@@ -37,11 +37,11 @@ Samples for several Azure AD B2C advance scenarios
 ## Generic 
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's groups, add the groups to JTW token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
-- [SAML RP](policies/saml-relying-party)  This document walks you through adding a SAML-based Relying party to Azure AD B2C. 
+- [SAML Service Provider](https://github.com/azure-ad-b2c/saml-sp)  This document walks you through adding a SAML-based Relying party to Azure AD B2C. 
 
 - [Sing-up with social and local account](policies/sign-up-with-social-and-local-account) - Demonstrate how to create a policy that allows user to sign-up with a social account linked to local account
 
-- [Integrate REST API claims exchanges and input validation](policies/rest-api-integration) - A sample .Net core web API, demonstrate the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).
+- [Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api) - A sample .Net core web API, demonstrate the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).
 
 - [Remote profile](policies/remote-profile) - Demonstrates how to store and read user profile in a remote database. 
 
