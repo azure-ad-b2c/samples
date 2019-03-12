@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="your-tenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_B2C_1A_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <!--Demo: Claims to store the password fragments in HASH format-->
+    <ClaimsSchema>
+      <ClaimType Id="extension_password1">
+        <DisplayName>Password in Hash format</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>The first 3 letters of the password in HASH format</UserHelpText>
+      </ClaimType>
+  
+      <ClaimType Id="extension_password2">
+        <DisplayName>Password in Hash format</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>The second 3 letters of the password in HASH format</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="extension_password3">
+        <DisplayName>Password in Hash format</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>The third 3 letters of the password in HASH format</UserHelpText>
+    </ClaimType>
+  </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+
+        <!--Demo: Customized the sign-up technical profile to call the REST-HashPassword validation technical profile-->
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="REST-HashPassword" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+          </ValidationTechnicalProfiles>          
+        </TechnicalProfile>
+
+        <!--Demo: Customized the password reset technical profile to call the REST-HashPassword validation technical profile-->
+        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="REST-HashPassword" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId" />
+          </ValidationTechnicalProfiles>   
+        </TechnicalProfile>     
+      </TechnicalProfiles>
+    </ClaimsProvider>
+	
+    <ClaimsProvider>
+      <DisplayName>REST APIs</DisplayName>
+      <TechnicalProfiles>
+    
+      <!-- Demo: Custom Restful service to HASH the password. This technical profile sends the password as input
+            claim and return the passwords in HASH format, including the first 3 letters, second 3 letters 
+            and third 3 letters as output cliams. The input and output claims map the name use in the policy 
+            with the name defined in the REST API code -->
+      <TechnicalProfile Id="REST-HashPassword">
+        <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
+        <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+        <Metadata>
+          <Item Key="ServiceUrl">http://your-application.azurewebsites.net/api/identity/hash</Item>
+          <Item Key="AuthenticationType">None</Item>
+          <Item Key="SendClaimsIn">Body</Item>
+        </Metadata>
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"  />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_password1" PartnerClaimType="password1" />
+          <OutputClaim ClaimTypeReferenceId="extension_password2" PartnerClaimType="password2" />
+          <OutputClaim ClaimTypeReferenceId="extension_password3" PartnerClaimType="password3" />
+        </OutputClaims>
+        <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+      </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- Local account Sign-In claims provider -->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <InputClaims>
+            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-Common">
+          <DisplayName>Azure Active Directory</DisplayName>
+          <!--  Demo: Provide objectId and appId before using extension properties.
+                For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom 
+                Action required: Insert objectId and appId here -->
+          <Metadata>
+            <Item Key="ApplicationObjectId">00000000-0000-0000-0000-000000000000</Item>
+            <Item Key="ClientId">00000000-0000-0000-0000-000000000000</Item>
+          </Metadata>
+        </TechnicalProfile>	
+
+        <!-- Demo: Persist the sign-up password claims to the user profile-->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_password1" />
+            <PersistedClaim ClaimTypeReferenceId="extension_password2" />
+            <PersistedClaim ClaimTypeReferenceId="extension_password3" />
+          </PersistedClaims>
+        </TechnicalProfile>
+
+        <!-- Demo: Persist the password reset claims to the user profile-->
+        <TechnicalProfile Id="AAD-UserWritePasswordUsingObjectId">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_password1" />
+            <PersistedClaim ClaimTypeReferenceId="extension_password2" />
+            <PersistedClaim ClaimTypeReferenceId="extension_password3" />
+          </PersistedClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- Facebook claims provider -->
+	<ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <Metadata>
+            <!--Demo action required: Change to your Facebook App Id-->
+            <Item Key="client_id">0</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+
+  </ClaimsProviders>
+
+  <!--<UserJourneys>
+  </UserJourneys>-->
+
+</TrustFrameworkPolicy>

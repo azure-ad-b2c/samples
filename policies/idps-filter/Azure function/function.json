@@ -1,0 +1,19 @@
+{
+    "bindings": [
+      {
+        "type": "httpTrigger",
+        "direction": "in",
+        "webHookType": "genericJson",
+        "name": "request",
+        "methods": [
+          "post"
+        ]
+      },
+      {
+        "type": "http",
+        "direction": "out",
+        "name": "response"
+      }
+    ],
+    "disabled": false
+  }

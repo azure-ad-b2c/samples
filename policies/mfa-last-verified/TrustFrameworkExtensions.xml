@@ -1,0 +1,494 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="sunflowersdemo.onmicrosoft.com" 
+  PolicyId="B2C_1A_MFA_Last_Verified_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://sunflowersdemo.onmicrosoft.com/B2C_1A_MFA_Last_Verified_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>sunflowersdemo.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_MFA_Last_Verified_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+  <ClaimsSchema>
+    <!--Demo: Specifies the last time MFA verified-->
+  	<ClaimType Id="extension_StrongAuthenticationLastMFAVerified">
+	    <DisplayName>Last MFA verified</DisplayName>
+	    <DataType>dateTime</DataType>
+	    <UserHelpText>Last MFA verified</UserHelpText>
+	  </ClaimType>
+
+    <!--Demo: Specifies the current date and time-->
+  	<ClaimType Id="currentDateTime">
+	    <DisplayName>Current date and time</DisplayName>
+	    <DataType>dateTime</DataType>
+	    <UserHelpText>Current date and time</UserHelpText>
+	  </ClaimType>
+
+    <!--Demo: Indicates whether MFA run and verified -->
+    <ClaimType Id="strongAuthentication">
+      <DisplayName>strongAuthentication</DisplayName>
+      <DataType>boolean</DataType>
+      <AdminHelpText>Add help text here</AdminHelpText>
+      <UserHelpText>Add help text here</UserHelpText>
+    </ClaimType>
+
+    <!--Demo: Indicates if MFA is required, based on date comparison -->
+    <ClaimType Id="isLastMFAVerifiedGreaterThanNow">
+  	  <DisplayName>isLastMFAVerifiedGreaterThanNow</DisplayName>
+	    <DataType>boolean</DataType>
+	  </ClaimType>
+
+    <ClaimType Id="isStrongAuthenticationLastMFAVerifiedPresent">
+  	  <DisplayName>isStrongAuthenticationLastMFAVerifiedPresent</DisplayName>
+	    <DataType>boolean</DataType>
+	  </ClaimType>
+
+    <ClaimType Id="skipMFA">
+  	  <DisplayName>skipMFA</DisplayName>
+	    <DataType>boolean</DataType>
+	  </ClaimType>    
+    <!--Demo: **for testing only**, don't need in production-->
+    <ClaimType Id="policyVersion">
+  	  <DisplayName>policyVersion</DisplayName>
+	    <DataType>string</DataType>
+	  </ClaimType>
+
+  </ClaimsSchema>
+
+  <ClaimsTransformations>
+    <!--Demo: Get the current UTC date and time and set the value to extension_StrongAuthenticationLastMFAVerified-->
+    <ClaimsTransformation Id="SetStrongAuthenticationLastMFAVerified" TransformationMethod="GetCurrentDateTime">
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" TransformationClaimType="currentDateTime" />
+      </OutputClaims>
+    </ClaimsTransformation>
+
+    <!--Demo: Get the current UTC date and time -->
+    <ClaimsTransformation Id="GetCurrentDateTime" TransformationMethod="GetCurrentDateTime">
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="currentDateTime" TransformationClaimType="currentDateTime" />
+      </OutputClaims>
+    </ClaimsTransformation>
+
+    <!--Demo: Compare the dates and check if MFA is required -->
+    <ClaimsTransformation Id="CompareLastMFAVerificationWithCurrentDateTime" TransformationMethod="DateTimeComparison">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="currentDateTime" TransformationClaimType="firstDateTime" />
+        <InputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" TransformationClaimType="secondDateTime" />
+      </InputClaims>
+      <InputParameters>
+        <!--Demo: Adding seconds to the first date. So, we check if the last time MFA verified plus
+                  number of days (in seconds) is later than now (earlier)-->
+        <InputParameter Id="operator" DataType="string" Value="earlier than" />
+        <!--Action Required: Change the time span according to 60 or 90 days (in seconds)-->
+        <InputParameter Id="timeSpanInSeconds" DataType="int" Value="-80" />
+      </InputParameters>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="isLastMFAVerifiedGreaterThanNow" TransformationClaimType="result" />
+      </OutputClaims>      
+    </ClaimsTransformation>  
+
+    <!--Demo: Check if extension_StrongAuthenticationLastMFAVerified is existed in Azure AD directory services.
+              For new uses this value is not exists. Or if someone removed the value from the user account -->
+    <ClaimsTransformation Id="CheckIfStrongAuthenticationLastMFAVerifiedPresent" TransformationMethod="DoesClaimExist">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" TransformationClaimType="inputClaim" />
+      </InputClaims>					
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="isStrongAuthenticationLastMFAVerifiedPresent" TransformationClaimType="outputClaim" />
+      </OutputClaims>
+    </ClaimsTransformation>
+
+    <!--Demo: This claims transformation make verify that both, extension_StrongAuthenticationLastMFAVerified contians value
+              and this value is also less than now (with the configured timeSpanInSeconds). If one of them false,
+              this is new user or the value is greater than now. The MFA orchestration step should run --> 
+    <ClaimsTransformation Id="CheckWhetherMFACanBeSkipped" TransformationMethod="AndClaims">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="isLastMFAVerifiedGreaterThanNow" TransformationClaimType="inputClaim1" />
+        <InputClaim ClaimTypeReferenceId="isStrongAuthenticationLastMFAVerifiedPresent" TransformationClaimType="inputClaim2" />
+      </InputClaims>					
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="skipMFA" TransformationClaimType="outputClaim" />
+      </OutputClaims>
+    </ClaimsTransformation>
+  </ClaimsTransformations> 
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <!-- Demo: **For test only**, remove the email verification -->
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <Metadata>
+            <Item Key="EnforceEmailVerification">False</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <Metadata>
+            <Item Key="client_id">708931959302288</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">988f9a13-7ba4-4261-af75-92b2c32a3652</Item>
+            <Item Key="IdTokenAudience">917ac5bc-e856-45bf-ad6e-281f0c9f55fe</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="988f9a13-7ba4-4261-af75-92b2c32a3652" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="917ac5bc-e856-45bf-ad6e-281f0c9f55fe" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+   <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+
+        <TechnicalProfile Id="AAD-Common">
+          <DisplayName>Azure Active Directory</DisplayName>
+          <!--  Demo: Provide objectId and appId before using extension properties.
+                For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom 
+                Action required: Insert objectId and appId here -->
+          <Metadata>
+            <Item Key="ApplicationObjectId">da65c0f4-645c-4e9c-9ae1-21be18ff374b</Item>
+            <Item Key="ClientId">aa51c2e9-7cbe-4392-80b8-917058ff03ab</Item>
+          </Metadata>
+        </TechnicalProfile>
+
+        <!--Demo: Save the last time MFA verified to AAD directory services -->
+        <TechnicalProfile Id="AAD-UserWriteMFAVerifyUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="SetStrongAuthenticationLastMFAVerified" />
+          </InputClaimsTransformations>          
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+        <!--Demo: For social account, read the extension_StrongAuthenticationLastMFAVerified from the directory and
+                  check whether MFA Can be skipped.  -->
+        <TechnicalProfile Id="AAD-UserReadUsingAlternativeSecurityId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isLastMFAVerifiedGreaterThanNow" />
+            <OutputClaim ClaimTypeReferenceId="currentDateTime" />
+            <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" />
+            <OutputClaim ClaimTypeReferenceId="policyVersion" DefaultValue="*50*" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetCurrentDateTime" />
+            <OutputClaimsTransformation ReferenceId="CheckIfStrongAuthenticationLastMFAVerifiedPresent" />
+            <OutputClaimsTransformation ReferenceId="CompareLastMFAVerificationWithCurrentDateTime" />
+            <OutputClaimsTransformation ReferenceId="CheckWhetherMFACanBeSkipped" />
+          </OutputClaimsTransformations>            
+        </TechnicalProfile>
+
+        <!--Demo: For local account, read the extension_StrongAuthenticationLastMFAVerified from the directory, and
+                  check whether MFA Can be skipped. -->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="currentDateTime" />
+            <OutputClaim ClaimTypeReferenceId="isLastMFAVerifiedGreaterThanNow" />
+            <OutputClaim ClaimTypeReferenceId="isStrongAuthenticationLastMFAVerifiedPresent" />
+            <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" />
+            <OutputClaim ClaimTypeReferenceId="policyVersion" DefaultValue="*50*" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetCurrentDateTime" />
+            <OutputClaimsTransformation ReferenceId="CheckIfStrongAuthenticationLastMFAVerifiedPresent" />
+            <OutputClaimsTransformation ReferenceId="CompareLastMFAVerificationWithCurrentDateTime" />
+            <OutputClaimsTransformation ReferenceId="CheckWhetherMFACanBeSkipped" />
+          </OutputClaimsTransformations>  
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>PhoneFactor</DisplayName>
+      <!--Demo: Add an indicator that user passed the MFA verification successfully -->
+      <TechnicalProfiles>
+        <TechnicalProfile Id="PhoneFactor-InputOrVerify">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="strongAuthentication" DefaultValue="true" />
+          </OutputClaims>        
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+  </ClaimsProviders>
+  <UserJourneys>
+      <UserJourney Id="tester">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingEmailAddress" TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+
+    <UserJourney Id="SignUpOrSignIn">
+      <OrchestrationSteps>
+      
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+  
+        <!-- Phone verification: If MFA is not required, the next three steps (#5-#7) should be removed.
+             This step checks whether there's a phone number on record,  for the user. If found, then the user is challenged to verify it. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <!--Demo: Skip MFA validation if not required-->
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>skipMFA</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>        
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Save MFA phone number: The precondition verifies whether the user provided a new number in the 
+             previous step. If so, then the phone number is stored in the directory for future authentication 
+             requests. -->
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newPhoneNumberEntered</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Demo: update the extension_StrongAuthenticationLastMFAVerified attribute with current data and time,
+                  only if the MFA was run and verified -->
+        <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>strongAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteMFAVerifyUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteMFAVerifyUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="10" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+    <UserJourney Id="ProfileEdit">
+      <OrchestrationSteps>
+      
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserRead" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+  
+        <!-- If the user ever stepped up to use 2FA, profile update must verify this because the user will be able to change
+          their sign in email address or strong authentication email here. This guards against scenarios where a user's 
+          password is stolen, the attacker can change the email addresses leaving no way for the user to recover their account.
+          By requiring 2FA, stolen passwords cannot be used to take over the account completely. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+ 
+    <UserJourney Id="PasswordReset">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+  </UserJourneys>
+
+</TrustFrameworkPolicy>

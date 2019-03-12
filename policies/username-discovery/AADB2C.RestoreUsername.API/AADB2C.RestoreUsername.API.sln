@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AADB2C.RestoreUsername.API", "AADB2C.RestoreUsername.API\AADB2C.RestoreUsername.API.csproj", "{62B81A80-1610-48F5-9868-1BCFC95E3A4A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62B81A80-1610-48F5-9868-1BCFC95E3A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B81A80-1610-48F5-9868-1BCFC95E3A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B81A80-1610-48F5-9868-1BCFC95E3A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B81A80-1610-48F5-9868-1BCFC95E3A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {71F0302E-298D-4715-98E6-D73999FE96F1}
+	EndGlobalSection
+EndGlobal

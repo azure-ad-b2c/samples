@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_RBAC_TrustFrameworkExtensions"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_RBAC_TrustFrameworkExtensions">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_RBAC_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    
+    <!--Demo: List of user's security groups return by the REST API-->
+    <ClaimsSchema>
+      <ClaimType Id="groups">
+        <DisplayName>groups</DisplayName>
+        <DataType>stringCollection</DataType>
+      </ClaimType>
+
+    <!--Demo: List of permitted  security groups user can sign-in.
+        Null or empty means, user any user can sign-in.
+        This claim sends to REST API-->
+    <ClaimType Id="onlyMembersOf">
+	    <DisplayName>onlyMembersOf</DisplayName>
+	    <DataType>string</DataType>
+	  </ClaimType>
+
+    </ClaimsSchema>
+    </BuildingBlocks>
+	  
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <OutputClaims>
+            <!--Demo: Add the groups claim type to the output claim collection-->
+            <OutputClaim ClaimTypeReferenceId="groups" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <!-- Demo: Make sure you first call the login-NonInteractive technical profile, to get the user ID.
+                 Then call the role-based access control REST API to get adn validate user's groups -->
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
+            <ValidationTechnicalProfile ReferenceId="REST-RBAC" />
+          </ValidationTechnicalProfiles>        
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- Local account Sign-In claims provider -->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+         <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppID" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppID" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+     <!-- Demo: Technical profile to read and validate user's groups-->
+    <ClaimsProvider>
+      <DisplayName>REST APIs</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-RBAC">
+          <DisplayName>Read and validate user's groups</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <!--Demo: Change the service URL with your REST API location-->
+            <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/Identity</Item>
+            
+            <!--Demo: Change the AuthenticationType to basic or ClientCertificate.
+            For more information, see: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-custom-rest-api-netfw-secure-cert-->
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+            <!--Demo: set the DefaultValue to empty string or comma delimiter list 
+            of security groups to validate-->
+            <InputClaim ClaimTypeReferenceId="onlyMembersOf" DefaultValue="admins" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="groups" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+    <!--UserJourneys>
+	
+	</UserJourneys-->
+
+</TrustFrameworkPolicy>

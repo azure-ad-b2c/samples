@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_ChangeSignInName_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_ChangeSignInName_TrustFrameworkExtensions">
+
+	<BasePolicy>
+		<TenantId>yourtenant.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_ChangeSignInName_TrustFrameworkBase</PolicyId>
+	</BasePolicy>
+	<BuildingBlocks>
+
+	</BuildingBlocks>
+
+	<ClaimsProviders>
+
+		<!-- Local account Sign-In claims provider -->
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="login-NonInteractive">
+					<Metadata>
+						<Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+						<Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppID" />
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppID" />
+					</InputClaims>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+		<!-- Facebook claims provider -->
+		<ClaimsProvider>
+			<DisplayName>Facebook</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="Facebook-OAUTH">
+					<Metadata>
+						<Item Key="client_id">facebook_clientid</Item>
+						<Item Key="scope">email public_profile</Item>
+						<Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+					</Metadata>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+		<ClaimsProvider>
+			<DisplayName>Azure Active Directory</DisplayName>
+			<TechnicalProfiles>
+				<!--Demo: This technical profile write the new sign-in name to the 
+					user account in the directory	-->
+				<TechnicalProfile Id="AAD-UserWriteEmailUsingObjectId">
+					<Metadata>
+						<Item Key="Operation">Write</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<PersistedClaims>
+						<PersistedClaim ClaimTypeReferenceId="objectId" />
+						<!-- Demo: Persist the email address to the user's profile-->
+						<PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" />
+					</PersistedClaims>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+		<ClaimsProvider>
+			<DisplayName>Self Asserted Social</DisplayName>
+			<TechnicalProfiles>
+				<!--Demo: This technical profile collects, validates and 
+					call AAD-UserWriteEmailUsingObjectId technical profile to persist the 
+					data to Azure Active Directory account-->
+				<TechnicalProfile Id="SelfAsserted-EmailUpdate">
+					<DisplayName>Email update</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="alternativeSecurityId" />
+						<InputClaim ClaimTypeReferenceId="userPrincipalName" />
+					</InputClaims>
+					<OutputClaims>
+						<!-- Demo: Collect and validate the email address -->
+						<OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+						<OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+					</OutputClaims>
+					<ValidationTechnicalProfiles>
+						<!-- Demo: call validation technical profile to persist the data-->
+						<ValidationTechnicalProfile ReferenceId="AAD-UserWriteEmailUsingObjectId" />
+					</ValidationTechnicalProfiles>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+	</ClaimsProviders>
+
+	<UserJourneys>
+		<UserJourney Id="ChangeSignInName">
+			<OrchestrationSteps>
+				<!-- Demo: To change the sign-in names, user need to sign-in with 
+				local account only -->
+				<OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+				</OrchestrationStep>
+
+				<!--Demo: Sign-in user with local account-->
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!--Demo: Read the user data from the Azure Active Directory -->
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>authenticationSource</Value>
+							<Value>socialIdpAuthentication</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Demo: this self asserted technical profile validates and 
+					update the sing-in name -->
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-EmailUpdate" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+
+	</UserJourneys>
+
+</TrustFrameworkPolicy>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADB2C.Lockout", "ADB2C.Lockout\ADB2C.Lockout.csproj", "{FF0E5117-13EF-43AF-B03E-CEEAF51DD3EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF0E5117-13EF-43AF-B03E-CEEAF51DD3EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0E5117-13EF-43AF-B03E-CEEAF51DD3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0E5117-13EF-43AF-B03E-CEEAF51DD3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0E5117-13EF-43AF-B03E-CEEAF51DD3EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31F11EED-9A39-4D3E-B64F-F68A697CFC3D}
+	EndGlobalSection
+EndGlobal
