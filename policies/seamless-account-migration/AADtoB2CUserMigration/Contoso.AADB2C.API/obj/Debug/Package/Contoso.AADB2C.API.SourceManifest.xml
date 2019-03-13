@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<sitemanifest>
-  <IisApp path="C:\B2C GitHub\LocalAccounts - Seamless account migration\AADtoB2CUserMigration\Contoso.AADB2C.API\obj\Debug\Package\PackageTmp" />
-  <setAcl path="C:\B2C GitHub\LocalAccounts - Seamless account migration\AADtoB2CUserMigration\Contoso.AADB2C.API\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
-  <setAcl path="C:\B2C GitHub\LocalAccounts - Seamless account migration\AADtoB2CUserMigration\Contoso.AADB2C.API\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
-</sitemanifest>
