@@ -21,6 +21,10 @@ Samples for several Azure AD B2C advance scenarios
 
 - [Email Verification at Sign In](policies/signin-email-verification) - For scenarios where you would like users to validate their email via TOTP on every sign in.
 
+- [Google Captcha on Sign In](policies/captcha-integration) - An example set of policies which integrate Google Captcha into the sign in journey.
+
+- [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies to for passwordless login via Phone Number (SMS or Phone Call).
+
 ## Social account
 - [Social identity provider force email verification](policies/social-idp-force-email) - When sign-in with social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate email address.
 
@@ -33,11 +37,6 @@ Samples for several Azure AD B2C advance scenarios
 - [Link a local account to federated account](policies/link-local-account-with-federated-account) - Demonstrates how to link a user who logged in via a federated provider to a pre-created AAD B2C Local Account.
 
 - [Preventing logon for Social or External IdP Accounts when Disabled in AAD B2C](policies/disable-social-account-from-logon) - For scenarios where you would like to prevent logons via Social or External IdPs when the account has been disabled in Azure AD B2C.
-
-- [Google Captcha on Sign In](policies/captcha-integration) - An example set of policies which integrate Google Captcha into the sign in journey.
-
-- [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies to for passwordless login via Phone Number (SMS or Phone Call).
-
 
 ## Multi factor authentication
 
@@ -62,8 +61,6 @@ Samples for several Azure AD B2C advance scenarios
     3. The user is logging in from a different IP than they last logged in from.
 
 - [Username based journey](policies/username-signup-or-signin) - For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.
-
-
 
 ## App migration
 - [Angular5](policies/app-migration-angular5) This guide shows you how to migrate exiting Angular SPA application to Azure AD B2C
