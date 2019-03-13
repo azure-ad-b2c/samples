@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Untouched Templates\LocalAccounts - JIT Password Migration with AAD precreated account\AADtoB2CUserMigration\Contoso.AADB2C.API\obj\Debug\Package\PackageTmp" />
+  <setAcl path="C:\Untouched Templates\LocalAccounts - JIT Password Migration with AAD precreated account\AADtoB2CUserMigration\Contoso.AADB2C.API\obj\Debug\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Untouched Templates\LocalAccounts - JIT Password Migration with AAD precreated account\AADtoB2CUserMigration\Contoso.AADB2C.API\obj\Debug\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="contoso.onmicrosoft.com" PolicyId="B2C_1A_SeamlessMigration_TrustFrameworkExtensions" PublicPolicyUri="http://contoso.onmicrosoft.com/B2C_1A_SeamlessMigration_TrustFrameworkExtensions">
+
+  <BasePolicy>
+    <TenantId>contoso.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_SeamlessMigration_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="extension_requiresMigration">
+        <DisplayName>extension_requiresMigration</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>extension_requiresMigration</AdminHelpText>
+        <UserHelpText>extension_requiresMigration</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="tokenSuccess">
+        <DisplayName>tokenSuccess</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>tokenSuccess</AdminHelpText>
+        <UserHelpText>tokenSuccess</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="migrationRequired">
+        <DisplayName>migrationRequired</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>migrationRequired</AdminHelpText>
+        <UserHelpText>migrationRequired</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
+            <!-- Native App -->
+            <Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
+            <!-- Web Api -->
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
+          </InputClaims>
+        </TechnicalProfile>
+
+		<TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+		<OutputClaims>
+			<OutputClaim ClaimTypeReferenceId="extension_requiresMigration" />
+		</OutputClaims>
+		<ValidationTechnicalProfiles>
+			<!--Add user migration validation technical profiles before login-NonInteractive -->
+
+			<!-- Populate extension_requireMigration into the claims pipeline -->
+			<ValidationTechnicalProfile ReferenceId="Get-requiresMigration-status-signin" ContinueOnError="false" />
+
+			<!-- If extension_requireMigration is true, call the legacy IdP via the REST API -->
+			<ValidationTechnicalProfile ReferenceId="UserMigrationViaLegacyIdp" ContinueOnError="false">
+			<Preconditions>
+				<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+				<Value>extension_requiresMigration</Value>
+				<Value>False</Value>
+				<Action>SkipThisValidationTechnicalProfile</Action>
+				</Precondition>
+			</Preconditions>
+			</ValidationTechnicalProfile>
+
+			<!-- If the API returned 'tokensuccess', write the new password and unmark the account for migration -->
+			<ValidationTechnicalProfile ReferenceId="AAD-WritePasswordAndFlipMigratedFlag" ContinueOnError="false">
+			<Preconditions>
+				<Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+				<Value>tokenSuccess</Value>
+				<Action>SkipThisValidationTechnicalProfile</Action>
+				</Precondition>
+			</Preconditions>
+			</ValidationTechnicalProfile>
+
+			<!-- Initiate a normal logon against Azure AD B2C -->
+			<ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
+		</ValidationTechnicalProfiles>
+		</TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+	<ClaimsProvider>
+	<DisplayName>Local Account SignIn - Read migration status</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="Get-requiresMigration-status-signin">
+		<Metadata>
+			<Item Key="Operation">Read</Item>
+			<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+			<Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+		</Metadata>
+		<IncludeInSso>false</IncludeInSso>
+		<InputClaims>
+			<InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.emailAddress" Required="true" />
+		</InputClaims>
+		<OutputClaims>
+			<OutputClaim ClaimTypeReferenceId="objectId" />
+			<!-- Set a default value (false) in the case the account does not have this attribute defined -->
+			<OutputClaim ClaimTypeReferenceId="extension_requiresMigration" DefaultValue="false" />
+		</OutputClaims>
+		<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+		</TechnicalProfile>
+	</TechnicalProfiles>
+	</ClaimsProvider>
+
+	<ClaimsProvider>
+	<DisplayName>REST API to communicate with Legacy IdP</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="UserMigrationViaLegacyIdp">
+		<DisplayName>REST API call to communicate with Legacy IdP</DisplayName>
+		<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+		<Metadata>
+			<Item Key="ServiceUrl">https://aadtob2cjitmigratepassword.azurewebsites.net/api/identity</Item>
+			<Item Key="AuthenticationType">None</Item>
+			<Item Key="SendClaimsIn">Body</Item>
+		</Metadata>
+		<InputClaims>
+			<InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+			<InputClaim ClaimTypeReferenceId="password" />
+		</InputClaims>
+		<OutputClaims>
+			<OutputClaim ClaimTypeReferenceId="tokenSuccess" DefaultValue="false"/>
+			<OutputClaim ClaimTypeReferenceId="migrationRequired"/>
+		</OutputClaims> 
+		<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+		</TechnicalProfile>
+	</TechnicalProfiles>
+	</ClaimsProvider>
+
+	<ClaimsProvider>
+	<DisplayName>Local Account SignIn - Write new password and unmark for migration</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="AAD-WritePasswordAndFlipMigratedFlag">
+		<Metadata>
+			<Item Key="Operation">Write</Item>
+			<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+		</Metadata>
+		<IncludeInSso>false</IncludeInSso>
+		<InputClaims>
+			<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+		</InputClaims>
+		<PersistedClaims>
+			<PersistedClaim ClaimTypeReferenceId="objectId" />
+			<PersistedClaim ClaimTypeReferenceId="password" PartnerClaimType="password"/>
+			<PersistedClaim ClaimTypeReferenceId="migrationRequired" PartnerClaimType="extension_requiresMigration"/>
+		</PersistedClaims>
+		<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+		<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+		</TechnicalProfile>
+	</TechnicalProfiles>
+	</ClaimsProvider>
+
+	<ClaimsProvider>
+	<DisplayName>Local Account Password Reset - Read migration flag</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="Get-requiresMigration-status-password-reset">
+		<Metadata>
+			<Item Key="Operation">Read</Item>
+			<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+			<Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+		</Metadata>
+		<IncludeInSso>false</IncludeInSso>
+		<InputClaims>
+			<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+		</InputClaims>
+		<OutputClaims>
+			<OutputClaim ClaimTypeReferenceId="extension_requiresMigration" DefaultValue="false" />
+		</OutputClaims>
+		<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+		</TechnicalProfile>
+	</TechnicalProfiles>
+	</ClaimsProvider>
+
+	<ClaimsProvider>
+	<DisplayName>Local Account Password Reset - Flip migration flag</DisplayName>
+	<TechnicalProfiles>
+		<TechnicalProfile Id="AAD-FlipMigratedFlag">
+		<Metadata>
+			<Item Key="Operation">Write</Item>
+			<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+		</Metadata>
+		<IncludeInSso>false</IncludeInSso>
+		<InputClaims>
+			<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+		</InputClaims>
+		<PersistedClaims>
+			<PersistedClaim ClaimTypeReferenceId="objectId" />
+			<PersistedClaim ClaimTypeReferenceId="migrationRequired" PartnerClaimType="extension_requiresMigration" DefaultValue="false" AlwaysUseDefaultValue="true"/>
+		</PersistedClaims>
+		<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+		<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+		</TechnicalProfile>
+	</TechnicalProfiles>
+	</ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account Password Reset - Write Password</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="Get-requiresMigration-status-password-reset" ContinueOnError="false" />
+            <ValidationTechnicalProfile ReferenceId="AAD-FlipMigratedFlag" ContinueOnError="false">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>extension_requiresMigration</Value>
+                  <Value>False</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignIn">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+
+</TrustFrameworkPolicy>

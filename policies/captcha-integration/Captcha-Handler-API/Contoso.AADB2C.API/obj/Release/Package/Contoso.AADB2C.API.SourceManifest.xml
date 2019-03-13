@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Untouched Templates\LocalAccounts - custom UI Captcha\Contoso.AADB2C.API\obj\Release\Package\PackageTmp" />
+  <setAcl path="C:\Untouched Templates\LocalAccounts - custom UI Captcha\Contoso.AADB2C.API\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Untouched Templates\LocalAccounts - custom UI Captcha\Contoso.AADB2C.API\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

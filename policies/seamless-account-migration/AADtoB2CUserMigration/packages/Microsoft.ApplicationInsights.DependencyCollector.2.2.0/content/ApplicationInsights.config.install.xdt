@@ -1,0 +1,8 @@
+<ApplicationInsights xmlns="http://schemas.microsoft.com/ApplicationInsights/2013/Settings" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <TelemetryInitializers xdt:Transform="InsertIfMissing">
+    <Add xdt:Transform="InsertIfMissing" xdt:Locator="Match(Type)" Type="Microsoft.ApplicationInsights.DependencyCollector.HttpDependenciesParsingTelemetryInitializer, Microsoft.AI.DependencyCollector" />
+  </TelemetryInitializers>
+  <TelemetryModules xdt:Transform="InsertIfMissing">
+    <Add xdt:Transform="InsertIfMissing" xdt:Locator="Match(Type)" Type="Microsoft.ApplicationInsights.DependencyCollector.DependencyTrackingTelemetryModule, Microsoft.AI.DependencyCollector" />
+  </TelemetryModules>
+</ApplicationInsights>
