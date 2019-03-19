@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="YourTenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_MFA_IP_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://YourTenant.onmicrosoft.com/B2C_1A_MFA_IP_TrustFrameworkExtensions">
+
+	<BasePolicy>
+		<TenantId>YourTenant.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_MFA_IP_TrustFrameworkBase</PolicyId>
+	</BasePolicy>
+	<BuildingBlocks>
+		<ContentDefinitions>
+			<ContentDefinition Id="api.phonefactor">
+				<LoadUri>~/tenant/default/multifactor-1.0.0.cshtml</LoadUri>
+				<RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+				<DataUri>urn:com:microsoft:aad:b2c:elements:multifactor:1.1.0</DataUri>
+				<Metadata>
+					<Item Key="DisplayName">Multi-factor authentication page</Item>
+				</Metadata>
+			</ContentDefinition>
+		</ContentDefinitions>
+	</BuildingBlocks>
+
+	<ClaimsProviders>
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="login-NonInteractive">
+					<Metadata>
+						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
+						<!-- Native App -->
+						<Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
+						<!-- Web Api -->
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
+					</InputClaims>
+				</TechnicalProfile>
+
+				<!-- This technical profile uses a validation technical profile to authenticate the user. -->
+				<TechnicalProfile Id="SignUpOrSignInUsernameOrEmailWithIPbasedMFAAndMFATimeWindow">
+					<DisplayName>Local Account Signin</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
+						<Item Key="setting.operatingMode">Email</Item>
+						<Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="signInName" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+						<OutputClaim ClaimTypeReferenceId="password" Required="true" />
+						<OutputClaim ClaimTypeReferenceId="objectId" />
+						<OutputClaim ClaimTypeReferenceId="authenticationSource" />
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
+					</OutputClaimsTransformations>
+					<ValidationTechnicalProfiles>
+						<ValidationTechnicalProfile ReferenceId="login-NonInteractive" ContinueOnError="false"/>
+					</ValidationTechnicalProfiles>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+				</TechnicalProfile>
+</TechnicalProfiles>
+</ClaimsProvider>
+		<!-- Technical profile to enable MFA -->
+		<ClaimsProvider>
+			<DisplayName>PhoneFactor</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="PhoneFactor-InputOrVerify">
+					<DisplayName>PhoneFactor</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.PhoneFactorProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<Item Key="ContentDefinitionReferenceId">api.phonefactor</Item>
+						<Item Key="ManualPhoneNumberEntryAllowed">true</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+					</CryptographicKeys>
+					<InputClaimsTransformations>
+						<InputClaimsTransformation ReferenceId="CreateUserIdForMFA" />
+					</InputClaimsTransformations>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="userIdForMFA" PartnerClaimType="UserId" />
+						<InputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="Verified.OfficePhone" />
+						<OutputClaim ClaimTypeReferenceId="newPhoneNumberEntered" PartnerClaimType="newPhoneNumberEntered" />
+						<OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
+					</OutputClaims>
+				</TechnicalProfile>
+
+				<TechnicalProfile Id="AAD-UserWritePhoneNumberUsingObjectId">
+					<Metadata>
+						<Item Key="Operation">Write</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<PersistedClaims>
+						<PersistedClaim ClaimTypeReferenceId="objectId" />
+						<PersistedClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="strongAuthenticationPhoneNumber" />
+					</PersistedClaims>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- Writes the current logon attempts IP address to the user and the currentTime
+					to record when the user last did MFA (this step only triggers when the user did MFA)-->
+				<TechnicalProfile Id="AAD-UserWriteIPUsingObjectId">
+					<Metadata>
+						<Item Key="Operation">Write</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<PersistedClaims>
+						<PersistedClaim ClaimTypeReferenceId="objectId" />
+						<PersistedClaim ClaimTypeReferenceId="IP-Address" PartnerClaimType="extension_IP" />
+						<PersistedClaim ClaimTypeReferenceId="CurrentTime" PartnerClaimType="extension_LastMFATime" />
+					</PersistedClaims>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- Reads the IP from which the user last logged in with
+						And the last time which they performed MFA -->
+				<TechnicalProfile Id="AAD-UserReadStoredIP">
+					<Metadata>
+						<Item Key="Operation">Read</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="extension_IP" DefaultValue="noIP"/>
+						<OutputClaim ClaimTypeReferenceId="CurrentTime" />
+						<OutputClaim ClaimTypeReferenceId="extension_LastMFATime" DefaultValue="2018-10-01T15:00:00.0000000Z" />
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="IsLoginFromLastRecordedIP" />
+						<OutputClaimsTransformation ReferenceId="CompareTimetoLastMFATime" />
+					</OutputClaimsTransformations>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- Outputs the IP-Address claim which contains the IP address the current logon
+							is from -->
+				<TechnicalProfile Id="SimpleUJContext">
+					<DisplayName>User Journey Context Provide</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.UserJourneyContextProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="IP-Address" />
+					</OutputClaims>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+	</ClaimsProviders>
+
+	<UserJourneys>
+		<UserJourney Id="SignUpOrSignInWithIPbasedMFAAndMFATimeWindow">
+			<OrchestrationSteps>
+
+				<!-- Get the logon IP-->
+				<OrchestrationStep Order="1" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="UserJourneyContext" TechnicalProfileReferenceId="SimpleUJContext" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Present the sign in page -->
+				<OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SignUpOrSignInUsernameOrEmailWithIPbasedMFAAndMFATimeWindow" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- This step reads any user attributes that we may not have received when in the token. -->
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Read the last logon IP and last MFA time -->
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadStoredIP" TechnicalProfileReferenceId="AAD-UserReadStoredIP" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Phone verification:
+             This step checks whether there's a phone number on record,  for the user. If found, 
+						 then the user is challenged to verify it. 
+						 
+						 This step only occurs if the user hasnt already just done MFA or the IP is not the same
+						 as when the user last did MFA (last logon)-->
+				<OrchestrationStep Order="6" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>isActiveMFASession</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>SameIPAddress</Value>
+							<Value>True</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="PhoneFactor-Verify-IP-Address" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!--This step only occurs if the last time the user did MFA was over the absolute time window-->
+				<OrchestrationStep Order="7" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>isActiveMFASession</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>isLastMFATimeGreaterThanWindow</Value>
+							<Value>False</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="PhoneFactor-Verify-MFATimeWindow" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Save MFA phone number: The precondition verifies whether the user provided a new number in the 
+             previous step. If so, then the phone number is stored in the directory for future authentication 
+             requests. -->
+				<OrchestrationStep Order="8" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+							<Value>newPhoneNumberEntered</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- If the user just performed MFA, record the IP and stamp the current time on the user 
+			as to indicate when MFA was last performed -->
+				<OrchestrationStep Order="9" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+							<Value>isActiveMFASession</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserWriteIPUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteIPUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="10" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+	</UserJourneys>
+</TrustFrameworkPolicy> 
