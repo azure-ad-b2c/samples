@@ -115,7 +115,7 @@ namespace AADB2C.Invite
                     audience,
                     claims,
                     DateTime.Now,
-                    DateTime.Now.AddYears(1),
+                    DateTime.Now.AddDays(7),
                     signingCredentials);
 
             // Get the representation of the signed token
