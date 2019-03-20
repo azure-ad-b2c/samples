@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="b2cprod.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://b2cprod.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+
+	<BasePolicy>
+		<TenantId>b2cprod.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+	</BasePolicy>
+	<BuildingBlocks>
+		<ClaimsSchema>
+			<ClaimType Id="dummy">
+				<DisplayName>hide me</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText/>
+				<UserInputType>TextBox</UserInputType>
+			</ClaimType>
+			<ClaimType Id="dummyFalse">
+				<DisplayName>dummyFalse</DisplayName>
+				<DataType>boolean</DataType>
+				<AdminHelpText>dummyFalse</AdminHelpText>
+				<UserHelpText>dummyFalse</UserHelpText>
+			</ClaimType>
+
+			<ClaimType Id="userLockedOutForInactivity">
+				<DisplayName>is the last time the user did MFA over the window</DisplayName>
+				<DataType>boolean</DataType>
+				<UserHelpText>is the last time the user did MFA over the window</UserHelpText>
+			</ClaimType>
+
+			<ClaimType Id="extension_lastLogonTime">
+				<DisplayName>extension_lastLogonTime</DisplayName>
+				<DataType>dateTime</DataType>
+				<AdminHelpText>extension_lastLogonTime</AdminHelpText>
+				<UserHelpText>extension_lastLogonTime</UserHelpText>
+			</ClaimType>
+
+			<ClaimType Id="CurrentTime">
+				<DisplayName>Current time</DisplayName>
+				<DataType>dateTime</DataType>
+				<UserHelpText>Current time</UserHelpText>
+			</ClaimType>
+		</ClaimsSchema>
+
+		<ClaimsTransformations>
+			<ClaimsTransformation Id="AssertAccountEnabledIsTrue" TransformationMethod="AssertBooleanClaimIsEqualToValue">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="accountEnabled" TransformationClaimType="inputClaim" />
+				</InputClaims>
+				<InputParameters>
+					<InputParameter Id="valueToCompareTo" DataType="boolean" Value="true" />
+				</InputParameters>
+			</ClaimsTransformation>
+
+			<ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="CurrentTime" TransformationClaimType="currentDateTime" />
+				</OutputClaims>
+			</ClaimsTransformation>
+
+			<ClaimsTransformation Id="CompareTimetoLastLogonTime" TransformationMethod="DateTimeComparison">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="extension_lastLogonTime" TransformationClaimType="firstDateTime" />
+					<InputClaim ClaimTypeReferenceId="CurrentTime" TransformationClaimType="secondDateTime" />
+				</InputClaims>
+				<InputParameters>
+					<InputParameter Id="operator" DataType="string" Value="earlier than" />
+					<InputParameter Id="timeSpanInSeconds" DataType="int" Value="160" />
+				</InputParameters>
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="userLockedOutForInactivity" TransformationClaimType="result" />
+				</OutputClaims>
+			</ClaimsTransformation>
+		</ClaimsTransformations>
+
+	</BuildingBlocks>
+
+	<ClaimsProviders>
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="login-NonInteractive">
+					<Metadata>
+						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
+						<!-- Native App -->
+						<Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
+						<!-- Web Api -->
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
+						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
+					</InputClaims>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+		<ClaimsProvider>
+			<DisplayName>Disable inactive account</DisplayName>
+			<TechnicalProfiles>
+				<!-- Reads the times the user last logged in and last changed password, will output boolean claims
+				to signify if password expired or inactive account-->
+				<TechnicalProfile Id="AAD-UserReadLastLogonTime">
+					<Metadata>
+						<Item Key="Operation">Read</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="extension_lastLogonTime" DefaultValue="2018-10-01T15:00:00.0000000Z"/>
+						<OutputClaim ClaimTypeReferenceId="CurrentTime" />
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="CompareTimetoLastLogonTime" />
+					</OutputClaimsTransformations>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- Writes the current logon attempts logon time into the extension attribute-->
+				<TechnicalProfile Id="AAD-UserWriteLogonTimeUsingObjectId">
+					<Metadata>
+						<Item Key="Operation">Write</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<PersistedClaims>
+						<PersistedClaim ClaimTypeReferenceId="objectId" />
+						<PersistedClaim ClaimTypeReferenceId="CurrentTime" PartnerClaimType="extension_lastLogonTime" />
+
+					</PersistedClaims>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- Page to send a disabled user to -->
+				<TechnicalProfile Id="Self-Asserted-AccountDisabled">
+					<DisplayName>Page for disabled AAD User</DisplayName>
+					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+					<Metadata>
+						<Item Key="ContentDefinitionReferenceId">api.disableduser</Item>
+						<Item Key="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">Your account has been locked. Contact your support person to unlock it, then try again.</Item>
+					</Metadata>
+					<CryptographicKeys>
+						<Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+					</CryptographicKeys>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="dummy" />
+					</OutputClaims>
+					<ValidationTechnicalProfiles>
+						<ValidationTechnicalProfile ReferenceId="AAD-AssertAccountEnabled" />
+					</ValidationTechnicalProfiles>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+				</TechnicalProfile>
+
+				<TechnicalProfile Id="AAD-AssertAccountEnabled">
+					<Metadata>
+						<Item Key="Operation">Read</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+						<Item Key="UserMessageIfClaimsPrincipalDoesNotExist">User does not exist. Please sign up before you can sign in.</Item>
+						<Item Key="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">Your account has been locked. Contact your support person to unlock it, then try again.</Item>
+					</Metadata>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="email"/>
+					</OutputClaims>
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="AssertAccountEnabledIsTrue" />
+					</OutputClaimsTransformations>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- get current time and write logon time for sign ups
+				<TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+					<InputClaimsTransformations>
+						<InputClaimsTransformation ReferenceId="GetSystemDateTime"/>
+					</InputClaimsTransformations>
+				</TechnicalProfile>
+
+				<TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+					<PersistedClaims>
+						<PersistedClaim ClaimTypeReferenceId="currentTime" PartnerClaimType="extension_lastLogonTime"/>
+					</PersistedClaims>
+				</TechnicalProfile>-->
+
+				<!-- get current time for all sign in/up's -->
+				<TechnicalProfile Id="AAD-UserReadUsingObjectId">
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="GetSystemDateTime"/>
+					</OutputClaimsTransformations>
+				</TechnicalProfile>
+
+
+				<!-- Set accountEnabled to disabled when account was logged in after inactivity period threshold
+						was passed -->
+				<TechnicalProfile Id="AAD-DisableAccount">
+					<Metadata>
+						<Item Key="Operation">Write</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="objectId" />
+					</InputClaims>
+					<PersistedClaims>
+						<!-- Required claims -->
+						<PersistedClaim ClaimTypeReferenceId="objectId"/>
+						<PersistedClaim ClaimTypeReferenceId="accountEnabled" AlwaysUseDefaultValue="false" DefaultValue="false" />
+					</PersistedClaims>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+				</TechnicalProfile>
+
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+	</ClaimsProviders>
+
+	<UserJourneys>
+		<UserJourney Id="SignUpOrSignInEmail">
+			<OrchestrationSteps>
+				<!-- Present the sign in page -->
+				<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+					<ClaimsProviderSelections>
+						<ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+					</ClaimsProviderSelections>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="2" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+							<Value>objectId</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- This step reads any user attributes that we may not have received when in the token. -->
+				<OrchestrationStep Order="3" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Write logon time for new user as currenttime -->
+				<OrchestrationStep Order="4" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+							<Value>newUser</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="UserWriteLogonTimeUsingObjectIdNewUser" TechnicalProfileReferenceId="AAD-UserWriteLogonTimeUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+
+
+				<!-- Read the last logon IP and last MFA time -->
+				<OrchestrationStep Order="5" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AADUserReadLastLogonTime" TechnicalProfileReferenceId="AAD-UserReadLastLogonTime" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!--This step only occurs if the user has not logged in for X number of days 
+					It will set AccountEnabled attribute to False -->
+				<OrchestrationStep Order="6" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>userLockedOutForInactivity</Value>
+							<Value>False</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="DisableAccount" TechnicalProfileReferenceId="AAD-DisableAccount" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- Sends the inactive account login to a disabled user page to abort the sign in -->
+				<OrchestrationStep Order="7" Type="ClaimsExchange">
+					<Preconditions>
+						<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+							<Value>userLockedOutForInactivity</Value>
+							<Value>False</Value>
+							<Action>SkipThisOrchestrationStep</Action>
+						</Precondition>
+					</Preconditions>
+					<ClaimsExchanges>
+						<ClaimsExchange Id="AccountInactiveStep" TechnicalProfileReferenceId="Self-Asserted-AccountDisabled" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<!-- If the user got this far, write the current time into the lastLogonTime attribute -->
+				<OrchestrationStep Order="8" Type="ClaimsExchange">
+					<ClaimsExchanges>
+						<ClaimsExchange Id="UserWriteLogonTimeUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteLogonTimeUsingObjectId" />
+					</ClaimsExchanges>
+				</OrchestrationStep>
+
+				<OrchestrationStep Order="9" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+			</OrchestrationSteps>
+			<ClientDefinition ReferenceId="DefaultWeb" />
+		</UserJourney>
+	</UserJourneys>
+</TrustFrameworkPolicy> 
