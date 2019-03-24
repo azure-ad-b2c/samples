@@ -27,6 +27,10 @@ Samples for several Azure AD B2C advanced scenarios
 
 - [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies to for passwordless login via Phone Number (SMS or Phone Call).
 
+- [Password reset without the ability to use the last password](policies/password-reset-not-last-password) - For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.
+
+- [Disable and lockout an account after a time period](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
+
 ## Social account
 - [Social identity provider force email verification](policies/social-idp-force-email) - When a users signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
 

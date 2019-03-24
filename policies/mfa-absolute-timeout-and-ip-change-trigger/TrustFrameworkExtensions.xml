@@ -1,12 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
-  TenantId="YourTenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_MFA_IP_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://YourTenant.onmicrosoft.com/B2C_1A_MFA_IP_TrustFrameworkExtensions">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="YourTenant.onmicrosoft.com" PolicyId="B2C_1A_MFA_IP_TrustFrameworkExtensions" PublicPolicyUri="http://YourTenant.onmicrosoft.com/B2C_1A_MFA_IP_TrustFrameworkExtensions">
 
 	<BasePolicy>
 		<TenantId>YourTenant.onmicrosoft.com</TenantId>
@@ -61,16 +56,13 @@
 						<OutputClaim ClaimTypeReferenceId="objectId" />
 						<OutputClaim ClaimTypeReferenceId="authenticationSource" />
 					</OutputClaims>
-					<OutputClaimsTransformations>
-						<OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
-					</OutputClaimsTransformations>
 					<ValidationTechnicalProfiles>
 						<ValidationTechnicalProfile ReferenceId="login-NonInteractive" ContinueOnError="false"/>
 					</ValidationTechnicalProfiles>
 					<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
 				</TechnicalProfile>
-</TechnicalProfiles>
-</ClaimsProvider>
+			</TechnicalProfiles>
+		</ClaimsProvider>
 		<!-- Technical profile to enable MFA -->
 		<ClaimsProvider>
 			<DisplayName>PhoneFactor</DisplayName>
@@ -134,6 +126,13 @@
 						<PersistedClaim ClaimTypeReferenceId="CurrentTime" PartnerClaimType="extension_LastMFATime" />
 					</PersistedClaims>
 					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+				<!-- Modify the AAD Read User TP to also emit the current time -->
+				<TechnicalProfile Id="AAD-UserReadUsingObjectId">
+					<OutputClaimsTransformations>
+						<OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
+					</OutputClaimsTransformations>
 				</TechnicalProfile>
 
 				<!-- Reads the IP from which the user last logged in with
