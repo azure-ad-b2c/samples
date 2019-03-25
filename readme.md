@@ -19,6 +19,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Force password reset first logon](policies/force-password-reset-first-logon) - Demonstrates how to force a user to reset their password on the first logon. 
 
+- [Sign-up and sign-in with embedded password rest](policies/embedded-password-reset) - This policy demostrates how to embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.
+
 - [Force password after 90 days](policies/force-password-reset-after-90-days) - Demonstrates how to force a user to reset their password after 90 days from the last time user set their password.  
 
 - [Password reset only](policies/password-reset-only) - This example policy prevents issuing an access token to the user after resetting their password.
