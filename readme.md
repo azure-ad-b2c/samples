@@ -39,6 +39,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Disable and lockout an account after a time period](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
 
+- [Banned password list](policies/banned-password-list-no-API) - For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.
+
 ## Social account policy enhancements
 - [Social identity provider force email verification](policies/social-idp-force-email) - When a users signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
 
