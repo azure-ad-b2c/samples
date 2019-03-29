@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="your-tenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_CE_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_CE_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_CE_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+
+
+  <ClaimsSchema>
+    <ClaimType Id="CorrelationId">
+      <DisplayName>CorrelationId</DisplayName>
+      <DataType>string</DataType>
+    </ClaimType>
+    <ClaimType Id="CorrelationIdReadOnly">
+      <DisplayName>CorrelationIdReadOnly</DisplayName>
+      <DataType>string</DataType>
+      <UserInputType>Readonly</UserInputType>
+    </ClaimType>
+    <ClaimType Id="IP-Address">
+      <DisplayName>IP-Address</DisplayName>
+      <DataType>string</DataType>
+    </ClaimType>  
+    <ClaimType Id="collectData">
+		  <DisplayName>collectData</DisplayName>
+		  <DataType>boolean</DataType>
+	  </ClaimType>
+    <ClaimType Id="requestAppId">
+      <DisplayName>requestAppId</DisplayName>
+      <DataType>string</DataType>
+    </ClaimType>
+    <ClaimType Id="requestId">
+      <DisplayName>requestId</DisplayName>
+      <DataType>string</DataType>
+    </ClaimType>
+
+    <!--Custom attributes -->
+    <ClaimType Id="city">
+      <DisplayName>city</DisplayName>
+      <DataType>string</DataType>
+    </ClaimType>
+  </ClaimsSchema>
+
+  <ClaimsTransformations>
+    <!--Demo: Copy the correlation ID to a read only claim type -->
+    <ClaimsTransformation Id="CreateCorrelationIdReadOnly" TransformationMethod="FormatStringClaim">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="CorrelationId" TransformationClaimType="inputClaim" />
+      </InputClaims>
+      <InputParameters>
+        <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+      </InputParameters>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="CorrelationIdReadOnly" TransformationClaimType="outputClaim" />
+      </OutputClaims>
+    </ClaimsTransformation>
+  </ClaimsTransformations>
+</BuildingBlocks>
+
+  <ClaimsProviders>
+    <!-- Local account Sign-Up claims provider -->
+  <ClaimsProvider>
+    <DisplayName>Local Account</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+        <Metadata>
+          <Item Key="EnforceEmailVerification">False</Item>
+        </Metadata>
+      </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+	
+  <!-- Local account Sign-In claims provider -->
+  <ClaimsProvider>
+    <DisplayName>Local Account SignIn</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="login-NonInteractive">
+        <Metadata>
+          <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
+          <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
+
+          <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
+          <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>
+        </Metadata>
+        <InputClaims>
+          <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
+          <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
+
+          <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
+          <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
+        </InputClaims>
+      </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+
+
+    <!-- Facebook claims provider -->
+	<ClaimsProvider>
+    <DisplayName>Facebook</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="Facebook-OAUTH">
+        <Metadata>
+            <!--Demo action required: Change to your Facebook App Id-->
+            <Item Key="client_id"></Item>
+          <Item Key="scope">email public_profile</Item>
+          <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+        </Metadata>
+    </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+
+ 	<ClaimsProvider>
+    <DisplayName>REST APIs</DisplayName>
+    <TechnicalProfiles>
+
+      <!-- Custom Restful service -->
+      <TechnicalProfile Id="REST-CheckAppAttributes">
+      <DisplayName>Chceck if application attributes exist</DisplayName>
+      <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+      <Metadata>
+        <Item Key="ServiceUrl">http://aadb2cclaimsproviderap.azurewebsites.net/api/identity/CheckAppAttributes</Item>
+        <Item Key="AuthenticationType">None</Item>
+        <Item Key="SendClaimsIn">Body</Item>
+      </Metadata>
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="userId" />
+        <InputClaim ClaimTypeReferenceId="CorrelationId" PartnerClaimType="correlationId" />
+        <InputClaim ClaimTypeReferenceId="IP-Address" PartnerClaimType="ipAddress" />
+        <InputClaim ClaimTypeReferenceId="requestAppId" PartnerClaimType="appId" DefaultValue="{OIDC:ClientId}" />
+
+        <!--Custom attributes-->
+        <InputClaim ClaimTypeReferenceId="city" PartnerClaimType="city" />
+     </InputClaims>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="collectData" />
+        <OutputClaim ClaimTypeReferenceId="requestId"  />
+      </OutputClaims>
+      <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+      </TechnicalProfile>
+	  </TechnicalProfiles>
+	</ClaimsProvider>
+
+  <ClaimsProvider>
+    <DisplayName>Application Insights</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="JourneyContextForInsights">
+        <DisplayName>Application Insights</DisplayName>
+        <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.UserJourneyContextProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="IP-Address" />
+          <OutputClaim ClaimTypeReferenceId="CorrelationId" />
+        </OutputClaims>
+      </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+
+		<ClaimsProvider>
+			<Domain>ClaimsExchange.com</Domain>
+			<DisplayName>Login using ClaimsExchange.com</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="ClaimsExchange-OIDC">
+					<DisplayName>Pinedemo.com Employee</DisplayName>
+					<Description>Login with your Pinedemo.com account</Description>
+					<Protocol Name="OpenIdConnect"/>
+					<OutputTokenFormat>JWT</OutputTokenFormat>
+					<Metadata>
+						<Item Key="METADATA">https://aadb2cclaimsproviderui.azurewebsites.net/oidc/wellknown</Item>
+						<Item Key="ProviderName">http://www.contoso.com</Item>
+						<Item Key="client_id">b948655f-f059-488d-b250-06b09308c3eb</Item>
+						<Item Key="IdTokenAudience">http://azure.microsoft.com/B2C/claimsExchange</Item>
+						<Item Key="response_types">id_token</Item>
+						<Item Key="UsePolicyInRedirectUri">false</Item>
+						<Item Key="response_mode">query</Item>
+					</Metadata>
+          <InputClaims>
+						<InputClaim ClaimTypeReferenceId="requestId" PartnerClaimType="rid" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="city" PartnerClaimType="city" />
+					</OutputClaims>
+					<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+				</TechnicalProfile>
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+  <ClaimsProvider>
+    <DisplayName>Azure Active Directory</DisplayName>
+    <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <!--Custom attributes-->
+            <OutputClaim ClaimTypeReferenceId="city" />
+          </OutputClaims>
+        </TechnicalProfile>    
+        
+        <TechnicalProfile Id="AAD-UserReadUsingAlternativeSecurityId-NoError">
+          <OutputClaims>
+            <!--Custom attributes-->
+            <OutputClaim ClaimTypeReferenceId="city" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserWriteAppAProfileUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+
+            <!-- Optional claims -->
+            <PersistedClaim ClaimTypeReferenceId="city" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+    </TechnicalProfiles>
+	</ClaimsProvider>      
+</ClaimsProviders>
+
+  <UserJourneys>
+
+      <UserJourney Id="SignUpOrSignIn">
+      <OrchestrationSteps>
+
+       <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="JourneyContextForInsights" TechnicalProfileReferenceId="JourneyContextForInsights" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+           <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+           <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-CheckAppAttributes" TechnicalProfileReferenceId="REST-CheckAppAttributes" />
+          </ClaimsExchanges>
+        </OrchestrationStep> 
+        
+
+        <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>collectData</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ClaimsExchangeOIDC" TechnicalProfileReferenceId="ClaimsExchange-OIDC" />
+         </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- <OrchestrationStep Order="10" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>collectData</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+             <ClaimsExchange Id="AADUserReadWithObjectId2" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+        </ClaimsExchanges>
+        </OrchestrationStep> -->
+
+        <OrchestrationStep Order="10" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+  </UserJourneys>
+
+</TrustFrameworkPolicy>

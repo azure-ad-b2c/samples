@@ -1,0 +1,43 @@
+﻿@model AADB2C.ClaimsProvider.UI.Models.UserProfileModel
+@{
+    Layout = "";
+}
+
+@{
+    var parms = new Dictionary<string, string>
+{
+{ "redirect_uri", ViewData["redirect_uri"].ToString() },
+{ "state", ViewData["state"].ToString() },
+{ "rid", ViewData["rid"].ToString() }
+};
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AADB2C.ClaimsExchange.Sample</title>
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+          asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+          asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-4" style="padding-left: 100px; padding-right:100px;">
+            <form asp-action="" asp-all-route-data="parms">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
