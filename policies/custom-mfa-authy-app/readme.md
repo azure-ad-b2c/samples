@@ -15,7 +15,7 @@ Following component are involved in the Azure AD B2C Authy App multi-factor auth
 
 ## 1. Sign-up or sign in flow
 - During the sign-up or sign-in flow, orchestration step #6 reads the AppCode MFA attributes. 
-- If the AppCode exists, step #7 runs the MFA validation
+- If AppCode attribute exists, step #7 runs the MFA validation
 - If AppCode attribute doesn't exist, step #8 enrolls and validates the phone number.
 
 ### Enroll new phone number
@@ -28,6 +28,7 @@ The .Net core solution **identity** controller **Register** POST endpoint runs s
 As part of the registration process, Azure AD B2C custom policy also calls the **Identity** POST **WaitForAuthyApproval** endpoint to validate the phone number and then stores **authyid** (AppCode) value in the user's Azure AD B2C account for later use.
 
 Orchestration step 8 asks the user to provide the phone number (with the country code).
+
 ![Enroll](media/enroll.png)
 
 When user clicks continue, the **SelfAsserted-AppFactor-Register** technical profile runs following validation technical profiles:
@@ -38,6 +39,7 @@ When user clicks continue, the **SelfAsserted-AppFactor-Register** technical pro
 ### Validate the phone number
 Both the registration and the sign-in flow run the verification flow. The **SelfAsserted-AppFactor-WaitForAuthyApproval** technical profile calls the **Identity** POST **WaitForAuthyApproval** endpoint. This endpoint runs some input validation and then makes two calls the Auth API
 - [Create an Approval Request](https://www.twilio.com/docs/authy/api/push-authentications#create-an-approval-request) This will create a new approval request for the given Authy ID and send it to the end user along with a push notification to the Authy Mobile app. At this point Authy sends push notification to the Auth mobile App. User has to approve or deny the request.
+    
     ![Authy app](media/auth-app.png)
     
 - [Check Approval Request Status](https://www.twilio.com/docs/authy/api/push-authentications#check-approval-request-status) repeatedly calls this endpoint until the user approves the request, or until the **Identity** endpoint reaches the timeout.
