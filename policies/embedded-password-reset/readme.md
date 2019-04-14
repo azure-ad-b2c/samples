@@ -6,10 +6,10 @@ This policy demonstrates how to embed the password reset flow a part of the sign
 
 ## Policy artifacts
 1. The `isPasswordResetFlow` claim type indicates whether user resetting the password
-1. The `LocalAccountDiscoveryUsingEmailAddress` technical profile is overwritten by setting the display name. The display name controls the button text that renders to the user. Also, setting the value of the `isPasswordResetFlow` output claim to `ture`. As indicator that user is running the password reset flow (in the same policy).
+1. The `LocalAccountDiscoveryUsingEmailAddress` technical profile is overwritten by setting the display name. The display name controls the button text that renders to the user. Also, setting the value of the `isPasswordResetFlow` output claim to `true`. As indicator that user is running the password reset flow (in the same policy).
 1. In the first orchestration step, we add a new `LocalAccountSigninEmailExchange` claims provider selection.
 1. In the second orchestration step, we add the action for the password reset button that added in the previous step. This is the first step of the password reset flow, where the user validates the email address. The technical profile also set the `isPasswordResetFlow` as an indicator that user is resetting the password
-1. The third orchestration step is the second step of the password rest flow, that actually resets the password.
+1. The third orchestration step is the second step of the password reset flow, that actually resets the password.
 
 ##  Fix the user interface
 In this solution, the password reset is added as an identity provider selection button. You may want to move the button to the proper location and set the UI to looks like a link.
