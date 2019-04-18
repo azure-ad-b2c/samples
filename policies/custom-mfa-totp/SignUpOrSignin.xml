@@ -15,6 +15,12 @@
 
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+
+    <UserJourneyBehaviors>
+      <!-- Demo: Allow JavaScript execution in the relying party policy-->
+      <ScriptExecution>Allow</ScriptExecution>
+    </UserJourneyBehaviors>
+    
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
