@@ -1,0 +1,5 @@
+platform :ios, '11.0'
+
+target 'b2creact' do
+  pod 'AppAuth', '>= 0.94'
+end
