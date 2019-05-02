@@ -20,7 +20,7 @@
     - **Disclaimer** The sample policy is developed and managed by the open-source community in GitHub. The policy is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The app is provided AS IS without warranty of any kind. 
     
 
-4. Go to the root folder and update the readme.md file with the new sample you created. 
+4. Go to the root folder and update the [readme.md](readme.md) file with the new sample you created. 
 
 ## Policy
 - Avoid making changes to the base policy 
