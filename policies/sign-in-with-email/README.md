@@ -50,3 +50,5 @@ If you publish the application to Azure App Service, you'll need to configure a 
 1. First, export your certificate as a PFX file using the User Certificates management tool (or create a new one)
 2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service
 3. Follow [these instructions](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) to ensure App Service loads the certificate when the app runs
+
+This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the nessacery changes in the **Demo action required** sections. 
