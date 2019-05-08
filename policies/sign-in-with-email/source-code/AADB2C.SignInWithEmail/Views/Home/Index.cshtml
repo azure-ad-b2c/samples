@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <h2>@ViewData["Message"] </h2>
+</div>
+
+<form method="get" asp-controller="Home" asp-action="Post">
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2" for="email">Email address:</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" id="email" name="email" value="" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="email" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send sign-in email" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
