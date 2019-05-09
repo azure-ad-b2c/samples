@@ -26,7 +26,7 @@ PATCH https://graph.windows.net/your-tenant.onmicrosoft.com/users/user-id
 }
 ```
 
-Replase:
+Replace:
 - **your-tenant**, with your tenant name
 - **user-id**, with the user object id, or UPN
 - **clientId**, with the extension attribute application client id
