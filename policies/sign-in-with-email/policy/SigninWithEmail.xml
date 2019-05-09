@@ -35,7 +35,7 @@
         </OutputClaims>
       </ClaimsTransformation>
 
-      <!--Sample: Initiates the errorMessage claims type with the error message user not foud-->
+      <!--Sample: Initiates the errorMessage claims type with the error message user not found-->
       <ClaimsTransformation Id="CreateUserNotFoundErrorMessage" TransformationMethod="CreateStringClaim">
         <InputParameters>
           <InputParameter Id="value" DataType="string" Value="You aren't registered in the system!" />
@@ -50,7 +50,7 @@
 
   <ClaimsProviders>
     <!--Sample: This technical profile specifies how B2C should validate your token, and what claims you want B2C to extract from the token. 
-      The METADATA value in the TechnicalProfile metadata is required. 
+      The METADATA value in the TechnicalProfile meta-data is required. 
       The “IdTokenAudience” and “issuer” arguments are optional (see later section)-->
     <ClaimsProvider>
       <DisplayName>My ID Token Hint ClaimsProvider</DisplayName>
@@ -184,7 +184,7 @@
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
-      <!--Sample: Set the input cliams to be read from the id_token_hint-->
+      <!--Sample: Set the input claims to be read from the id_token_hint-->
       <InputClaims>
         <InputClaim ClaimTypeReferenceId="email" />  
       </InputClaims>       

@@ -1,6 +1,10 @@
 # SignUp with email invitation
 This sample console app (.Net core) demonstrates how to send sign-up email invitation. The console application generates a link to sign-up policy with the email address to be validated. The link to the sign-up policy contains the email address, which is encapsulated inside a JWT token (client assertion). When a user clicks on that link, Azure AD B2C validates the JWT token signature, reads the information from the  token, and extracts the email address.
 
+---
+## This solution id deprecated!
+---
+
 The sample solution contains two policies you can use:
 1. **B2C_1A_invite_signup**  - Sign-up invitation policy
 1. **B2C_1A_invite_signin_with_mfa**  - Sign-up invitation with MFA policy. The application sends also the user phone number as input claim. User is asked to verify the phone number, without the ability to change the phone number.
