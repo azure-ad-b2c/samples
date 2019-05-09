@@ -1,6 +1,10 @@
 # SignUp with email invitation
 This sample console app (.Net core) demonstrates how to send sign-up email invitation. The web application sends an email to the end user with a link to sign-up policy. The link to the sign-up policy contains the email address, which is encapsulated inside a JWT token (id_token_hint). When a user clicks on that link, Azure AD B2C validates the JWT token signature, reads the information from the token, extracts the email address and ask the user to set the password, display name, surname and given name.
 
+## User flow
+To invite a user, from the application, type the user's **email address** and click **Send invintation**. The application sends a sign-in link (with a id_token_hint). User clicks on the link, that takes to user to Azure AD B2C policy. Azure AD B2C validate the input id_token_hint, asks the user to provide the password and user data. User clicks continue, Azure AD B2C creates the account, issues an access token, and redirect the user back to the application.  
+![User flow](media/flow.png)
+
 ## Sending Application Data
 The key of sending data to Azure AD B2C custom policy is to package the data into a JWT token as claims (id_token_hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
 
