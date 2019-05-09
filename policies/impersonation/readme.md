@@ -10,21 +10,33 @@ When you run the impersonation policy, you first need to sign-in with your own c
 
 ![Impersonation flow](media/flow.png)
 
-## Core Policy components
+1. User (a customer service representative) sign-in with local or social account
+1. After the user sign-in, the `AAD-UserReadUsingObjectId` technical profile reads the `extension_can_impersonate` extension attribute from the directory
+1. The next orchestration step (step number 6) checks whether the user is allowed to impersonate (extension_can_impersonate value is equesl to 1). If not, `SelfAsserted-ErrorMessage` technical profile displays an error, preventing the user from issuing an access token.
+1. Next orchestration step asks the user to provide the email address of the user to be impersonated, by calling the `SelfAsserted-TargetEmailExchange` technical profile. This technical profile also checks if the impersonated user exists in the directory, and return the user's email address
+1. On the last step Azure AD B2C issues the access token, with the claims specified in the RelyingParty XML element, including the impersonated user's email address - `impersonatedUser` claim type
 
-### Claim Schema
-* ***targetEmail*** - this string claim represents as a textbox in the UX. This claim to interactive with the privileged user allowing them to pass a value to Azure AD B2C backend service. This value is sent to look up email from **signInNames**.
+## Authorization
+The authorization is based on the value of the `extension_can_impersonate` claim type. If the value is `1`, the user is allowed to impersonate. You should use Azure AD Graph API to set the value of the extension attribute. For example, send an HTTP `PATCH` request to:
 
-* ***impersonatedUser*** - this is a string claim that is solely to take the return from the **signInNames** (A collection that contains username & email) and pass it to the application/service. This is done through the Validation Profile **AAD-ImpersonatedUserRead** that pulls the **signInNames.email** variable and pass it to the Relying Party **SignUpOrSignin.xml**.
+```HTTP
+https://graph.windows.net/your-tenant.onmicrosoft.com/users/user-id
+{
+    "extension_clientId_can_impersonate": "1"
+}
+```
 
-### Relying Party
-* SignUpOrSignin - This is a typical sign-up sign-in policy that adds the varilable ***impersonatedUser*** as an output claim to the application.
+Replase:
+- **your-tenant**, with your tenant name
+- **user-id**, with the user object id, or UPN
+- **clientId**, with the extension attribute application client id
 
-### Technical Profile
-* SelfAsserted-TargetEmailExchange - This profile prompts user a text box and captures the ***targetEmail***. Within the policy, it triggers the **AAD-ImpersonatedUserRead** Validation Technical Profile to read the user information in the Azure AD B2C directory
+For more infomation, see:
+- [Azure AD B2C: Use the Azure AD Graph API](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-devquickstarts-graph-dotnet)
+- [Use custom attributes in a custom profile edit policy](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom)
+- [Extend Azure Active Directory Schema using Graph API](https://blogs.msdn.microsoft.com/aadgraphteam/2014/03/05/extend-azure-active-directory-schema-using-graph-api-preview/)
 
-### Validation Technical Profile
-* AAD-ImpersonatedUserRead - This Validation Technical Profile looks up the user object and returns claims. If user does not exists, it handles a successful error. It returns an output claim ***impersonatedUser*** for the Relying Party **SignUpOrSignin**. 
+You can also use other authorization method, such as calling a REST API to check is user is allowed to impersonate.
 
 ## Disclaimer
 The sample is developed and managed by the open-source community in GitHub. The application is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.

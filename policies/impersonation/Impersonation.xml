@@ -32,7 +32,34 @@
         <DataType>string</DataType>
         <UserHelpText/>
       </ClaimType>
+
+      <!--Sample: Indicates whether a user can impersonate (if the value is 1)-->
+      <ClaimType Id="extension_can_impersonate">
+        <DisplayName>Can impersonate</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Add help text here</UserHelpText>
+      </ClaimType>
+
+      <!--Sample: Stores the error message if user can't impersonate-->
+      <ClaimType Id="errorMessage">
+     	  <DisplayName>Error</DisplayName>
+     	  <DataType>string</DataType>
+        <UserHelpText>Add help text here</UserHelpText>
+     	  <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <!--Sample: Initiates the errorMessage claims type with the error message-->
+      <ClaimsTransformation Id="CreateUnsolicitedErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You are not allow to impersonate. Please content your administrator" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
 </BuildingBlocks>
 
 <ClaimsProviders>
@@ -45,7 +72,7 @@
           <DisplayName>Target Email Page</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item> <!-- Ensure you remove suffix ".profileupdate" and leave api.selfasserted-->
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item> 
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
           <OutputClaims>
@@ -58,12 +85,51 @@
             <ValidationTechnicalProfile ReferenceId="AAD-ImpersonatedUserRead"/>
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
+
+        <!-- Sample: Show error message if user is not allowed to impersonate-->
+        <TechnicalProfile Id="SelfAsserted-ErrorMessage">
+          <DisplayName>Error message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <!-- Sample: Remove the continue button-->
+            <Item Key="setting.showContinueButton">false</Item>         
+         </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUnsolicitedErrorMessage" />
+          </InputClaimsTransformations>         
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorMessage"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="errorMessage"/>
+          </OutputClaims>
+        </TechnicalProfile>
       </TechnicalProfiles>
-  </ClaimsProvider>
+    </ClaimsProvider>
   
-  <ClaimsProvider>
+    <ClaimsProvider>
     <DisplayName>Azure Active Directory</DisplayName>
     <TechnicalProfiles>
+      <TechnicalProfile Id="AAD-Common">
+        <DisplayName>Azure Active Directory</DisplayName>
+        <!--  Sample action required: Provide objectId and appId to use extension properties.
+              For more information, see: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom -->
+        <Metadata>
+          <Item Key="ApplicationObjectId">00000000-0000-0000-0000-000000000000<</Item>
+          <!--Sample: the name of the extension attribute will be:
+            extension_cleintId_can_impersonate, for example: extension_831374b3bd5041bfaa54263ec9e050fc_can_impersonate-->
+          <Item Key="ClientId">11111111-1111-1111-1111-111111111111</Item>
+        </Metadata>
+      </TechnicalProfile>	
+      
+      <!--Sample: read the extension_can_impersonate attribute-->
+      <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_can_impersonate"/>
+        </OutputClaims>
+      </TechnicalProfile>
+
       <!--Sample: Read target user and return error it doesn't exist. 
         If exists, pipes value into impersonatedUser claim type -->
       <TechnicalProfile Id="AAD-ImpersonatedUserRead">
@@ -148,27 +214,34 @@
 
         <!--Sample: this step reads your own account properties-->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>        
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!--Sample: Collect the email address of the end user of act of behalf of-->
+        <!-- Sample: Check whether user can impersonate -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
+         <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>extension_can_impersonate</Value>
+              <Value>1</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>        
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-ErrorMessage" TechnicalProfileReferenceId="SelfAsserted-ErrorMessage"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Collect the email address of the end user of act of behalf of-->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="TargetEmailExchange" TechnicalProfileReferenceId="SelfAsserted-TargetEmailExchange"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
         <!--Sample: Issu an access token-->
-        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
     
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb"/>
