@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="your-tenant.onmicrosoft.com"
+  PolicyId="B2C_1A_Impersonation"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_Impersonation">
+
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+       <!-- Sample: targetEmail is the email of the user originally requested impersonatedUser is the 
+       email value returned from SignInNames.Email from Azure AD after we requested (this is directory data) -->
+      <ClaimType Id="targetEmail">
+        <DisplayName>Sign on behalf of</DisplayName>
+        <DataType>string</DataType>
+         <UserHelpText>Email address of the impersonated user</UserHelpText>
+        <UserInputType>EmailBox</UserInputType>
+        <Restriction>
+          <Pattern RegularExpression="^[a-zA-Z0-9.!#$%&amp;'^_`{}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" HelpText="Please enter a valid email address." />
+        </Restriction>
+      </ClaimType>
+
+      <ClaimType Id="impersonatedUser">  
+        <DisplayName>Impersonated account</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText/>
+      </ClaimType>
+   </ClaimsSchema>
+</BuildingBlocks>
+
+<ClaimsProviders>
+  <!--Sample: this technical profile provides input for targetEmail and runs validation technical 
+      profile for to read the impersonated user profile -->
+  <ClaimsProvider>
+    <DisplayName>Self Asserted Targeted Email Exchange</DisplayName>
+    <TechnicalProfiles>
+      <TechnicalProfile Id="SelfAsserted-TargetEmailExchange">
+          <DisplayName>Target Email Page</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item> <!-- Ensure you remove suffix ".profileupdate" and leave api.selfasserted-->
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="impersonatedUser" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="targetEmail" Required="true"/> 
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-ImpersonatedUserRead"/>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+  </ClaimsProvider>
+  
+  <ClaimsProvider>
+    <DisplayName>Azure Active Directory</DisplayName>
+    <TechnicalProfiles>
+      <!--Sample: Read target user and return error it doesn't exist. 
+        If exists, pipes value into impersonatedUser claim type -->
+      <TechnicalProfile Id="AAD-ImpersonatedUserRead">
+        <Metadata>
+          <Item Key="Operation">Read</Item>
+          <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+        </Metadata>
+        <IncludeInSso>false</IncludeInSso>
+        <InputClaims>
+          <!--Sample: Look up in the signInNames to see if the value in targetEmail contains - look it up-->
+          <InputClaim ClaimTypeReferenceId="targetEmail" PartnerClaimType="signInNames" Required="true"/>
+        </InputClaims>
+        <OutputClaims>
+          <!-- Sample: Reutrns the value in targetEmail and check in signInNames collection, then 
+                 returns value in SignInName and pipe into impersonatedUser-->
+          <OutputClaim ClaimTypeReferenceId="impersonatedUser" PartnerClaimType="signInNames.emailAddress" /> 
+        </OutputClaims>
+        <IncludeTechnicalProfile ReferenceId="AAD-Common"/>
+      </TechnicalProfile>
+    </TechnicalProfiles>
+  </ClaimsProvider>
+</ClaimsProviders>
+
+<UserJourneys>
+  <UserJourney Id="Impersonation">
+      <OrchestrationSteps>
+
+        <!--Sample: Sign-in with your own credentials  -->   
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Or create new account -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: this step reads your own account properties-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Collect the email address of the end user of act of behalf of-->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>newuser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="TargetEmailExchange" TechnicalProfileReferenceId="SelfAsserted-TargetEmailExchange"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Issu an access token-->
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+    
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+
+	</UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="Impersonation" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="impersonatedUser"/>
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
+
+
+
