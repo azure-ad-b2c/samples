@@ -17,7 +17,7 @@ When you run the impersonation policy, you first need to sign-in with your own c
 1. On the last step Azure AD B2C issues the access token, with the claims specified in the RelyingParty XML element, including the impersonated user's email address - `impersonatedUser` claim type
 
 ## Authorization
-The authorization is based on the value of the `extension_can_impersonate` claim type. If the value is `1`, the user is allowed to impersonate. You should use Azure AD Graph API to set the value of the extension attribute. For example, send an HTTP `PATCH` request to:
+The authorization is based on the value of the `extension_can_impersonate` claim type. If the value is `1`, the user is allowed to impersonate. You should use Azure AD Graph API to set the value of the extension attribute. For example, send an HTTP `PATCH` request to update the user's profile:
 
 ```HTTP
 https://graph.windows.net/your-tenant.onmicrosoft.com/users/user-id
