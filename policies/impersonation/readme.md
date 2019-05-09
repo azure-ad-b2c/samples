@@ -5,9 +5,6 @@ Impersonation flows are common for many business needs. We see this for users th
 1. **Customer Service Representative** requires assisting a user and requires to log into the application on the behalf of the user. The CSR wants to see exactly what the user sees.
 2. **Financial Investor** manages on the behalf of their customers. As such, a bank or an investment firm may require these individuals to log into their service/application to manage their customers information.
 
-### Note:
-A standard to manage impersonation flows is currently in development and has not been finalized. This sample does not reflect the final product or guidance. You should monitor on this progress and plan to make changes to your design as standards of the industry changes. You can read more [here](https://tools.ietf.org/html/draft-ietf-oauth-token-exchange-10 "OAuth 2.0 Token Exchange draft-ietf-oauth-token-exchange-10").
-
 ### Impersonation flow
 When you run the impersonation policy, you first need to sign-in with your own credentials. On the second page, provide the email address of the user you want to impersonate. B2C checks whether the user exists in the directory. If yes, B2C issues and access token with the email address of the impersonated user `impersonatedUser`.
 
@@ -34,3 +31,5 @@ The sample is developed and managed by the open-source community in GitHub. The 
 
 ## Notes
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the nessacery changes in the **Sample action required** sections. 
+
+A standard to manage impersonation flows is currently in development and has not been finalized. This sample does not reflect the final product or guidance. You should monitor on this progress and plan to make changes to your design as standards of the industry changes. You can read more [here](https://tools.ietf.org/html/draft-ietf-oauth-token-exchange-10 "OAuth 2.0 Token Exchange draft-ietf-oauth-token-exchange-10").
