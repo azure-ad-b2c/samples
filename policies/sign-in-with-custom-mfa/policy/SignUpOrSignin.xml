@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="your-tenant.onmicrosoft.com"
+  PolicyId="B2C_1A_signup_signin_with_sms"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_signup_signin_with_sms">
+
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+
+      <!--Sample: indicating that SMS sent to the user -->
+      <ClaimType Id="SMSSent">
+      	<DisplayName>SMS Sent</DisplayName>
+      	<DataType>boolean</DataType>
+      </ClaimType>
+
+      <!--Sample: Stores the user phone number -->
+      <ClaimType Id="phoneNumber">
+      	<DisplayName>Phone number</DisplayName>
+      	<DataType>string</DataType>
+        <!-- <UserInputType>Readonly</UserInputType> -->
+        <Mask Type="Simple">XXX-XXX-</Mask>
+      </ClaimType>
+
+      <!--Sample: Stores the verification code return by the REST API-->
+      <ClaimType Id="verificationCode">
+     	  <DisplayName></DisplayName>
+     	  <DataType>string</DataType>
+      </ClaimType>
+
+      <ClaimType Id="userVerificationCode">
+      	<DisplayName>Verification code</DisplayName>
+      	<DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+
+<ClaimsProviders>
+  <ClaimsProvider>
+    <DisplayName>Local Account</DisplayName>
+    <TechnicalProfiles>
+      <!--Sample: This technical profile collect the phone number, and call a validation technical profile 
+        to send the SMS with a verification code-->
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-PhoneNumber">
+          <DisplayName>Phone number</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="SMSSent" />
+            <OutputClaim ClaimTypeReferenceId="verificationCode" />
+
+            <!--Sample: bubble up claims from AAD-UserReadUsingEmailAddress validaion technical profile-->
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <!--Sample: Read the user's profile with the phone number from the directory -->
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress"/>
+
+            <!--Sample: Send SMS to the phone number-->
+            <ValidationTechnicalProfile ReferenceId="REST-SendSMS"/>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD"/>
+        </TechnicalProfile>
+
+        <!--Sample: Collect and check the verification code-->
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-VerificationCode">
+          <DisplayName>Verification Code</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userVerificationCode" Required="true"/>
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+             <!--Sample: validate the verification code-->
+             <ValidationTechnicalProfile ReferenceId="REST-Validate" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <Metadata>
+            <!--Sample: don't raise error if user not found. We have an orchestration step to handle the error message-->
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+          </Metadata>
+          <OutputClaims>
+            <!--Sample: read the phone number-->
+            <OutputClaim ClaimTypeReferenceId="phoneNumber" PartnerClaimType="mobile"/>
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!--Sample: This technical profile sends a magic link to the provided email address-->
+    <ClaimsProvider>
+      <DisplayName>Custom REST API</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-SendSMS">
+          <DisplayName>Send SMS with verification code</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <!--Sample action required: replace with your endpoint location -->
+            <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/identity/send</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="phoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="verificationCode" />
+            <OutputClaim ClaimTypeReferenceId="SMSSent" DefaultValue="true" AlwaysUseDefaultValue="true"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-Validate">
+          <DisplayName>Validate the verification code</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <!--Sample action required: replace with your endpoint location -->
+            <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/identity/validate</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="verificationCode" />
+            <InputClaim ClaimTypeReferenceId="userVerificationCode" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+  </ClaimsProviders>
+<UserJourneys>
+  <UserJourney Id="SignUpOrSignInWithCustomSMS">
+      <OrchestrationSteps>
+      
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
+            <!--Sample: Adding the sign-in with SMS button-->
+            <ClaimsProviderSelection TargetClaimsExchangeId="SignInWithSMSExchange"/>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/>
+            <ClaimsExchange Id="SignInWithSMSExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-PhoneNumber"/>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Sample: If user choose to sign-in with magic email, stop the flow. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>SMSSent</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedEmailSent" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-VerificationCode"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+ 
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignInWithCustomSMS" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
+
+
+
