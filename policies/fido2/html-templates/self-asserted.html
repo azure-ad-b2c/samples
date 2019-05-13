@@ -86,11 +86,12 @@
                                             <i id="registerSpinner"></i><span id="fidoAuthnTitle">Register or sign-in</span></button>
                                         <br />
                                         <div class="alert alert-primary hidden wordWrap" role="alert" id="status">
+                                        </div>
                                         
-                                            <br />
+                                        <br />
                                         <a id="debugMode" href="#" style="font-size: .75em;">Debug</a>    
 
-                                        </div>
+                                        
                                         <span id="spaceLine">
                                             <br />
                                         </span>
@@ -150,7 +151,7 @@ var isDebug =  false;
 
 function showHiddenFields() {
     isDebug = true;
-    var claims = ['challenge', 'extension_fido_rawId', 'clientDataJSON', 'signature', 'authenticatorData', 'userHandle', 'readOnlyDisplayName', 'readOnlyName', 'objectId', 'BanattestationObjectana', 'continue'];
+    var claims = ['challenge', 'extension_fido_rawId', 'clientDataJSON', 'signature', 'authenticatorData', 'userHandle', 'readOnlyDisplayName', 'readOnlyName', 'objectId', 'attestationObject', 'continue'];
 
     claims.forEach(function(item, index, array) {
         if ($('#' + item).length >0 )
