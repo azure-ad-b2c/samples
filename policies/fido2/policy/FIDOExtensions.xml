@@ -314,13 +314,13 @@
              <InputClaimsTransformation ReferenceId="FIDOCreateAuthenticationMessage" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="challenge"/>
             <InputClaim ClaimTypeReferenceId="userMessage"/>
+            <InputClaim ClaimTypeReferenceId="challenge"/>
           </InputClaims>
           <OutputClaims>
             <!--Sample: Read only claims to present to be sent the authenticator--> 
-            <OutputClaim ClaimTypeReferenceId="challenge" />
             <OutputClaim ClaimTypeReferenceId="userMessage" />
+            <OutputClaim ClaimTypeReferenceId="challenge" />
 
             <!--Sample: Claims return from the authenticator -->
             <OutputClaim ClaimTypeReferenceId="extension_fido_rawId" />
