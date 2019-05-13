@@ -282,7 +282,7 @@ function createCredential() {
         publicKey: createCredentialOptions
     }).then(rawAttestation => {
         $("#extension_fido_rawId").val(base64encode(rawAttestation.rawId));
-        $("#clientDataJSON").val(arrayBufferToString(rawAttestation.response.clientDataJSON));
+        $("#clientDataJSON").val(base64encode(rawAttestation.response.clientDataJSON));
         $("#attestationObject").val(base64encode(rawAttestation.response.attestationObject));
         
         localStorage.setItem("credentialId", $("#extension_fido_rawId").val());
@@ -337,7 +337,7 @@ function getAssertion() {
     }).then(rawAssertion => {
         
         $("#extension_fido_rawId").val(base64encode(rawAssertion.rawId));
-        $("#clientDataJSON").val(arrayBufferToString(rawAssertion.response.clientDataJSON));
+        $("#clientDataJSON").val(base64encode(rawAssertion.response.clientDataJSON));
         $("#userHandle").val(base64encode(rawAssertion.response.userHandle));
         $("#signature").val(base64encode(rawAssertion.response.signature));
         $("#authenticatorData").val(base64encode(rawAssertion.response.authenticatorData));

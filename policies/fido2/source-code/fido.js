@@ -45,7 +45,7 @@ fido.makeCredential = async (attestation) => {
     //the credential creation
     let C;
     try {
-        C = JSON.parse(attestation.clientDataJSON);
+        C = JSON.parse(Buffer.from(attestation.clientDataJSON, 'base64'));
     } catch (e) {
         throw new Error("clientDataJSON could not be parsed");
     }
@@ -86,18 +86,9 @@ fido.makeCredential = async (attestation) => {
 
     //Steps 12-19 are skipped because this is a sample app.
 
-    //Store the credential
-    /*Yoel const credential = await storage.Credentials.create({
-        id: authenticatorData.attestedCredentialData.credentialId.toString('base64'),
-        publicKeyJwk: authenticatorData.attestedCredentialData.publicKeyJwk,
-        signCount: authenticatorData.signCount
-    });
-
-    return credential;*/
     return {
         id: authenticatorData.attestedCredentialData.credentialId.toString('base64'),
-        publicKeyJwk: authenticatorData.attestedCredentialData.publicKeyJwk,
-        test: "ddddd"
+        publicKeyJwk: authenticatorData.attestedCredentialData.publicKeyJwk
     }
 };
 
@@ -114,13 +105,6 @@ fido.verifyAssertion = async (assertion) => {
 
     // Step 3: Using credential’s id attribute look up the corresponding
     // credential public key.
-    /*Yoel let credential = await storage.Credentials.findOne({
-        id: assertion.id
-    });
-
-    if (!credential) {
-        throw new Error("Could not find credential with that ID");
-    }*/
 
     const publicKeyStr = assertion.publicKeyJwk1 + assertion.publicKeyJwk2;
     if (!publicKeyStr)
@@ -130,7 +114,7 @@ fido.verifyAssertion = async (assertion) => {
 
     // Step 4: Let cData, authData and sig denote the value of credential’s
     // response's clientDataJSON, authenticatorData, and signature respectively
-    const cData = assertion.clientDataJSON;
+    const cData = Buffer.from(assertion.clientDataJSON, 'base64'); 
     const authData = Buffer.from(assertion.authenticatorData, 'base64');
     const sig = Buffer.from(assertion.signature, 'base64');
 
@@ -149,9 +133,10 @@ fido.verifyAssertion = async (assertion) => {
 
     //Step 11: Verify that the rpIdHash in authData is the SHA-256 hash of the
     //RP ID expected by the Relying Party.
-    if (!authenticatorData.rpIdHash.equals(sha256(hostname))) {
-        throw new Error("RPID hash does not match expected value: sha256(" + rpId + ")");
-    }
+    if (hostname != "localhost")
+        if (!authenticatorData.rpIdHash.equals(sha256(hostname))) {
+            throw new Error("RPID hash does not match expected value: sha256(" + hostname + ")");
+        }
 
     //Step 12: Verify that the User Present bit of the flags in authData is set
     if ((authenticatorData.flags & 0b00000001) == 0) {
@@ -281,6 +266,10 @@ const validateClientData = (clientData, type) => {
     } catch (e) {
         throw new Error("Invalid origin in collectedClientData");
     }
+
+    // Don't validate the ClientData on localhost
+    if (hostname === "localhost")
+        return;
 
     if (origin.hostname !== hostname)
         throw new Error("Invalid origin in collectedClientData. Expected hostname " + hostname);
