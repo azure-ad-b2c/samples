@@ -5,123 +5,21 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="your-tenant.onmicrosoft.com"
-  PolicyId="B2C_1A_signup_signin_with_magic_link"
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_signup_signin_with_magic_link">
+  PolicyId="B2C_1A_fido_signup_signin"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_fido_signup_signin">
 
   <BasePolicy>
     <TenantId>your-tenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+    <PolicyId>B2C_1A_FIDOExtensions</PolicyId>
   </BasePolicy>
-  <BuildingBlocks>
-    <ClaimsSchema>
-      <!--Sample: indicating that magic link sent to the user -->
-      <ClaimType Id="magicLinkSent">
-      	<DisplayName>magicLinkSent</DisplayName>
-      	<DataType>boolean</DataType>
-      </ClaimType>
-
-      <!--Sample: Stores the message that an email sent to you-->
-      <ClaimType Id="userMessage">
-     	  <DisplayName></DisplayName>
-     	  <DataType>string</DataType>
-        <UserHelpText>Add help text here</UserHelpText>
-     	  <UserInputType>Paragraph</UserInputType>
-      </ClaimType>   
-    </ClaimsSchema>
-
-    <ClaimsTransformations>
-      <!--Sample: Initiates the message to be presented to the user-->
-      <ClaimsTransformation Id="CreateUserMessage" TransformationMethod="CreateStringClaim">
-        <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="A link to sign-in has been sent to your inbox." />
-        </InputParameters>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
-        </OutputClaims>
-      </ClaimsTransformation>
-    </ClaimsTransformations>      
-  </BuildingBlocks>
-
-
-<ClaimsProviders>
-  <ClaimsProvider>
-    <DisplayName>Local Account</DisplayName>
-    <TechnicalProfiles>
-      <!--Sample: This technical profile collect the email address, and call a validation technical profile 
-        to send the magic link to the provided email address-->
-      <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-MagicLink">
-          <DisplayName>Magic link</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
-          <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-          </Metadata>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="email" Required="true"/>
-            <OutputClaim ClaimTypeReferenceId="magicLinkSent" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-             <OutputClaimsTransformation ReferenceId="CreateUserMessage" />
-          </OutputClaimsTransformations>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="REST-SendMacigLink"/>
-          </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD"/>
-        </TechnicalProfile>
-
-        <!-- Demo: Show email sent message-->
-        <TechnicalProfile Id="SelfAsserted-EmailSent">
-          <DisplayName>Sing-in with local account</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
-          <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <!-- Sample: Remove the continue and cancel button-->
-            <Item Key="setting.showContinueButton">false</Item>
-            <Item Key="setting.showCancelButton">false</Item>
-         </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userMessage"/>
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="userMessage"/>
-          </OutputClaims>
-        </TechnicalProfile>        
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-    <!--Sample: This technical profile sends a magic link to the provided email address-->
-    <ClaimsProvider>
-      <DisplayName>Custom REST API</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="REST-SendMacigLink">
-          <DisplayName>Send a magic link</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <!--Sample action required: replace with your endpoint location -->
-            <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/identity</Item>
-            <Item Key="AuthenticationType">None</Item>
-            <Item Key="SendClaimsIn">Body</Item>
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="email" />
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="magicLinkSent" DefaultValue="true" AlwaysUseDefaultValue="true"/>
-          </OutputClaims>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-  </ClaimsProviders>
 <UserJourneys>
-  <UserJourney Id="SignUpOrSignInWithMagicLink">
+  <UserJourney Id="SignUpOrSignInWithFido">
       <OrchestrationSteps>
       
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
-            <!--Sample: Adding the sign-in with magic link button-->
-            <ClaimsProviderSelection TargetClaimsExchangeId="SignInWithMagicLinkExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FidoExchange"/>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
           </ClaimsProviderSelections>
           <ClaimsExchanges>
@@ -139,24 +37,32 @@
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/>
-            <ClaimsExchange Id="SignInWithMagicLinkExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-MagicLink"/>
+
+            <!--Sample: Get FIDO challenge. This technical profile also set the identity provider name 
+                        that is used in the next orchestration steps--> 
+            <ClaimsExchange Id="FidoExchange" TechnicalProfileReferenceId="REST-FIDOGetChallengeForSignIn"/>
+            
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: If user choose to sign-in with magic email, stop the flow. -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>magicLinkSent</Value>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>identityProvider</Value>
+              <Value>fido</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAssertedEmailSent" TechnicalProfileReferenceId="SelfAsserted-EmailSent"/>
+            <ClaimsExchange Id="SelfAsserted-FIDOSignIn" TechnicalProfileReferenceId="SelfAsserted-FIDOSignIn"/>
           </ClaimsExchanges>
         </OrchestrationStep>
-        
+
         <!-- For social IDP authentication, attempt to find the user account in the directory. -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
@@ -165,6 +71,11 @@
               <Value>localAccountAuthentication</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>identityProvider</Value>
+              <Value>fido</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>            
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError"/>
@@ -195,6 +106,11 @@
               <Value>socialIdpAuthentication</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>identityProvider</Value>
+              <Value>fido</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>                 
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
@@ -222,7 +138,12 @@
     </UserJourney>
   </UserJourneys>
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpOrSignInWithMagicLink" />
+    <DefaultUserJourney ReferenceId="SignUpOrSignInWithFido" />
+    <!--Sample: Enable script execution by adding the ScriptExecution element to the RelyingParty element.-->
+    <UserJourneyBehaviors>
+      <ScriptExecution>Allow</ScriptExecution>
+    </UserJourneyBehaviors>
+
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
@@ -232,6 +153,7 @@
         <OutputClaim ClaimTypeReferenceId="surname" />
         <OutputClaim ClaimTypeReferenceId="email" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />

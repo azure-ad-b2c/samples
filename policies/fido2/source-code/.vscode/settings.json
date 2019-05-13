@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/4d142eb4-d891-4281-ab5c-91981d114a3d/resourceGroups/Azure-AD-B2C/providers/Microsoft.Web/sites/fido2node",
+    "appService.deploySubpath": ""
+}

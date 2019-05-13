@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="your-tenant.onmicrosoft.com"
+  PolicyId="B2C_1A_fido_enroll"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_fido_enroll">
+
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_FIDOExtensions</PolicyId>
+  </BasePolicy>
+
+  <UserJourneys>
+    <UserJourney Id="EnrollFidoAuth">
+      <OrchestrationSteps>
+        
+        <!--Sample: Present the enrollment welcome screen-->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+           <ClaimsExchanges>
+              <ClaimsExchange Id="SelfAsserted-EnrollmentWelcome" TechnicalProfileReferenceId="SelfAsserted-FIDOEnrollmentWelcome" />
+           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+ 
+        <!--Sample: FIDO get a FIDO challenge value from the REST API service-->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-FIDOGetChallenge" TechnicalProfileReferenceId="REST-FIDOGetChallenge" />
+           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: FIDO enrollment step-->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Enrollment" TechnicalProfileReferenceId="SelfAsserted-FIDOEnrollment" />
+           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: FIDO enrollment persist data-->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AAD-UserWriteFidoUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteFidoUsingObjectId" />
+           </ClaimsExchanges>
+        </OrchestrationStep>  
+
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+
+
+    <UserJourney Id="EnrollFidoAuthTester">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-Tester"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-FIDOGetChallenge" TechnicalProfileReferenceId="REST-FIDOGetChallenge" />
+           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: FIDO enrollment step-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Enrollment" TechnicalProfileReferenceId="SelfAsserted-FIDOEnrollment" />
+           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: FIDO enrollment step-->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-EnrollmentTester" TechnicalProfileReferenceId="SelfAsserted-FIDOEnrollmentTester" />
+           </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: FIDO enrollment persist data-->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AAD-UserWriteFidoUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteFidoUsingObjectId" />
+           </ClaimsExchanges>
+        </OrchestrationStep>    
+
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="EnrollFidoAuth" />
+    <!--Sample: Enable script execution by adding the ScriptExecution element to the RelyingParty element.-->
+    <UserJourneyBehaviors>
+      <ScriptExecution>Allow</ScriptExecution>
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
+
+
+
