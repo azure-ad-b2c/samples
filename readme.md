@@ -68,6 +68,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Authy App multi-factor authentication](policies/custom-mfa-authy-app) - Custom MFA solution, based on Authy App (push notification). Allowing users to sign-in with Twilio Auth App (authenticator apps).
 
+- [MFA with either Phone (Call/SMS) or Email verification](policies/mfa-email-or-phone) - Allow the user to do MFA by either Phone (Call/SMS) or Email verification, with the ability to change this preference via Profile Edit.
+
 ## Generic enhancements
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
