@@ -1,6 +1,6 @@
 # Azure AD B2C Community samples guidance
 
-1. **Sample folder** - Under the policies folder, create a sub folder for your sample (all in lower cases)
+1. **Sample folder** - Under the policies root folder, create a sub folder for your sample (all in lower cases)
 
 1. The sample folder may contain following sub folders:
     - **source-code**, for the source code 
@@ -9,8 +9,9 @@
 
 
 3. Under the sample folder add a `readme.md` file with following sections:
-    - Title and description
-    - **Adding this functionality to your policy**, describe the necessary steps how to add the functionality to an existing policy
+    - **Title**
+    - **Description**, describes the user flow and how it's implemented  in the policy.
+    - **A diagram** with the user flow
     - **Solution artifacts** if your solution has dependencies, such as a Visual Studio solution, describe the components and how to configure and run the VS solution
     - **Tests** how to test the policy 
     - **The policy** at the end of the readme file, add a note pointing to the starter pack you use in your sample. For example: 
@@ -20,12 +21,20 @@
     - **Disclaimer** The sample policy is developed and managed by the open-source community in GitHub. The policy is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The app is provided AS IS without warranty of any kind. 
     
 
-4. Go to the root folder and update the [readme.md](readme.md) file with the new sample you created. 
+4. In the policy root folder, update the [readme.md](readme.md) file with the new sample you created. 
 
 ## Policy
-- Avoid making changes to the base policy 
-- If you didn't change the base policy, don't upload the base policy. Instead, add reference to the starter pack, as mentioned above.
+- Make all the changes in the **relying party policy**. Avoid making changes to the base and extension policy.
+- If you have multiple relying party policies, create your own extension policy that inherits from the extension one, for example:
+    - B2C_1A_TrustFrameworkBase
+    - B2C_1A_TrustFrameworkExtensions
+    - B2C_1A_FIDO_Extension
+        - B2C_1A_FIDO_sign_in
+        - B2C_1A_FIDO_enroll 
+- Relying party name should start with a prefix, such as **FIDO**SignUpOrSignIn
+- If you don't change the base or extension policy, don't include them. Instead, add reference to the starter pack, as mentioned above.
+- Add notes that describe the purpose of the component, starts with `<!--Sample: -->`
+- Add action required comments where a developer needs to take an action, starting with `<!--Sample action required: -->`
 - Remove you tenant name (use `yourtenant` instead), and application IDs
-- Add comments to describe the logic behind the XML elements. The comments should start with **Sample:**
-- Add action required comments where a developer needs to take an action, starting with **Sample action required:**
+
 
