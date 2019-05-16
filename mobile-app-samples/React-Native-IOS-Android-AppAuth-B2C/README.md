@@ -83,7 +83,7 @@ Copying the IOS Setup from [FormidableLabs](https://github.com/FormidableLabs/re
 2. [Register redirect URL scheme](https://github.com/FormidableLabs/react-native-app-auth#register-redirect-url-scheme)
 3. [Define openURL callback in AppDelegate](https://github.com/FormidableLabs/react-native-app-auth#define-openurl-callback-in-appdelegate)
 
-### Run on Android
+### Run on IOS
 
 ```
 cd ..
