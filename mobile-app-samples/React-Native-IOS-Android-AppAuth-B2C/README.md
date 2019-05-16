@@ -77,5 +77,15 @@ react-native run-android
 ```
 
 ### IOS Setup
-Coming soon...
+Copying the IOS Setup from [FormidableLabs](https://github.com/FormidableLabs/react-native-app-auth) for your convenience.
 
+1. [Install native dependencies](https://github.com/FormidableLabs/react-native-app-auth#install-native-dependencies)
+2. [Register redirect URL scheme](https://github.com/FormidableLabs/react-native-app-auth#register-redirect-url-scheme)
+3. [Define openURL callback in AppDelegate](https://github.com/FormidableLabs/react-native-app-auth#define-openurl-callback-in-appdelegate)
+
+### Run on Android
+
+```
+cd ..
+react-native run-ios
+```
