@@ -7,8 +7,8 @@ This sample uses Azure AD B2C as an Identity Provider to your react-native apps 
 Refer to [this](https://facebook.github.io/react-native/docs/getting-started) to set up your IOS and Android envionment.
 
 ```
-git clone https://github.com/vi-nu/aadb2c
-cd aadb2c/React-Native-IOS-Android-AppAuth-B2C/
+git clone https://github.com/azure-ad-b2c/samples
+cd samples/mobile-app-samples/React-Native-IOS-Android-AppAuth-B2C/
 
 npm install react-native-app-auth --save
 react-native link
