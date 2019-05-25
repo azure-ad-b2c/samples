@@ -7,8 +7,8 @@ This sample uses Azure AD B2C as an Identity Provider to your react-native apps 
 Refer to [this](https://facebook.github.io/react-native/docs/getting-started) to set up your IOS and Android envionment.
 
 ```
-git clone https://github.com/vi-nu/aadb2c
-cd aadb2c/React-Native-IOS-Android-AppAuth-B2C/
+git clone https://github.com/azure-ad-b2c/samples
+cd samples/mobile-app-samples/React-Native-IOS-Android-AppAuth-B2C/
 
 npm install react-native-app-auth --save
 react-native link
@@ -77,5 +77,15 @@ react-native run-android
 ```
 
 ### IOS Setup
-Coming soon...
+Copying the IOS Setup from [FormidableLabs](https://github.com/FormidableLabs/react-native-app-auth) for your convenience.
 
+1. [Install native dependencies](https://github.com/FormidableLabs/react-native-app-auth#install-native-dependencies)
+2. [Register redirect URL scheme](https://github.com/FormidableLabs/react-native-app-auth#register-redirect-url-scheme)
+3. [Define openURL callback in AppDelegate](https://github.com/FormidableLabs/react-native-app-auth#define-openurl-callback-in-appdelegate)
+
+### Run on IOS
+
+```
+cd ..
+react-native run-ios
+```
