@@ -21,7 +21,7 @@ The **AAD-UserWriteUsingLogonEmail** (sign-up) and **AAD-UserWritePasswordUsingO
 The custom REST API source code for .Net core is available under the [source code folder](source-code/dot-net-core)
 
 ## Custom policy
-This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the nessacery changes in the **Demo action required** sections.
+This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the necessary changes in the **Demo action required** sections.
 
 ### Base policy
 In the **TrustFrameworkBase.xml** file, we move the validation technical profiles of the `LocalAccountSignUpWithLogonEmail` (sign-up) and `LocalAccountWritePasswordUsingObjectId` (password reset) technical profiles to the extension polity. 
