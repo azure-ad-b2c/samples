@@ -5,8 +5,8 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="your-tenant.onmicrosoft.com"
-  PolicyId="B2C_1A_fido_enroll"
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_fido_enroll">
+  PolicyId="B2C_1A_fido_registration"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_fido_registration">
 
   <BasePolicy>
     <TenantId>your-tenant.onmicrosoft.com</TenantId>
@@ -14,7 +14,7 @@
   </BasePolicy>
 
   <UserJourneys>
-    <UserJourney Id="EnrollFidoAuth">
+    <UserJourney Id="FIDO-Registration">
       <OrchestrationSteps>
         
         <!--Sample: Present the enrollment welcome screen-->
@@ -80,52 +80,9 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb"/>
     </UserJourney>
-
-
-    <UserJourney Id="EnrollFidoAuthTester">
-      <OrchestrationSteps>
-
-        <OrchestrationStep Order="1" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-Tester"/>
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="REST-FIDOGetChallenge" TechnicalProfileReferenceId="REST-FIDOGetChallenge" />
-           </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!--Sample: FIDO enrollment step-->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-Enrollment" TechnicalProfileReferenceId="SelfAsserted-FIDOEnrollment" />
-           </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!--Sample: FIDO enrollment step-->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-EnrollmentTester" TechnicalProfileReferenceId="SelfAsserted-FIDOEnrollmentTester" />
-           </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!--Sample: FIDO enrollment persist data-->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AAD-UserWriteFidoUsingObjectId" TechnicalProfileReferenceId="AAD-UserWriteFidoUsingObjectId" />
-           </ClaimsExchanges>
-        </OrchestrationStep>    
-
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
- 
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb"/>
-    </UserJourney>
   </UserJourneys>
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="EnrollFidoAuth" />
+    <DefaultUserJourney ReferenceId="FIDO-Registration" />
     <!--Sample: Enable script execution by adding the ScriptExecution element to the RelyingParty element.-->
     <UserJourneyBehaviors>
       <ScriptExecution>Allow</ScriptExecution>

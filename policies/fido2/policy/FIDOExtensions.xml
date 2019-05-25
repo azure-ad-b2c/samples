@@ -176,7 +176,7 @@
         </OutputClaims>
       </ClaimsTransformation>
 
-      <!--Sample: Copy the user's dispaly name-->
+      <!--Sample: Copy the user's display name-->
       <ClaimsTransformation Id="CopyDisplayName" TransformationMethod="FormatStringClaim">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="inputClaim" />
