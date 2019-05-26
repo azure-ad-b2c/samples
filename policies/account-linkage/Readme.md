@@ -15,7 +15,7 @@ With Azure AD B2C a user can have multiple identities. Sign-in with local or soc
 
 * Depending on the identity provider, the **Social user ID** is a unique value for a given user per application or development account. Configure the Azure AD B2C policy with the same application ID that was previously assigned by the social provider. Or another application within the same development account.
 
-So, your account may look like this one:
+With the link and unlink policies, we append and remove soical identiites to the `userIdentities` collection. Whether it's a social account, we add new `userIdentitie`, or a local account and we add the first `userIdentities` to the collection. So, an account may look like this one:
 ```JSON
 "displayName": "Andrew Taylor",
 "signInNames": [
