@@ -1,0 +1,702 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="your-tenant.onmicrosoft.com"
+  PolicyId="B2C_1A_AccountLink_Extensions"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_AccountLink_Extensions">
+
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+
+  	<ClaimsSchema>
+     
+      <ClaimType Id="userIdentities">
+        <DisplayName>userIdentities</DisplayName>
+        <DataType>userIdentityCollection</DataType>
+        <AdminHelpText>userIdentities</AdminHelpText>
+        <UserHelpText>userIdentities</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="userIdentity">
+        <DisplayName>userIdentity</DisplayName>
+        <DataType>userIdentity</DataType>
+        <AdminHelpText>userIdentity</AdminHelpText>
+        <UserHelpText>userIdentity</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="objectIdToLink">
+        <DisplayName>objectIdToLink</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Second account user objectId</UserHelpText>
+      </ClaimType>
+
+      <!--Sample: Stores the error message if user exists-->
+      <ClaimType Id="errorMessage">
+     	  <DisplayName>Error</DisplayName>
+     	  <DataType>string</DataType>
+        <UserHelpText>Add help text here</UserHelpText>
+     	  <UserInputType>Paragraph</UserInputType>
+      </ClaimType>  
+
+      <ClaimType Id="issuerToUnlink">
+        <DisplayName>issuerToUnlink</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>issuerToUnlink</AdminHelpText>
+        <UserHelpText>issuerToUnlink</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="issuerToLink">
+        <DisplayName>issuerToLink</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>issuerToLink</AdminHelpText>
+        <UserHelpText>issuerToLink</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="issuerUserId">
+        <DisplayName>issuerUserId</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>issuerUserId</AdminHelpText>
+        <UserHelpText>issuerUserId</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="issuerUserIdToLink">
+        <DisplayName>issuerUserIdToLink</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>issuerUserIdToLink</AdminHelpText>
+        <UserHelpText>issuerUserIdToLink</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="userIdentityToLink">
+        <DisplayName>userIdentityToLink</DisplayName>
+        <DataType>userIdentity</DataType>
+        <AdminHelpText>userIdentityToLink</AdminHelpText>
+        <UserHelpText>userIdentityToLink</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="issuers">
+        <DisplayName>issuers</DisplayName>
+        <DataType>stringCollection</DataType>
+        <UserHelpText>User identity providers. This information is received from alternativeSecurityIds</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+     
+    <ClaimsTransformations>  
+      <!--Sample: Initiates the errorMessage claims type with the error message-->
+      <ClaimsTransformation Id="CreateUserExistsErrorMessage" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerToLink" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="Your {0} identity is already existed in the directory. You need to delete this account, and then you will be able to link to another account" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!-- Sample: On sign-in (first time) with social account, create a userIdentity claim, using issuerUserId and issuer name --> 
+      <ClaimsTransformation Id="CreateUserIdentity" TransformationMethod="CreateUserIdentity">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerUserId" TransformationClaimType="issuerUserId" />
+          <InputClaim ClaimTypeReferenceId="identityProvider" TransformationClaimType="issuer" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdentity" TransformationClaimType="userIdentity" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!-- Sample: On sign-in (second time) with social account, create a userIdentityToLink claim, using issuerUserId and issuer name --> 
+      <ClaimsTransformation Id="CreateUserIdentityToLink" TransformationMethod="CreateUserIdentity">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerUserIdToLink" TransformationClaimType="issuerUserId" />
+          <InputClaim ClaimTypeReferenceId="issuerToLink" TransformationClaimType="issuer" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdentityToLink" TransformationClaimType="userIdentity" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!--Sample: Add a userIdentity to the userIdentities collection. .-->
+      <ClaimsTransformation Id="AppendUserIdentity" TransformationMethod="AddItemToUserIdentityCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="userIdentity" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="AppendUserIdentityToLink" TransformationMethod="AddItemToUserIdentityCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="userIdentityToLink" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!--Sample: Removes an issuer from the  claim from the userIdentities collection-->
+      <ClaimsTransformation Id="RemoveUserIdentityFromCollectionByIssuer" TransformationMethod="RemoveUserIdentityFromCollectionByIssuer">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="issuerToUnlink" TransformationClaimType="issuer" />
+          <InputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      
+      <!--Sample: Extracts the list of social identity providers associated with the user -->
+      <ClaimsTransformation Id="ExtractIssuers" TransformationMethod="GetIssuersFromUserIdentityCollectionTransformation">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="userIdentityCollection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuers" TransformationClaimType="issuersCollection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <Metadata>
+            <Item Key="EnforceEmailVerification">False</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingUserIdentityToLink-NoError">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userIdentities" PartnerClaimType="userIdentities" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectIdToLink" PartnerClaimType="objectId" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>   
+
+        <TechnicalProfile Id="AAD-UserReadUsingUserIdentity">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">User does not exist. Please sign up before you can sign in.</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userIdentities" PartnerClaimType="userIdentities" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="userIdentities" />
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="ExtractIssuers" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserReadUsingUserIdentity-NoError">
+          <Metadata>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+          </Metadata>
+          <IncludeTechnicalProfile ReferenceId="AAD-UserReadUsingUserIdentity" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserWriteUsingUserIdentity">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
+            <Item Key="UserMessageIfClaimsPrincipalAlreadyExists">You are already registered, please press the back button and sign in instead.</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmail"/>
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userIdentities" PartnerClaimType="userIdentities" Required="true"/>
+          </InputClaims>
+          <PersistedClaims>
+            <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="userIdentities"/>
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName"/>
+            <PersistedClaim ClaimTypeReferenceId="mailNickName" DefaultValue="unknown"/>
+            <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown"/>
+
+            <!-- Optional claims -->
+            <PersistedClaim ClaimTypeReferenceId="otherMails"/>
+            <PersistedClaim ClaimTypeReferenceId="givenName"/>
+            <PersistedClaim ClaimTypeReferenceId="surname"/>
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId"/>
+            <OutputClaim ClaimTypeReferenceId="userIdentities"/>
+            <OutputClaim ClaimTypeReferenceId="newUser" PartnerClaimType="newClaimsPrincipalCreated"/>
+            <!-- The following other mails claim is needed for the case when a user is created, we get otherMails from directory. Self-asserted provider also has an
+                 OutputClaims, and if this is absent, Self-Asserted provider will prompt the user for otherMails. -->
+            <OutputClaim ClaimTypeReferenceId="otherMails"/>
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common"/>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD"/>
+        </TechnicalProfile>
+
+        <!--Sample: Update the userIdentities to add or remove user identity -->
+        <TechnicalProfile Id="AAD-UserUpdateWithUserIdentities">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="userIdentities" />
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="userIdentities" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="ExtractIssuers" />
+          </OutputClaimsTransformations>          
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!--Sample: Reads local accoutn's  userIdentities attribute to userIdentities claim-->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+          </Metadata>        
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userIdentities" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="ExtractIssuers" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>      
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!-- Demo: Show error message if user exists-->
+        <TechnicalProfile Id="SelfAsserted-Error">
+          <DisplayName>Unsolicited error message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <!-- Sample: Remove the continue button-->
+            <Item Key="setting.showContinueButton">false</Item>
+         </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserExistsErrorMessage" />
+          </InputClaimsTransformations>         
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorMessage"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="errorMessage"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-Social-v2">
+          <DisplayName>User ID signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer"/>
+          </CryptographicKeys>
+          <InputClaims>
+            <!-- These claims ensure that any values retrieved in the previous steps (e.g. from an external IDP) are prefilled. 
+                 Note that some of these claims may not have any value, for example, if the external IDP did not provide any of
+                 these values, or if the claim did not appear in the OutputClaims section of the IDP.
+                 In addition, if a claim is not in the InputClaims section, but it is in the OutputClaims section, then its
+                 value will not be prefilled, but the user will still be prompted for it (with an empty value). -->
+            <InputClaim ClaimTypeReferenceId="displayName"/>
+            <InputClaim ClaimTypeReferenceId="givenName"/>
+            <InputClaim ClaimTypeReferenceId="surname"/>
+          </InputClaims>
+          <OutputClaims>
+            <!-- These claims are not shown to the user because their value is obtained through the "ValidationTechnicalProfiles"
+                 referenced below, or a default value is assigned to the claim. A claim is only shown to the user to provide a 
+                 value if its value cannot be obtained through any other means. -->
+            <OutputClaim ClaimTypeReferenceId="objectId"/>
+            <OutputClaim ClaimTypeReferenceId="newUser"/>
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true"/>
+
+            <!-- Optional claims. These claims are collected from the user and can be modified. If a claim is to be persisted in the directory after having been 
+                 collected from the user, it needs to be added as a PersistedClaim in the ValidationTechnicalProfile referenced below, i.e. 
+                 in AAD-UserWriteUsingAlternativeSecurityId. -->
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="surname"/>
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingUserIdentity"/>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialSignup"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Social Accounts</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SocialAccount-Unlink">
+          <DisplayName>Unlink Microsoft</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+            <Metadata>
+              <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
+            </Metadata>    
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="" AlwaysUseDefaultValue="true" />
+          </OutputClaims>                
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="RemoveUserIdentityFromCollectionByIssuer" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>  
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- Facebook claims provider -->
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH-Base">
+          <DisplayName>Facebook</DisplayName>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">facebook</Item>
+            <Item Key="authorization_endpoint">https://www.facebook.com/dialog/oauth</Item>
+            <Item Key="AccessTokenEndpoint">https://graph.facebook.com/oauth/access_token</Item>
+            <Item Key="HttpBinding">GET</Item>
+            <Item Key="UsePolicyInRedirectUri">0</Item>
+            <Item Key="AccessTokenResponseFormat">json</Item>
+
+            <!--Demo action required: Change to your Facebook App Id-->
+            <Item Key="client_id">Your Facebook app id</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_FacebookSecret" />
+          </CryptographicKeys>
+          <InputClaims />
+        </TechnicalProfile>
+
+
+        <TechnicalProfile Id="Facebook-OAUTH-SignIn">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
+            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="Facebook-OAUTH-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Facebook-OAUTH-Link">
+        <DisplayName>Link Facebook</DisplayName>
+          <Metadata>
+            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
+            <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+              <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
+              <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="Facebook-OAUTH-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <!-- The button will show up only when facebook.com is missing in issuers claim -->
+          <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Facebook-Unlink">
+          <DisplayName>Unlink Facebook</DisplayName>
+            <Metadata>
+              <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
+            </Metadata>        
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
+        </TechnicalProfile>             
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <Domain>google.com</Domain>
+      <DisplayName>Google</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Google-OAUTH-Base">
+          <DisplayName>Google</DisplayName>
+          <Protocol Name="OAuth2" />
+          <Metadata>
+            <Item Key="ProviderName">google</Item>
+            <Item Key="authorization_endpoint">https://accounts.google.com/o/oauth2/auth</Item>
+            <Item Key="AccessTokenEndpoint">https://accounts.google.com/o/oauth2/token</Item>
+            <Item Key="ClaimsEndpoint">https://www.googleapis.com/oauth2/v1/userinfo</Item>
+            <Item Key="scope">email profile</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">0</Item>
+
+            <!--Demo action required: Change to your Google App Id-->            
+            <Item Key="client_id">Your Google App Id</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_GoogleSecret" />
+          </CryptographicKeys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Google-OAUTH-SignIn">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="google.com" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
+            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="Google-OAUTH-Base" />
+         <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Google-OAUTH-Link">
+        <DisplayName>Link Google</DisplayName>
+          <Metadata>
+            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
+            <Item Key="ClaimValueOnWhichToEnable">google.com</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="google.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+              <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
+              <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="Google-OAUTH-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Google-Unlink">
+          <DisplayName>Unlink Google</DisplayName>
+            <Metadata>
+              <Item Key="ClaimValueOnWhichToEnable">google.com</Item>
+            </Metadata>        
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="google.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
+        </TechnicalProfile>             
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <Domain>live.com</Domain>
+      <DisplayName>Microsoft Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="MSA-OIDC-Base">
+          <DisplayName>Microsoft Account</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <Item Key="ProviderName">https://login.live.com</Item>
+            <Item Key="METADATA">https://login.live.com/.well-known/openid-configuration</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="scope">openid profile email</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">0</Item>
+
+            <!--Demo action required: Change to your Microsoft App Id-->
+            <Item Key="client_id">Microsoft app Id</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_MSASecret" />
+          </CryptographicKeys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="MSA-OIDC-SignIn">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="live.com" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
+            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="MSA-OIDC-Base" />
+         <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="MSA-OAUTH-Link">
+          <DisplayName>Link Microsoft</DisplayName>
+          <Metadata>
+            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
+            <Item Key="ClaimValueOnWhichToEnable">live.com</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="live.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+              <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
+              <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="MSA-OIDC-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="MSA-Unlink">
+          <DisplayName>Unlink Microsoft</DisplayName>
+            <Metadata>
+              <Item Key="ClaimValueOnWhichToEnable">live.com</Item>
+            </Metadata>        
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="live.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
+        </TechnicalProfile>    
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <Domain>twitter.com</Domain>
+      <DisplayName>Twitter</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Twitter-OAUTH1-Base">
+          <DisplayName>Twitter</DisplayName>
+          <Protocol Name="OAuth1" />
+          <Metadata>
+            <Item Key="ProviderName">Twitter</Item>
+            <Item Key="authorization_endpoint">https://api.twitter.com/oauth/authenticate</Item>
+            <Item Key="access_token_endpoint">https://api.twitter.com/oauth/access_token</Item>
+            <Item Key="request_token_endpoint">https://api.twitter.com/oauth/request_token</Item>
+            <Item Key="ClaimsEndpoint">https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true</Item>
+            <Item Key="ClaimsResponseFormat">json</Item>
+
+            <!--Demo action required: Change to your Twitter App Id-->
+            <Item Key="client_id">Twitter app Id</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_TwitterSecret" />
+          </CryptographicKeys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Twitter-OAUTH1-SignIn">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="user_id" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="screen_name" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="twitter.com" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
+            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="Twitter-OAUTH1-Base" />
+         <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Twitter-OAUTH1-Link">
+          <DisplayName>Link Twitter</DisplayName>
+          <Metadata>
+            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
+            <Item Key="ClaimValueOnWhichToEnable">twitter.com</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="user_id" />
+            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="twitter.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+              <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
+              <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="Twitter-OAUTH1-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="Twitter-Unlink">
+          <DisplayName>Unlink Twitter</DisplayName>
+            <Metadata>
+              <Item Key="ClaimValueOnWhichToEnable">twitter.com</Item>
+            </Metadata>        
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="twitter.com" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
+        </TechnicalProfile> 
+      </TechnicalProfiles>
+    </ClaimsProvider>    
+  </ClaimsProviders>
+
+</TrustFrameworkPolicy>

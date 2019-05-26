@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="your-tenant.onmicrosoft.com"
+  PolicyId="B2C_1A_AccountLink_Remove"
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_AccountLink_Remove"
+  DeploymentMode="Development"
+  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
+
+  <BasePolicy>
+    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_AccountLink_Extensions</PolicyId>
+  </BasePolicy>
+  <UserJourneys>
+    <UserJourney Id="AccountUnlink">
+      <OrchestrationSteps>    
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="MicrosoftAccountExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="TwitterExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH-SignIn"/>
+            <ClaimsExchange Id="MicrosoftAccountExchange" TechnicalProfileReferenceId="MSA-OIDC-SignIn"/>
+            <ClaimsExchange Id="GoogleExchange" TechnicalProfileReferenceId="Google-OAUTH-SignIn"/>
+            <ClaimsExchange Id="TwitterExchange" TechnicalProfileReferenceId="Twitter-OAUTH1-SignIn"/>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingUserIdentity" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentity" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+
+        <!--Sample: Displays the sign-in the social account buttons.-->
+        <OrchestrationStep Order="5" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.idpselections">
+          <ClaimsProviderSelections DisplayOption="ShowSingleProvider">
+            <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkFacebookExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkMSAExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkGoogleExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkTwitterExchange"/>
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+
+        <!-- Sample: Redirect the user to the selected social provider, to complete the sign-in and link the new account -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="UnLinkFacebookExchange" TechnicalProfileReferenceId="Facebook-Unlink"/>
+            <ClaimsExchange Id="UnlinkMSAExchange" TechnicalProfileReferenceId="MSA-Unlink"/>
+            <ClaimsExchange Id="UnlinkGoogleExchange" TechnicalProfileReferenceId="Google-Unlink"/>
+            <ClaimsExchange Id="UnlinkTwitterExchange" TechnicalProfileReferenceId="Twitter-Unlink"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Sample: Update the account with the new user identities collection. -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="UpdateUserIdentities" TechnicalProfileReferenceId="AAD-UserUpdateWithUserIdentities"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+
+   </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+	<!-- Demo: This relying party policy executes the `AccountLink` user journey.
+	Please see the B2C_1A_Link_TrustFrameworkExtensions policy for more details -->
+    <DefaultUserJourney ReferenceId="AccountUnlink" />
+
+    <UserJourneyBehaviors>
+     <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="c5b9a7ce-3135-442d-b825-fa2be4f61189" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
+    </UserJourneyBehaviors>
+
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <!-- <OutputClaim ClaimTypeReferenceId="identityProviders" DefaultValue=""/> -->
+        <!-- <OutputClaim ClaimTypeReferenceId="alternativeSecurityIdToLink" DefaultValue=""/> -->
+       <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
+
+
+
+
