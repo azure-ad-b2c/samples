@@ -6,9 +6,7 @@
   PolicySchemaVersion="0.3.0.0"
   TenantId="your-tenant.onmicrosoft.com"
   PolicyId="B2C_1A_AccountLink_SUSI"
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_AccountLink_SUSI"
-  DeploymentMode="Development"
-  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_AccountLink_SUSI">
 
   <BasePolicy>
     <TenantId>your-tenant.onmicrosoft.com</TenantId>
@@ -101,11 +99,6 @@
   </UserJourneys>
   <RelyingParty>
     <DefaultUserJourney ReferenceId="AccountLinkSignUpOrSignIn" />
-
-   <UserJourneyBehaviors>
-     <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="c5b9a7ce-3135-442d-b825-fa2be4f61189" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
-   </UserJourneyBehaviors>
-
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
@@ -116,6 +109,7 @@
         <OutputClaim ClaimTypeReferenceId="email" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
         <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

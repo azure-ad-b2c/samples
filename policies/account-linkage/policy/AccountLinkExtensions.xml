@@ -38,7 +38,7 @@
 
       <!--Sample: Stores the error message if user exists-->
       <ClaimType Id="errorMessage">
-     	  <DisplayName>Error</DisplayName>
+     	  <DisplayName></DisplayName>
      	  <DataType>string</DataType>
         <UserHelpText>Add help text here</UserHelpText>
      	  <UserInputType>Paragraph</UserInputType>
@@ -168,18 +168,6 @@
   </BuildingBlocks>
 
   <ClaimsProviders>
-
-    <ClaimsProvider>
-      <DisplayName>Local Account</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
-          <Metadata>
-            <Item Key="EnforceEmailVerification">False</Item>
-          </Metadata>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
@@ -412,7 +400,7 @@
             <Item Key="AccessTokenResponseFormat">json</Item>
 
             <!--Demo action required: Change to your Facebook App Id-->
-            <Item Key="client_id">Your Facebook app id</Item>
+            <Item Key="client_id">0</Item>
             <Item Key="scope">email public_profile</Item>
             <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
           </Metadata>
@@ -493,7 +481,7 @@
             <Item Key="UsePolicyInRedirectUri">0</Item>
 
             <!--Demo action required: Change to your Google App Id-->            
-            <Item Key="client_id">Your Google App Id</Item>
+            <Item Key="client_id">0</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="client_secret" StorageReferenceId="B2C_1A_GoogleSecret" />
@@ -569,7 +557,7 @@
             <Item Key="UsePolicyInRedirectUri">0</Item>
 
             <!--Demo action required: Change to your Microsoft App Id-->
-            <Item Key="client_id">Microsoft app Id</Item>
+            <Item Key="client_id">0</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="client_secret" StorageReferenceId="B2C_1A_MSASecret" />
@@ -641,7 +629,7 @@
             <Item Key="ClaimsResponseFormat">json</Item>
 
             <!--Demo action required: Change to your Twitter App Id-->
-            <Item Key="client_id">Twitter app Id</Item>
+            <Item Key="client_id">0</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="client_secret" StorageReferenceId="B2C_1A_TwitterSecret" />

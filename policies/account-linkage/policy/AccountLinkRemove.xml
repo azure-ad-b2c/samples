@@ -6,14 +6,26 @@
   PolicySchemaVersion="0.3.0.0"
   TenantId="your-tenant.onmicrosoft.com"
   PolicyId="B2C_1A_AccountLink_Remove"
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_AccountLink_Remove"
-  DeploymentMode="Development"
-  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
+  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_AccountLink_Remove">
 
   <BasePolicy>
     <TenantId>your-tenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_AccountLink_Extensions</PolicyId>
   </BasePolicy>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <!--Sample: Remove the sign-up link-->
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <Metadata>
+            <Item Key="setting.showSignupLink">false</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  
   <UserJourneys>
     <UserJourney Id="AccountUnlink">
       <OrchestrationSteps>    
@@ -112,14 +124,7 @@
    </UserJourney>
   </UserJourneys>
   <RelyingParty>
-	<!-- Demo: This relying party policy executes the `AccountLink` user journey.
-	Please see the B2C_1A_Link_TrustFrameworkExtensions policy for more details -->
     <DefaultUserJourney ReferenceId="AccountUnlink" />
-
-    <UserJourneyBehaviors>
-     <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="c5b9a7ce-3135-442d-b825-fa2be4f61189" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
-    </UserJourneyBehaviors>
-
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
@@ -128,10 +133,9 @@
         <OutputClaim ClaimTypeReferenceId="givenName" />
         <OutputClaim ClaimTypeReferenceId="surname" />
         <OutputClaim ClaimTypeReferenceId="email" />
-        <!-- <OutputClaim ClaimTypeReferenceId="identityProviders" DefaultValue=""/> -->
-        <!-- <OutputClaim ClaimTypeReferenceId="alternativeSecurityIdToLink" DefaultValue=""/> -->
-       <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
         <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>

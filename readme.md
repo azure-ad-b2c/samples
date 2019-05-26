@@ -11,6 +11,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 
 ## Local account policy enhancements
+- [Link soical accounts](policies/account-linkage) - Demonstrate how to link and unlink social identities to any local or social account.
+
 - [Local account change sign-in name email address](policies/change-sign-in-name) - During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.
 
 - [Password-less sign-in with email verification](policies/passwordless-email) - Passwordless authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).  
