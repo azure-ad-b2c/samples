@@ -16,6 +16,9 @@ When you run the impersonation policy, you first need to sign-in with your own c
 1. Next orchestration step asks the user to provide the email address of the user to be impersonated, by calling the `SelfAsserted-TargetEmailExchange` technical profile. This technical profile also checks if the impersonated user exists in the directory, and return the user's email address
 1. On the last step Azure AD B2C issues the access token, with the claims specified in the RelyingParty XML element, including the impersonated user's email address - `impersonatedUser` claim type
 
+
+>Note: You can also prefill the email address of the user to sign-in on behalf of, by sending in the authorization request the `&targetemail=bob@contoso.com` query string parameter. The `SelfAsserted-TargetEmailExchange` technical profile reads the value of `{OAUTH-KV:targetEmail}` to set the default value.
+
 ## Authorization
 The authorization is based on the value of the `extension_can_impersonate` claim type. If the value is `1`, the user is allowed to impersonate. You should use Azure AD Graph API to set the value of the extension attribute. For example, send an HTTP `PATCH` request to update the user's profile:
 

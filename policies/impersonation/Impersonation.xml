@@ -73,8 +73,13 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item> 
+            <!--Sample:  indicating that claim resolving should be performed. So, we can read the value of {OAUTH-KV:targetEmail} claim resolver -->
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
           </Metadata>
-          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <!--Sample: read the targetEmail query string parameter e.g. &targetemail=bob@contoso.com -->
+            <InputClaim ClaimTypeReferenceId="targetEmail" DefaultValue="{OAUTH-KV:targetEmail}" AlwaysUseDefaultValue="true"/>
+          </InputClaims>
           <OutputClaims>
             <!-- Required claims -->
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true"/>
