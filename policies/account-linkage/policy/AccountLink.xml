@@ -83,7 +83,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social"/>
+            <ClaimsExchange Id="SelfAsserted-Social-v2" TechnicalProfileReferenceId="SelfAsserted-Social-v2"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
