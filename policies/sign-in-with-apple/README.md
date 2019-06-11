@@ -1,5 +1,13 @@
 # Setting up **Sign in with Apple**
 
+## Disclaimer
+
+**WARNING: SIGN IN WITH APPLE IS CURRENTLY IN BETA - Functionality is subject to change. You should not use this sample in production.**
+
+The sample is developed and managed by the open-source community in GitHub. The application is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.
+
+<hr />
+
 This sample shows how to enable **Sign in with Apple** as an identity provider in Azure AD B2C. **Sign in with Apple** uses an authentication protocol with is very close to OpenID Connect - close enough that we can use these features in Azure AD B2C to build the integration.
 
 These instructions will guide you to:
@@ -43,12 +51,11 @@ Apple has taken the interesting and unusual approach of requiring app developers
 1. On the **Keys** tab in the Apple Developer portal, choose **Create a key** or click the **(+)** button.
 ![Creating a new key in the Apple Developer Portal](media/apple_newkey.jpg)
 2. On the **Register a New Key** page give the key a name, check the box next to **Sign in with Apple** and click **Configure**.
-![Registering a key in the Apple Developer Portal](media/apple_registerkey1.jpg)
+![Registering a key in the Apple Developer Portal](media/apple_registerkey.jpg)
 3. On the **Configure Key** page, link the key to the primary app ID you created previously and click **Save**.
-![Configuring a key in the Apple Developer Portal](media/apple_configurekey1.jpg)
-4. Finish creating the key by confirming the information and clicking **Register**.
-![Registering a key in the Apple Developer Portal](media/apple_registerkey2.jpg)
-5. On the **Download Your Key** page, download the key. It will download as a `.p8` (PKCS#8) file - you'll use this to sign your client secret JWT.
+![Configuring a key in the Apple Developer Portal](media/apple_configurekey.jpg)
+4. Finish creating the key by confirming the information and clicking **Continue** and then reviewing the information and clicking **Register**.
+5. On the **Download Your Key** page, download the key. It will download as a `.p8` (PKCS#8) file - you'll use this to sign your client secret JWT. After finishing the process, you can come back later to revoke the key, in case you ever need to.
 ![Downloading a key in the Apple Developer Portal](media/apple_downloadkey.jpg)
 
 ### Structuring the client secret JWT
@@ -65,10 +72,10 @@ Apple requires the JWT token which will be used as your client secret to have a 
   "aud": "https://appleid.apple.com"
 }.[Signature]
 ```
-- **sub:**: The Apple Service ID (also the client ID)
-- **iss:**: Your Apple Developer Team ID
-- **aud:**: Apple is receiving the token, so they are the audience
-- **exp:**: No more than six months after **nbf**
+- **sub**: The Apple Service ID (also the client ID)
+- **iss**: Your Apple Developer Team ID
+- **aud**: Apple is receiving the token, so they are the audience
+- **exp**: No more than six months after **nbf**
 
 _Note: Apple does not accept client secret JWTs with an expiration date more than six months after the creation (or not-before) date. That means you'll need to rotate your client secret, at minimum, every six months._
 
@@ -131,8 +138,4 @@ Choose *OpenID Connect* as the identity provider type and use these configuratio
 Apple only provides a single useful claim in their ID tokens, the `sub` claim. You should map this to both the User ID and Display Name claims.
 ![Claims mapping in Azure AD B2C](media/b2c_claimsmapping.jpg)
 
-_Note: even if you include the `name` or `email` scopes, nether will not be included as claims in the token which Azure AD B2C receives from Apple. Apple provides these values in a non-standard way as part of the authorization response payload. Azure AD B2C will not be able to read these values and you should collect them from the user separately._
-
-## Using **Sign in with Apple** in a custom policy
-
-_Coming soon!_
+_Note: even if you include the `name` or `email` scopes, nether will not be included as claims in the token which Azure AD B2C receives from Apple. Apple provides these values in a non-standard way as part of the authorization response payload. Azure AD B2C will not be able to read these values and you should collect them from the user separately if needed._
