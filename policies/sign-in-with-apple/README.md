@@ -2,6 +2,16 @@
 
 This sample shows how to enable **Sign in with Apple** as an identity provider in Azure AD B2C. **Sign in with Apple** uses an authentication protocol with is very close to OpenID Connect - close enough that we can use these features in Azure AD B2C to build the integration.
 
+These instructions will guide you to:
+- Create the application you will need in the Apple Developer portal
+- Create the JWT client secret value which is required to initiate an OpenID Connect flow with Apple, including:
+  - Generating and downloading the private key
+  - Understand how to structure the client secret JWT
+  - Generate and cryptographically sign the client secret JWT
+- Host an OIDC metadata endpoint for the **Sign in with Apple** service
+- Use **Sign in with Apple** in a user flow (built-in policy)
+- Use **Sign in with Apple** in a custom policy
+
 ## Creating an application in the Apple Developer portal
 To setup **Sign in with Apple**, you will need to create an App ID and a service ID in the Apple Developer portal.
 
@@ -55,15 +65,15 @@ Apple requires the JWT token which will be used as your client secret to have a 
   "aud": "https://appleid.apple.com"
 }.[Signature]
 ```
-* **sub:**: The Apple Service ID (also the client ID)
-* **iss:**: Your Apple Developer Team ID
-* **aud:**: Apple is receiving the token, so they are the audience
-* **exp:**: No more than six months after **nbf**
+- **sub:**: The Apple Service ID (also the client ID)
+- **iss:**: Your Apple Developer Team ID
+- **aud:**: Apple is receiving the token, so they are the audience
+- **exp:**: No more than six months after **nbf**
 
 _Note: Apple does not accept client secret JWTs with an expiration date more than six months after the creation (or not-before) date. That means you'll need to rotate your client secret, at minimum, every six months._
 
 ### Signing the client secret JWT
-You'll use the `.p8` file you downloaded aboveo to sign the JWT. This file is in PEM format. There are many libraries which can create and sign the JWT for you. One way of doing this is by running a small amount of code in an Azure Function.
+You'll use the `.p8` file you downloaded previously to sign the client secret JWT. This file is a [PCKS#8 file](https://en.wikipedia.org/wiki/PKCS_8) which contains the private signing key in PEM format. There are many libraries which can create and sign the JWT for you. One way of doing this is by running a small amount of code in an Azure Function.
 
 The `SigninWithApple_ClientSecret` function in the source code of this sample expects a POST request with a payload like this example:
 ```json
@@ -73,9 +83,9 @@ The `SigninWithApple_ClientSecret` function in the source code of this sample ex
     "p8key": "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg+s07NiAcuGEu8rxsJBG7ttupF6FRe3bXdHxEipuyK82gCgYIKoZIzj0DAQehRANCAAQnR1W/KbbaihTQayXH3tuAXA8Aei7u7Ij5OdRy6clOgBeRBPy1miObKYVx3ki1msjjG2uGqRbrc1LvjLHINWRD"
 }
 ```
-* **appleTeamId**: Your Apple Developer Team ID
-* **appleServiceId**: The Apple Service ID (also the client ID)
-* **p8key**: The PEM format key - you can obtain this by opening the `.p8` file in a text editor, and copying everything between `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----` without line breaks
+- **appleTeamId**: Your Apple Developer Team ID
+- **appleServiceId**: The Apple Service ID (also the client ID)
+- **p8key**: The PEM format key - you can obtain this by opening the `.p8` file in a text editor, and copying everything between `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----` without line breaks
 
 The function will return a response like this example:
 ```json
@@ -104,17 +114,17 @@ The metadata document is a JSON file with the following content:
 
 _Note: You must ensure the URL to the metadata ends in exactly: `./well-known/openid-configuration`_
 
-## Using **Sign in with Apple** in a built-in policy
+## Using **Sign in with Apple** in a user flow (built-in policy)
 
 Now that you have created and collected the necessary configuration values which are necessary to configure **Sign in with Apple** as an identity provider, you can do so in the Azure AD B2C blade in the Azure Portal.
 
 Choose *OpenID Connect* as the identity provider type and use these configuration values:
-* **Metadata url:** URL to the metadata endpoint you created
-* **Client id:** The Apple Service ID (e.g. com.mycompany.app1)
-* **Client secret:** The signed JWT you created
-* **Scope:** `name` and/or `email` may be specified, however, please see the note below
-* **Response type:** code
-* **Response mode:** form_post
+- **Metadata url:** URL to the metadata endpoint you created
+- **Client id:** The Apple Service ID (e.g. com.mycompany.app1)
+- **Client secret:** The signed JWT you created
+- **Scope:** `name` and/or `email` may be specified, however, please see the note below
+- **Response type:** code
+- **Response mode:** form_post
 
 Apple only provides a single useful claim in their ID tokens, the `sub` claim. You should map this to both the User ID and Display Name claims.
 ![Claims mapping in Azure AD B2C](media/b2c_claimsmapping.jpg)
