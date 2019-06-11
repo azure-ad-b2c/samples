@@ -27,23 +27,23 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
         new Claim ("sub", subject)
     };
 
-    var cngKey = CngKey.Import(Convert.FromBase64String(p8key), CngKeyBlobFormat.Pkcs8PrivateBlob);
+    CngKey cngKey = CngKey.Import(Convert.FromBase64String(p8key), CngKeyBlobFormat.Pkcs8PrivateBlob);
 
     SigningCredentials signingCred = new SigningCredentials(
         new ECDsaSecurityKey(new ECDsaCng(cngKey)),
         SecurityAlgorithms.EcdsaSha256
     );
 
-    var token = new JwtSecurityToken(
+    JwtSecurityToken token = new JwtSecurityToken(
         issuer,
         audience,
         claims,
         DateTime.Now,
-        DateTime.Now.AddDays(1),
+        DateTime.Now.AddDays(180),
         signingCred
     );
 
-    var tokenHandler = new JwtSecurityTokenHandler();
+    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
     
     string jwt = tokenHandler.WriteToken(token);
 

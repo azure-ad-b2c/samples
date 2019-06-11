@@ -4,7 +4,7 @@
 
 **WARNING: SIGN IN WITH APPLE IS CURRENTLY IN BETA - Functionality is subject to change. You should not use this sample in production.**
 
-The sample is developed and managed by the open-source community in GitHub. The application is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.
+The sample is developed and managed by the open-source community in GitHub. The application is not part of the Azure AD B2C product and is not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.
 
 <hr />
 
@@ -18,7 +18,6 @@ These instructions will guide you to:
   - Generate and cryptographically sign the client secret JWT
 - Host an OIDC metadata endpoint for the **Sign in with Apple** service
 - Use **Sign in with Apple** in a user flow (built-in policy)
-- Use **Sign in with Apple** in a custom policy
 
 ## Creating an application in the Apple Developer portal
 To setup **Sign in with Apple**, you will need to create an App ID and a service ID in the Apple Developer portal.
@@ -82,7 +81,7 @@ _Note: Apple does not accept client secret JWTs with an expiration date more tha
 ### Signing the client secret JWT
 You'll use the `.p8` file you downloaded previously to sign the client secret JWT. This file is a [PCKS#8 file](https://en.wikipedia.org/wiki/PKCS_8) which contains the private signing key in PEM format. There are many libraries which can create and sign the JWT for you. One way of doing this is by running a small amount of code in an Azure Function.
 
-The `SigninWithApple_ClientSecret` Azure Function in the source code of this sample accepts a POST request with a JSON body like this example:
+The [`SigninWithApple_ClientSecret` Azure Function](source-code/B2CSignInWithApple/SigninWithApple_ClientSecret/run.csx) in the source code of this sample accepts a POST request with a JSON body like this example:
 ```json
 {
     "appleTeamId": "ABC123DEFG",
@@ -103,13 +102,15 @@ The function will respond with a properly formatted and signed client secret JWT
 
 This token is the client secret value you will use to configure the OpenID Connect federation.
 
-_Note: The sample Azure Function generates a JWT which is valid for one day. You may want to change this in the code depending on your desired secret rotation frequency._
+You can create this Azure Function by publishing the `B2CSignInWithApple` Visual Studio project from the `source-code` folder of this project.
+
+_Note: The sample Azure Function generates a JWT which is valid for 180 days. You may want to change this in the code depending on your desired secret rotation frequency._
 
 _Note: Ensure the `WEBSITE_LOAD_USER_PROFILE` configuration setting is set to `1` in your Azure Functions app environment - this provides access to the cryptographic context which is required to load the private key._
 
 ## Creating the OIDC metadata endpoint
 
-Apple does not expose an OpenID Connect metadata endpoint. In order to use it as an identity provider in Azure AD B2C, you must host a metadata document which B2C can access over the internet. You could host this file in Azure Blob Storage (with public access enabled), on your website, in an Azure Function, or in some other location. In the source code for this sample, there is a function app which exposes this metadata.
+Apple does not expose an OpenID Connect metadata endpoint. In order to use it as an identity provider in Azure AD B2C, you must host a metadata document which B2C can access over the internet. You could host this file in Azure Blob Storage (with public access enabled), on your website, in an [Azure Function](source-code/B2CSignInWithApple/SigninWithApple_OpenidConfiguration/run.csx), or in some other location. In the source code for this sample, there is a function app which exposes this metadata.
 
 The metadata document is a JSON file with the following content:
 ```json
