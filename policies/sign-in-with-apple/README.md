@@ -1,4 +1,4 @@
-# Sign in with Apple
+# Setting up **Sign in with Apple**
 
 This sample shows how to enable **Sign in with Apple** as an identity provider in Azure AD B2C. **Sign in with Apple** uses an authentication protocol with is very close to OpenID Connect - close enough that we can use these features in Azure AD B2C to build the integration.
 
@@ -75,7 +75,7 @@ _Note: Apple does not accept client secret JWTs with an expiration date more tha
 ### Signing the client secret JWT
 You'll use the `.p8` file you downloaded previously to sign the client secret JWT. This file is a [PCKS#8 file](https://en.wikipedia.org/wiki/PKCS_8) which contains the private signing key in PEM format. There are many libraries which can create and sign the JWT for you. One way of doing this is by running a small amount of code in an Azure Function.
 
-The `SigninWithApple_ClientSecret` function in the source code of this sample expects a POST request with a payload like this example:
+The `SigninWithApple_ClientSecret` Azure Function in the source code of this sample accepts a POST request with a JSON body like this example:
 ```json
 {
     "appleTeamId": "ABC123DEFG",
@@ -87,16 +87,18 @@ The `SigninWithApple_ClientSecret` function in the source code of this sample ex
 - **appleServiceId**: The Apple Service ID (also the client ID)
 - **p8key**: The PEM format key - you can obtain this by opening the `.p8` file in a text editor, and copying everything between `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----` without line breaks
 
-The function will return a response like this example:
+The function will respond with a properly formatted and signed client secret JWT in a response like this example:
 ```json
 {
-    "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMmMuYWRhbXRlc3Quc2lnbmlud2l0aGFwcGxlIiwibmJmIjoxNTYwMjAzMjA3LCJleHAiOjE1NjAyODk2MDcsImlzcyI6IkU4OEsyRkY2TFUiLCJhdWQiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIn0.-aiv9PdUJgF6tChH6W6pXXuv5wrN0BkmFbeHnZR3YMAMm3tRsE6NK9RsPY7eQgmJRogrMOZSXbNFVlpEU5Zb8g"
+    "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjb20ueW91cmNvbXBhbnkuYXBwMSIsIm5iZiI6MTU2MDI2OTY3NSwiZXhwIjoxNTYwMzU2MDc1LCJpc3MiOiJBQkMxMjNERUZHIiwiYXVkIjoiaHR0cHM6Ly9hcHBsZWlkLmFwcGxlLmNvbSJ9.Dt9qA9NmJ_mk6tOqbsuTmfBrQLFqc9BnSVKR6A-bf9TcTft2XmhWaVODr7Q9w1PP3QOYShFXAnNql5OdNebB4g"
 }
 ```
 
 This token is the client secret value you will use to configure the OpenID Connect federation.
 
-_Note: The sample Azure Function generates a JWT which is valid for one day. You may want to change the code depending on your desired secret rotation frequency._
+_Note: The sample Azure Function generates a JWT which is valid for one day. You may want to change this in the code depending on your desired secret rotation frequency._
+
+_Note: Ensure the `WEBSITE_LOAD_USER_PROFILE` configuration setting is set to `1` in your Azure Functions app environment - this provides access to the cryptographic context which is required to load the private key._
 
 ## Creating the OIDC metadata endpoint
 
