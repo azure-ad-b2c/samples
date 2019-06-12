@@ -1,6 +1,6 @@
 # Setting up **Sign in with Apple**
 
-> Disclaimer: **Sign in with Apple** is currently in beta and as such, may be subject to change. This sample is provided AS IS.
+> Disclaimer: **Sign in with Apple** is currently in beta and, as such, may be subject to change. This sample is provided AS IS - a best effort will be made to update this sample as the service evolves.
 
 This sample shows how to enable **Sign in with Apple** as an identity provider in Azure AD B2C. **Sign in with Apple** uses an authentication protocol with is very close to OpenID Connect - close enough that we can use these features in Azure AD B2C to build the integration.
 
