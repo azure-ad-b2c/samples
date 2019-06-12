@@ -1,4 +1,4 @@
-# Setting up **Sign in with Apple**
+# Setting up **Sign in with Apple** as a Custom OpenID Connect identity provider
 
 > Disclaimer: **Sign in with Apple** is currently in beta and, as such, may be subject to change. This sample is provided AS IS - a best effort will be made to update this sample as the service evolves.
 

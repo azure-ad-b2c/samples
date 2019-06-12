@@ -65,7 +65,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Preventing logon for Social or External IdP Accounts when Disabled in AAD B2C](policies/disable-social-account-from-logon) - For scenarios where you would like to prevent logons via Social or External IdPs when the account has been disabled in Azure AD B2C.
 
-- [Sign in with Apple](policies/sign-in-with-apple) - Demonstrates how to gather the correct configuration information to setup Sign in with Apple as an OpenID Connect identity provider.
+- [Sign in with Apple as a Custom OpenID Connect identity provider](policies/sign-in-with-apple) - Demonstrates how to gather the correct configuration information to setup Sign in with Apple as an OpenID Connect identity provider.
 
 ## Multi factor authentication enhancements
 
