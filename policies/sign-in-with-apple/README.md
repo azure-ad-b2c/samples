@@ -2,9 +2,7 @@
 
 ## Disclaimer
 
-**WARNING: SIGN IN WITH APPLE IS CURRENTLY IN BETA - Functionality is subject to change. You should not use this sample in production.**
-
-The sample is developed and managed by the open-source community in GitHub. The application is not part of the Azure AD B2C product and is not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.
+**Sign in with Apple** is currently in beta and as such, may be subject to change. This sample is provided AS IS.
 
 <hr />
 
@@ -140,3 +138,10 @@ Apple only provides a single useful claim in their ID tokens, the `sub` claim. Y
 ![Claims mapping in Azure AD B2C](media/b2c_claimsmapping.jpg)
 
 _Note: even if you include the `name` or `email` scopes, nether will not be included as claims in the token which Azure AD B2C receives from Apple. Apple provides these values in a non-standard way as part of the authorization response payload. Azure AD B2C will not be able to read these values and you should collect them from the user separately if needed._
+
+## Community Help and Support
+Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
+
+If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
+
+To provide product feedback, visit the [Azure Active Directory B2C Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
