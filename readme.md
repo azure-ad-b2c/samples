@@ -99,3 +99,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## App migration
 - [Angular5](policies/app-migration-angular5) This guide shows how to migrate an exiting Angular SPA application to be protected with Azure AD B2C authentication.
+
+## Web Test
+- [SignIn Web test](policies/signin-webtest) This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.
