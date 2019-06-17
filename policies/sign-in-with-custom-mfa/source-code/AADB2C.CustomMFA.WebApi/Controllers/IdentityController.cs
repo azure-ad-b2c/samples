@@ -95,57 +95,5 @@ namespace AADB2C.CustomMFA.WebApi.Controllers
                 return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("An unexpected error occurred. " + ex.Message, HttpStatusCode.Conflict));
             }
         }
-
-        [HttpPost(Name = "validate")]
-        public async Task<ActionResult> Validate()
-        {
-            string input = null;
-
-            // If not data came in, then return
-            if (this.Request.Body == null)
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("Request content is null", HttpStatusCode.Conflict));
-            }
-
-            // Read the input claims from the request body
-            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-            {
-                input = await reader.ReadToEndAsync();
-            }
-
-            // Check input content value
-            if (string.IsNullOrEmpty(input))
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("Request content is empty", HttpStatusCode.Conflict));
-            }
-
-            // Convert the input string into InputClaimsModel object
-            InputClaimsModel inputClaims = InputClaimsModel.Parse(input);
-
-            if (inputClaims == null)
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("Can not deserialize input claims", HttpStatusCode.Conflict));
-            }
-
-            // Check input verification code
-            if (string.IsNullOrEmpty(inputClaims.verificationCode))
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("Validation code is empty", HttpStatusCode.Conflict));
-            }
-
-            // Check input user verification code
-            if (string.IsNullOrEmpty(inputClaims.userVerificationCode))
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("User validation code is empty", HttpStatusCode.Conflict));
-            }
-
-            
-            if (inputClaims.verificationCode.Trim() != inputClaims.userVerificationCode.Trim())
-            {
-                return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("Invalid verification code", HttpStatusCode.Conflict));
-            }
-
-            return Ok();
-        }
     }
 }
