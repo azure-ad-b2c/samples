@@ -116,7 +116,7 @@ The metadata document is a JSON file with the following content:
 }
 ```
 
-_Note: You must ensure the URL to the metadata ends in exactly: `./well-known/openid-configuration`_
+_Note: Ensure the URL to the metadata ends in exactly: `/.well-known/openid-configuration`_
 
 ## Using **Sign in with Apple** in a user flow (built-in policy)
 
