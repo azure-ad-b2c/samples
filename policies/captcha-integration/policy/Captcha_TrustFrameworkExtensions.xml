@@ -1,33 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="b2cprod.onmicrosoft.com" PolicyId="B2C_1A_Captcha_TrustFrameworkExtensions" PublicPolicyUri="http://b2cprod.onmicrosoft.com/B2C_1A_Captcha_TrustFrameworkExtensions">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_Captcha_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Captcha_TrustFrameworkExtensions">
 
   <BasePolicy>
-    <TenantId>b2cprod.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_Captcha_TrustFrameworkBase</PolicyId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
-  </BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="g-recaptcha-response-toms">
+        <DisplayName>g-recaptcha-response-toms</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Parameter provided by the ATP Recapcha service for the response</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
 
+      <ClaimType Id="captcha">
+        <DisplayName>captcha</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText/>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ContentDefinitions>
+
+      <ContentDefinition Id="api.signuporsignin">
+        <LoadUri>https://b2ccaptcha.blob.core.windows.net/b2ccustompage/customCaptcha.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:1.0.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Signin and Signup</Item>
+        </Metadata>
+      </ContentDefinition>
+
+
+      <ContentDefinition Id="api.selfasserted">
+        <LoadUri>https://b2ccaptcha.blob.core.windows.net/b2ccustompage/customCaptcha2.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Collect information from user page</Item>
+        </Metadata>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.selfasserted.profileupdate">
+        <LoadUri>~/tenant/default/updateProfile.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Collect information from user page</Item>
+        </Metadata>
+      </ContentDefinition>
+    </ContentDefinitions>
+  </BuildingBlocks>
   <ClaimsProviders>
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
-            <!-- Native App -->
-            <Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
-            <!-- Web Api -->
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
 
     <ClaimsProvider>
       <DisplayName>Sign in Captcha</DisplayName>
@@ -39,7 +67,6 @@
             <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
             <Item Key="setting.operatingMode">Email</Item>
             <Item Key="setting.showSignupLink">true</Item>
-            <!--<Item Key="setting.forgotPasswordLinkLocation">AfterInput</Item>-->
             <Item Key="setting.showCancelButton">false</Item>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
             <Item Key="language.button_continue">Sign In</Item>
@@ -121,10 +148,6 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
-             from the user. So, in that case, create the user in the directory if one does not already exist 
-             (verified using objectId which would be set from the last step if account was created in the directory. -->
-
 
         <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 

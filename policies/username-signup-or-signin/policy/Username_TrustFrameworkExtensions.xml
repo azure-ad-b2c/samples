@@ -1,33 +1,100 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-	PolicySchemaVersion="0.3.0.0"
-	TenantId="yourtenant.onmicrosoft.com"
-	PolicyId="B2C_1A_Username_TrustFrameworkExtensions"
-	PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Username_TrustFrameworkExtensions">
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_Username_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Username_TrustFrameworkExtensions">
 	<BasePolicy>
 		<TenantId>yourtenant.onmicrosoft.com</TenantId>
-		<PolicyId>B2C_1A_Username_TrustFrameworkBase</PolicyId>
+		<PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
 	</BasePolicy>
 	<BuildingBlocks>
+		<ClaimsSchema>
+			<ClaimType Id="emails">
+				<DisplayName>Email Addresses</DisplayName>
+				<DataType>stringCollection</DataType>
+				<AdminHelpText>Email addresses of the user.</AdminHelpText>
+				<UserHelpText>Your email addresses.</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="strongAuthenticationEmailAddress">
+				<DisplayName>Email Address</DisplayName>
+				<DataType>string</DataType>
+				<AdminHelpText>Email address that the user can use for strong authentication.</AdminHelpText>
+				<UserHelpText>Email address to use for strong authentication.</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+			</ClaimType>
+			<ClaimType Id="accountEnabled">
+				<DisplayName>Account Enabled</DisplayName>
+				<DataType>boolean</DataType>
+				<AdminHelpText>Specifies whether the user's account is enabled.</AdminHelpText>
+				<UserHelpText>Specifies whether your account is enabled.</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="signInNamesInfo.emailAddress">
+				<DisplayName>Email Address</DisplayName>
+				<DataType>string</DataType>
+				<AdminHelpText>Email address that the user can use to sign in.</AdminHelpText>
+				<UserHelpText>Email address to use for signing in.</UserHelpText>
+				<UserInputType>TextBox</UserInputType>
+			</ClaimType>
+		</ClaimsSchema>
+		<ClaimsTransformations>
+			<ClaimsTransformation Id="CreateSubjectClaimFromObjectID" TransformationMethod="CreateStringClaim">
+				<InputParameters>
+					<InputParameter Id="value" DataType="string" Value="Not supported currently. Use oid claim." />
+				</InputParameters>
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="sub" TransformationClaimType="createdClaim" />
+				</OutputClaims>
+			</ClaimsTransformation>
+			<ClaimsTransformation Id="CreateEmailsFromOtherMailsAndSignInNamesInfo" TransformationMethod="AddItemToStringCollection">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="signInNamesInfo.emailAddress" TransformationClaimType="item" />
+					<InputClaim ClaimTypeReferenceId="otherMails" TransformationClaimType="collection" />
+				</InputClaims>
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+				</OutputClaims>
+			</ClaimsTransformation>
+			<ClaimsTransformation Id="AddStrongAuthenticationEmailToEmails" TransformationMethod="AddItemToStringCollection">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="strongAuthenticationEmailAddress" TransformationClaimType="item" />
+					<InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+				</InputClaims>
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+				</OutputClaims>
+			</ClaimsTransformation>
+			<ClaimsTransformation Id="AssertEmailAndstrongAuthenticationEmailAddressAreEqual" TransformationMethod="AssertStringClaimsAreEqual">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="email" TransformationClaimType="inputClaim1" />
+					<InputClaim ClaimTypeReferenceId="strongAuthenticationEmailAddress" TransformationClaimType="inputClaim2" />
+				</InputClaims>
+				<InputParameters>
+					<InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
+				</InputParameters>
+			</ClaimsTransformation>
+			<ClaimsTransformation Id="AssertAccountEnabledIsTrue" TransformationMethod="AssertBooleanClaimIsEqualToValue">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="accountEnabled" TransformationClaimType="inputClaim" />
+				</InputClaims>
+				<InputParameters>
+					<InputParameter Id="valueToCompareTo" DataType="boolean" Value="true" />
+				</InputParameters>
+			</ClaimsTransformation>
+		</ClaimsTransformations>
+		<ContentDefinitions>
+			<ContentDefinition Id="api.localaccountpasswordchange1.1">
+				<LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
+				<RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+				<DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+				<Metadata>
+					<Item Key="DisplayName">Local account change password page</Item>
+				</Metadata>
+			</ContentDefinition>
+		</ContentDefinitions>
 	</BuildingBlocks>
 	<ClaimsProviders>
 		<ClaimsProvider>
 			<DisplayName>Local Account SignIn</DisplayName>
 			<TechnicalProfiles>
-				<TechnicalProfile Id="login-NonInteractive">
-					<Metadata>
-						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
-						<!-- Native App -->
-						<Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
-						<!-- Web Api -->
-					</Metadata>
-					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
-						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
-					</InputClaims>
-				</TechnicalProfile>
 				<TechnicalProfile Id="AAD-UserWriteUsingLogonName">
 					<Metadata>
 						<Item Key="Operation">Write</Item>
@@ -208,7 +275,7 @@
 	<UserJourneys>
 		<UserJourney Id="SignUpOrSignInWithUsername">
 			<OrchestrationSteps>
-				<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsigninwithkmsi">
+				<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
 					<ClaimsProviderSelections>
 						<ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninUsernameExchange" />
 					</ClaimsProviderSelections>

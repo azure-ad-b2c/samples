@@ -4,8 +4,8 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_Username_signuporsignin"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Username_signuporsignin">
+  PolicyId="B2C_1A_Username_SUSI"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Username_SUSI">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="b2cprod.onmicrosoft.com" PolicyId="B2C_1A_MFA_phone_or_email_TrustFrameworkExtensions" PublicPolicyUri="http://b2cprod.onmicrosoft.com/B2C_1A_MFA_phone_or_email_TrustFrameworkExtensions">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_MFA_phone_or_email_Extensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_phone_or_email_Extensions">
 
   <BasePolicy>
-    <TenantId>b2cprod.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_MFA_phone_or_email_TrustFrameworkBase</PolicyId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
@@ -47,25 +47,6 @@
   </BuildingBlocks>
 
   <ClaimsProviders>
-
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
-            <!-- Native App -->
-            <Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
-            <!-- Web Api -->
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>PhoneFactor</DisplayName>
       <TechnicalProfiles>
@@ -256,7 +237,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignUpOrSignIn">
+    <UserJourney Id="SignUpOrSignInMFAOption">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">

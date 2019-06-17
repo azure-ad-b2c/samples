@@ -4,27 +4,30 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="b2cprod.onmicrosoft.com"
-  PolicyId="B2C_1A_Captcha_PasswordReset"
-  PublicPolicyUri="http://b2cprod.onmicrosoft.com/B2C_1A_Captcha_PasswordReset">
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_MFA_phone_or_email_SUSI"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_phone_or_email_SUSI">
 
   <BasePolicy>
-    <TenantId>b2cprod.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_Captcha_TrustFrameworkExtensions</PolicyId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_MFA_phone_or_email_Extensions</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="PasswordReset" />
+    <DefaultUserJourney ReferenceId="SignUpOrSignInMFAOption" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
       <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="signInName" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="mfaByPhoneOrEmail" />
+        <OutputClaim ClaimTypeReferenceId="isActiveMFASession" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
+
 
 

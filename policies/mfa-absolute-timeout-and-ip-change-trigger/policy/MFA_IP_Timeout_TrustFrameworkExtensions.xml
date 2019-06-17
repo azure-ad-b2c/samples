@@ -1,42 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="YourTenant.onmicrosoft.com" PolicyId="B2C_1A_MFA_IP_TrustFrameworkExtensions" PublicPolicyUri="http://YourTenant.onmicrosoft.com/B2C_1A_MFA_IP_TrustFrameworkExtensions">
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_MFA_IP_Timeout_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_IP_Timeout_TrustFrameworkExtensions">
 
 	<BasePolicy>
-		<TenantId>YourTenant.onmicrosoft.com</TenantId>
-		<PolicyId>B2C_1A_MFA_IP_TrustFrameworkBase</PolicyId>
+		<TenantId>yourtenant.onmicrosoft.com</TenantId>
+		<PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
 	</BasePolicy>
 	<BuildingBlocks>
-		<ContentDefinitions>
-			<ContentDefinition Id="api.phonefactor">
-				<LoadUri>~/tenant/default/multifactor-1.0.0.cshtml</LoadUri>
-				<RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-				<DataUri>urn:com:microsoft:aad:b2c:elements:multifactor:1.1.0</DataUri>
-				<Metadata>
-					<Item Key="DisplayName">Multi-factor authentication page</Item>
-				</Metadata>
-			</ContentDefinition>
-		</ContentDefinitions>
+		<ClaimsSchema>
+			<ClaimType Id="extension_IP">
+				<DisplayName>ip address</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>Users last logon IP Address</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="IP-Address">
+				<DisplayName>ip address</DisplayName>
+				<DataType>string</DataType>
+				<UserHelpText>Users current logon IP Address</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="SameIPAddress">
+				<DisplayName>is ip the same as last time</DisplayName>
+				<DataType>boolean</DataType>
+				<UserHelpText>is ip the same as last time</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="extension_LastMFATime">
+				<DisplayName>last time user did MFA</DisplayName>
+				<DataType>dateTime</DataType>
+				<UserHelpText>last time user did MFA</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="CurrentTime">
+				<DisplayName>Current time</DisplayName>
+				<DataType>dateTime</DataType>
+				<UserHelpText>Current time</UserHelpText>
+			</ClaimType>
+			<ClaimType Id="isLastMFATimeGreaterThanWindow">
+				<DisplayName>is the last time the user did MFA over the window</DisplayName>
+				<DataType>boolean</DataType>
+				<UserHelpText>is the last time the user did MFA over the window</UserHelpText>
+			</ClaimType>
+		</ClaimsSchema>
+		<ClaimsTransformations>
+			<ClaimsTransformation Id="IsLoginFromLastRecordedIP" TransformationMethod="CompareClaims">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="extension_IP" TransformationClaimType="inputClaim1" />
+					<InputClaim ClaimTypeReferenceId="IP-Address" TransformationClaimType="inputClaim2" />
+				</InputClaims>
+				<InputParameters>
+					<InputParameter Id="operator" DataType="string" Value="EQUAL" />
+					<InputParameter Id="ignoreCase" DataType="string" Value="true" />
+				</InputParameters>
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="SameIPAddress" TransformationClaimType="outputClaim" />
+				</OutputClaims>
+			</ClaimsTransformation>
+			<ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="CurrentTime" TransformationClaimType="currentDateTime" />
+				</OutputClaims>
+			</ClaimsTransformation>
+			<ClaimsTransformation Id="CompareTimetoLastMFATime" TransformationMethod="DateTimeComparison">
+				<InputClaims>
+					<InputClaim ClaimTypeReferenceId="extension_LastMFATime" TransformationClaimType="firstDateTime" />
+					<InputClaim ClaimTypeReferenceId="CurrentTime" TransformationClaimType="secondDateTime" />
+				</InputClaims>
+				<InputParameters>
+					<InputParameter Id="operator" DataType="string" Value="earlier than" />
+					<InputParameter Id="timeSpanInSeconds" DataType="int" Value="100" />
+				</InputParameters>
+				<OutputClaims>
+					<OutputClaim ClaimTypeReferenceId="isLastMFATimeGreaterThanWindow" TransformationClaimType="result" />
+				</OutputClaims>
+			</ClaimsTransformation>
+		</ClaimsTransformations>
 	</BuildingBlocks>
 
 	<ClaimsProviders>
 		<ClaimsProvider>
 			<DisplayName>Local Account SignIn</DisplayName>
 			<TechnicalProfiles>
-				<TechnicalProfile Id="login-NonInteractive">
-					<Metadata>
-						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
-						<!-- Native App -->
-						<Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
-						<!-- Web Api -->
-					</Metadata>
-					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
-						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
-					</InputClaims>
-				</TechnicalProfile>
-
 				<!-- This technical profile uses a validation technical profile to authenticate the user. -->
 				<TechnicalProfile Id="SignUpOrSignInUsernameOrEmailWithIPbasedMFAAndMFATimeWindow">
 					<DisplayName>Local Account Signin</DisplayName>
