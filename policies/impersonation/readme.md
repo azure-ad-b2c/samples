@@ -23,14 +23,14 @@ When you run the impersonation policy, you first need to sign-in with your own c
 The authorization is based on the value of the `extension_can_impersonate` claim type. If the value is `1`, the user is allowed to impersonate. You should use Azure AD Graph API to set the value of the extension attribute. For example, send an HTTP `PATCH` request to update the user's profile:
 
 ```HTTP
-PATCH https://graph.windows.net/your-tenant.onmicrosoft.com/users/user-id
+PATCH https://graph.windows.net/yourtenant.onmicrosoft.com/users/user-id
 {
     "extension_clientId_can_impersonate": "1"
 }
 ```
 
 Replace:
-- **your-tenant**, with your tenant name
+- **yourtenant**, with your tenant name
 - **user-id**, with the user object id, or UPN
 - **clientId**, with the extension attribute application client id
 

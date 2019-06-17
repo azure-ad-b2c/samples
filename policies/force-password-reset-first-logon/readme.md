@@ -47,7 +47,7 @@ Replace the id with your application Id
     "passwordPolicies": "DisablePasswordExpiration,DisableStrongPassword",
     "userIdentities": [],
     "otherMails": [],
-    "userPrincipalName": "1de4141d-d1c2-448d-877d-c9e92bda87f5@your-tenant.onmicrosoft.com",
+    "userPrincipalName": "1de4141d-d1c2-448d-877d-c9e92bda87f5@yourtenant.onmicrosoft.com",
     
     // Add this line to your JSON
     "extension_00000000000000000000000000000000_mustResetPassword": true

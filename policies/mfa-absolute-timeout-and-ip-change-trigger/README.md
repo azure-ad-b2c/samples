@@ -18,3 +18,6 @@ If the users IP address is the same as the last logon IP at which they did MFA, 
 This means the users MFA session is absolute, and if the user contiues to logon from the same IP, the user will be prompted to perform MFA after this time period expires.
 
 The absolute time window for which the user must perform MFA after, can be adjusted in seconds by modifying the `timeSpanInSeconds` paramter in the `CompareTimetoLastMFATime` technical profile in the `TrustFrameworkBase` file. It has been set to 100 seconds in this example.
+
+## Notes
+This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 

@@ -25,3 +25,6 @@ During Password Reset, a similar flow occurs. When `LocalAccountWritePasswordUsi
 ## Unit Tests
 1. New password matches one of the passwords on the banned list (within `passwordToMatchBanList` claims transformation).
 2. New password does not match one of the passwords on the banned list (within `passwordToMatchBanList` claims transformation).
+
+## Notes
+This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 

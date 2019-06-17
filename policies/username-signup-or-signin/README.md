@@ -13,3 +13,6 @@ At Sign Up, the user is asked to validate an email address. This email address w
 At Sign In, the Username provided is used as a lookup against all SignInNames that are present on user objects stored in the the directory. This is achieved by sending the paramater `nca=1` when making the authentication request via the `login-NonInteractive` technical profile in `TrustFrameworkBase`. 
 
 At Password Reset, the user will be asked to confirm the email address. It will be sent a TOTP and validated against the email address stored at sign up in the `strongAuthenticationEmailAddress` attribute. This ensures the user owns this Username.
+
+## Notes
+This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 

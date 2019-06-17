@@ -32,7 +32,7 @@ To setup **Sign in with Apple**, you will need to create an App ID and a service
 ![Registering a new service identifier in the Apple Developer Portal](media/apple_registerservice.jpg)
 9. On the **Register a Services ID** page, provide a description and an identifier. The description is what will be show to the user on the consent screen, and the identifier will be your client ID for the OpenID Connect flow. Then click on **Configure**.
 ![Registering a new service identifier in the Apple Developer Portal](media/apple_configureservice1.jpg)
-10. On the pop-up window, specify the App ID you just created as the Primary App ID. Specify your application's domain in the domain section (you do not need to verify it unless you intend to use the email relay service). For the return URL, use your B2C tenant's reply URL such as `https://your-tenant.b2clogin.com/your-tenant.onmicrosoft.com/oauth2/authresp`. Then click **Add** and **Save**.
+10. On the pop-up window, specify the App ID you just created as the Primary App ID. Specify your application's domain in the domain section (you do not need to verify it unless you intend to use the email relay service). For the return URL, use your B2C tenant's reply URL such as `https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/authresp`. Then click **Add** and **Save**.
 ![Registering a new service identifier in the Apple Developer Portal](media/apple_configureservice2.jpg)
 11. Review the service registration information and click **Save**.
 

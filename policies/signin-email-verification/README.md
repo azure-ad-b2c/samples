@@ -13,3 +13,6 @@ At Sign In, the email address authenticated with is copied into a read only attr
 The `readOnlyEmail` claim is passed as an input claim to the `EmailVerifyOnSignIn` self asserted technical profile to validate the email address via TOTP. This is made possible by using `PartnerClaimType="Verified.Email"` in the output claims section.
 
 The user journey only calls the `EmailVerifyOnSignIn` self asserted technical profile if the user is not a new user. This bypassess this particular step if the user is signing up.
+
+## Notes
+This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 
