@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="b2cprod.onmicrosoft.com"
+  TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_Captcha_signin"
-  PublicPolicyUri="http://b2cprod.onmicrosoft.com/B2C_1A_Captcha_signin">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Captcha_signin">
 
   <BasePolicy>
-    <TenantId>b2cprod.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_Captcha_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
