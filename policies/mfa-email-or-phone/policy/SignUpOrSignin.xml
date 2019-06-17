@@ -5,25 +5,29 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_MFA_phone_or_email_ProfileEdit"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_phone_or_email_ProfileEdit">
+  PolicyId="B2C_1A_MFA_phone_or_email_SUSI"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_phone_or_email_SUSI">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_MFA_phone_or_email_TrustFrameworkExtensions</PolicyId>
+    <PolicyId>B2C_1A_MFA_phone_or_email_Extensions</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="ProfileEdit" />
+    <DefaultUserJourney ReferenceId="SignUpOrSignInMFAOption" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
       <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="signInName" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="mfaByPhoneOrEmail" />
+        <OutputClaim ClaimTypeReferenceId="isActiveMFASession" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
+
 
 
