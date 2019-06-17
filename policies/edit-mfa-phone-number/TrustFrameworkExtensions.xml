@@ -132,7 +132,7 @@
         <!--Demo: First verify existing one-->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="ExitingPhoneFactor" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+            <ClaimsExchange Id="ExistingPhoneFactor" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
