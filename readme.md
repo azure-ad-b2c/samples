@@ -51,7 +51,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Impersonation Flow](policies/impersonation) - For scenarios where you require one user to impersonate another user. This is common for support desk or delegated administration of a user in an application or service. It is recommended to always issue the token of the original authenticated user and append additional information about the targeted impersonated user as part of the auth flow
 
-- [Sign-in with FIDO](policies/fido2) - Demonstrates how to sign-in with FIDO authenticator (as a first factor authentication.) This policy use the WebAuthn standard to register new credential and sign-in with FIDO credential.
+- [Sign-in with FIDO](policies/fido2) - Demonstrates how to sign-in with a FIDO authenticator (as a first factor authentication). This policy use the WebAuthn standard to register new credential and sign-in with FIDO credential.
 
 
 ## Social account policy enhancements
