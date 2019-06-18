@@ -43,7 +43,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Disable and lockout an account after a time period](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
 
-- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an access token, without prompting for a password.
+- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to automatically sign-in to a web application redeeming a link sent via email. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an id_token, without prompting for a password.
 
 - [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.
 
