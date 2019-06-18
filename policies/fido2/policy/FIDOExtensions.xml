@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
   PolicySchemaVersion="0.3.0.0" 
-  TenantId="your-tenant.onmicrosoft.com" 
+  TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_FIDOExtensions" 
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_FIDOExtensions">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_FIDOExtensions">
   
   <BasePolicy>
-    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
@@ -220,14 +220,14 @@
 
       <!--Sample: FIDO self-asserted HTML page-->
       <ContentDefinition Id="api.selfasserted.fido">
-        <LoadUri>https://your-tenant.blob.core.windows.net/azure-ad-b2c/fido/self-asserted.html</LoadUri>
+        <LoadUri>https://yourtenant.blob.core.windows.net/azure-ad-b2c/fido/self-asserted.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
       </ContentDefinition>
 
       <!--Sample: FIDO welcome self-asserted HTML page-->
       <ContentDefinition Id="api.selfasserted.fido.welcome">
-        <LoadUri>https://your-tenant.blob.core.windows.net/azure-ad-b2c/fido/welcome.html</LoadUri>
+        <LoadUri>https://yourtenant.blob.core.windows.net/azure-ad-b2c/fido/welcome.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
       </ContentDefinition>

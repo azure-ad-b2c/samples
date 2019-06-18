@@ -80,13 +80,13 @@ namespace AADB2C.MFA.AuthyApp.Controllers
 
             using (var client = new HttpClient())
             {
-                var requestUri = $"https://api.authy.com/protected/json/users/new?api_key={AppSettings.Key}";
+                var requestUri = $"https://api.authy.com/protected/json/users/new";
                 var requestForm = new Dictionary<string, string>();
                 requestForm.Add("user[email]", inputClaims.GetEamilAddress());
                 requestForm.Add("user[cellphone]", phoneNumberMatch.Groups[2].Value);
                 requestForm.Add("user[country_code]", phoneNumberMatch.Groups[1].Value);
                 var requestContent = new FormUrlEncodedContent(requestForm);
-
+                client.DefaultRequestHeaders.Add("X-Authy-API-Key", AppSettings.Key);
 
                 try
                 {
@@ -207,7 +207,7 @@ namespace AADB2C.MFA.AuthyApp.Controllers
 
                     while (!isApprovalRequestApproved && approvalRequestQueryCount < (AppSettings.Timeout / 3))
                     {
-                        RequestURI = $"https://api.authy.com/onetouch/json/approval_requests/{approvalRequestId}?api_key={AppSettings.Key}";
+                        RequestURI = $"https://api.authy.com/onetouch/json/approval_requests/{approvalRequestId}";
                         var getResponse = await client.GetAsync(RequestURI);
                         Responsecontent = await getResponse.Content.ReadAsStringAsync();
                         getResponse.EnsureSuccessStatusCode();

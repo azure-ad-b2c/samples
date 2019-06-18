@@ -1,7 +1,9 @@
 # A B2C IEF Custom Policy which allows disabling accounts that are from External IDPs
 
-## Disclaimer
-The sample policy is developed and managed by the open-source community in GitHub. This policy is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The policy is provided AS IS without warranty of any kind.
+## Community Help and Support
+Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
+If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
+To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
 For scenarios where you would like to block logins for social accounts or external IdP accounts that have been marked disabled in Azure AD B2C.

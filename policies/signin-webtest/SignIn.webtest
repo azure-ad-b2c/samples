@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="SignIn" Id="ef667cce-fee0-411c-bcb9-a9b43e8af753" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="WebTest1.ceb2831a-d559-457d-b63f-98f565e5008a.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="a710f389-6b66-48a7-a4f2-293a4af2bbc1" Version="1.1" Url="https://ENTER-YOUR-TENANT-NAME.b2clogin.com/ENTER-YOUR-TENANT-NAME.onmicrosoft.com/oauth2/v2.0/authorize" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <DependentRequests>
+        <Request Method="GET" Guid="b6c6c928-8cb0-44ba-83a9-a695d0df1044" Version="1.1" Url="https://login.microsoftonline.com/static/tenant/default/unified.cshtml" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <DependentRequests>
+            <Request Method="GET" Guid="d4911f6b-445f-47e1-8a83-e928cd265463" Version="1.1" Url="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.2.min.js" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+            <Request Method="GET" Guid="f8f2a87a-d42f-4a37-bc9d-6ce05585f682" Version="1.1" Url="https://login.microsoftonline.com/static/tenant/default/img/default_signin_illustration_optimized.png" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+          </DependentRequests>
+        </Request>
+      </DependentRequests>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractRegularExpression, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="CSRF" DisplayName="Extract Regular Expression" Description="Extract text from the response matching a regular expression and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="RegularExpression" Value="(?&lt;=&quot;csrf&quot;:&quot;)\w+=*(?=&quot;)" />
+            <RuleParameter Name="IgnoreCase" Value="True" />
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="UseGroups" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractRegularExpression, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="TX2" DisplayName="Extract Regular Expression" Description="Extract text from the response matching a regular expression and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="RegularExpression" Value="(?&lt;=&quot;transId&quot;:&quot;)\w+=*(?=&quot;)" />
+            <RuleParameter Name="IgnoreCase" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="UseGroups" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="TX" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&quot;transId&quot;:&quot;" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="IgnoreCase" Value="True" />
+            <RuleParameter Name="UseRegularExpression" Value="True" />
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="ExtractRandomMatch" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="SearchInHeaders" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="p" Value="{{PolicyId}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="client_Id" Value="{{ClientId}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="nonce" Value="{{Nonce}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="redirect_uri" Value="{{RedirectUri}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="scope" Value="{{Scope}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="prompt" Value="{{Prompt}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="state" Value="{{State}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="response_mode" Value="{{ResponseMode}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="response_type" Value="{{ResponseType}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="POST" Guid="07d9973f-6b70-4415-b312-dbf429229873" Version="1.1" Url="https://ENTER-YOUR-TENANT-NAME.b2clogin.com/ENTER-YOUR-TENANT-NAME.onmicrosoft.com/oauth2/v2.0/authorize/ENTER-YOUR-TENANT-NAME.onmicrosoft.com/ENTER-YOUR-B2C-POLICYNAME/SelfAsserted" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="X-CSRF-TOKEN" Value="{{CSRF}}" />
+      </Headers>
+      <ValidationRules>
+        <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleFindText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Find Text" Description="Verifies the existence of the specified text in the response." Level="High" ExectuionOrder="BeforeDependents">
+          <RuleParameters>
+            <RuleParameter Name="FindText" Value="{&quot;status&quot;:&quot;200&quot;}" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="PassIfTextFound" Value="True" />
+          </RuleParameters>
+        </ValidationRule>
+      </ValidationRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="tx" Value="{{TX}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="{{PolicyId}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+      <FormPostHttpBody>
+        <FormPostParameter Name="logonIdentifier" Value="{{Username}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" />
+        <FormPostParameter Name="password" Value="{{Password}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="request_type" Value="{{request_type}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="914769be-537f-49bf-89cd-91e4e69327ed" Version="1.1" Url="https://ENTER-YOUR-TENANT-NAME.b2clogin.com/ENTER-YOUR-TENANT-NAME.onmicrosoft.com/oauth2/v2.0/authorize/ENTER-YOUR-TENANT-NAME.onmicrosoft.com/ENTER-YOUR-B2C-POLICY-NAME/api/SelfAsserted/confirmed" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="200" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <DependentRequests>
+        <Request Method="GET" Guid="58f9ed2c-fe10-43a9-98b5-43bde1b9c6fb" Version="1.1" Url="{{RedirectUri}}" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+          <QueryStringParameters>
+            <QueryStringParameter Name="id_token" Value="{{ReturnedIdTokenValue}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+          </QueryStringParameters>
+        </Request>
+      </DependentRequests>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="ReturnedIdTokenValue" DisplayName="Extract Form Field" Description="Extract the value of a specified form field in the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="id_token" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="csrf_token" Value="{{CSRF}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="tx" Value="{{TX}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="{{PolicyId}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+  </Items>
+  <ContextParameters>
+    <ContextParameter Name="Password" Value="ENTER-YOUR-B2C-TESTUSER-Password" />
+    <ContextParameter Name="PolicyId" Value="ENTER-YOUR-POLICY-NAME, e.g. B2C_1_V2_SUSI" />
+    <ContextParameter Name="ClientId" Value="ENTER-YOUR-APP-ID e.g. c823f166-8b0d-4937-9e27-be39930c0588" />
+    <ContextParameter Name="Nonce" Value="defaultNonce" />
+    <ContextParameter Name="RedirectUri" Value="ENTER-YOUR-APP-RETURN-URI, e.g. htttps://jwt.ms" />
+    <ContextParameter Name="Scope" Value="openid" />
+    <ContextParameter Name="ResponseType" Value="id_token" />
+    <ContextParameter Name="Prompt" Value="login" />
+    <ContextParameter Name="TX" Value="" />
+    <ContextParameter Name="CSRF" Value="" />
+    <ContextParameter Name="CSRF_COOKIE" Value="" />
+    <ContextParameter Name="Username" Value="ENTER-YOUR-B2C-TESTUSER-NAME, e.g. bob@contoso.com" />
+    <ContextParameter Name="State" Value="State" />
+    <ContextParameter Name="ResponseMode" Value="form_post" />
+    <ContextParameter Name="ReturnedIdTokenValue" Value="" />
+    <ContextParameter Name="request_type" Value="RESPONSE" />
+  </ContextParameters>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleRequestTime, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Maximum Request Time" Description="Verifies that the request finishes within a specified amount of time." Level="Medium" ExectuionOrder="BeforeDependents">
+      <RuleParameters>
+        <RuleParameter Name="MaxRequestTime" Value="3000" />
+      </RuleParameters>
+    </ValidationRule>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents">
+      <RuleParameters>
+        <RuleParameter Name="IgnoreCase" Value="True" />
+      </RuleParameters>
+    </ValidationRule>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Medium" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+</WebTest>

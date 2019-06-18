@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_MFA_phone_or_email_Extensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_phone_or_email_Extensions">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="mfaByPhoneOrEmail">
+        <DisplayName>Select your MFA Method</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>RadioSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Phone" Value="phone" SelectByDefault="true" />
+          <Enumeration Text="Email " Value="email" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+      <ClaimType Id="readOnlyEmail">
+        <DisplayName>Email Address</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText/>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="extension_mfaByPhoneOrEmail">
+        <DisplayName>Stored MFA Method preference</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText/>
+      </ClaimType>
+
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CopySignInNameToReadOnly" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="readOnlyEmail" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>PhoneFactor</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="PhoneFactor-InputOrVerify">
+          <DisplayName>PhoneFactor</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.PhoneFactorProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.phonefactor</Item>
+            <Item Key="ManualPhoneNumberEntryAllowed">true</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserIdForMFA" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userIdForMFA" PartnerClaimType="UserId" />
+            <InputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="Verified.OfficePhone" />
+            <OutputClaim ClaimTypeReferenceId="newPhoneNumberEntered" PartnerClaimType="newPhoneNumberEntered" />
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress-NoError">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames" Required="true"/>
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="objectId"/>
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication"/>
+
+            <OutputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber"/>
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName"/>
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="otherMails"/>
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress"/>
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="MFA-Method">
+          <DisplayName>Allow user to choose their MFA Method</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="mfaByPhoneOrEmail" Required="true"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="PersistMFAMethod">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <PersistedClaims>
+            <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="mfaByPhoneOrEmail" PartnerClaimType="extension_mfaByPhoneOrEmail" />
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="displayname" />
+          </PersistedClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="mfaByPhoneOrEmail" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="mfaByPhoneOrEmail" PartnerClaimType="extension_mfaByPhoneOrEmail" />
+          </PersistedClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <DisplayName>Validate Email on Sign In</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="EmailVerifyOnSignIn">
+          <DisplayName>EmailVerifyOnSignIn</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="readOnlyEmail"/>
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="Verified.Email"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail"/>
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="mfaByPhoneOrEmail"/>
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignInMFAOption">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ReadUsingObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_mfaByPhoneOrEmail</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="MFAMethod" TechnicalProfileReferenceId="MFA-Method" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Phone verification: If MFA is not required, the next three steps (#5-#7) should be removed.
+             This step checks whether there's a phone number on record,  for the user. If found, then the user is challenged to verify it. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActiveMFASession</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mfaByPhoneOrEmail</Value>
+              <Value>phone</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Save MFA phone number: The precondition verifies whether the user provided a new number in the 
+             previous step. If so, then the phone number is stored in the directory for future authentication 
+             requests. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>mfaByPhoneOrEmail</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PersistMFAMethod" TechnicalProfileReferenceId="PersistMFAMethod" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newPhoneNumberEntered</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mfaByPhoneOrEmail</Value>
+              <Value>email</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="Email-Verify" TechnicalProfileReferenceId="EmailVerifyOnSignIn" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="9" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+    <UserJourney Id="ProfileEdit">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- If the user ever stepped up to use 2FA, profile update must verify this because the user will be able to change
+          their sign in email address or strong authentication email here. This guards against scenarios where a user's 
+          password is stolen, the attacker can change the email addresses leaving no way for the user to recover their account.
+          By requiring 2FA, stolen passwords cannot be used to take over the account completely. -->
+        <!-- Phone verification: If MFA is not required, the next three steps (#5-#7) should be removed.
+             This step checks whether there's a phone number on record,  for the user. If found, then the user is challenged to verify it. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActiveMFASession</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mfaByPhoneOrEmail</Value>
+              <Value>phone</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mfaByPhoneOrEmail</Value>
+              <Value>email</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="Email-Verify" TechnicalProfileReferenceId="EmailVerifyOnSignIn" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+    <UserJourney Id="PasswordReset">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- If the user ever stepped up to use 2FA, profile update must verify this because the user will be able to change
+          their sign in email address or strong authentication email here. This guards against scenarios where a user's 
+          password is stolen, the attacker can change the email addresses leaving no way for the user to recover their account.
+          By requiring 2FA, stolen passwords cannot be used to take over the account completely. -->
+        <!-- Phone verification: If MFA is not required, the next three steps (#5-#7) should be removed.
+             This step checks whether there's a phone number on record,  for the user. If found, then the user is challenged to verify it. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActiveMFASession</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>extension_mfaByPhoneOrEmail</Value>
+              <Value>phone</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+
+</TrustFrameworkPolicy>

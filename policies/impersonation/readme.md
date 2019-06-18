@@ -23,14 +23,14 @@ When you run the impersonation policy, you first need to sign-in with your own c
 The authorization is based on the value of the `extension_can_impersonate` claim type. If the value is `1`, the user is allowed to impersonate. You should use Azure AD Graph API to set the value of the extension attribute. For example, send an HTTP `PATCH` request to update the user's profile:
 
 ```HTTP
-PATCH https://graph.windows.net/your-tenant.onmicrosoft.com/users/user-id
+PATCH https://graph.windows.net/yourtenant.onmicrosoft.com/users/user-id
 {
     "extension_clientId_can_impersonate": "1"
 }
 ```
 
 Replace:
-- **your-tenant**, with your tenant name
+- **yourtenant**, with your tenant name
 - **user-id**, with the user object id, or UPN
 - **clientId**, with the extension attribute application client id
 
@@ -41,8 +41,10 @@ For more infomation, see:
 
 You can also use other authorization method, such as calling a REST API to check is user is allowed to impersonate.
 
-## Disclaimer
-The sample is developed and managed by the open-source community in GitHub. The application is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.
+## Community Help and Support
+Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
+If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
+To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Notes
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 
