@@ -43,7 +43,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Disable and lockout an account after a time period](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
 
-- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to automatically sign-in to a web application redeeming a link sent via email. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an id_token, without prompting for a password.
+- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to automatically sign-in to a web application by redeeming a link sent via email. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an id_token, without prompting for a password.
 
 - [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.
 
@@ -88,7 +88,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api) - A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).
 
-- [Remote profile](policies/remote-profile) - Demonstrates how to store and read user profile from a remote database. 
+- [Remote profile](policies/remote-profile) - Demonstrates how to store and read user profiles from a remote database. 
 
 - [MFA after timeout or IP change](policies/mfa-absolute-timeout-and-ip-change-trigger) - A policy which forces the user to do MFA on 3 conditions:
     1. The user has newly signed up.
