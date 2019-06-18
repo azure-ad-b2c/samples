@@ -1,6 +1,9 @@
 # Custom email verification
 Custom email verification solution allows you to send your own custom email verification during sign-up or password reset user journey. The solution requires using Azure AD B2C custom policy and a REST API endpoint that sends and verifies the email address.
 
+
+> **Important**: This solution uses a POST to a rest API from the client-side JavaScript to send an emails, which prone to be an email flooding vulnerability. Make sure you secure the REST API, for example, you could combine with the [Captcha sample also in the repo](https://github.com/azure-ad-b2c/samples/tree/master/policies/captcha-integration).
+
 The solution includes:
 1. REST API to **send** the email verification with the TOTP code
 1. REST API to **verify** the email address with the TOTP code
