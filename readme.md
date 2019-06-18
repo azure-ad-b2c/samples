@@ -31,7 +31,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Username discovery](policies/username-discovery) - This example shows how to discover a username by email address. It's useful when a user forgot their username and remembers only their email address.
 
-- [Azure AD B2C Invitation](policies/invite)  This sample console app demonstrates how to send a sign-up email invitation. After you sent the invention, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account by beforehand, while letting the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means. 
+- [Azure AD B2C Invitation](policies/invite)  This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means. 
 
 - [Email Verification at Sign In](policies/signin-email-verification) - For scenarios where you would like users to validate their email via TOTP on every sign in.
 
@@ -43,9 +43,9 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Disable and lockout an account after a time period](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
 
-- [Sign-in with email](policies/sign-in-with-email) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an access token, without prompting for a password.
+- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an access token, without prompting for a password.
 
-- [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how to sign-in to a web application by sending a sign-in link.
+- [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.
 
 - [Banned password list](policies/banned-password-list-no-API) - For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.
 
@@ -55,9 +55,9 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 
 ## Social account policy enhancements
-- [Social identity provider force email verification](policies/social-idp-force-email) - When a users signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
+- [Social identity provider force email verification](policies/social-idp-force-email) - When a user signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
 
-- [Dynamic identity provider selection](policies/idps-filter)  Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.
+- [Dynamic identity provider selection](policies/idps-filter) - Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on the requests application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.
 
 - [Home Realm Discovery page](policies/home-realm-discovery-page) - Demonstrates how to create a home realm discovery page. On the sign-in page, the user provides their sign-in email address and clicks continue. B2C checks the domain portion of the sign-in email address. If the domain name is `contoso.com` the user is redirected to Contoso.com Azure AD to complete the sign-in. Otherwise the user continues the sign-in with username and password. In both cases (AAD B2C local account and AAD account), the user does not need to retype the user name. 
 

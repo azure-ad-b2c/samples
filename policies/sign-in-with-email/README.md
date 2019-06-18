@@ -1,4 +1,4 @@
-# Sign-in with email
+# Email delivered account redemption link
 This sample demonstrates how to sign-in to a web application by sending a sign-in link. The web application sends an email to the end user with a link to sign-in policy. The link to the sign-in policy contains the email address, which is encapsulated inside a JWT token (id_token_hint). When a user clicks on that link, Azure AD B2C validates the JWT token signature, reads the information from the token, extracts the email address and issues an access token back to the application.
 
 ## User flow
