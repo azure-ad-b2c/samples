@@ -8,6 +8,9 @@ To provide product feedback, visit the Azure Active Directory B2C [Feedback page
 ## Scenario
 In this scenario, we force users to check a box to accept the "terms of use", and upon sign in, we check whether the user has accepted the latest "terms of use", and if not they are presented with a screen to re-consent to the "terms of use", otherwise they are not authenticated.
 
+## Reference
+[Capture terms of use agreement](https://docs.microsoft.com/en-us/azure/active-directory-b2c/manage-user-access#capture-terms-of-use-agreement) - Microsoft AAD B2C Documentation as reference material.
+
 ## How it works
 When the user signs up, the `LocalAccountSignUpWithLogonEmailCustom` technical profile implements a checkbox which the user must "check" to submit the form. This acts as the "terms of use" accepted signal. If the user does not select the check box, the user cannot create an account.  
 
