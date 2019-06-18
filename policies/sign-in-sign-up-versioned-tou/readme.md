@@ -18,9 +18,10 @@ When the account is created, since the user must have accepted the 'terms of use
 
 The current time is computed within `LocalAccountSignUpWithLogonEmailCustom` technical profile, which calls the `GetCurrentDateTime` claims transformation.
 
-At each sign in, the `Check-TOU-Status` validation technical profile is run (after credential validation with `login-noninteractive`). This validation technical profile reads the `extension_termsOfUseConsentDateTime` attribute to determine when the user last consented to the 'terms of use'. Then the `IsTermsOfUseConsentRequiredForDateTime` output claim transformation is run against `extension_termsOfUseConsentDateTime`. It returns `True` of the the date of consent is prior to the date configured in `IsTermsOfUseConsentRequiredForDateTime`, and false otherwise.
+At each sign in, the `Check-TOU-Status` validation technical profile is run (after credential validation with `login-noninteractive`). This validation technical profile reads the `extension_termsOfUseConsentDateTime` attribute to determine when the user last consented to the 'terms of use'. Then the `IsTermsOfUseConsentRequiredForDateTime` output claim transformation is run against `extension_termsOfUseConsentDateTime`. It returns `termsOfUseConsentRequired:true` if the the date of consent is prior to the date configured in `IsTermsOfUseConsentRequiredForDateTime`, and false otherwise.
 
-Then within the orchestration steps, the `SelfAsserted-Input-ToU-SignIn` technical profile is triggered if the consent is out of date. This page re-prompts the user for consent. If the user consents by clicking the check box, the `Update-TOU-Status` validation technical profile runs which writes the current time into `extension_termsOfUseConsentDateTime`. The next time the user logs on, they are not prompted for consent.
+Then within the orchestration steps, the `SelfAsserted-Input-ToU-SignIn` technical profile is triggered if the consent is out of date. This would occur if the value of `termsOfUseConsentRequired` was `true`.
+This page re-prompts the user for consent. If the user consents by clicking the check box, the `Update-TOU-Status` validation technical profile runs which writes the current time into `extension_termsOfUseConsentDateTime`. The next time the user logs on, they are not prompted for consent.
 
 ## Unit Tests
 1. Sign up and verify the account cannot be created without selecting the 'terms of use' check box.
