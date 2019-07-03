@@ -4,6 +4,8 @@ This sample solution, demonstrates how to store and read user profile in a remot
 
 During the **sign-up** and **profile editing** flow, Azure AD B2C calls a REST API to persist the user profile to the remote data source (a marketing database, CRM system, or any line of business application). On **sign-in**, with local or social account, Azure AD B2C invokes the REST API, sending the user unique identifier as a user primary key (email address, or user objectId). The REST API reads the data from the remote database and return the user profile. Then Azure AD B2C includes the user profile in the access token that returns back to the application.  
 
+Following diagram depicts the sign-in flow with remote profile.
+
 ![Remote profile](media/remote-profile.png)
 
 ## User flow
