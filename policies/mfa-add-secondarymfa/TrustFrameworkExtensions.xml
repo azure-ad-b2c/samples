@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
   PolicySchemaVersion="0.3.0.0" 
-  TenantId="harshaseeja.onmicrosoft.com" 
+  TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_TrustFrameworkExtensions_GitSample" 
-  PublicPolicyUri="http://harshaseeja.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
   
   <BasePolicy>
-    <TenantId>harshaseeja.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkBase_GitSample</PolicyId>
   </BasePolicy>
   
@@ -223,18 +223,12 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="login-NonInteractive">
           <Metadata>
-            <Item Key="client_id">1715d88f-10a4-4390-96eb-74eff5aeb0d3</Item>
-            <Item Key="IdTokenAudience">9106a85c-128f-4c52-ac11-39f983c9d9d2</Item>
-            <!--<Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
-            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>-->
+            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
           </Metadata>
           <InputClaims>
-
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="1715d88f-10a4-4390-96eb-74eff5aeb0d3" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="9106a85c-128f-4c52-ac11-39f983c9d9d2" />
-
-            <!--<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />-->
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
