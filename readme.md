@@ -79,6 +79,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [MFA with either Phone (Call/SMS) or Email verification](policies/mfa-email-or-phone) - Allow the user to do MFA by either Phone (Call/SMS) or Email verification, with the ability to change this preference via Profile Edit.
 
+- [Add & Select 2 MFA phone numbers at SignIn/Signup](policies/mfa-add-secondarymfa) - Demonstrates how to store two phone numbers in a secure manner in B2C and choose between any two at signIn. The flow prompts the user to store a secondary phone if only one phone number is one file. Once the two numbers are stored as part of SignUp or SignIn the user is given a choice to select between the two phones for their MFA on subsequent signIns. 
+
 ## Generic enhancements
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
