@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="your-tenant.onmicrosoft.com"
+  TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_ProfileEdit"
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_ProfileEdit">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_ProfileEdit">
 
   <BasePolicy>
-    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 

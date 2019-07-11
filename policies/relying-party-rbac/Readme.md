@@ -8,7 +8,7 @@ After user account has been created in Azure AD B2C directory. Administrator, fr
 
 During sign-in (with local account), IEF invokes REST API, sending the user `objectId` as input claim. The Rest API queries Azure AD Graph API to retrieve the list of group user is member of. The user's group list return back to B2C, as an output claim.
 
-Optionally, you can also send the `onlyMembersOf` claim type with a list of groups a user MSUT be member of to the REST API. If a user is not member of one of the groups specified in `onlyMembersOf`, The REST API returns a user friendly error will present to the user.
+Optionally, you can also send the `onlyMembersOf` claim type with a list of groups a user MUST be member of to the REST API. If a user is not member of one of the groups specified in `onlyMembersOf`, The REST API returns a user friendly error will present to the user.
 
 > Note:  This sample policy is based on [LocalAccounts starter pack](../../../LocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files.
 

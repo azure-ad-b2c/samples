@@ -1,6 +1,12 @@
 # Azure AD B2C: Remote profile
 
-Demonstrates how to store and read user profile in a remote database. This sample use Azure Blob Storage to store and read the user profile.
+This sample solution, demonstrates how to store and read user profile in a remote database. The sample uses Azure Blob Storage as a data source for the user profile. 
+
+During the **sign-up** and **profile editing** flow, Azure AD B2C calls a REST API to persist the user profile to the remote data source (a marketing database, CRM system, or any line of business application). On **sign-in**, with local or social account, Azure AD B2C invokes the REST API, sending the user unique identifier as a user primary key (email address, or user objectId). The REST API reads the data from the remote database and return the user profile. Then Azure AD B2C includes the user profile in the access token that returns back to the application.  
+
+Following diagram depicts the sign-in flow with remote profile.
+
+![Remote profile](media/remote-profile.png)
 
 ## User flow
 -  **Sign-up with local account** the LocalAccountSignUpWithLogonEmail technical profile invokes the REST-SignUpOrEditProfile validation technical profile. This technical profile reads the user objectId (return by the AAD-UserWriteUsingLogonEmail validation technical profile) and persist the profile to Azure Blob Table.
@@ -33,7 +39,9 @@ Deploy your the REST API and update the the Azure Blob storage connection string
   }
 ``` 
 
-## Disclaimer
-The sample is developed and managed by the open-source community in GitHub. The application is not part of Azure AD B2C product and it's not supported under any Microsoft standard support program or service. The sample (Azure AD B2C policy and any companion code) is provided AS IS without warranty of any kind.
+## Community Help and Support
+Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
+If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
+To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
-> Note:  This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the nessacery changes in the **Demo action required** sections.
+> Note:  This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the necessary changes in the **Demo action required** sections.

@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_signin_with_email"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signin_with_email">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+   <BuildingBlocks>
+    <ClaimsSchema>
+      <!--Sample: Stores the error message for unsolicited request (a request without id_token_hint) and user not found-->
+      <ClaimType Id="errorMessage">
+     	  <DisplayName>Error</DisplayName>
+     	  <DataType>string</DataType>
+        <UserHelpText>Add help text here</UserHelpText>
+     	  <UserInputType>Paragraph</UserInputType>
+      </ClaimType>      
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <!--Sample: Initiates the errorMessage claims type with the error message-->
+      <ClaimsTransformation Id="CreateUnsolicitedErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You cannot sign-in without invitation" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!--Sample: Initiates the errorMessage claims type with the error message user not found-->
+      <ClaimsTransformation Id="CreateUserNotFoundErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You aren't registered in the system!" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+
+  <ClaimsProviders>
+    <!--Sample: This technical profile specifies how B2C should validate your token, and what claims you want B2C to extract from the token. 
+      The METADATA value in the TechnicalProfile meta-data is required. 
+      The “IdTokenAudience” and “issuer” arguments are optional (see later section)-->
+    <ClaimsProvider>
+      <DisplayName>My ID Token Hint ClaimsProvider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="IdTokenHint_ExtractClaims">
+          <DisplayName> My ID Token Hint TechnicalProfile</DisplayName>
+          <Protocol Name="None" />
+          <Metadata>
+          
+            <!--Sample action required: replace with your endpoint location -->
+            <Item Key="METADATA">https://your-app.azurewebsites.net/.well-known/openid-configuration</Item>
+
+            <!-- <Item Key="IdTokenAudience">your_optional_audience_override</Item> -->
+            <!-- <Item Key="issuer">your_optional_token_issuer_override</Item> -->
+          </Metadata>
+        <OutputClaims>
+          <!--Sample: Read the email cliam from the id_token_hint-->
+          <OutputClaim ClaimTypeReferenceId="email" />  
+        </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!-- Demo: Show error message-->
+        <TechnicalProfile Id="SelfAsserted-Error">
+          <DisplayName>Unsolicited error message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <!-- Sample: Remove the continue button-->
+            <Item Key="setting.showContinueButton">false</Item>
+         </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorMessage"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="errorMessage"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <!-- Demo: Show unsolicited error message-->
+        <TechnicalProfile Id="SelfAsserted-Unsolicited">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUnsolicitedErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+
+        <!-- Demo: Show user not found error message-->
+        <TechnicalProfile Id="SelfAsserted-UserNotFound">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserNotFoundErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <Metadata>
+            <!--Sample: don't raise error if user not found. We have an orchestration step to handle the error message-->
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+          </Metadata>
+          <OutputClaims>
+            <!--Sample: add optional claims to read from the directory-->
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="surname"/>
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignInWithEmail">
+      <OrchestrationSteps>
+        
+        <!--Sample: Read the input claims from the id_token_hint-->
+        <OrchestrationStep Order="1" Type="GetClaims" CpimIssuerTechnicalProfileReferenceId="IdTokenHint_ExtractClaims" />
+
+        <!-- Sample: Check if user tries to run the policy without invitation -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+         <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>email</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>        
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Unsolicited" TechnicalProfileReferenceId="SelfAsserted-Unsolicited" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Read the user properties from the directory-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingEmailAddress" TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Sample: Check whether the user not existed in the directory -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedUserNotFound" TechnicalProfileReferenceId="SelfAsserted-UserNotFound" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Issue an access token-->
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+    
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignInWithEmail" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <!--Sample: Set the input claims to be read from the id_token_hint-->
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="email" />  
+      </InputClaims>       
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
+
+
+

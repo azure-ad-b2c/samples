@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" href="index.css">
+
+    <title>WebAuthn Sample App</title>
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <h3>WebAuthn Sample App</h3>
+        <p>
+            <small>Source code on
+                <a href="https://github.com/MicrosoftEdge/webauthnsample">GitHub</a>
+            </small>
+        </p>
+
+
+
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-md-3 pt-0">
+                    <b>Register credential</b>
+                </legend>
+                <div class="col-md-9">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="attachment" id="attachmentPlatform" value="platform" checked>
+                        <label class="form-check-label" for="attachmentPlatform">
+                            On bound (platform) authenticator
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="attachment" id="attachmentCrossPlatform" value="cross-platform">
+                        <label class="form-check-label" for="attachmentCrossPlatform">
+                            On roaming (cross-platform) authenticator
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-md-3 pt-0">
+                    <b>Authenticate credential</b>
+                </legend>
+                <div class="col-md-9">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="allowCredentials" id="allowCredentialsFilled" value="filled" checked>
+                        <label class="form-check-label" for="allowCredentialsFilled">
+                            Last created in this browser
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="allowCredentials" id="allowCredentialsEmpty" value="empty">
+                        <label class="form-check-label" for="allowCredentialsEmpty">
+                            Any credential (allowCredentials empty)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <br>
+
+        <button class="btn btn-primary" href="#" role="button" type="button" id="register">
+            <i class="fa fa-spinner fa-spin spinner hidden" id="registerSpinner"></i>Register</button>
+        <button class="btn btn-primary" href="#" role="button" type="button" id="authenticate">
+            <i class="fa fa-spinner fa-spin spinner hidden" id="authenticateSpinner"></i>Authenticate</button>
+        <br>
+        <br>
+        <br>
+        <div role="alert" id="status" />
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="index.js"></script>
+</body>
+
+</html>

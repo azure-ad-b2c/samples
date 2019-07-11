@@ -1,0 +1,22 @@
+.btn {
+    width: 240px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.spinner {
+    margin-right: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.errorText {
+    color: red;
+}
+
+.wordWrap {
+    word-break: break-all;
+    word-wrap: break-word;
+}

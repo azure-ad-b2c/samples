@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "B2CSignInWithApple", "B2CSignInWithApple.csproj", "{AE94EDC2-358A-4DE3-A4C1-78A4A989E359}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE94EDC2-358A-4DE3-A4C1-78A4A989E359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE94EDC2-358A-4DE3-A4C1-78A4A989E359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE94EDC2-358A-4DE3-A4C1-78A4A989E359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE94EDC2-358A-4DE3-A4C1-78A4A989E359}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DFFDE12-5C93-4371-86E9-0173A4C0DF4C}
+	EndGlobalSection
+EndGlobal

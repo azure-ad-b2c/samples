@@ -62,7 +62,7 @@ A Web application needs to be registered in your Azure AD B2C tenant before they
 1. Enter a name for the application. For example, `My Angular App`.
 1. For **Include web app/ web API** and **Allow implicit flow**, select Yes.
 1. For **Reply URL**, enter an endpoint where Azure AD B2C should return any tokens that your application requests. In this tutorial, the Angular sample runs locally and listens at `http://localhost:4200`.
-1. For **App ID URI**, enter the identifier used for your web API. The full identifier URI including the domain is generated for you. For example, `https://your-tenant.onmicrosoft.com/angular-api`.
+1. For **App ID URI**, enter the identifier used for your web API. The full identifier URI including the domain is generated for you. For example, `https://yourtenant.onmicrosoft.com/angular-api`.
     ![Create new app](media/create-app.png)
 1. Click **Create**.
 1. On the properties page, record the **Application ID** that you'll use when you configure the web application.
@@ -111,10 +111,10 @@ export class MsalService {
     B2CTodoAccessTokenKey = "b2c.todo.access.token";
 
     tenantConfig = {
-        tenant: "your-tenant.onmicrosoft.com",
+        tenant: "yourtenant.onmicrosoft.com",
         clientID: 'ebce2d28-8fb8-4cc7-83ae-accc9d73ee9d',
         signUpSignInPolicy: "B2C_1_SUSI",
-        b2cScopes: ["https://your-tenant.onmicrosoft.com/angular-api/Demo.Read"]
+        b2cScopes: ["https://yourtenant.onmicrosoft.com/angular-api/Demo.Read"]
     };
     
     // Configure the authority for Azure AD B2C
@@ -181,10 +181,10 @@ This code sets the Azure AD B2C values. Set those parameters with the value of y
 
  ```TypeScript
     tenantConfig = {
-        tenant: "your-tenant.onmicrosoft.com",
+        tenant: "yourtenant.onmicrosoft.com",
         clientID: 'ebce2d28-8fb8-4cc7-83ae-accc9d73ee9d',
         signUpSignInPolicy: "B2C_1_SUSI",
-        b2cScopes: ["https://your-tenant.onmicrosoft.com/angular-api/Demo.Read"]
+        b2cScopes: ["https://yourtenant.onmicrosoft.com/angular-api/Demo.Read"]
     };
 ```
 

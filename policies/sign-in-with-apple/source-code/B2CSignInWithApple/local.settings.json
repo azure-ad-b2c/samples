@@ -1,0 +1,19 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "WEBSITE_SLOT_NAME": "Production",
+    "FUNCTIONS_EXTENSION_VERSION": "~2",
+    "ScmType": "None",
+    "WEBSITE_AUTH_ENABLED": "False",
+    "REMOTEDEBUGGINGVERSION": "15.0.28307.222",
+    "WEBSITE_NODE_DEFAULT_VERSION": "10.14.1",
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "",
+    "WEBSITE_CONTENTSHARE": "B2CSignInWithAppleb11e",
+    "WEBSITE_AUTH_AUTO_AAD": "False",
+    "WEBSITE_LOAD_USER_PROFILE": "1",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "WEBSITE_SITE_NAME": "B2CSignInWithApple",
+    "WEBSITE_AUTH_LOGOUT_PATH": "/.auth/logout",
+    "AzureWebJobsStorage": ""
+  }
+}

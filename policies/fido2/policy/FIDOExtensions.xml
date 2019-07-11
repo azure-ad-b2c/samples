@@ -1,0 +1,540 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_FIDOExtensions" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_FIDOExtensions">
+  
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+
+      <!--Sample: Add input type to the objectId claim type, so we can render it on the self-asserted page-->
+      <ClaimType Id="objectId">
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      
+      <!--Sample: Stores the user message -->
+      <ClaimType Id="userMessage">
+     	  <DisplayName></DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>Paragraph</UserInputType>
+      </ClaimType>  
+
+      
+      <!--Sample: Work around for a self-asserted page without claims -->
+      <ClaimType Id="fake">
+     	  <DisplayName></DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType>  
+
+      <!--Sample: Stores the FIDO challenge received from the REST API-->      
+      <ClaimType Id="challenge">
+     	  <DisplayName>FIDO Challenge</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: Read only cliams to render on the self-asserted page-->
+      <ClaimType Id="readOnlyDisplayName">
+     	  <DisplayName>FIDO dispaly name</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>Readonly</UserInputType>
+      </ClaimType> 
+
+      <ClaimType Id="readOnlyName">
+     	  <DisplayName>FIDO username</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>Readonly</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: The rawId read-only property of the PublicKeyCredential interface is an ArrayBuffer object 
+                  containing the identifier of the credentials. (base64url encoding).-->
+      <ClaimType Id="extension_fido_rawId">
+     	  <DisplayName>rawId</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: The client data for the authentication, such as origin and challenge (base64url encoding).-->
+      <ClaimType Id="clientDataJSON">
+     	  <DisplayName>clientDataJSON</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: An ArrayBuffer containing authenticator data and an attestation statement for a newly-created key pair. (base64url encoding) .-->
+      <ClaimType Id="attestationObject">
+     	  <DisplayName>attestationObject</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: An ArrayBuffer containing an opaque user identifier.-->
+      <ClaimType Id="userHandle">
+     	  <DisplayName>userHandle</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: An assertion signature over AuthenticatorAssertionResponse.authenticatorData and AuthenticatorResponse.clientDataJSON. 
+                  The assertion signature is created with the private key of keypair that was created during the 
+                  navigator.credentials.create() call and verified using the public key of that same keypair.-->
+      <ClaimType Id="signature">
+     	  <DisplayName>signature</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: An ArrayBuffer containing information from the authenticator such as the Relying Party ID Hash (rpIdHash), 
+                  a signature counter, test of user presence and user verification flags, and any extensions processed by the authenticator-->
+      <ClaimType Id="authenticatorData">
+     	  <DisplayName>authenticatorData</DisplayName>
+     	  <DataType>string</DataType>
+     	  <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+
+      <!--Sample: the public key return after registration-->
+      <ClaimType Id="fido_publicKeyJwk">
+     	  <DisplayName>publicKeyJwk</DisplayName>
+     	  <DataType>string</DataType>
+         <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+      <ClaimType Id="extension_fido_publicKeyJwk1">
+     	  <DisplayName>publicKeyJwk</DisplayName>
+     	  <DataType>string</DataType>
+         <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+      <ClaimType Id="extension_fido_publicKeyJwk2">
+     	  <DisplayName>publicKeyJwk</DisplayName>
+     	  <DataType>string</DataType>
+         <UserInputType>TextBox</UserInputType>
+      </ClaimType> 
+    </ClaimsSchema>
+
+
+    <ClaimsTransformations>
+      <!--Sample: Initiates the message to be presented to the user-->
+      <ClaimsTransformation Id="FIDOEnrollmentCreateWelcomeMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="To enroll your FIDO credentials, you need to sign-in first. Click continue and sign-in with your own credential." />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!--Sample: Initiates the message to be presented to the user-->
+      <ClaimsTransformation Id="FIDOEnrollmentCreateRegistrationMessage" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="Click Register to enroll {0} with a FIDO authenticator" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation> 
+      
+      <!--Sample: Set a fake value-->
+      <ClaimsTransformation Id="CreateFakeValue" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="fake" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="fake" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!--Sample: Initiates the message to be presented to the user-->
+      <ClaimsTransformation Id="FIDOCreateAuthenticationMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="Click Authenticate to identify yourself with FIDO authenticator" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <!--Sample: Copy the user's email address-->
+      <ClaimsTransformation Id="CopyEmailAddress" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="readOnlyName" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <!--Sample: Copy the user's display name-->
+      <ClaimsTransformation Id="CopyDisplayName" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="readOnlyDisplayName" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>      
+    </ClaimsTransformations>  
+
+<ContentDefinitions>
+
+      <!-- Sample: enable script execution by setting the page contract -->
+      <ContentDefinition Id="api.error">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:globalexception:1.1.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.idpselections">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.0.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.idpselections.signup">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.0.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.signuporsignin">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:1.1.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.profileupdate">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountsignup">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+      </ContentDefinition>
+
+      <!--Sample: FIDO self-asserted HTML page-->
+      <ContentDefinition Id="api.selfasserted.fido">
+        <LoadUri>https://yourtenant.blob.core.windows.net/azure-ad-b2c/fido/self-asserted.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+      </ContentDefinition>
+
+      <!--Sample: FIDO welcome self-asserted HTML page-->
+      <ContentDefinition Id="api.selfasserted.fido.welcome">
+        <LoadUri>https://yourtenant.blob.core.windows.net/azure-ad-b2c/fido/welcome.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
+      </ContentDefinition>
+    </ContentDefinitions>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>FIDO enrollment</DisplayName>
+      <TechnicalProfiles>
+        <!--Sample: Render the FIDO enrollment wolcome page-->
+        <TechnicalProfile Id="SelfAsserted-FIDOEnrollmentWelcome">
+          <DisplayName>Welcome to FIDO enrollment</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.fido.welcome</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+             <InputClaimsTransformation ReferenceId="FIDOEnrollmentCreateWelcomeMessage" />
+             <InputClaimsTransformation ReferenceId="CreateFakeValue" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userMessage"/>
+            <InputClaim ClaimTypeReferenceId="fake"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
+            <OutputClaim ClaimTypeReferenceId="fake" DefaultValue="fake" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+
+        <!--Sample: Render the FIDO enrollment page-->
+        <TechnicalProfile Id="SelfAsserted-FIDOEnrollment">
+          <DisplayName>Welcome to FIDO enrollment</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.fido</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+             <InputClaimsTransformation ReferenceId="CopyEmailAddress" />
+             <InputClaimsTransformation ReferenceId="CopyDisplayName" />
+             <InputClaimsTransformation ReferenceId="FIDOEnrollmentCreateRegistrationMessage" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userMessage"/>
+            <InputClaim ClaimTypeReferenceId="readOnlyName"/>
+            <InputClaim ClaimTypeReferenceId="readOnlyDisplayName"/>
+            <InputClaim ClaimTypeReferenceId="objectId"/>
+            <InputClaim ClaimTypeReferenceId="challenge"/>
+          </InputClaims>
+          <OutputClaims>
+            <!--Sample: Read only claims to present to be sent the authenticator--> 
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
+            <OutputClaim ClaimTypeReferenceId="readOnlyName" />
+            <OutputClaim ClaimTypeReferenceId="readOnlyDisplayName" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="challenge" />
+
+            <!--Sample: Claims return from the authenticator -->
+            <OutputClaim ClaimTypeReferenceId="extension_fido_rawId"  />
+            <OutputClaim ClaimTypeReferenceId="clientDataJSON" />
+            <OutputClaim ClaimTypeReferenceId="attestationObject" />
+
+            <!--Sample: Bubble up claims from the validation technical profile-->
+            <OutputClaim ClaimTypeReferenceId="fido_publicKeyJwk"  />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk1"  />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk2"  />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+             <ValidationTechnicalProfile ReferenceId="REST-FIDOMakeCredential" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+
+        <!--Sample: Render the FIDO sing-in page-->
+        <TechnicalProfile Id="SelfAsserted-FIDOSignIn">
+          <DisplayName>Welcome to FIDO enrollment</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.fido</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+             <InputClaimsTransformation ReferenceId="FIDOCreateAuthenticationMessage" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userMessage"/>
+            <InputClaim ClaimTypeReferenceId="challenge"/>
+          </InputClaims>
+          <OutputClaims>
+            <!--Sample: Read only claims to present to be sent the authenticator--> 
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
+            <OutputClaim ClaimTypeReferenceId="challenge" />
+
+            <!--Sample: Claims return from the authenticator -->
+            <OutputClaim ClaimTypeReferenceId="extension_fido_rawId" />
+            <OutputClaim ClaimTypeReferenceId="clientDataJSON" />
+            <OutputClaim ClaimTypeReferenceId="userHandle" />
+            <OutputClaim ClaimTypeReferenceId="signature" />
+            <OutputClaim ClaimTypeReferenceId="authenticatorData" />
+
+            <!--Sample: Bubble up claims from the validation technical profile-->
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk1" />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk2" />            
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+             <ValidationTechnicalProfile ReferenceId="AAD-FidoUserReadUsingObjectId" />
+             <ValidationTechnicalProfile ReferenceId="REST-FIDOAssertion" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+
+
+        <TechnicalProfile Id="SelfAsserted-FIDOEnrollmentTester">
+          <DisplayName>Welcome to FIDO enrollment</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="fido_publicKeyJwk"/>
+           </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="fido_publicKeyJwk"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>  
+   <ClaimsProvider>
+      <DisplayName>Custom REST API</DisplayName>
+      <TechnicalProfiles>
+        <!--Sample: Call the REST API to get a signed challenge. Later, on the response, the server (RP)
+          checks the integrity of the challenge (whether is issued by the server, by validating the JTW token). 
+          Also will validate the signature of the challenge, signed by FIDO authenticator. -->
+        <TechnicalProfile Id="REST-FIDOGetChallenge">
+          <DisplayName>GET a FIDO Challenge</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://fido2node.azurewebsites.net/challenge</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">QueryString</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="challenge" PartnerClaimType="result" />
+
+            <!--Sample: Set the identity provider name to FIDO-->
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="fido" AlwaysUseDefaultValue="true" />            
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-FIDOGetChallengeForSignIn">
+          <DisplayName>FIDO</DisplayName>
+          <IncludeTechnicalProfile ReferenceId="REST-FIDOGetChallenge" />
+        </TechnicalProfile>
+        
+        <TechnicalProfile Id="REST-FIDOMakeCredential">
+          <DisplayName>GET a FIDO Challenge</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://fido2node.azurewebsites.net/credentials</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_fido_rawId" PartnerClaimType="id" />
+            <InputClaim ClaimTypeReferenceId="clientDataJSON" PartnerClaimType="clientDataJSON" />
+            <InputClaim ClaimTypeReferenceId="attestationObject" PartnerClaimType="attestationObject" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="fido_publicKeyJwk" PartnerClaimType="publicKeyJwk" />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk1" PartnerClaimType="publicKeyJwk1" />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk2" PartnerClaimType="publicKeyJwk2" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-FIDOAssertion">
+          <DisplayName>GET a FIDO Challenge</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://fido2node.azurewebsites.net/assertion</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_fido_rawId" PartnerClaimType="id" />
+            <InputClaim ClaimTypeReferenceId="clientDataJSON"  />
+            <InputClaim ClaimTypeReferenceId="userHandle"  />
+            <InputClaim ClaimTypeReferenceId="signature"  />
+            <InputClaim ClaimTypeReferenceId="authenticatorData"  />
+            <InputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk1" PartnerClaimType="publicKeyJwk1" />
+            <InputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk2" PartnerClaimType="publicKeyJwk2" DefaultValue="" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+  <ClaimsProvider>
+    <DisplayName>Azure Active Directory</DisplayName>
+    <TechnicalProfiles>
+        
+        <TechnicalProfile Id="AAD-Common">
+          <DisplayName>Azure Active Directory</DisplayName>
+          <!--  Sample: Provide objectId and appId before using extension properties.
+                For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom 
+                Action required: Insert objectId and appId here -->
+          <Metadata>
+            <Item Key="ApplicationObjectId">1702d1ac-623c-4a4d-982d-e1dc2e51cfb2</Item>
+            <Item Key="ClientId">831374b3-bd50-41bf-aa54-263ec9e050fc</Item>
+          </Metadata>
+        </TechnicalProfile>	
+        
+        <TechnicalProfile Id="AAD-UserWriteFidoUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true"/>
+          </InputClaims>
+          <PersistedClaims>
+            <!-- Required claims -->
+            <PersistedClaim ClaimTypeReferenceId="objectId"/>
+
+            <!-- Sample: Writ FIDO claims to the user account -->
+            <PersistedClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk1" DefaultValue="" />
+            <PersistedClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk2" DefaultValue=""/>
+            <PersistedClaim ClaimTypeReferenceId="extension_fido_rawId" DefaultValue=""/>
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common"/>
+        </TechnicalProfile>
+
+      <!-- <TechnicalProfile Id="AAD-FidoUserReadUsingObjectId">
+        <Metadata>
+          <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can not find such an account</Item>
+        </Metadata>
+        <IncludeTechnicalProfile ReferenceId="AAD-UserReadUsingObjectId" />
+        </TechnicalProfile> -->
+
+        <TechnicalProfile Id="AAD-FidoUserReadUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="extension_fido_rawId" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+
+            <!--Sample: FIDO data-->
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk1" />
+            <OutputClaim ClaimTypeReferenceId="extension_fido_publicKeyJwk2" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+      <TechnicalProfile Id="AAD-Tester">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" 
+				      PartnerClaimType="signInNames" Required="true"
+				      DefaultValue="12@mfa.com" />
+          </InputClaims>
+          <OutputClaims>
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress"/>
+            <OutputClaim ClaimTypeReferenceId="displayName"/>
+            <OutputClaim ClaimTypeReferenceId="otherMails"/>
+            <OutputClaim ClaimTypeReferenceId="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="surname"/>
+            <OutputClaim ClaimTypeReferenceId="objectId"/>
+            <OutputClaim ClaimTypeReferenceId="email"/>
+            <OutputClaim ClaimTypeReferenceId="identityProvider"/>
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+  </ClaimsProviders>
+
+
+</TrustFrameworkPolicy>

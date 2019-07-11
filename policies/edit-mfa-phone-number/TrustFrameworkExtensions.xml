@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
   PolicySchemaVersion="0.3.0.0" 
-  TenantId="your-tenant.onmicrosoft.com" 
+  TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_Edit_MFA_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://your-tenant.onmicrosoft.com/B2C_1A_Edit_MFA_TrustFrameworkExtensions">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Edit_MFA_TrustFrameworkExtensions">
   
   <BasePolicy>
-    <TenantId>your-tenant.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_Edit_MFA_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
@@ -132,7 +132,7 @@
         <!--Demo: First verify existing one-->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="ExitingPhoneFactor" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
+            <ClaimsExchange Id="ExistingPhoneFactor" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
