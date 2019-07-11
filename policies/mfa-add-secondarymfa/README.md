@@ -21,14 +21,15 @@ Store two strong phone numbers in AAD B2C securely
         2.2 If user selected "No" 
             2.2.1 Issue token
 ### Existing user SignIn/Login
+3. User enters username and password as the first step.
 
-3. User enters username and password. 
+    3.1 User does not have two phone numbers on file.
+    
+        3.1.1 Gets prompted for first MFA and completes MFA.
+        3.1.2 Gets prompted to store another MFA phone number and follows step from 2. from previous section
 
-    3.1 User does not have two phone numbers on file
-        3.1.1 Gets prompted for first MFA and completes MFA
-        3.1.2 Gets prompted to store another MFA phone number and follows step from 2. from previous 
-
-    3.2 User has two phone numbers on file
+    3.2 User has two phone numbers on file:
+    
         3.2.1 User gets prompted for MFA with an option to select between any two phone numers
         
 
