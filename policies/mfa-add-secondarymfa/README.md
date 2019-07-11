@@ -10,8 +10,8 @@ Store two strong phone numbers in AAD B2C securely
  1. The user has forgotten or lost one of their phone numbers and still need access
  2. Select between any of the two phone numbers at the time of signIn
  
-##Flow
-#New User / SignUp
+## Flow
+# New User / SignUp
     1. Collect signUp attributes and first MFA phone number. 
     2. Prompt the user if they want to store an additional phone number for MFA
         2.1 If user selected "Yes" - Ask for another phone number
@@ -20,7 +20,7 @@ Store two strong phone numbers in AAD B2C securely
             2.1.3 Issue token
         2.2 If user selected "No" 
             2.2.1 Issue token
-#Existing user SignIn/Login
+# Existing user SignIn/Login
 
 3. User enters username and password. 
 
