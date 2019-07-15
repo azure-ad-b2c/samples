@@ -197,7 +197,7 @@
 					</CryptographicKeys>
 					<OutputClaims>
 						<OutputClaim ClaimTypeReferenceId="userId" Required="true" />
-						<OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Email" Required="true" />
+						<OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
 						<OutputClaim ClaimTypeReferenceId="emails" />
 						<OutputClaim ClaimTypeReferenceId="objectId" />
 						<OutputClaim ClaimTypeReferenceId="userPrincipalName" />
