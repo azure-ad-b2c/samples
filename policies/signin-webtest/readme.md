@@ -1,3 +1,7 @@
+## Community Help and Support
+Use Stack Overflow to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c]. If you find a bug in the sample, please raise the issue on GitHub Issues. To provide product feedback, visit the Azure Active Directory B2C Feedback page.
+
+## How is your Azure AD B2C Sign In doing?
 Monitoring availability and responsiveness of Azure AD B2C Sign-in’s using the Azure Application Web test feature of Azure Application Insights.
 
 If you need to run continuous tests to monitor the availability and responsiveness of sign-in’s (username and password only - non-MFA) in Azure AD B2C, for a stand-alone Sign In policy,  or the Sign-in portion of a combined Sign-In-And-Sign-Up policy, then this solution may meet your needs.  This web test can also be modified for testing B2C Profile Edit, or other self-asserted (user input) based policies.   
