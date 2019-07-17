@@ -18,7 +18,7 @@ This example shows how to discover username by email address. The assumption is 
 
 **RestoreUsername** policy, calls the **SelfAsserted-UsernameDiscovery**  technical profile that: 
 1. Collects the email address form the user
-1. Run the **AAD-UserReadUsingEmailAddress-NoError** validation technical profile. This technical profile inlueds the **AAD-UserReadUsingEmailAddress** technical profile, but doesn't rise an error if an account could not be found for the provided email address. We Don't' raise the error bacuse we want to prevent users guessing email accounts (email harvesting attacks)
+1. Run the **AAD-UserReadUsingEmailAddress-NoError** validation technical profile. This technical profile includes the **AAD-UserReadUsingEmailAddress** technical profile, but doesn't rise an error if an account could not be found for the provided email address. We Don't' raise the error bacuse we want to prevent users guessing email accounts (email harvesting attacks)
 1. If the  **AAD-UserReadUsingEmailAddress-NoError** returns the **LogonName** claim, then next validation technical profile **REST-RestoreUsername** is executed. This technical profile receives the email address and the username, and sends the restore username email.
 
 To merge the policy into your policy, you need:
