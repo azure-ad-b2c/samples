@@ -1,5 +1,6 @@
 # Azure AD B2C: Username discovery
 
+
 This example shows how to discover username by email address. The assumption is that the username and the companion email address are unique. The email address can't be shared between multiple users. Using this policy, when a user sign-up and provides the username and the email address. After the email verification process, Azure AD B2C persists both username and email address to the signInNames collection. Follwing is an example of such account:
 
 ```JSON
