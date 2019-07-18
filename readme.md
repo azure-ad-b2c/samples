@@ -63,6 +63,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign-in with social identity provider and force email uniqueness](policies/force-unique-email-across-social-identities) - Demonstrates how to force a social account user to provide and validate their email address, and also checks that there is no other account with the same email address.
 
+- [Account linkage](policies/account-linkage) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity.
+
 - [Link a local account to federated account](policies/link-local-account-with-federated-account) - Demonstrates how to link a user who logged in via a federated provider to a pre-created AAD B2C Local Account.
 
 - [Preventing logon for Social or External IdP Accounts when Disabled in AAD B2C](policies/disable-social-account-from-logon) - For scenarios where you would like to prevent logons via Social or External IdPs when the account has been disabled in Azure AD B2C.
