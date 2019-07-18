@@ -1,8 +1,6 @@
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-    TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_HRD_SUSI" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_HRD_SUSI"
-    TenantObjectId="yourtenant.onmicrosoft.com">
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_HRD_SUSI" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_HRD_SUSI" TenantObjectId="yourtenant.onmicrosoft.com">
     <BasePolicy>
         <TenantId>yourtenant.onmicrosoft.com</TenantId>
         <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -42,6 +40,7 @@
                 </InputClaims>
                 <InputParameters>
                     <InputParameter Id = "contoso.com" DataType="string" Value="true" />
+                    <InputParameter Id = "facebook.com" DataType="string" Value="true" />
                     <InputParameter Id= "errorOnFailedLookup" DataType="boolean" Value="false" />
                 </InputParameters>
                 <OutputClaims>
@@ -98,6 +97,19 @@
                         <OutputClaimsTransformation ReferenceId="CreateidentityProvidersCollection" />
                     </OutputClaimsTransformations>
                     <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Facebook</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="Facebook-OAUTH">
+                    <Metadata>
+                        <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+                        <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
+                    </Metadata>
+                    <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
                 </TechnicalProfile>
             </TechnicalProfiles>
         </ClaimsProvider>
@@ -197,6 +209,7 @@
                     </Preconditions>
                     <ClaimsProviderSelections>
                         <ClaimsProviderSelection TargetClaimsExchangeId="AADSAML" />
+                        <ClaimsProviderSelection TargetClaimsExchangeId="FB" />
                     </ClaimsProviderSelections>
                 </OrchestrationStep>
 
@@ -214,6 +227,7 @@
                     </Preconditions>
                     <ClaimsExchanges>
                         <ClaimsExchange Id="AADSAML" TechnicalProfileReferenceId="AAD-SAML2" />
+                        <ClaimsExchange Id="FB" TechnicalProfileReferenceId="Facebook-OAUTH" />
                     </ClaimsExchanges>
                 </OrchestrationStep>
                 <!-- If the domain_hint did not match any known domain, then redirect to a default IdP-->

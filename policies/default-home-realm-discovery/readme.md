@@ -10,6 +10,8 @@ For scenarios where you need to implement a sign in journey, where the user is a
 
 In this example, users who enter an email with the suffix `contoso.com`, they will be redirected directly to their federated identity provider to sign in. In this case that is Azure AD (SAML2).
 
+Users who enter an email with the suffix `facebook.com`, they will be redirected directly to their federated identity provider to sign in. In this case that is Facebook (OAuth).
+
 Where a user comes from an unknown email suffix,  they will be redirected directly to a default identity provider, in this case that is Azure AD (OpenId).
 
 ## How it works
