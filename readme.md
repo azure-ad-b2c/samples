@@ -53,6 +53,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign-in with FIDO](policies/fido2) - Demonstrates how to sign-in with a FIDO authenticator (as a first factor authentication). This policy use the WebAuthn standard to register new credential and sign-in with FIDO credential.
 
+- [Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery) - Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.
 
 ## Social account policy enhancements
 - [Social identity provider force email verification](policies/social-idp-force-email) - When a user signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
