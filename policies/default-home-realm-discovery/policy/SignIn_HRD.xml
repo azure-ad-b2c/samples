@@ -1,0 +1,272 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_HRD_SUSI" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_HRD_SUSI"
+    TenantObjectId="yourtenant.onmicrosoft.com">
+    <BasePolicy>
+        <TenantId>yourtenant.onmicrosoft.com</TenantId>
+        <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+    </BasePolicy>
+    <BuildingBlocks>
+        <ClaimsSchema>
+            <ClaimType Id="identityProviders">
+                <DisplayName>IdentityProviders</DisplayName>
+                <DataType>stringCollection</DataType>
+                <UserHelpText>User identity providers</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="domainParameter">
+                <DisplayName>domainParameter</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>parsed domain value from url</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="knownDomain">
+                <DisplayName>knownDomain</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>if this a domain that is a customer</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isKnownCustomer">
+                <DisplayName>knownDomain</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>if this a domain that is a customer</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="dummyTrue">
+                <DisplayName>dummy value for comparison</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText/>
+            </ClaimType>
+        </ClaimsSchema>
+        <ClaimsTransformations>
+            <ClaimsTransformation Id="DomainLookup" TransformationMethod="LookupValue">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId = "domainParameter" TransformationClaimType="inputParameterId" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id = "contoso.com" DataType="string" Value="true" />
+                    <InputParameter Id= "errorOnFailedLookup" DataType="boolean" Value="false" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId = "knownDomain" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+
+            <ClaimsTransformation Id="CheckDomainParameterValue" TransformationMethod="CompareClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="knownDomain" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="dummyTrue" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="operator" DataType="string" Value="EQUAL" />
+                    <InputParameter Id="ignoreCase" DataType="string" Value="true" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="isKnownCustomer" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+
+            <ClaimsTransformation Id="CreateidentityProvidersCollection" TransformationMethod="AddItemToStringCollection">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="domainParameter" TransformationClaimType="item" />
+                    <InputClaim ClaimTypeReferenceId="identityProviders" TransformationClaimType="collection" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="identityProviders" TransformationClaimType="collection" />
+                </OutputClaims>
+            </ClaimsTransformation>
+        </ClaimsTransformations>
+    </BuildingBlocks>
+    <ClaimsProviders>
+        <ClaimsProvider>
+            <DisplayName>Parse domain parameter</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="ParseDomainHint">
+                    <DisplayName>Unlink Microsoft</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="dummyTrue" DefaultValue="true"/>
+                        <InputClaim ClaimTypeReferenceId="domainParameter" DefaultValue="{OIDC:DomainHint}" AlwaysUseDefaultValue="true"/>
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="identityProviders"/>
+                        <OutputClaim ClaimTypeReferenceId="knownDomain" />
+                    </OutputClaims>
+                    <OutputClaimsTransformations>
+                        <OutputClaimsTransformation ReferenceId="DomainLookup" />
+                        <OutputClaimsTransformation ReferenceId="CheckDomainParameterValue" />
+                        <OutputClaimsTransformation ReferenceId="CreateidentityProvidersCollection" />
+                    </OutputClaimsTransformations>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Local Account SignIn</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="AAD-SAML2">
+                    <DisplayName>AAD SAML</DisplayName>
+                    <Description>Login with your AAD account (SAML)</Description>
+                    <Protocol Name="SAML2"/>
+                    <Metadata>
+                        <Item Key="WantsSignedRequests">false</Item>
+                        <Item Key="WantsEncryptedAssertions">false</Item>
+                        <Item Key="PartnerEntity">https://login.microsoftonline.com/06a05be1-33df-4feb-9009-95c7a27a7a49/federationmetadata/2007-06/federationmetadata.xml?appid=a01035b2-0c01-44be-ab71-4424580fc212</Item>
+                        <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+                        <Item Key="ClaimValueOnWhichToEnable">contoso.com</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_AadSamlIdPPFX"/>
+                        <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_AadSamlIdPPFX"/>
+                    </CryptographicKeys>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier"/>
+                        <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tenantid"/>
+                        <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" />
+                        <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname" />
+                        <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="AADSAMLIDP" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication"/>
+                        <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin"/>
+                    <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Login with AAD OIDC</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="AAD-OIDC">
+                    <DisplayName>Login with AAD (OIDC)</DisplayName>
+                    <Description>Login with AAD (OIDC)</Description>
+                    <Protocol Name="OpenIdConnect" />
+                    <OutputTokenFormat>JWT</OutputTokenFormat>
+                    <Metadata>
+                        <Item Key="METADATA">https://login.windows.net/aadprod.onmicrosoft.com/.well-known/openid-configuration</Item>
+                        <Item Key="ProviderName">https://sts.windows.net/ebbf521e-2006-4b2f-a7e2-c1f5177066c8/</Item>
+                        <Item Key="client_id">8b0f00fb-165b-4a4b-ae88-5a54ac847511</Item>
+                        <Item Key="IdTokenAudience">8b0f00fb-165b-4a4b-ae88-5a54ac847511</Item>
+                        <Item Key="UsePolicyInRedirectUri">false</Item>
+                        <Item Key="response_types">id_token</Item>
+                        <Item Key="scope">openid</Item>
+                        <Item Key="response_mode">form_post</Item>
+                        <Item Key="HttpBinding">POST</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="client_secret" StorageReferenceId="B2C_1A_AadSamlAadProd" />
+                    </CryptographicKeys>
+                    <InputClaims>
+                        <!--Demo: pass the login_hint to Azure AD home realm discovery page-->
+                        <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="login_hint" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="oid" />
+                        <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+                        <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+                        <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="AADOIDCIDP" AlwaysUseDefaultValue="true" />
+                        <OutputClaim ClaimTypeReferenceId="email" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+    </ClaimsProviders>
+
+    <UserJourneys>
+        <UserJourney Id="SignIn">
+            <OrchestrationSteps>
+                <OrchestrationStep Order="1" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="ParseDomainHint" TechnicalProfileReferenceId="ParseDomainHint" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- If the domain_hint matched any known domain, then this step will have a single IdP
+                    enabled due to each known IdP TP having an enablement flag via identityProviders claim -->
+                <OrchestrationStep Order="2" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                            <Value>isKnownCustomer</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsProviderSelections>
+                        <ClaimsProviderSelection TargetClaimsExchangeId="AADSAML" />
+                    </ClaimsProviderSelections>
+                </OrchestrationStep>
+
+                <OrchestrationStep Order="3" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                            <Value>isKnownCustomer</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADSAML" TechnicalProfileReferenceId="AAD-SAML2" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- If the domain_hint did not match any known domain, then redirect to a default IdP-->
+                <OrchestrationStep Order="4" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>isKnownCustomer</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsProviderSelections>
+                        <ClaimsProviderSelection TargetClaimsExchangeId="AADOIDC" />
+                    </ClaimsProviderSelections>
+                </OrchestrationStep>
+
+                <OrchestrationStep Order="5" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>isKnownCustomer</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADOIDC" TechnicalProfileReferenceId="AAD-OIDC" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+            </OrchestrationSteps>
+            <ClientDefinition ReferenceId="DefaultWeb" />
+        </UserJourney>
+    </UserJourneys>
+
+    <RelyingParty>
+        <DefaultUserJourney ReferenceId="SignIn" />
+        <TechnicalProfile Id="PolicyProfile">
+            <DisplayName>PolicyProfile</DisplayName>
+            <Protocol Name="OpenIdConnect" />
+            <OutputClaims>
+                <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="firstname"/>
+                <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="surname"/>
+                <OutputClaim ClaimTypeReferenceId="identityProvider" />
+                <OutputClaim ClaimTypeReferenceId="email" />
+                <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="sub"/>
+                <OutputClaim ClaimTypeReferenceId="identityProviders"/>
+            </OutputClaims>
+            <SubjectNamingInfo ClaimType="sub" />
+        </TechnicalProfile>
+    </RelyingParty>
+</TrustFrameworkPolicy>
