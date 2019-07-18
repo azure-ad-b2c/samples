@@ -1,6 +1,6 @@
 # Azure AD B2C account linkage
 
-With Azure AD B2C a user can have multiple identities. Sign-in with local or social account, and link another social identity to an existing one. Both share the same account in Azure AD B2C. This Azure AD B2C sample demonstrates how to link existing local account to a social account. 
+With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity.
 
 ## How it works
 * In Azure AD B2C, **local accounts** sign-in names (user name or email address) are stored in the `signInNames` collection in the user record. The `signInNames` contains one or more `signInName` records that specify the sign-in names for the user. Each sign-in name must be unique across the tenant.
