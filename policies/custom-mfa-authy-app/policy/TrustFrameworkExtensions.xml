@@ -176,7 +176,7 @@
             <ValidationTechnicalProfile ReferenceId="AppFactor-WaitForAuthyApprovalWebHook" />
             <ValidationTechnicalProfile ReferenceId="AAD-WriteUserAppCodeByObjectId" />
           </ValidationTechnicalProfiles>
-          <!--<UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />-->
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-Authy" />
         </TechnicalProfile>
 
         <!-- Demo: The following technical profile registers a verification phone. -->
@@ -198,7 +198,7 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AppFactor-WaitForAuthyApprovalWebHook" />
           </ValidationTechnicalProfiles>
-          <!--<UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />-->
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-Authy" />
         </TechnicalProfile>
 
       </TechnicalProfiles>
@@ -245,6 +245,22 @@
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Session Management Authy</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SM-MFA-Authy">
+          <DisplayName>Session Mananagement Provider</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.DefaultSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" />
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
 
   <UserJourneys>
     <UserJourney Id="SignUpOrSignInWithAuthApp">
