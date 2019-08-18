@@ -6,6 +6,8 @@ The sample policy is developed and managed by the open-source community in GitHu
 ## Scenario
 For scenarios where you would like to give users the choice to use Email verification or SMS/Phone Call as the second authentication factor, and allow them to change this choice at a later point via Profile Edit.
 
+![User flow](media/flow.png)
+
 ## How it works
 When the user signs up, where the user attribute for `extension_mfaByPhoneOrEmail` does not exist, the user is prompted to make a selection via a radio box. 
 When a user has made a selection for the MFA method, then the `PersistMFAMethod` technical profile is executed, which writes the selection value to the `extension_mfaByPhoneOrEmail` attribute.
