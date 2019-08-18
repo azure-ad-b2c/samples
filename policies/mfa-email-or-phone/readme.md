@@ -13,7 +13,7 @@ For scenarios where you would like to give users the choice to use Email verific
 User flow:
 1. When the user signs-up or signs-in, where the user attribute for `extension_mfaByPhoneOrEmail` does not exist, the user is prompted to make a selection via a radio box.
 1. If the MFA preferred MFA method is:
-    1. **phone**, the `PhoneFactor-InputOrVerify"` technical profile is executed, to enroll or verify the phone number.
+    1. **phone**, the `PhoneFactor-InputOrVerify` technical profile is executed, to enroll or verify the phone number.
     1. **email**  the `EmailVerifyOnSignIn` technical profile is executed, to enroll or verify the email address.
 1. New enrolled MFA is persisted to the directory.
 
