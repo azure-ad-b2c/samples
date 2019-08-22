@@ -145,7 +145,7 @@ namespace AADB2C.RestoreUsername.API.Controllers
                 // For sign-in, the 'timeStepMatched' input claim contains the last time last matched (from the user profile), and evaluated with 
                 // the value of the result of the TOTP out 'timeStepMatched' variable
                 if ((string.IsNullOrEmpty(inputClaims.timeStepMatched) == false) && 
-                    (!inputClaims.timeStepMatched).Equals(timeStepMatched.ToString()))
+                    !(inputClaims.timeStepMatched).Equals(timeStepMatched.ToString()))
                 {
                     return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("The verification code has already been used.", HttpStatusCode.Conflict));
 
