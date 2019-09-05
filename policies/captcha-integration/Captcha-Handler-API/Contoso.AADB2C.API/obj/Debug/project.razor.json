@@ -11,9 +11,9 @@
   },
   "ProjectWorkspaceState": {
     "TagHelpers": [],
-    "CSharpLanguageVersion": 703
+    "CSharpLanguageVersion": 800
   },
   "RootNamespace": null,
   "Documents": [],
-  "SerializationFormat": "0.1"
+  "SerializationFormat": "0.2"
 }
