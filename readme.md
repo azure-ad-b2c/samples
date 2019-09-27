@@ -57,6 +57,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery) - Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.
 
+- [Terms of Service with Sign-in or Sign-up](policies/terms-of-service) - Demonstrates how to implement Terms of Service within a SUSI experience. This policy writes a configurable policy version onto an attribute stored in the directory. If you update the version within the policy, it will prompt the user during the next login to force the user to accept the new terms of service agreement.
+
 ## Social account policy enhancements
 - [Social identity provider force email verification](policies/social-idp-force-email) - When a user signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
 
