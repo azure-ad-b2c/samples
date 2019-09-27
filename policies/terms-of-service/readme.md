@@ -11,7 +11,7 @@ The sample policy includes following user journey:
     * Reads the Azure AD B2C directory for the user's previously accepted TOS
     * Prompts user for a new TOS agreement if they are not current, then updates the new TOS to Azure AD B2C directory 
     * Allows customizable errors if TOS not accepted
-* Sign-up with a local accout
+* Sign-up with a local account
     * Captures Terms of Service during Sign-Up
     * Allows customizable errors if TOS not accepted
 
@@ -35,9 +35,9 @@ In your relying party policy:
 1. Add new TechnicalProfiles:
     1. **AAD-ReadTOS** - Reads the directory and puts the user's current TOS in the claim bag
     1. **SelfAsserted-RefreshTOS** - Prompts a screen to a user if TOS has changed during sign-in.
-    1. **VerfiyTOSConsentedTo** - Validates the TOS button was selected and provides an error mechanism if not selected
+    1. **VerfiyTOSConsentedTo** - Validates the TOS button is selected and provides an error mechanism if not selected
     1. **AAD-UserWriteProfileUsingObjectIdUpdateTOU** - Writes the current TOS version to the directory in Azure AD B2C.
-    1. **CheckTOSrequirement** - Verifies whether the company's TOS policy has changed by comparing the user's TOS attribute in the directory to what's been configured in the policy and returns a boolean.
+    1. **CheckTOSrequirement** - Verifies whether the company's TOS policy has changed. This is done by comparing the user's TOS attribute in the directory to the configured value within the policy then returns a boolean value.
 1. Add **UserJourney** TermsOfServiceSignUpOrSignIn
 1. Update "v16" to the *string* value of your TOS name. This can be any value. There are three locations within the XML file.
 
@@ -53,7 +53,7 @@ You should run at least following acceptance tests:
         GET https://graph.windows.net/contosob2c.com/users/<user-object-id>?api-version=1.6
         ```
 - Create new local account and **do not** accept Terms of Service agreement (attempting to bypass the TOS box)
-    -  Verify the correct ERROR mesage occurs on the screen
+    -  Verify the correct ERROR message occurs on the screen
     -  Verify the TOS version is **not** writen on the user object via Graph for attribute *extension_AgreedToTermsOfService* (when calling graph,if the attribute is empty it will not return in the call)
 -  Update your XML custom policy with a new VERSION# for both *AgreedToTermsOfService* and *policyTOSversion* default values THEN sign-in with a user that has the older TOS policy version on the user object
     -   After successful authentication, a new screen will appear to prompt user to accept the *new* TOS agreement
