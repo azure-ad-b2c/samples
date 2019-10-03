@@ -15,6 +15,12 @@
         <UserHelpText>Phone number to use for signing in.</UserHelpText>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
+      <ClaimType Id="signInName">
+        <DisplayName>Enter your Phone Number</DisplayName>
+        <DataType>string</DataType>
+       <UserHelpText>Phone Number +XXXXXXXXXXX</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
     </ClaimsSchema>
     <ClaimsTransformations>
       <ClaimsTransformation Id="CopySignInNameIntostrongAuthenticationPhoneNumber" TransformationMethod="FormatStringClaim">
@@ -51,6 +57,7 @@
   </BuildingBlocks>
 
   <ClaimsProviders>
+    <ClaimsProvider>
       <DisplayName>Username based Sign In</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Username">
@@ -114,7 +121,7 @@
           </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
-        
+
         <!-- The following technical profile is used to read data after user authenticates. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <Metadata>
@@ -232,10 +239,10 @@
             <PersistedClaim ClaimTypeReferenceId="givenName" />
             <PersistedClaim ClaimTypeReferenceId="surname" />
             <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
-<PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
           </PersistedClaims>
           <OutputClaims>
-             <OutputClaim ClaimTypeReferenceId="objectId"/>
+            <OutputClaim ClaimTypeReferenceId="objectId"/>
           </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
