@@ -374,9 +374,11 @@
           <DisplayName>GET a FIDO Challenge</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://fido2node.azurewebsites.net/challenge</Item>
+            <Item Key="ServiceUrl">https://yoursite.azurewebsites.net/challenge</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">QueryString</Item>
+            <!-- Remove in Production-->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="challenge" PartnerClaimType="result" />
@@ -396,9 +398,11 @@
           <DisplayName>GET a FIDO Challenge</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://fido2node.azurewebsites.net/credentials</Item>
+            <Item Key="ServiceUrl">https://yoursite.azurewebsites.net/credentials</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
+            <!-- Remove in Production-->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="extension_fido_rawId" PartnerClaimType="id" />
@@ -417,9 +421,11 @@
           <DisplayName>GET a FIDO Challenge</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://fido2node.azurewebsites.net/assertion</Item>
+            <Item Key="ServiceUrl">https://yoursite.azurewebsites.net/assertion</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
+            <!-- Remove in Production-->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="extension_fido_rawId" PartnerClaimType="id" />
