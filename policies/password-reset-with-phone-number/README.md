@@ -1,4 +1,4 @@
-# A B2C IEF Custom Policy which allows login via Phone Number (TOTP)
+# A B2C IEF Custom Policy which allows Password Reset via Phone Number (TOTP)
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
