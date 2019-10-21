@@ -39,7 +39,9 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Google Captcha on Sign In](policies/captcha-integration) - An example set of policies which integrate Google Captcha into the sign in journey.
 
-- [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies to for passwordless login via Phone Number (SMS or Phone Call).
+- [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies for passwordless login via Phone Number (SMS or Phone Call).
+
+- [Password Reset with Phone Number](policies/password-reset-with-phone-number) - An example policy to reset a users passwird usingPhone Number (SMS or Phone Call).
 
 - [Password reset without the ability to use the last password](policies/password-reset-not-last-password) - For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.
 

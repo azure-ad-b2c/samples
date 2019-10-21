@@ -6,10 +6,7 @@ If you find a bug in the sample, please raise the issue on [GitHub Issues](https
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
-Where you would like to login users solely on Phone Number and MFA via SMS or Phone Call.
-This approach is passwordless.
-
-For password reset please see this sample - [Password Reset with Phone Number](policies/password-reset-with-phone-number)
+For scenarios where the login Id is the phone number (for example [Login with Phone Number](policies/signup-signin-with-phone-number), an email address is not always required. Ths sample policy will allow you use the users mobile phone number to reset their password.
 
 ## Notes
 This sample policy is based on [SocialAndLocalAccountsWithMFA starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 
