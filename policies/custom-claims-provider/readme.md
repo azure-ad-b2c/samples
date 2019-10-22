@@ -26,19 +26,19 @@ In this step, you register your Graph API application in Azure AD. Create applic
 1. Sign in to the [Azure portal](https://portal.azure.com/).
 2. Choose your Azure AD B2C tenant by selecting your account in the top right corner of the page.
 3. From left panel, open the **Azure Active Directory** (not the Azure AD B2C). You might need to select **More Services** to find it.
-4. Select **App registrations**.
+4. Select **App registrations (Preview)**.
 5. Select **New application registration**.
 6. Follow the prompts and create a new application
     * For **Name**, use **B2CUserMigratioin**.
-    * For **Application type**, use **Web app/API**.
-    * For **Sign-on URL**, use https://localhost (as it's not relevant for this application).
+    * For **Supported account types**, use "Accounts in this organizational directory only (Microsoft only - Single tenant)".
     * Click **Create**
 7. Once it is created, select the newly created application **B2CUserMigratioin**.
 Select **Properties**, copy the **Application ID**, and save it for later.
 
 ### Create application secret
-8. Click on **Keys** and add a new key (also known as client secret). Also, copy the key for later.
-
+8. Click on **Certificates & secrets** and add new client secret by clicking "New client secret". 
+9. Add a description and expiration date and click "Add".
+10. Copy the key "Value" for later.
 
 
 ## Custom REST API
