@@ -261,7 +261,7 @@
 
                 <OrchestrationStep Order="2" Type="ClaimsExchange">
                     <ClaimsExchanges>
-                        <ClaimsExchange Id="HRDLogic" TechnicalProfileReferenceId="ParseDomainHint" />
+                        <ClaimsExchange Id="ParseDomainHintLogic" TechnicalProfileReferenceId="HRDLogic" />
                     </ClaimsExchanges>
                 </OrchestrationStep>
 
