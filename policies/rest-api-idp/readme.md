@@ -1,6 +1,6 @@
 # Sign-in with REST API identity provider
 
-Allows users to sign-in with credentials stored legacy identity provider using REST API services. 
+Allows users to sign-in with credentials stored in a legacy identity provider using REST API services.
 
 ![REST API IDP](media/rest-api-idp.png)
 
