@@ -14,7 +14,7 @@
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+    <DefaultUserJourney ReferenceId="SignUpOrSignInWithForcePasswordReset" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
