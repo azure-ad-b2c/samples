@@ -2,7 +2,7 @@
 
 This sample policy demonstrates how to allow user to provide and validate new MFA phone number. After user change the MFA phone number, on the next login, user needs to provide the new phone number instead of the old one.
 
-The solution is based on new `B2C_1A_Edit_MFA` relying party policy. The policy invokes `EditMFAPhoneNumber` user journey which:
+The solution is based on new `B2C_1A_Edit_MFA` relying party policy located in the [ProfileMFAPhoneNumber.xml file](https://github.com/azure-ad-b2c/samples/blob/master/policies/edit-mfa-phone-number/ProfileMFAPhoneNumber.xml). The policy invokes `EditMFAPhoneNumber` user journey located in the [TrustFrameworkExtensions.xml file](https://github.com/azure-ad-b2c/samples/blob/master/policies/edit-mfa-phone-number/TrustFrameworkExtensions.xml) which:
 1. Asks the user to sign-in with local account or social account
 1. Reads the user data from the Azure Active Directory
 1. Asks the user to validate the existing phone number
