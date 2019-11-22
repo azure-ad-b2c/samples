@@ -2,6 +2,13 @@
 
 In this repo, you will find samples for several enhanced Azure AD B2C Custom CIAM User Journeys.
 
+## Getting started
+- See our [Azure AD B2C Wiki articles](https://github.com/azure-ad-b2c/ief-wiki/wiki) here to help walkthrough the cuctom policy components.
+
+- See our Custom Policy Documentation [here](https://aka.ms/ief).
+
+- See our Custom Policy Schema reference [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
+
 ## Prerequisites
 - You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
 
