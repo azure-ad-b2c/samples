@@ -78,6 +78,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign in with Apple as a Custom OpenID Connect identity provider](policies/sign-in-with-apple) - Demonstrates how to gather the correct configuration information to setup Sign in with Apple as an OpenID Connect identity provider.
 
+- [Sign in with REST API identity provider](policies/rest-api-idp) - Demonstrates how allow users to sign-in with credentials stored in a legacy identity provider using REST API services.
+
 ## Multi factor authentication enhancements
 
 - [Edit MFA phone number](policies/edit-mfa-phone-number) - Demonstrates how to allow user to provide and validate a new MFA phone number. After the user changes their MFA phone number, on the next login, the user needs to provide the new phone number instead of the old one.
@@ -90,6 +92,11 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Add & Select 2 MFA phone numbers at SignIn/Signup](policies/mfa-add-secondarymfa) - Demonstrates how to store two phone numbers in a secure manner in B2C and choose between any two at signIn. The flow prompts the user to store a secondary phone if only one phone number is one file. Once the two numbers are stored as part of SignUp or SignIn the user is given a choice to select between the two phones for their MFA on subsequent signIns. 
 
+- [MFA after timeout or IP change](policies/mfa-absolute-timeout-and-ip-change-trigger) - A policy which forces the user to do MFA on 3 conditions:
+    1. The user has newly signed up.
+    2. The user has not done MFA in the last X seconds.
+    3. The user is logging in from a different IP than they last logged in from.
+    
 ## Generic enhancements
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
@@ -100,11 +107,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - [Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api) - A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).
 
 - [Remote profile](policies/remote-profile) - Demonstrates how to store and read user profiles from a remote database. 
-
-- [MFA after timeout or IP change](policies/mfa-absolute-timeout-and-ip-change-trigger) - A policy which forces the user to do MFA on 3 conditions:
-    1. The user has newly signed up.
-    2. The user has not done MFA in the last X seconds.
-    3. The user is logging in from a different IP than they last logged in from.
 
 - [Username based journey](policies/username-signup-or-signin) - For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.
 
