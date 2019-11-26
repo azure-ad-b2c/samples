@@ -25,6 +25,7 @@ The sample application uses a self-signed certificate to sign the ID tokens. You
 $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=MySelfSignedCertificate" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3") -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -NotAfter (Get-Date).AddYears(2) -CertStoreLocation "Cert:\CurrentUser\My"
 $cert.Thumbprint
 ```
+#### If you have issues with the cert you created you can also try creating a cert using another way. See steps here: https://github.com/azure-ad-b2c/saml-sp#11-preparing-self-signed-certificate
 
 ### Configuring the application
 Update the *appSettings* values in **appsettings.json** with the information for your Azure AD B2C tenant and the signing certificate you just created.
