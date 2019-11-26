@@ -57,5 +57,33 @@ If you publish the application to Azure App Service, you'll need to configure a 
 2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service
 3. Follow [these instructions](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) to ensure App Service loads the certificate when the app runs
 
+### Using B2C to generate the metadata endpoints
+
+You can have B2C genreate the below mentioned metadata endpoints if you dont wish to host these yourself. 
+* **/.well-known/openid-configuration**, set this URL in the **IdTokenHint_ExtractClaims** technical profile
+* **/.well-known/keys**
+
+#### Steps to have B2C create these metadata endpoints. 
+In order for B2C to use these metada for us we will need to upload the certificate we generated to sign our id_token_hint to B2C. We can either upload the pfx + password or just the cer file to the B2C key container. We will then reference this certificate as the signing key in one of the custom policy set we would create. 
+1. In the "Policy Keys" blade, Click Add to create a new key and select Upload in the options. 
+2. Give it a name, something like Id_Token_Hint_Cert and select key type to be RSA and usage to be Signature. You can optionally set the expiration to the epxiration of the cert. Save the name of new generated key.  
+3. Create a dummy set of new base, extension and relying party files. You can do so by downloading it from the starter pack here https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack. To keep things simple we will use https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/LocalAccounts but any starter pack can be used. 
+4. If you have not setup custom policies from a starter pack before then follow the instructions here 
+https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom
+
+5. Once you have successfully setup the new starter pack policies open the base file of this set and update the TechnicalProfile 
+   Id="JwtIssuer"
+  Here we will update the token signing key container to the key we created in step 2. 
+
+    Update B2C_1A B2C_1A_TokenSigningKeyContainer to B2C_1A_Id_Token_Hint_Cert  
+    ```
+    <Key Id="issuer_secret" StorageReferenceId="B2C_1A_Id_Token_Hint_Cert" />
+    ```
+  
+6. Upload this base file along with the extension and relying party if you haven't done so yet. 
+
+7. Click on the relying party file in the b2c portal and copy the "OpenID Connect discovery endpoint". This is the metadata you needed! 
+![User flow](media/OpenIDConnect.png)
+  
 ## Notes
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the necessary changes in the **Demo action required** sections. 
