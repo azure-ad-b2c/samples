@@ -115,7 +115,7 @@ Authorization:  eyJ0eXAiOiJKV1Qi……. DUxWmJUbktFZFc1
 Microsoft Graph Call Result:
 
 
-!graph1](media/grpah1.jpg) 
+!graph1](media/Grpah1.jpg) 
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
