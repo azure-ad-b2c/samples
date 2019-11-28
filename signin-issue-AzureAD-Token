@@ -1,5 +1,0 @@
-Pass an Azure AD access token through a B2C user flow to your application in Azure Active Directory B2C
-The following documentation explains how to acquire an access token from an identity provider, thought an Azure AD B2C user flow (built user journey available from the Azure AD Admin portal.
- https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow
- 
-This sample has a similar concept as the one for the built-in user flows, but shows how to do same using a Custom B2C Policy, with additional capabilities of acquiring an access token from Azure AD, which can be used to call the Graph API of the users’ home Azure AD tenant.  
