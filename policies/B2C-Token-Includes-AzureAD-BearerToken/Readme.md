@@ -21,13 +21,13 @@ The reply url (redirect URI) should be your b2c tenant instance’s reply uRL  (
 https://your-B2C-tenant-name.b2clogin.com/your-B2C-tenant-name.onmicrosoft.com/oauth2/authresp
 
 
-![RegisterYourApp](media/registerYourApp.jpg) 
+![RegisterYourApp](media/RegisterYourApp.jpg) 
 
 Select Register.  After the application is successfully created, copy down the Application (client) id – which will be used in the B2C policy file (see below)
 
-![clientID](media/clientID.jpg)
+![clientID](media/ClientID.jpg)
 
-![clientID2](media/clientID2.jpg)
+![clientID2](media/ClientID2.jpg)
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
