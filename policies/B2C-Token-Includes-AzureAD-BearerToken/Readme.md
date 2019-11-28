@@ -5,15 +5,10 @@ This sample builds on the built-in user flows, and how to include an Azure AD be
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow
 The following diagram overviews this sample:.
 
-
 These instructions will guide you to:
 
+[AAD Token](/issueAADTokenThroughB2C.jpg)
 
-## Creating an application in the Apple Developer portal
-
-![Creating a new app identifier in the Apple Developer Portal](media/apple_newapp.jpg)
-
-![Registering a new app identifier in the Apple Developer Portal](media/apple_registerapp.jpg)
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
