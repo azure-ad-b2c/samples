@@ -82,19 +82,19 @@ Update the Scope value to equal the permissions that you configured for your.  T
 During the first-time user logon from an Azure AD tenant, users will be able to consent to Microsoft Graph permissions if the requested permissions do not require administrator consent.
 
 
-![consent1](media/consent1.jpg)   
+![consent1](media/Consent1.jpg)   
 
 Administrators can consent on behalf of all users in their organization – after this consent, users will not see request for consent.
-![consent2](media/consent2.jpg)   
+![consent2](media/Consent2.jpg)   
  
 
 Some permissions require the company administrator’s consent, therefore users are not authorized to consent individually.  In this case, users will be blocked from sign in until the company administrator logons to the app and consents on behalf of all users in their organization.
 
-![consent3](media/consent3.jpg) 
+![consent3](media/Consent3.jpg) 
          
 Figure 1 User cannot logon nor consent to an app requesting privileged permissions
 
-![consent4](media/consent4.jpg) 
+![consent4](media/Consent4.jpg) 
               
 Figure 2 Admin Can consent for the organization
 
