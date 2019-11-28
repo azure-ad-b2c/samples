@@ -5,7 +5,7 @@ This sample builds on the built-in user flows, and how to include an Azure AD be
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow
 The following diagram overviews this sample:.
 
-![AAD Token](media/issueAADTokenThroughB2C.jpg)
+![AAD Token](media/IssueAADTokenThroughB2C.jpg)
 
 These instructions will guide you to:
 
