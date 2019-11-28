@@ -101,12 +101,13 @@ Figure 2 Admin Can consent for the organization
 **Calling the Graph API using the access token**
 Upon successful user sign on, the original Azure AD idp access token will  be part of the B2C token.  This idp access token can be used to access the users’ home Azure AD tenant’s Graph API (with the scope of Directory.Read)   For example:
 
-!token1](media/token1.jpg) 
+
+!{token1](media/token1.jpg) 
  
 
 The idp access_token, is base64 encoded and can be viewed:
 
-!token2](media/token2.jpg) 
+!{token2](media/token2.jpg) 
  
 
 Calls to the Microsoft Graph Call can now be made, using this idp access token in the authorization header.  Example:
@@ -115,7 +116,7 @@ Authorization:  eyJ0eXAiOiJKV1Qi……. DUxWmJUbktFZFc1
 Microsoft Graph Call Result:
 
 
-!graph1](media/Grpah1.jpg) 
+!{graph1](media/Grpah1.jpg) 
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
