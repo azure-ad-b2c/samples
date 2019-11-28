@@ -1,4 +1,4 @@
-# Include an Azure AD access token thourgh a B2C token, as part of a B2C Sign In
+# Include an Azure AD access token through a B2C token, as part of a B2C Sign In
 > Disclaimer: This sample is provided AS IS - a best effort will be made to update this sample as the service evolves.
 
 This sample builds on the built-in user flows, and shows how to include an Azure AD bearer token as a claim within a B2C token issued from a custom B2C sign in policy.  It also shows how to call the Graph API of the users’ home Azure AD tenant using the issued Azure AD token.  For reference, similar capability can be achieved to receive the original identity provider’s id token, using the built-in B2C user flows
@@ -35,18 +35,23 @@ Select Register.  After the application is successfully created, copy down the A
 
 Next select, select API Permission, and select Add Permission.  Select Microsoft Graph and select Delegated Permissions.
  
-![appPerm1](media/AppPermission1.jpg)
-![appPerm2](media/AppPermission2.jpg)
-![appPerm3](media/AppPermission3.jpg)               
+![appPerm1](media/AppPermissions1.jpg)
+
+![appPerm2](media/AppPermissions2.jpg)
+
+![appPerm3](media/AppPermissions3.jpg)
 
 Then Select openid  and user.read and select the “Add Permissions” button to save your configuration.  
        
-![appPerm4](media/AppPermission4.jpg)   
-![appPerm5](media/AppPermission5.jpg)    
+![appPerm4](media/AppPermissions4.jpg)
+
+![appPerm5](media/AppPermissions5.jpg)
+
 
 Your summarized application permissions should look like the following screen.
 
-![appPerm5](media/AppPermission6.jpg)   
+![appPerm5](media/AppPermissions6.jpg) 
+
  
 Note: other delegated permissions could have been selected – however, some may need Admin consent before the user will be able to sign into your application. A  best practice is to request the minimum permissions needed by your application.  If you find that additional permissions are needed, you can add them later – users and administrators may need to re-consent to the new permissions.
 
