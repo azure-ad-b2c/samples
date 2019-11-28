@@ -76,7 +76,46 @@ Update the Scope value to equal the permissions that you configured for your.  T
 
 
 ![AADTP](media/AAD-TP.jpg)  
+
+
+**First Sign In experience for users**
+During the first-time user logon from an Azure AD tenant, users will be able to consent to Microsoft Graph permissions if the requested permissions do not require administrator consent.
+
+
+![consent1](media/consent1.jpg)   
+
+Administrators can consent on behalf of all users in their organization – after this consent, users will not see request for consent.
+![consent2](media/consent2.jpg)   
  
+
+Some permissions require the company administrator’s consent, therefore users are not authorized to consent individually.  In this case, users will be blocked from sign in until the company administrator logons to the app and consents on behalf of all users in their organization.
+
+![consent3](media/consent3.jpg) 
+         
+Figure 1 User cannot logon nor consent to an app requesting privileged permissions
+
+![consent4](media/consent4.jpg) 
+              
+Figure 2 Admin Can consent for the organization
+
+**Calling the Graph API using the access token**
+Upon successful user sign on, the original Azure AD idp access token will  be part of the B2C token.  This idp access token can be used to access the users’ home Azure AD tenant’s Graph API (with the scope of Directory.Read)   For example:
+
+!token1](media/token1.jpg) 
+ 
+
+The idp access_token, is base64 encoded and can be viewed:
+
+!token2](media/token2.jpg) 
+ 
+
+Calls to the Microsoft Graph Call can now be made, using this idp access token in the authorization header.  Example:
+https://graph.microsoft.com/beta/users/chad@deployit.info
+Authorization:  eyJ0eXAiOiJKV1Qi……. DUxWmJUbktFZFc1
+Microsoft Graph Call Result:
+
+
+!graph1](media/grpah1.jpg) 
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
