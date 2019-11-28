@@ -33,7 +33,22 @@ Select Register.  After the application is successfully created, copy down the A
 
 ![clientID2](media/ClientID2.jpg)
 
+Next select, select API Permission, and select Add Permission.  Select Microsoft Graph and select Delegated Permissions.
+ 
+![appPerm1](media/AppPermission1.jpg)
+![appPerm2](media/AppPermission2.jpg)
+![appPerm3](media/AppPermission3.jpg)               
 
+Then Select openid  and user.read and select the “Add Permissions” button to save your configuration.  
+       
+![appPerm4](media/AppPermission4.jpg)   
+![appPerm5](media/AppPermission5.jpg)    
+
+Your summarized application permissions should look like the following screen.
+
+![appPerm5](media/AppPermission6.jpg)   
+ 
+Note: other delegated permissions could have been selected – however, some may need Admin consent before the user will be able to sign into your application. A  best practice is to request the minimum permissions needed by your application.  If you find that additional permissions are needed, you can add them later – users and administrators may need to re-consent to the new permissions.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
