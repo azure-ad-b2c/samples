@@ -12,9 +12,9 @@ The following diagram overviews this sample:.
 To configure the solution above, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  Review the getting started with custom B2C applications
 
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom?tabs=applications
-In the documentation, it references the B2C starter pack of advanced policies – download the starter pack, and use the policy files from the SocialAndLocalAccounts folder– which the use of both local and Azure AD accounts.   
+In the documentation, it references the B2C starter pack of advanced policies – a set of edited versions of the starte pack base, extension and signUpsignIn policy files are included in this sample, that includes the updates that enable the issuance of the Azure AD identity provider access token.  
 
-We also recommend using Visual Studio Code and the B2C extensions for managing Custom policies, as there are many tools to simplify the configuration of the policies.
+We also recommend using Visual Studio Code and installing the Azure AD B2C extension for editing Custom policies, as there are many funcitions in this extension that are designed to enahnce the configuration experience.
 
 •	Download Visual Studio Code:  https://code.visualstudio.com/
 
