@@ -88,6 +88,7 @@ During the first-time user logon from an Azure AD tenant, users will be able to 
 ![consent1](media/Consent1.jpg)   
 
 Administrators can consent on behalf of all users in their organization – after this consent, users will not see request for consent.
+
 ![consent2](media/Consent2.jpg)   
  
 
