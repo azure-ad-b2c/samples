@@ -2,7 +2,9 @@
 > Disclaimer: This sample is provided AS IS - a best effort will be made to update this sample as the service evolves.
 
 This sample builds on the built-in user flows, and shows how to include an Azure AD bearer token as a claim within a B2C token issued from a custom B2C sign in policy.  It also shows how to call the Graph API of the users’ home Azure AD tenant using the issued Azure AD token.  For reference, similar capability can be achieved to receive the original identity provider’s id token, using the built-in B2C user flows
+
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow
+
 The following diagram overviews this sample:.
 
 ![AAD Token](media/IssueAADTokenThroughB2C.jpg)
@@ -100,6 +102,7 @@ Figure 1 User cannot logon nor consent to an app requesting privileged permissio
 Figure 2 Admin Can consent for the organization
 
 **Calling the Graph API using the access token**
+
 Upon successful user sign on, the original Azure AD idp access token will  be part of the B2C token.  This idp access token can be used to access the users’ home Azure AD tenant’s Graph API (with the scope of Directory.Read)   For example:
 
 
@@ -111,9 +114,13 @@ The idp access_token, is base64 encoded and can be viewed:
 ![token2](media/token2.jpg) 
  
 
-Calls to the Microsoft Graph Call can now be made, using this idp access token in the authorization header.  Example:
+Calls to the Microsoft Graph Call can now be made, using this idp access token in the authorization header.  
+Example:
+
 https://graph.microsoft.com/beta/users/chad@deployit.info
+
 Authorization:  eyJ0eXAiOiJKV1Qi……. DUxWmJUbktFZFc1
+
 Microsoft Graph Call Result:
 
 
