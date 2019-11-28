@@ -17,7 +17,7 @@ We also recommend using Visual Studio Code and the B2C extensions for managing C
 
 •	Install Visual Studio Code Extension: Azure AD B2C  https://marketplace.visualstudio.com/items?itemName=AzureADB2CTools.aadb2c
 
-Register an application that allows users from Azure AD tenants to sign-in to your B2C tenant
+**Register an application that allows users from Azure AD tenants to sign-in to your B2C tenant**
 
 From the Azure AD B2C portal, select App registration, create a friendly name for the app, and select the “Accounts in any organization directory or any identity provider…” under the Supported Account Types.   This selection makes this a Multi-tenant application, that becomes available to any Azure AD tenant.  Details about multi-tenant Azure AD applications can be found here:  https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant
 
@@ -54,7 +54,7 @@ Your summarized application permissions should look like the following screen.
 
 Note: other delegated permissions could have been selected – however, some may need Admin consent before the user will be able to sign into your application. A  best practice is to request the minimum permissions needed by your application.  If you find that additional permissions are needed, you can add them later – users and administrators may need to re-consent to the new permissions.
 
-Updating the B2C Policy Permissions and Client Secret
+**Updating the B2C Policy Permissions and Client Secret**
 
 A client Secret associated with this application, must be created – select either 1 or 2 year expiration (select no expiration for testing purposes only).  
 
@@ -62,7 +62,7 @@ A client Secret associated with this application, must be created – select eit
  
 Copy the client secret – in the next steps, we will need to store the value in a B2C policy key location, and reference the key location from withing the Azure AD technical profile in the B2C policy file.  
 
-Add Application Secret to the Identity Experience Framework Policy Key
+**Add the Application Secret to the Identity Experience Framework Policy Key**
 
 Create a B2C policy key (under the Identity Experience Framework blade).  Select Manual for the Option, create a name (we will reference this policyKeyName in the next step), and enter the client secret value from the previous step.
 
