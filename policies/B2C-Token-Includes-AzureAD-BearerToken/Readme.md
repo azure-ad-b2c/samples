@@ -8,6 +8,7 @@ The following diagram overviews this sample:.
 ![AAD Token](media/IssueAADTokenThroughB2C.jpg)
 
 To configure the solution above, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  Review the getting started with custom B2C applications
+
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom?tabs=applications
 In the documentation, it references the B2C starter pack of advanced policies – download the starter pack, and use the policy files from the SocialAndLocalAccounts folder– which the use of both local and Azure AD accounts.   
 
@@ -102,12 +103,12 @@ Figure 2 Admin Can consent for the organization
 Upon successful user sign on, the original Azure AD idp access token will  be part of the B2C token.  This idp access token can be used to access the users’ home Azure AD tenant’s Graph API (with the scope of Directory.Read)   For example:
 
 
-!{token1](media/token1.jpg) 
+![token1](media/token1.jpg) 
  
 
 The idp access_token, is base64 encoded and can be viewed:
 
-!{token2](media/token2.jpg) 
+![token2](media/token2.jpg) 
  
 
 Calls to the Microsoft Graph Call can now be made, using this idp access token in the authorization header.  Example:
@@ -116,7 +117,7 @@ Authorization:  eyJ0eXAiOiJKV1Qi……. DUxWmJUbktFZFc1
 Microsoft Graph Call Result:
 
 
-!{graph1](media/Grpah1.jpg) 
+![graph1](media/Graph1.jpg) 
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
