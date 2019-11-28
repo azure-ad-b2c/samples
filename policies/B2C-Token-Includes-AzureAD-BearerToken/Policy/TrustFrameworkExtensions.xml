@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+ <BuildingBlocks>
+  <ClaimsSchema>
+    <ClaimType Id="emailAddress">
+        <DisplayName>emailAddress from AAD token - mapped to upn or other claim</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>the emailAddress from AzureAD issued token - mapped from upn or other claim)</UserHelpText>
+      </ClaimType>    
+    <ClaimType Id="identityProviderAccessToken">
+        <DisplayName>Access token from the identity provider</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>the original token from the identity provider (e.g. Facebook, Azure AD)</UserHelpText>
+      </ClaimType>     
+ </ClaimsSchema>
+
+ <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateAzureADIdentityProvider" TransformationMethod="ParseDomain">
+        <InputClaims>
+         <InputClaim ClaimTypeReferenceId="userPrincipalName" TransformationClaimType="emailAddress"/>
+        </InputClaims>
+        <OutputClaims>
+         <OutputClaim ClaimTypeReferenceId="identityProvider" TransformationClaimType="domain"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+</BuildingBlocks>
+  <ClaimsProviders>
+    <!-- Local Account -->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- Facebook -->
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <Metadata>
+            <Item Key="client_id">facebook_clientid</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+<!-- Azure AD Technical Profile-->>
+  <ClaimsProvider>
+      <Domain>Login.AzureAD.com</Domain>
+      <DisplayName>AzureAD Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AzureADProfile_issueAADtoken">
+          <DisplayName>AzureAD User</DisplayName>
+          <Description>AzureAD Account</Description>
+          <Protocol Name="OAuth2"/>
+          <OutputTokenFormat>JWT</OutputTokenFormat>
+          <Metadata>
+            <Item Key="AccessTokenEndpoint">https://login.microsoftonline.com/common/oauth2/v2.0/token</Item>            
+            <Item Key="authorization_endpoint">https://login.microsoftonline.com/common/oauth2/v2.0/authorize</Item>
+            <Item Key="BearerTokenTransmissionMethod">AuthorizationHeader</Item>
+            <Item Key="ClaimsEndpoint">https://graph.microsoft.com/v1.0/me</Item>
+            <!-- TODO update client_id and IdTokenAudience to match your configuration-->
+            <!-- <Item Key="client_id">6de4c9fd-c266-4b04-a0fa-782e9654da71</Item> -->
+            <!-- <Item Key="IdTokenAudience">6de4c9fd-c266-4b04-a0fa-782e9654da71</Item> -->
+            <Item Key="client_id">Enter-your-ApplicationID</Item>
+            <Item Key="IdTokenAudience">Enter-your-ApplicationID</Item>
+            <Item Key="DiscoverMetadataByTokenIssuer">true</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid user.read</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <!-- <Item Key="AdditionalRequestQueryParameters"></Item> -->
+            <Item Key="ValidTokenIssuerPrefixes">https://sts.windows.net/</Item>
+            <!-- <Item Key="ValidTokenIssuerPrefixes">
+            https://sts.windows.net/4fd2b2f2-ea27-4fe5-a8f3-7b1a7c975f34,
+            https://sts.windows.net/72f988bf-86f1-41af-91ab-2d7cd011db47
+            </Item>  -->
+          </Metadata>
+          <CryptographicKeys>
+            <!-- TODO update StorageRefenceId to match your configuration-->
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_TenantApplicationKey"/>
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication"/>
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="displayName"/>
+            <!-- <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="mail" /> -->
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email"/>
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="givenName"/>
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="surname"/>
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="userPrincipalName"/>
+            <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="id"/>
+            <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}"/>
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateAzureADIdentityProvider"/> 
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName"/>
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName"/>
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId"/>
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId"/>
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+      </ClaimsProvider>
+  </ClaimsProviders>
+
+<UserJourneys>
+  <UserJourney Id="SignUpOrSignInUsingAzureAD_issueAADtoken">
+       <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="AzureADExchangeWithAADtoken"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Check if the user has selected to sign in using one of the external Identity providers (Facebook or AzureAD) -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+            <ClaimsExchange Id="AzureADExchangeWithAADtoken" TechnicalProfileReferenceId="AzureADProfile_issueAADtoken"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- For external IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using an external IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+        </OrchestrationSteps>
+       <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+</TrustFrameworkPolicy>
