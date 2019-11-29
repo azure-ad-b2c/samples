@@ -1,11 +1,11 @@
 # Include an Azure AD access token through a B2C token, as part of a B2C Sign In
 > Disclaimer: This sample is provided AS IS - a best effort will be made to update this sample as the service evolves.
 
-This sample builds on the built-in user flows, and shows how to include an Azure AD bearer token as a claim within a B2C token issued from a custom B2C sign in policy.  It also shows how to call the Graph API of the users’ home Azure AD tenant using the issued Azure AD token.  For reference, similar capability can be achieved to receive the original identity provider’s id token, using the built-in B2C user flows
+This sample builds on the built-in user flows and shows how to include an Azure AD bearer token as a claim within a B2C token issued from a custom B2C sign in policy.  It also shows how to call the Graph API of the users’ home Azure AD tenant using the issued Azure AD token.  For reference, similar capability can be achieved to receive the original identity provider’s id token, using the built-in B2C user flows
 
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow
 
-The following diagram overviews this sample:.
+The following diagram overviews this sample:
 
 ![AAD Token](media/IssueAADTokenThroughB2C.jpg)
 
@@ -14,7 +14,7 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c
 
 In the getting started documentation, it references the B2C starter pack of advanced policies – a set of edited versions of the starter pack base, extension and signUpsignIn policy files, are included in this sample, that includes the updates that enable the issuance of the Azure AD identity provider access token.  
 
-We also recommend using Visual Studio Code and installing the Azure AD B2C extension for editing Custom policies, as there are many funcitions in this extension that are designed to enahnce the configuration experience.
+We also recommend using Visual Studio Code and installing the Azure AD B2C extension for editing Custom policies, as there are many functions in this extension that are designed to enhance the configuration experience.
 
 •	Download Visual Studio Code:  https://code.visualstudio.com/
 
@@ -22,7 +22,7 @@ We also recommend using Visual Studio Code and installing the Azure AD B2C exten
 
 **Register a Multi-tenant application - this allows users from Azure AD tenants to sign-in to your B2C tenant**
 
-From the Azure AD B2C portal, select App registration, create a friendly name for the app, and select the “Accounts in any organization directory or any identity provider…” under the Supported Account Types.  By selecting this application option, it makes teh application a Multi-tenant appn, thus making it available to Azure AD tenants.  Details about Multi-tenant Azure AD applications can be found here:  https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant
+From the Azure AD B2C portal, select App registration, create a friendly name for the app, and select the “Accounts in any organization directory or any identity provider…” under the Supported Account Types.  By selecting this application option, it makes the application type to be a Multi-tenant app, thus making it available to Azure AD tenants.  Details about Multi-tenant Azure AD applications can be found here:  https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant
 
 The reply url (redirect URI) should be your b2c tenant instance’s reply uRL  (replace “your-B2C-tenant-name” with your tenant’s name.).  
 https://your-B2C-tenant-name.b2clogin.com/your-B2C-tenant-name.onmicrosoft.com/oauth2/authresp
@@ -55,7 +55,7 @@ Your summarized application permissions should look like the following screen.
 
 ![appPerm5](media/AppPermissions6.jpg) 
 
-Note: other delegated permissions could have been selected – however, some may need Admin consent before the user will be able to sign into your application. A  best practice is to request the minimum permissions needed by your application.  If you find that additional permissions are needed, you can add them later – users and administrators may need to re-consent to the new permissions.
+Note: other delegated permissions could have been selected – however, some may need Admin consent before the user will be able to sign into your application. A best practice is to request the minimum permissions needed by your application.  If you find that additional permissions are needed, you can add them later – users and administrators may need to re-consent to the new permissions.
 
 **Updating the B2C Policy Permissions and Client Secret**
 
@@ -67,7 +67,7 @@ Copy the client secret – in the next steps, we will need to store the value in
 
 **Add the Application Secret to the Identity Experience Framework Policy Key**
 
-Create a B2C policy key (under the Identity Experience Framework blade).  Select Manual for the Option, create a name (we will reference this policyKeyName in the next step), and enter the client secret value from the previous step.
+Create a B2C policy key (under the Identity Experience Framework blade).  Select Manual for the Option, create a name (we will reference this policyKeyName in the next step) and enter the client secret value from the previous step.
 
 ![CreateKeyt](media/CreateKey.jpg)
 
@@ -94,7 +94,7 @@ Administrators can consent on behalf of all users in their organization – afte
 ![consent2](media/Consent2.jpg)   
  
 
-Some permissions require the company administrator’s consent, therefore users are not authorized to consent individually.  In this case, users will be blocked from sign in until the company administrator logons to the app and consents on behalf of all users in their organization.
+Some permissions require the company administrator’s consent; therefore users are not authorized to consent individually.  In this case, users will be blocked from sign in until the company administrator logons to the app and consents on behalf of all users in their organization.
 
 ![consent3](media/Consent3.jpg) 
          
