@@ -72,6 +72,7 @@ Create a B2C policy key (under the Identity Experience Framework blade).  Select
 ![CreateKeyt](media/CreateKey.jpg)
 
 **Updating the AzureADProfile_issueAADToken technical profile in the B2C policy file**
+
 The application (client ID) and the permissions must be updated in the AzureAD technical profile in your B2C policy file.   First update the values for the client_id and the IdTokenAudience in the policy file.
 
 Update the Scope value to equal the permissions that you configured for your.  This should be openid and user.read.   Note: for mutliple scopes, each scope value should be separated by a space.  
