@@ -59,11 +59,11 @@ Note: other delegated permissions could have been selected – however, some may
 
 **Updating the B2C Policy Permissions and Client Secret**
 
-A client Secret associated with this application, must be created – select either 1 or 2 year expiration (select no expiration for testing purposes only).  
+A client Secret associated with this application, must be created – select either 1 or 2 year expiration (select Never for testing purposes only).  
 
 ![CLientSecret](media/ClientSecret.jpg)
  
-Copy the client secret – in the next steps, we will need to store the value in a B2C policy key location, and reference the key location from withing the Azure AD technical profile in the B2C policy file.  
+Copy the client secret – in the next steps, we will need to store the value in a B2C policy key location, and reference the key location from within the Azure AD technical profile in the B2C policy file.  
 
 **Add the Application Secret to the Identity Experience Framework Policy Key**
 
