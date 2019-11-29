@@ -9,9 +9,9 @@ The following diagram overviews this sample:.
 
 ![AAD Token](media/IssueAADTokenThroughB2C.jpg)
 
-To configure the solution above, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  Review the getting started with custom B2C applications
-
+To configure the solution above, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  Review the getting started with custom B2C applications:
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom?tabs=applications
+
 In the getting started documentation, it references the B2C starter pack of advanced policies – a set of edited versions of the starter pack base, extension and signUpsignIn policy files, are included in this sample, that includes the updates that enable the issuance of the Azure AD identity provider access token.  
 
 We also recommend using Visual Studio Code and installing the Azure AD B2C extension for editing Custom policies, as there are many funcitions in this extension that are designed to enahnce the configuration experience.
