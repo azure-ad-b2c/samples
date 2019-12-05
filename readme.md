@@ -87,6 +87,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign in with REST API identity provider](policies/rest-api-idp) - Demonstrates how allow users to sign-in with credentials stored in a legacy identity provider using REST API services.
 
+- [Sign in through Azure AD as the identity provider, and include original Idp token](policies/B2C-Token-Includes-AzureAD-BearerToken) - Demonstrates how to sign in through a federated identity provider, Azure AD, and include the original identity provider token (Azure AD Bearer Token) as part of the B2C issued token.
+
 ## Multi factor authentication enhancements
 
 - [Edit MFA phone number](policies/edit-mfa-phone-number) - Demonstrates how to allow user to provide and validate a new MFA phone number. After the user changes their MFA phone number, on the next login, the user needs to provide the new phone number instead of the old one.
