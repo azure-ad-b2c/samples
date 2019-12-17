@@ -139,13 +139,12 @@ namespace AADB2C.RestoreUsername.API.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("The verification code is invalid.", HttpStatusCode.Conflict));
                 }
-                
+
                 // Using the input claim 'timeStepMatched', we check whether the verification code has already been used.
                 // For sign-up, the 'timeStepMatched' input claim is null and should not be evaluated 
-                // For sign-in, the 'timeStepMatched' input claim contains the last time last matched (from the user profile), and evaluated with 
-                // the value of the result of the TOTP out 'timeStepMatched' variable
-                if ((string.IsNullOrEmpty(inputClaims.timeStepMatched) == false) && 
-                    !(inputClaims.timeStepMatched).Equals(timeStepMatched.ToString()))
+                // For sign-in, the 'timeStepMatched' input claim contains the last time a code matched (from the user profile), and if equal to
+                // the last time matched from the verify totp step, we know this code has already been used and can reject
+                if (!string.IsNullOrEmpty(inputClaims.timeStepMatched) && (inputClaims.timeStepMatched).Equals(timeStepMatched.ToString()))
                 {
                     return StatusCode((int)HttpStatusCode.Conflict, new B2CResponseModel("The verification code has already been used.", HttpStatusCode.Conflict));
 
