@@ -129,11 +129,10 @@
                 calling the self asserted page without continue button-->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAssertedPasswordResetUserMessage" TechnicalProfileReferenceId="SelfAsserted-PasswordResetUserMessage" />
+            <ClaimsExchange Id="SendClaims" TechnicalProfileReferenceId="SelfAsserted-PasswordResetUserMessage" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
