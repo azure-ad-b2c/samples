@@ -28,7 +28,9 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Password-less sign-in with email verification](policies/passwordless-email) - Passwordless authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).  
 
-- [Custom email verification](policies/custom-email-verifcation) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The solution requires using Azure AD B2C custom policy and a REST API endpoint that sends and verifies the TOTP. 
+- [Custom email verification](policies/custom-email-verifcation) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The solution requires using Azure AD B2C custom policy and a REST API endpoint that sends and verifies the OTP. 
+
+- [Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample refernced on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email) 
 
 - [Force password reset first logon](policies/force-password-reset-first-logon) - Demonstrates how to force a user to reset their password on the first logon. 
 

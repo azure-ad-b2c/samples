@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_DisplayControl_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_DisplayControl_TrustFrameworkExtensions">
+  
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="Otp">
+        <DisplayName>Secondary One-time password</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="sendGridReqBody">
+        <DisplayName>SendGrid request body</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="VerificationCode">
+        <DisplayName>Secondary Verification Code</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter your email verification code</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GenerateSendGridRequestBody" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="personalizations.0.to.0.email" />
+          <InputClaim ClaimTypeReferenceId="otp" TransformationClaimType="personalizations.0.dynamic_template_data.otp" />
+          <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="personalizations.0.dynamic_template_data.email" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="template_id" DataType="string" Value="yoursendgridtemplateid"/>
+          <InputParameter Id="from.email" DataType="string" Value="my_email@mydomain.com"/>
+          <InputParameter Id="personalizations.0.subject" DataType="string" Value="Contoso account email verification code"/>
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="sendGridReqBody" TransformationClaimType="outputClaim"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+
+    <ContentDefinitions>
+     <ContentDefinition Id="api.localaccountsignup">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.0.0</DataUri>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+    <DisplayControls>
+      <DisplayControl Id="emailVerificationControl" UserInterfaceControlType="VerificationControl">
+        <DisplayClaims>
+          <DisplayClaim ClaimTypeReferenceId="email" Required="true" />
+          <DisplayClaim ClaimTypeReferenceId="verificationCode" ControlClaimType="VerificationCode" Required="true" />
+        </DisplayClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="email" />
+        </OutputClaims>
+        <Actions>
+          <Action Id="SendCode">
+            <ValidationClaimsExchange>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="GenerateOtp" />
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="SendGrid" />
+            </ValidationClaimsExchange>
+          </Action>
+          <Action Id="VerifyCode">
+            <ValidationClaimsExchange>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="VerifyOtp" />
+            </ValidationClaimsExchange>
+          </Action>
+        </Actions>
+      </DisplayControl>
+    </DisplayControls>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>One time password technical profiles</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="GenerateOtp">
+          <DisplayName>Generate one time password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="Operation">GenerateCode</Item>
+            <Item Key="CodeExpirationInSeconds">1200</Item>
+            <Item Key="CodeLength">6</Item>
+            <Item Key="CharacterSet">0-9</Item>
+            <Item Key="ReuseSameCode">true</Item>
+            <Item Key="MaxNumAttempts">5</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="identifier" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="otp" PartnerClaimType="otpGenerated" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="VerifyOtp">
+          <DisplayName>Verify one time password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="Operation">VerifyCode</Item>
+            <Item Key="UserMessage.VerificationHasExpired">You have exceed the maximum time allowed.</Item>
+            <Item Key="UserMessage.MaxRetryAttemped">You have exceed the number of retries allowed.</Item>
+            <Item Key="UserMessage.InvalidCode">You have entered the wrong code.</Item>
+            <Item Key="UserMessage.ServerError">Cannot verify the code, please try again later.</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="identifier" />
+            <InputClaim ClaimTypeReferenceId="verificationCode" PartnerClaimType="otpToVerify" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>RestfulProvider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SendGrid">
+          <DisplayName>Use SendGrid's email API to send the code the the user</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://api.sendgrid.com/v3/mail/send</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="ClaimUsedForRequestPayload">sendGridReqBody</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GenerateSendGridRequestBody" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="sendGridReqBody" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <DisplayName>Email signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+            <Item Key="language.button_continue">Create</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
+            <DisplayClaim ClaimTypeReferenceId="displayName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="surName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </DisplayClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+  </ClaimsProviders>
+
+    <!--UserJourneys>
+	
+	</UserJourneys-->
+
+</TrustFrameworkPolicy>
