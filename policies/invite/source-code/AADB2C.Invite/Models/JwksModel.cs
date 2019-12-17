@@ -54,7 +54,7 @@ namespace AADB2C.Invite.Models
             string thumbprint = Base64UrlEncoder.Encode(certificate.GetCertHash());
 
             // JWK must have the modulus and exponent explicitly defined
-            RSACng rsa = certificate.PublicKey.Key as RSACng; ;
+            RSACng rsa = certificate.GetRSAPublicKey() as RSACng;
 
             if (rsa == null)
             {
