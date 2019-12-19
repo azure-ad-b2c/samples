@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
   PolicySchemaVersion="0.3.0.0" 
-  TenantId="sunflowersdemo.onmicrosoft.com" 
+  TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_MFA_Last_Verified_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://sunflowersdemo.onmicrosoft.com/B2C_1A_MFA_Last_Verified_TrustFrameworkExtensions">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_Last_Verified_TrustFrameworkExtensions">
   
   <BasePolicy>
-    <TenantId>sunflowersdemo.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_MFA_Last_Verified_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
@@ -51,11 +51,6 @@
   	  <DisplayName>skipMFA</DisplayName>
 	    <DataType>boolean</DataType>
 	  </ClaimType>    
-    <!--Demo: **for testing only**, don't need in production-->
-    <ClaimType Id="policyVersion">
-  	  <DisplayName>policyVersion</DisplayName>
-	    <DataType>string</DataType>
-	  </ClaimType>
 
   </ClaimsSchema>
 
@@ -137,7 +132,7 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="Facebook-OAUTH">
           <Metadata>
-            <Item Key="client_id">708931959302288</Item>
+            <Item Key="client_id">facebook_clientid</Item>
             <Item Key="scope">email public_profile</Item>
             <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
           </Metadata>
@@ -151,12 +146,12 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="login-NonInteractive">
           <Metadata>
-            <Item Key="client_id">988f9a13-7ba4-4261-af75-92b2c32a3652</Item>
-            <Item Key="IdTokenAudience">917ac5bc-e856-45bf-ad6e-281f0c9f55fe</Item>
+            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="988f9a13-7ba4-4261-af75-92b2c32a3652" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="917ac5bc-e856-45bf-ad6e-281f0c9f55fe" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -202,10 +197,7 @@
                   check whether MFA Can be skipped.  -->
         <TechnicalProfile Id="AAD-UserReadUsingAlternativeSecurityId">
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="isLastMFAVerifiedGreaterThanNow" />
-            <OutputClaim ClaimTypeReferenceId="currentDateTime" />
             <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" />
-            <OutputClaim ClaimTypeReferenceId="policyVersion" DefaultValue="*50*" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetCurrentDateTime" />
@@ -219,11 +211,7 @@
                   check whether MFA Can be skipped. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="currentDateTime" />
-            <OutputClaim ClaimTypeReferenceId="isLastMFAVerifiedGreaterThanNow" />
-            <OutputClaim ClaimTypeReferenceId="isStrongAuthenticationLastMFAVerifiedPresent" />
             <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationLastMFAVerified" />
-            <OutputClaim ClaimTypeReferenceId="policyVersion" DefaultValue="*50*" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetCurrentDateTime" />

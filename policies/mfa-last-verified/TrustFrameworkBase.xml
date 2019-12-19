@@ -4,9 +4,9 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="sunflowersdemo.onmicrosoft.com"
+  TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_MFA_Last_Verified_TrustFrameworkBase"
-  PublicPolicyUri="http://sunflowersdemo.onmicrosoft.com/B2C_1A_MFA_Last_Verified_TrustFrameworkBase">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MFA_Last_Verified_TrustFrameworkBase">
 
   <BuildingBlocks>
     <ClaimsSchema>
