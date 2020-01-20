@@ -28,8 +28,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Password-less sign-in with email verification](policies/passwordless-email) - Passwordless authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).  
 
-- [Custom email verification](policies/custom-email-verifcation) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The solution requires using Azure AD B2C custom policy and a REST API endpoint that sends and verifies the OTP. 
-
 - [Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample refernced on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email) 
 
 - [Force password reset first logon](policies/force-password-reset-first-logon) - Demonstrates how to force a user to reset their password on the first logon. 
@@ -54,11 +52,11 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Password reset without the ability to use the last password](policies/password-reset-not-last-password) - For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.
 
-- [Disable and lockout an account after a time period](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
+- [Disable and lockout an account after a period of inactivity](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
 
-- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to automatically sign-in to a web application by redeeming a link sent via email. The web application sends an email to the end user with a link to sign-in policy. When user clicks on the link, Azure AD B2C issues an id_token, without prompting for a password.
+- [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.
 
-- [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how to sign-in to a web application by sending a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.
+- [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how a user can sign in to your web application by sending them a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.
 
 - [Banned password list](policies/banned-password-list-no-API) - For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.
 
@@ -111,7 +109,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 ## Generic enhancements
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
-- [SAML Service Provider](https://github.com/azure-ad-b2c/saml-sp)  This document walks you through adding a SAML-based Relying party to Azure AD B2C. 
+- [SAML Service Provider](https://docs.microsoft.com/en-us/azure/active-directory-b2c/connect-with-saml-service-providers)  This document walks you through adding a SAML-based Relying party to Azure AD B2C. 
 
 - [Sign-up with social and local account](policies/sign-up-with-social-and-local-account) - Demonstrate how to create a policy that allows a user to sign-up with a social account linked to local account
 
