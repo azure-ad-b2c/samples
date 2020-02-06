@@ -6,7 +6,7 @@ This sample policy demonstrates how to dynamically filter the list of social ide
 
 By default Azure AD B2C displays every identity provider that appears in the `ClaimsProviderSelections` element of the first orchestration step of your user journey. To filter the list of identity providers dynamically, you send a custom query string parameter `idps`, in a comma delimiter format. The following URL illustrates how to display only Facebook and Google sign-in buttons:
 
-https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/B2C_1A_Dynamic_IDP_signup_signin/oauth2/v2.0/authorize?client_id=0239a9cc-309c-4d41-87f1-31288feb2e82&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&**idps=google,facebook**
+![Sign-in URL](media/sign-in-url.png)
 
 ## Solution building blocks
 
