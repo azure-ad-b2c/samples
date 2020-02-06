@@ -10,7 +10,7 @@
   
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_Dynamic_IDP_TrustFrameworkBase</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
   	<ClaimsSchema>
@@ -20,58 +20,40 @@
         <UserHelpText>User identity providers</UserHelpText>
       </ClaimType>
 
-      <ClaimType Id="appId">
-        <DisplayName>requestAppId</DisplayName>
+      <ClaimType Id="idps">
+        <DisplayName>IDP comma delimiter string</DisplayName>
         <DataType>string</DataType>
         <UserHelpText>The OAuth2 application Id (client_id) to be sent to the REST API</UserHelpText>
       </ClaimType>
   	</ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="ConvertIDPsToStringCollection" TransformationMethod="StringSplit">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="idps" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+        <InputParameter DataType="string" Id="delimiter" Value="," />
+          </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="identityProviders" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
   </BuildingBlocks>
 
   <ClaimsProviders>
-
-    <!-- Local account Sign-In claims provider -->
     <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-          <InputClaims>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-    <!-- Facebook claims provider -->
-	<ClaimsProvider>
       <DisplayName>Facebook</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="Facebook-OAUTH">
           <Metadata>
-            <!--Demo action required: Change to your Facebook App Id-->
-            <Item Key="client_id"></Item>
-            <Item Key="scope">email public_profile</Item>
-            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-
-            <!--Demo: this technical profile is displayed only if identityProviders collection contains the facebook.com entity-->
+            <!--Sample: this technical profile is displayed only if identityProviders collection contains the google.com entity-->
             <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
-            <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
+            <Item Key="ClaimValueOnWhichToEnable">facebook</Item>
           </Metadata>
 
-
-          <!--Demo: Show this technical profile only if item exists in string collection claim-->
+          <!--Sample: Show this technical profile only if item exists in string collection claim-->
           <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -89,21 +71,20 @@
             <Item Key="authorization_endpoint">https://accounts.google.com/o/oauth2/auth</Item>
             <Item Key="AccessTokenEndpoint">https://accounts.google.com/o/oauth2/token</Item>
             <Item Key="ClaimsEndpoint">https://www.googleapis.com/oauth2/v1/userinfo</Item>
-            <Item Key="scope">email</Item>
+            <Item Key="scope">email profile</Item>
             <Item Key="HttpBinding">POST</Item>
             <Item Key="UsePolicyInRedirectUri">0</Item>
-            <!--Demo action required: Change to your Google+ App Id-->
-            <Item Key="client_id"></Item>
+            <Item Key="client_id">Your Google application ID</Item>
 
-            <!--Demo: this technical profile is displayed only if identityProviders collection contains the google.com entity-->
+            <!--Sample: this technical profile is displayed only if identityProviders collection contains the google.com entity-->
             <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
-            <Item Key="ClaimValueOnWhichToEnable">google.com</Item>
+            <Item Key="ClaimValueOnWhichToEnable">google</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="client_secret" StorageReferenceId="B2C_1A_GoogleSecret" />
           </CryptographicKeys>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
             <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
@@ -115,60 +96,91 @@
             <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
             <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
             <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-          <ErrorHandlers>
-            <ErrorHandler>
-              <ErrorResponseFormat>json</ErrorResponseFormat>
-              <ResponseMatch>$[?(@@.error == 'invalid_grant')]</ResponseMatch>
-              <Action>Reauthenticate</Action>
-              <!--In case of authorization code used error, we don't want the user to select his account again.-->
-              <!--AdditionalRequestParameters Key="prompt">select_account</AdditionalRequestParameters-->
-            </ErrorHandler>
-          </ErrorHandlers>
 
-          <!--Demo: Show this technical profile only if item exists in string collection claim-->
+          <!--Sample: Show this technical profile only if item exists in string collection claim-->
           <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
 
-	  <ClaimsProvider>
-	    <DisplayName>REST APIs</DisplayName>
-	    <TechnicalProfiles>
-	
-      <!-- Custom Restful service -->
-      <TechnicalProfile Id="REST-IDPSelection">
-        <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
-        <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-        <Metadata>
-          <Item Key="ServiceUrl">https://b2crest.azurewebsites.net/api/IDPSelection?code=cAP5S1lEbBMZRJRpICF8VWggXUANXnn8JaN6lQTE2OAb0WWIEpWOdg==</Item>
-          <Item Key="AuthenticationType">None</Item>
-          <Item Key="SendClaimsIn">Body</Item>
-        </Metadata>
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="appId" DefaultValue="{OIDC:ClientId}" />
-        </InputClaims>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="identityProviders" />
-        </OutputClaims>
-        <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-      </TechnicalProfile>
-    </TechnicalProfiles>
-	</ClaimsProvider>
+    <ClaimsProvider>
+      <Domain>twitter.com</Domain>
+      <DisplayName>Twitter</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Twitter-OAUTH1">
+          <DisplayName>Twitter</DisplayName>
+          <Protocol Name="OAuth1" />
+          <Metadata>
+            <Item Key="ProviderName">Twitter</Item>
+            <Item Key="authorization_endpoint">https://api.twitter.com/oauth/authenticate</Item>
+            <Item Key="access_token_endpoint">https://api.twitter.com/oauth/access_token</Item>
+            <Item Key="request_token_endpoint">https://api.twitter.com/oauth/request_token</Item>
+            <Item Key="ClaimsEndpoint">https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true</Item>
+            <Item Key="ClaimsResponseFormat">json</Item>
+            <Item Key="client_id">Your Twitter application consumer key</Item>
 
-
+            <!--Sample: this technical profile is displayed only if identityProviders collection contains the google.com entity-->
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">twitter</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_TwitterSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="user_id" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="screen_name" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="twitter.com" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          
+          <!--Sample: Show this technical profile only if item exists in string collection claim-->
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Claims Transformation</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Get-IdentityProvidersList">
+          <DisplayName>Get identity provider list</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="idps" DefaultValue="{OAUTH-KV:idps}" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="identityProviders" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="ConvertIDPsToStringCollection" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
   </ClaimsProviders>
 
  <UserJourneys>
-
-    <UserJourney Id="SignUpOrSignIn">
+    <UserJourney Id="SignUpOrSignInWithIdpFilter">
       <OrchestrationSteps>
 
         <!--Demo: Call the RESP API to get the list of allowed identity providers to be displayed -->
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="REST-IDPSelection" TechnicalProfileReferenceId="REST-IDPSelection" />
+            <ClaimsExchange Id="Get-IdentityProvidersList" TechnicalProfileReferenceId="Get-IdentityProvidersList" />
           </ClaimsExchanges>
         </OrchestrationStep>   
 
@@ -176,6 +188,7 @@
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
             <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="TwitterExchange" />
            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
@@ -194,6 +207,7 @@
           <ClaimsExchanges>
             <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
             <ClaimsExchange Id="GoogleExchange" TechnicalProfileReferenceId="Google-OAUTH" />
+            <ClaimsExchange Id="TwitterExchange" TechnicalProfileReferenceId="Twitter-OAUTH1" />
            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>

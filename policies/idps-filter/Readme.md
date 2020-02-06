@@ -1,29 +1,22 @@
 # Azure AD B2C: Dynamic identity provider selection
 
-This sample policy demonstrates how to dynamically filter the list of social identity providers render to the user based on application ID. In the following screenshot user can select from the list of identity prviders, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The  claim value contains the list of identity provider to be rendered.
+This sample policy demonstrates how to dynamically filter the list of social identity providers render to the user based on a custom query string parameter `idps`. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Twitter. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The  claim value contains the list of identity provider to be rendered.
 
-![IDP Selection](IDPSelection.png)
+![IDP Selection](/media/IDPSelection.png)
 
-By default Azure AD B2C displays every identity provider that appears in the `ClaimsProviderSelections` element. 
+By default Azure AD B2C displays every identity provider that appears in the `ClaimsProviderSelections` element of the first orchestration step of your user journey. To filter the list of identity providers dynamically, you send a custom query string parameter `idps`, in a comma delimiter format. The following URL illustrates how to display only Facebook and Google sign-in buttons:
 
-```XML
-<OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
-  <ClaimsProviderSelections>
-    <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
-    <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange" />
-    <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
-  </ClaimsProviderSelections>
-  <ClaimsExchanges>
-   <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
-  </ClaimsExchanges>
-</OrchestrationStep>
-```
+https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/B2C_1A_Dynamic_IDP_signup_signin/oauth2/v2.0/authorize?client_id=0239a9cc-309c-4d41-87f1-31288feb2e82&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&**idps=google,facebook**
 
- To filter the list of identity providers, you first create a string collection claim, for example `IdentityProviders`. This claim contains the list of identity providers to be displayed. In each technical profile, you add the `EnabledForUserJourneys` element set to `OnItemExistenceInStringCollectionClaim`. This element controls if the technical profile is executed in a user journey. The value of the tels B2C to execute only when an item exists in a string collection claim.
+## Solution building blocks
 
-You also need to add two metadata elements:
-- `ClaimTypeOnWhichToEnable` specifies the claim's type that is to be evaluated. In this case the string collection claim `identityProviders`
-- `ClaimValueOnWhichToEnable` specifies the value that is to be compared. The name of the identity provider.
+1. The `IdentityProviders` **string collection** claim contains the list of identity providers to be displayed.
+1. The `idps` **string** claim contains incoming query string parameter `idps`.
+1. To convert the `idps` comma delimiter value to a string collection, we use the [StringSplit claims transformation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/string-transformations#stringsplit).
+1. The first orchestration step invokes the `Get-IdentityProvidersList`  [claims transofmation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/claims-transformation-technical-profile). This technical profile reads the `idps` query string parameter, using [claims resolvers ](https://docs.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview), then call the `ConvertIDPsToStringCollection` claims transformation (to convert the comma delimiter string to a string collection).
+1. In each technical profile:
+    1. The `EnabledForUserJourneys` element set to `OnItemExistenceInStringCollectionClaim`. This element controls if the technical profile is executed in a user journey. The value of the tels B2C to execute only when an item exists in a string collection claim.
+    1. You also need to add two metadata elements: `ClaimTypeOnWhichToEnable` specifies the claim's type that is to be evaluated. In this case the string collection claim `identityProviders`. `ClaimValueOnWhichToEnable` specifies the value that is to be compared. The name of the identity provider, for example **facebook**.
 
 
 ```XML
@@ -34,7 +27,7 @@ You also need to add two metadata elements:
       <Metadata>
         ...
         <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
-        <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
+        <Item Key="ClaimValueOnWhichToEnable">facebook</Item>
       </Metadata>
       ...
       <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
@@ -49,7 +42,7 @@ You also need to add two metadata elements:
       <Metadata>
         ...
         <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
-        <Item Key="ClaimValueOnWhichToEnable">google.com</Item>
+        <Item Key="ClaimValueOnWhichToEnable">google</Item>
       </Metadata>
       ...
       <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
@@ -57,37 +50,6 @@ You also need to add two metadata elements:
   </TechnicalProfiles>
 </ClaimsProvider>
 ```
-
-In this example, the first orchestration step makes a call to a REST API (Azure functions) that receives the application ID that initiates the authorization request. Based on the application ID the REST API rerutns back the list of identity providers that are relevant to the application. 
-
-If the application ID is:
-```JSON
-{
-  "appId" : "999919a0-c6b0-4e74-a76f-01684b821780"
-}
-```
-
-The REST API returns the `identityProviders` claim, which contains only facebook.com.
-```JSON
-{
-  "version": "1.0.0",
-  "status": 200,
-  "userMessage": "List of identity providers",
-  "identityProviders": ["facebook.com" ]
-}
-```
-
-Otherwise the `identityProviders` claim contains facebook.com and google.com.
-```JSON
-{
-  "version": "1.0.0",
-  "status": 200,
-  "userMessage": "List of identity providers",
-  "identityProviders": ["facebook.com", "google.com"]
-}
-```
-
-You can use this apporch to filter the identity providers based on IP range, input parameters you send to Azure AD B2C, localization. Some of the conditions can be done be using claims tranfomrtion. So, you don't need to develop any RESTfull services.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
