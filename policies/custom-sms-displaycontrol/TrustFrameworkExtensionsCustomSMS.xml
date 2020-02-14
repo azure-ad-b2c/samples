@@ -158,21 +158,21 @@
           <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://api.twilio.com/2010-04-01/Accounts/ACb4aab3a9a6b132aedbc5e091c1a17b9b/Messages.json</Item>
+            <Item Key="ServiceUrl">https://api.twilio.com/2010-04-01/Accounts/TwilioAccountSID/Messages.json</Item>
             <Item Key="AuthenticationType">Basic</Item>
             <Item Key="SendClaimsIn">Form</Item>
             <Item Key="ClaimsFormat">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_B2cRestTwilioClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_B2cRestTwilioClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_TwilioAccountSID" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_TwilioAUTHTOKEN" />
           </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateOTPMessage" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="OTPMessage" PartnerClaimType="Body"/>
-            <InputClaim ClaimTypeReferenceId="From" DefaultValue="+447723446830"/>
+            <InputClaim ClaimTypeReferenceId="From" DefaultValue="TwilioPhoneNumber"/>
             <InputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" PartnerClaimType="To"/>
           </InputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
@@ -181,21 +181,21 @@
           <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://api.twilio.com/2010-04-01/Accounts/ACb4aab3a9a6b132aedbc5e091c1a17b9b/Messages.json</Item>
+            <Item Key="ServiceUrl">https://api.twilio.com/2010-04-01/Accounts/TwilioAccountSID/Messages.json</Item>
             <Item Key="AuthenticationType">Basic</Item>
             <Item Key="SendClaimsIn">Form</Item>
             <Item Key="ClaimsFormat">Form</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_B2cRestTwilioClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_B2cRestTwilioClientSecret" />
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_TwilioAccountSID" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_TwilioAUTHTOKEN" />
           </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateOTPMessage" />
           </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="OTPMessage" PartnerClaimType="Body"/>
-            <InputClaim ClaimTypeReferenceId="From" DefaultValue="+447723446830"/>
+            <InputClaim ClaimTypeReferenceId="From" DefaultValue="TwilioPhoneNumber"/>
             <InputClaim ClaimTypeReferenceId="mfaPhoneNumber" PartnerClaimType="To"/>
           </InputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
