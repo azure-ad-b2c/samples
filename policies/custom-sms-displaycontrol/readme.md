@@ -84,6 +84,9 @@ Replace the `DefaultValue` for the `From` Input Claim with the Phone Number regi
 
 The `CryptographicKeys` element references the 'ACCOUNT SID' and 'AUTH TOKEN' keys setup prior in the Azure AD B2C Policy Keys menu. This is used to build the authorization header to authenticate to your Twilio instance using HTTP Basic authentication.
 
+### Manage 2FA Session 
+When the user has performed MFA via a policy, subsequent policies may skip MFA. For example, calling Profile Edit after Sign In.
+
 ## Add Orchestration steps
 From the TrustframeworkBase file, copy the entire `SignUpOrSignIn` UserJourney element. Insert this into the TrustframeworkExtension file within the UserJourneys element. Uncomment the Userjourneys element if it is commented out.
 Rename the `SignUpOrSignIn` UserJourney to `SignUpOrSignInCustomSMS`.
