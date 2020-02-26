@@ -6,10 +6,7 @@
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_Dynamic_IDP_signup_signin"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Dynamic_IDP_signup_signin"
-  
-  DeploymentMode="Development" 
-  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Dynamic_IDP_signup_signin">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -18,9 +15,6 @@
 
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignInWithIdpFilter" />
-      <UserJourneyBehaviors>
-        <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="c5b9a7ce-3135-442d-b825-fa2be4f61189" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
-      </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />

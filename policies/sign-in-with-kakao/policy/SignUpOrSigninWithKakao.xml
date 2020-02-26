@@ -6,10 +6,7 @@
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_Kakao_susi"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Kakao_susi"
-  DeploymentMode="Development" 
-  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights" 
->
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Kakao_susi">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -204,9 +201,6 @@
   <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
-    <UserJourneyBehaviors>
-      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="...your key..." DeveloperMode="true" ClientEnabled="true" ServerEnabled="true" TelemetryVersion="1.0.0" />
-    </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
