@@ -343,8 +343,8 @@
             <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingUserNameAndValidateStrongAuthenticationEmailAddress" />
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-
         </TechnicalProfile>
+
         <TechnicalProfile Id="AAD-UserReadUsingUserNameAndValidateStrongAuthenticationEmailAddress">
           <Metadata>
             <Item Key="Operation">Read</Item>
@@ -361,21 +361,6 @@
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="AssertEmailAndstrongAuthenticationEmailAddressAreEqual" />
           </OutputClaimsTransformations>
-          <IncludeTechnicalProfile ReferenceId="AAD-ReadCommon" />
-        </TechnicalProfile>
-
-        <TechnicalProfile Id="AAD-ReadCommon">
-          <Metadata>
-            <Item Key="Operation">Read</Item>
-            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
-          </Metadata>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="objectId" />
-            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
-            <OutputClaim ClaimTypeReferenceId="displayName" />
-            <OutputClaim ClaimTypeReferenceId="otherMails" />
-            <OutputClaim ClaimTypeReferenceId="strongAuthenticationEmailAddress" PartnerClaimType="signInNames.emailAddress" />
-          </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
 
