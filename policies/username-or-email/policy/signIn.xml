@@ -17,7 +17,7 @@
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignIn" />
+    <DefaultUserJourney ReferenceId="SignInUsernameOrEmail" />
     <UserJourneyBehaviors>
       <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="28ac10ad-55dc-4db7-9d79-5b3b4f0edefb"
        DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />

@@ -10,6 +10,11 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="ReadOnlyEmail">
+        <DisplayName>Verified Email Address</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
       <ClaimType Id="emailValue">
         <DisplayName>Matched mail</DisplayName>
         <DataType>string</DataType>
@@ -110,7 +115,7 @@
         </TechnicalProfile>
 
         <TechnicalProfile Id="regexAnalysisUsername">
-          <DisplayName>extract usernam</DisplayName>
+          <DisplayName>extract username</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="signInName" />
@@ -189,7 +194,7 @@
           </Metadata>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
-          </InputClaimsTransformations>          
+          </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="readOnlyEmail"/>
           </InputClaims>
@@ -228,9 +233,9 @@
             <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"/>
             <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
             <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration" />
- 
+
             <PersistedClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="strongAuthenticationPhoneNumber" />
- 
+
             <!-- Optional claims. -->
             <PersistedClaim ClaimTypeReferenceId="givenName" />
             <PersistedClaim ClaimTypeReferenceId="surname" />
@@ -407,7 +412,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignIn">
+    <UserJourney Id="SignInUsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -430,7 +435,7 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
 
-    <UserJourney Id="SignUp">
+    <UserJourney Id="SignUpUsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -479,7 +484,7 @@
 
 
 
-    <UserJourney Id="PasswordReset">
+    <UserJourney Id="PasswordResetUsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -531,7 +536,7 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-    
+
     <UserJourney Id="ProfileEditUsernameOrEmail">
       <OrchestrationSteps>
 

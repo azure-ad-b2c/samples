@@ -5,6 +5,7 @@ Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to
 If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
+
 ## Scenario
 For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.
 
