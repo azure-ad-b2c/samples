@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
@@ -7,115 +7,112 @@
   TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_ForcePasswordReset_TrustFrameworkExtensions" 
   PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_ForcePasswordReset_TrustFrameworkExtensions">
-  
+
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
-  </BasePolicy>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+   </BasePolicy>
   <BuildingBlocks>
+    <ClaimsSchema>
+      <!--Sample: The system current date and time-->
+      <ClaimType Id="currentDateTime">
+        <DisplayName>Current date and time</DisplayName>
+        <DataType>dateTime</DataType>
+        <UserHelpText>Current date and time</UserHelpText>
+      </ClaimType>
 
-  <ClaimsSchema>
-    <!--Demo: The system current date and time-->
-  	<ClaimType Id="currentDateTime">
-	    <DisplayName>Current date and time</DisplayName>
-	    <DataType>dateTime</DataType>
-	    <UserHelpText>Current date and time</UserHelpText>
-	  </ClaimType>
-      
-    <!--Demo: The last time user reset the password-->
-  	<ClaimType Id="extension_passwordResetOn">
-	    <DisplayName>Password reset on</DisplayName>
-	    <DataType>dateTime</DataType>
-	    <UserHelpText>The last time user reset the password</UserHelpText>
-	  </ClaimType>
+      <!--Sample: The last time user reset the password-->
+      <ClaimType Id="extension_passwordResetOn">
+        <DisplayName>Password reset on</DisplayName>
+        <DataType>dateTime</DataType>
+        <UserHelpText>The last time user reset the password</UserHelpText>
+      </ClaimType>
 
-    <!--Demo: Indicates whether password reset is required, based on date comparison -->
-    <ClaimType Id="isPasswordResetOnGreaterThanNow">
-  	  <DisplayName>Indicates whether password reset is required</DisplayName>
-	    <DataType>boolean</DataType>
-	  </ClaimType>
+      <!--Sample: Indicates whether password reset is required, based on date comparison -->
+      <ClaimType Id="isPasswordResetOnGreaterThanNow">
+        <DisplayName>Indicates whether password reset is required</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>
 
-    <!--Demo: Indicates whether password reset exists -->
-    <ClaimType Id="isPasswordResetOnPresent">
-  	  <DisplayName>Is password reset on presented</DisplayName>
-	    <DataType>boolean</DataType>
-	  </ClaimType>
+      <!--Sample: Indicates whether password reset exists -->
+      <ClaimType Id="isPasswordResetOnPresent">
+        <DisplayName>Is password reset on presented</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>
 
-    <!--Demo: Indicates whether password reset is required or not, based on date comparison and if extension_passwordResetOn is null -->
-    <ClaimType Id="skipPasswordReset">
-  	  <DisplayName>Skip password reset</DisplayName>
-	    <DataType>boolean</DataType>
-	  </ClaimType>   
-  </ClaimsSchema>
+      <!--Sample: Indicates whether password reset is required or not, based on date comparison and if extension_passwordResetOn is null -->
+      <ClaimType Id="skipPasswordReset">
+        <DisplayName>Skip password reset</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>   
+    </ClaimsSchema>
 
-  <ClaimsTransformations>
-    <!--Demo: Set the current UTC date and time to extension_passwordResetOn claim type-->
-    <ClaimsTransformation Id="SetPasswordResetOn" TransformationMethod="GetCurrentDateTime">
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="extension_passwordResetOn" TransformationClaimType="currentDateTime" />
-      </OutputClaims>
-    </ClaimsTransformation>
+    <ClaimsTransformations>
+      <!--Sample: Set the current UTC date and time to extension_passwordResetOn claim type-->
+      <ClaimsTransformation Id="SetPasswordResetOn" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="extension_passwordResetOn" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
 
-    <!--Demo: Set the current UTC date and time to currentDateTime claim type-->
-    <ClaimsTransformation Id="SetCurrentDateTime" TransformationMethod="GetCurrentDateTime">
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="currentDateTime" TransformationClaimType="currentDateTime" />
-      </OutputClaims>
-    </ClaimsTransformation>
+      <!--Sample: Set the current UTC date and time to currentDateTime claim type-->
+      <ClaimsTransformation Id="SetCurrentDateTime" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="currentDateTime" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
 
-    <!--Demo: Compare the dates and check if password reset is required -->
-    <ClaimsTransformation Id="ComparePasswordResetOnWithCurrentDateTime" TransformationMethod="DateTimeComparison">
-      <InputClaims>
-        <InputClaim ClaimTypeReferenceId="currentDateTime" TransformationClaimType="firstDateTime" />
-        <InputClaim ClaimTypeReferenceId="extension_passwordResetOn" TransformationClaimType="secondDateTime" />
-      </InputClaims>
-      <InputParameters>
-        <!--Demo: We check if the first date (current) minus 90 day is later than second date (password reset on).
+      <!--Sample: Compare the dates and check if password reset is required -->
+      <ClaimsTransformation Id="ComparePasswordResetOnWithCurrentDateTime" TransformationMethod="DateTimeComparison">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="currentDateTime" TransformationClaimType="firstDateTime" />
+          <InputClaim ClaimTypeReferenceId="extension_passwordResetOn" TransformationClaimType="secondDateTime" />
+        </InputClaims>
+        <InputParameters>
+          <!--Sample: We check if the first date (current) minus 90 day is later than second date (password reset on).
           If yes, it means that at least 90 days passed from the time user reset the password.
           Note: the first date must contain a value. So, we use the current datetime. Don't change the order --> 
-        <InputParameter Id="operator" DataType="string" Value="earlier than" />
-        <!--Deom Action Required: Change the time span according to 60 or 90 days (in seconds)-->
-        <InputParameter Id="timeSpanInSeconds" DataType="int" Value="-80" />
-      </InputParameters>
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="isPasswordResetOnGreaterThanNow" TransformationClaimType="result" />
-      </OutputClaims>      
-    </ClaimsTransformation>  
+          <InputParameter Id="operator" DataType="string" Value="earlier than" />
+          <!--Deom Action Required: Change the time span according to 60 or 90 days (in seconds)-->
+          <InputParameter Id="timeSpanInSeconds" DataType="int" Value="-80" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="isPasswordResetOnGreaterThanNow" TransformationClaimType="result" />
+        </OutputClaims>      
+      </ClaimsTransformation>  
 
-    <!--Demo: Check if extension_passwordResetOn is existed in user account. -->
-    <ClaimsTransformation Id="CheckIfPasswordResetOnPresent" TransformationMethod="DoesClaimExist">
-      <InputClaims>
-        <InputClaim ClaimTypeReferenceId="extension_passwordResetOn" TransformationClaimType="inputClaim" />
-      </InputClaims>					
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="isPasswordResetOnPresent" TransformationClaimType="outputClaim" />
-      </OutputClaims>
-    </ClaimsTransformation>
+      <!--Sample: Check if extension_passwordResetOn is existed in user account. -->
+      <ClaimsTransformation Id="CheckIfPasswordResetOnPresent" TransformationMethod="DoesClaimExist">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="extension_passwordResetOn" TransformationClaimType="inputClaim" />
+        </InputClaims>					
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="isPasswordResetOnPresent" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
 
-    <!--Demo: Check if datetime comparison is true and also the PasswordResetOn is presented in the user account.
-        If both of them are true, user doesn't need to reset the password--> 
-    <ClaimsTransformation Id="CheckWhetherPasswordResetCanBeSkipped" TransformationMethod="AndClaims">
-      <InputClaims>
-        <InputClaim ClaimTypeReferenceId="isPasswordResetOnGreaterThanNow" TransformationClaimType="inputClaim1" />
-        <InputClaim ClaimTypeReferenceId="isPasswordResetOnPresent" TransformationClaimType="inputClaim2" />
-      </InputClaims>					
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="skipPasswordReset" TransformationClaimType="outputClaim" />
-      </OutputClaims>
-    </ClaimsTransformation>
-  </ClaimsTransformations>
-
+      <!--Sample: Check if datetime comparison is true and also the PasswordResetOn is presented in the user account.
+      If both of them are true, user doesn't need to reset the password--> 
+      <ClaimsTransformation Id="CheckWhetherPasswordResetCanBeSkipped" TransformationMethod="AndClaims">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="isPasswordResetOnGreaterThanNow" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="isPasswordResetOnPresent" TransformationClaimType="inputClaim2" />
+        </InputClaims>					
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="skipPasswordReset" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
   </BuildingBlocks>
 
   <ClaimsProviders>
-   <ClaimsProvider>
+    <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>  
+        <!--  Sample action required: Provide objectId and appId before using extension properties.
+          For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom -->
         <TechnicalProfile Id="AAD-Common">
-          <DisplayName>Azure Active Directory</DisplayName>
-          <!--  Demo action required: Provide objectId and appId before using extension properties.
-                For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom 
-                Action required: Insert objectId and appId here -->
+          <DisplayName>Azure Active Directory</DisplayName> 
           <Metadata>
             <Item Key="ApplicationObjectId">00000000-0000-0000-0000-000000000000</Item>
             <Item Key="ClientId">00000000-0000-0000-0000-000000000000</Item>
@@ -124,93 +121,49 @@
 
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
-            <!--Demo: Read the 'password reset on' extension attribute -->
+            <!--Sample: Read the 'password reset on' extension attribute -->
             <OutputClaim ClaimTypeReferenceId="extension_passwordResetOn" />
           </OutputClaims>
-          <OutputClaimsTransformations>
+            <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="SetCurrentDateTime" />
             <OutputClaimsTransformation ReferenceId="ComparePasswordResetOnWithCurrentDateTime" />
             <OutputClaimsTransformation ReferenceId="CheckIfPasswordResetOnPresent" />
             <OutputClaimsTransformation ReferenceId="CheckWhetherPasswordResetCanBeSkipped" />
-       </OutputClaimsTransformations>            
+          </OutputClaimsTransformations>            
         </TechnicalProfile>
 
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <InputClaimsTransformations>
-            <!--Demo: Get current date and time -->
+            <!--Sample: Get current date and time -->
             <InputClaimsTransformation ReferenceId="SetPasswordResetOn" />
           </InputClaimsTransformations>
           <PersistedClaims>
-            <!--Demo: On sign-up, set the 'password reset on' extension attribute with the current date and time -->
+            <!--Sample: On sign-up, set the 'password reset on' extension attribute with the current date and time -->
             <PersistedClaim ClaimTypeReferenceId="extension_passwordResetOn" />
           </PersistedClaims>
         </TechnicalProfile>
 
         <TechnicalProfile Id="AAD-UserWritePasswordUsingObjectId">
           <InputClaimsTransformations>
-            <!--Demo: Get current date and time -->
-            <InputClaimsTransformation ReferenceId="SetPasswordResetOn" />
+           <!--Sample: Get current date and time -->
+           <InputClaimsTransformation ReferenceId="SetPasswordResetOn" />
           </InputClaimsTransformations>
           <PersistedClaims>
-            <!--Demo: On sign-up, set the 'password reset on' extension attribute with the current date and time -->
+            <!--Sample: On sign-up, set the 'password reset on' extension attribute with the current date and time -->
             <PersistedClaim ClaimTypeReferenceId="extension_passwordResetOn" />
           </PersistedClaims>
         </TechnicalProfile>
-
       </TechnicalProfiles>
     </ClaimsProvider>
-
-    <!-- Local account Sign-In claims provider -->
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-		<TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-          <InputClaims>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-    <!-- Facebook claims provider -->
-	<ClaimsProvider>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <Metadata>
-            <!--Demo action required: Change to your Facebook App Id-->
-            <Item Key="client_id"></Item>
-            <Item Key="scope">email public_profile</Item>
-            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-          </Metadata>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignUpOrSignIn">
+    <UserJourney Id="SignUpOrSignInWithForcePasswordReset">
       <OrchestrationSteps>
-      
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
-           <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
@@ -227,7 +180,7 @@
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
-           <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -246,8 +199,8 @@
         </OrchestrationStep>
 
         <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
-          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
-          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+        using ESTS in step 2, then an user account must exist in the directory by this time. -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -261,7 +214,7 @@
         </OrchestrationStep>
 
         <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
-          in the token. -->
+        in the token. -->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
@@ -295,26 +248,24 @@
         </OrchestrationStep>
 
         <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
-             from the user. So, in that case, create the user in the directory if one does not already exist 
-             (verified using objectId which would be set from the last step if account was created in the directory. -->
+        from the user. So, in that case, create the user in the directory if one does not already exist 
+        (verified using objectId which would be set from the last step if account was created in the directory. -->
         <OrchestrationStep Order="7" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-          </Preconditions>
+            </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
           </ClaimsExchanges>
         </OrchestrationStep>
- 
+
         <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
- 
-      </OrchestrationSteps>
+
+        </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-
   </UserJourneys>
-
 </TrustFrameworkPolicy>
