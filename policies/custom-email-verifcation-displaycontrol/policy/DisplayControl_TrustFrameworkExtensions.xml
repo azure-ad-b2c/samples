@@ -1,13 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_DisplayControl_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_DisplayControl_TrustFrameworkExtensions">
-  
+<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:xsd="http://www.w3.org/2001/XMLSchema"  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"  PolicySchemaVersion="0.3.0.0"  TenantId="yourtenant.onmicrosoft.com"  PolicyId="B2C_1A_DisplayControl_TrustFrameworkExtensions"  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_DisplayControl_TrustFrameworkExtensions">
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -29,7 +21,6 @@
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
     </ClaimsSchema>
-
     <ClaimsTransformations>
       <ClaimsTransformation Id="GenerateSendGridRequestBody" TransformationMethod="GenerateJson">
         <InputClaims>
@@ -47,13 +38,11 @@
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
-
     <ContentDefinitions>
-     <ContentDefinition Id="api.localaccountsignup">
+      <ContentDefinition Id="api.localaccountsignup">
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.0.0</DataUri>
       </ContentDefinition>
     </ContentDefinitions>
-
     <DisplayControls>
       <DisplayControl Id="emailVerificationControl" UserInterfaceControlType="VerificationControl">
         <DisplayClaims>
@@ -78,9 +67,7 @@
         </Actions>
       </DisplayControl>
     </DisplayControls>
-
   </BuildingBlocks>
-
   <ClaimsProviders>
     <ClaimsProvider>
       <DisplayName>One time password technical profiles</DisplayName>
@@ -103,7 +90,6 @@
             <OutputClaim ClaimTypeReferenceId="otp" PartnerClaimType="otpGenerated" />
           </OutputClaims>
         </TechnicalProfile>
-
         <TechnicalProfile Id="VerifyOtp">
           <DisplayName>Verify one time password</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -121,7 +107,6 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>RestfulProvider</DisplayName>
       <TechnicalProfiles>
@@ -146,11 +131,10 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail-CustomEmail">
           <DisplayName>Email signup</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
@@ -183,12 +167,38 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
-
   </ClaimsProviders>
-
-    <!--UserJourneys>
-	
-	</UserJourneys-->
-
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignInCustomEmail">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail-CustomEmail"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
 </TrustFrameworkPolicy>
