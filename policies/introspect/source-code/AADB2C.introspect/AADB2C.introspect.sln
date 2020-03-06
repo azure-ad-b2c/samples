@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AADB2C.Introspect", "AADB2C.Introspect\AADB2C.Introspect.csproj", "{9ED2146E-514F-46EB-9F9B-E3D0B0DE745A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9ED2146E-514F-46EB-9F9B-E3D0B0DE745A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED2146E-514F-46EB-9F9B-E3D0B0DE745A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED2146E-514F-46EB-9F9B-E3D0B0DE745A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED2146E-514F-46EB-9F9B-E3D0B0DE745A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E811FC29-7953-4BC2-BF0F-FFC4B7715FAB}
+	EndGlobalSection
+EndGlobal
