@@ -97,7 +97,7 @@ extension_89...c2_requiresMigration   : True
 ## Deploy the Azure Function
 For users that have the ``requiresMigration`` flag set to True, the Custom Policy will make a REST API call to the Azure Function to validate the userid and password. The Azure Function uses AWS Cognito API [***AWSCognitoIdentityProviderService.InitiateAuth***](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_InitiateAuth.html) to do the authentication and the Function will return HTTP status 200 when AWS Cognito could authenticate the user and 409 with the error message "Could not verify migrated user in old system." which will be shown to the user. 
 
-In portal.azure.com, create and Azure Function app and create a new HttpTrigger function. Then replace all the code in ``run.csx`` with the code in this repo for [run.csx](/source-code/run.csx). Update the Configuration on the Azure Function App and add
+In portal.azure.com, create and Azure Function app and create a new HttpTrigger function. Then replace all the code in ``run.csx`` with the code in this repo for [run.csx](source-code/run.csx). Update the Configuration on the Azure Function App and add
 1. ``AWS_Region`` your AWS region, like ``eu-west-1``
 2. ``AWS_CognitoUserPoolAppClientId`` should be the client id value of the AWS Cognito App client that has a name that ends with "Ropc"
 Make sure you save the configuration.
