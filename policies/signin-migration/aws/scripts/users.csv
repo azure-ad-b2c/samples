@@ -1,0 +1,6 @@
+username;email;name;family_name;given_name;phone_number;phone_number_verified
+alice;alice@contoso.com;Alice Smith(contoso);Smith;Alice;+46111222333;true
+bob;bon@contoso.com;Bob Smith (contoso);Smith;Bob;+18001122;true
+carol;carol@contoso.com;Carol Smith (contoso);Smith;Carol;+44111222333;true
+dan;dan@contoso.com;Dan Smith (contoso);Smith;Dan;+46111222333;true
+erin;erin@contoso.com;Erin Smith (contoso);Smith;Erin;+18001122;false

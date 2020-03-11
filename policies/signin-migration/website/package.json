@@ -1,0 +1,15 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "tiny website for migrating authentication",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "cljung@microsoft.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "simple-oauth2": "^3.3.0"
+  }
+}
