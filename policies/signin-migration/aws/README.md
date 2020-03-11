@@ -4,7 +4,7 @@
 You need to create an [AWS Account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/). The registration process currently requires you to register a credit card to cover any costs. AWS Cognito is free up to 50K users, so there shouldn't be any cost incured, but please check the latest [pricing](https://aws.amazon.com/cognito/pricing/).
 
 ## Install AWS CLI
-This sample uses AWS CLI (Command Line Interface) to script the creation of AWS Cognito resources and also as part of the migration process. You therefor need to [install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html/). Currently, the scripts are written in Powershell, so if you want to run this on a Mac, you need [Powershell for Mac](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7).
+This sample uses AWS CLI (Command Line Interface) to script the creation of AWS Cognito resources and also as part of the migration process. You therefor need to [install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html). Currently, the scripts are written in Powershell, so if you want to run this on a Mac, you need [Powershell for Mac](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7).
 
 In order to use AWS CLI, you need to configure it so it can access your AWS Account. The instructions for this configuration can be found [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration).
 
@@ -38,14 +38,18 @@ The script ends with outputting details that we need for later stages, like to u
 ## Importing users
 
 The importing of users to AWS Cognito is quite straightforward and it only involves two steps:
-1. Edit the file users.csv to your liking
+1. Edit the file [users.csv](scripts/users.csv) to your liking
 2. Run the script [import-user-to-aws-cognito.ps1](scripts/import-user-to-aws-cognito.ps1)
 
 The CSV file contains fields that are to be imported and the key fields are username, email and phone_number + phone_number_verified. For rows with ``phone_number_verified`` set to ``true``, the ``phone_number`` field should be a phone in your posession as it will be migrated as your MFA phone, meaning when you test MFA you need the phone. The ``username`` and ``email`` fields need to be unique withing the file or you will have import failures.
 
 ```CSV
 username;email;name;family_name;given_name;phone_number;phone_number_verified
-cljungdemo;cljungdemo@outlook.com;Christer Ljung (cljungdemo);Ljung;Christer;+46734112233;true
+alice;alice@contoso.com;Alice Smith(contoso);Smith;Alice;+46111222333;true
+bob;bon@contoso.com;Bob Smith (contoso);Smith;Bob;+18001122;true
+carol;carol@contoso.com;Carol Smith (contoso);Smith;Carol;+44111222333;true
+dan;dan@contoso.com;Dan Smith (contoso);Smith;Dan;+46111222333;true
+erin;erin@contoso.com;Erin Smith (contoso);Smith;Erin;+18001122;false
 ```
 
 You then run the script with the below command. Note that the envvar AWS_UserPoolId was set by the previous script you ran.
@@ -55,7 +59,7 @@ You then run the script with the below command. Note that the envvar AWS_UserPoo
 ```
 
 When you are done, the AWS Console should look something like this
-![AWS Imported Users](/media/aws-userpool-users.png)
+![AWS Imported Users](../media/aws-userpool-users.png)
 
 ## Verifying that a user can login
 

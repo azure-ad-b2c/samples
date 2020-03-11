@@ -8,7 +8,7 @@ The node.js app is based on the examples in this [github repo](https://github.co
 To get the website up and running, you need to do the following
 1. [Install node and npm](https://nodejs.org/en/download/)
 2. Open a command prompt in the ***website*** folder and run ``npm install`` to install the website dependancies
-3. Edit file ``start-website-aws.cmd`` to update 
+3. Edit file [start-website-aws.cmd](start-website-aws.cmd) to update 
 * CLIENT_ID = from the AWS Console under ***General settings*** > ***App clients*** (not the *Ropc app)
 * CLIENT_SECRET = from the AWS Console under ***General settings*** > ***App clients*** (not the *Ropc app)
 * AUTH_DOMAIN = from the AWS Console under ***App integration*** > ***Domain name*** (copy everything from https:// to .com)
@@ -31,7 +31,7 @@ In Azure portal and in the B2C tenant.
 
 1. Goto ***App Registrations*** blade and select ***+ New registration***
 2. Give the app a name (B2C migration testapp) and specify ``http:localhost:3000/callback`` for the ***Redirect URI***, Register
-3. Edit file ``start-website-b2c.cmd`` to update 
+3. Edit file [start-website-b2c.cmd](start-website-b2c.cmd) to update
 * B2C_TENANT=yourtenant (without.onmicrosoft.com)
 * CLIENT_ID=Application (client) ID from the portal
 * CLIENT_SECRET=create a key in ***Certificates & secrets*** in the portal. (Remember to escape characters as needed) 

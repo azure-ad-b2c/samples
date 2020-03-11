@@ -8,7 +8,7 @@ In order to migrate all users, we need to register an Application that has ***Di
 
 ### Creating the App Registration via poral.azure.com
 Steps:
-1. Open the Azure portal and navigate to the B2C directory[portal.azure.com/yourtenant.onmicrosoft.com](https://portal.azure.com/yourtenant.onmicrosoft.com)
+1. Open the Azure portal and navigate to the B2C directory [portal.azure.com/yourtenant.onmicrosoft.com](https://portal.azure.com/yourtenant.onmicrosoft.com)
 2. Open the ***App registrations (Preview)*** blade in ***Azure Active Directory*** [or use this link](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredAppsPreview)
 3. ***+ New registration***, add ``http://localhost`` as Redirect URIs > Register
 4. Copy the ***Application (client) ID*** as you will need it later 
@@ -66,7 +66,7 @@ Note two things: 1) You will not see these attributes listed in the portal as th
 
 ---
 ## Migrate the users
-The migration script [migrate-users-from-aws-cognito.ps1](b2c\scripts\migrate-users-from-aws-cognito.ps1) uses AWS CLI to retrieve users from the AWS Cognito UserPool and Azure AD GraphAPI to create them in the B2C tenant. The AWS CLI has a pagination feature so we can iterate as many times as needed. 
+The migration script [migrate-users-from-aws-cognito.ps1](scripts/migrate-users-from-aws-cognito.ps1) uses AWS CLI to retrieve users from the AWS Cognito UserPool and Azure AD GraphAPI to create them in the B2C tenant. The AWS CLI has a pagination feature so we can iterate as many times as needed. 
 
 The parameters for running the migration script are:
 * -t : your tenant name
