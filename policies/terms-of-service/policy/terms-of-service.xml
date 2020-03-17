@@ -5,7 +5,7 @@
   PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_TermsOfService" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TermsOfService" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TermsOfService" >
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
