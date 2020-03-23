@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="{Settings:Tenant}" 
+  PolicyId="B2C_1A_UnknownDevicesMFA_TrustFrameworkExtensions" 
+  PublicPolicyUri="http://{Settings:Tenant}/B2C_1A_UnknownDevicesMFA_TrustFrameworkExtensions">
+
+  <BasePolicy>
+    <TenantId>{Settings:Tenant}</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="deviceUserId">
+        <DisplayName>Device user id</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="deviceId">
+        <DisplayName>Device id</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="verifiedDeviceId">
+        <DisplayName>Verified device Id</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="isVerifiedDevice">
+        <DisplayName>Is verified device</DisplayName>
+        <DataType>boolean</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ipAddress">
+        <DisplayName>IP address</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="userAgent">
+        <DisplayName>User Agent</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="ipAddressAndUserAgent">
+        <DisplayName>IP address and User Agent combined</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="authInformation">
+        <DisplayName></DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateDeviceUserId" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}@{RelyingPartyTenantId}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="deviceUserId" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="HashDeviceUserId" TransformationMethod="Hash">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="deviceUserId" TransformationClaimType="plaintext"/>
+          <InputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="salt"/>
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="randomizerSecret" DataType="string" Value="B2C_1A_DeviceInformationSecret" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="deviceUserId" TransformationClaimType="hash"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="FormatIpAddressAndUserAgent" TransformationMethod="FormatStringMultipleClaims">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="ipAddress" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="userAgent" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}{1}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="ipAddressAndUserAgent" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="ComputeDeviceId" TransformationMethod="Hash">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="ipAddressAndUserAgent" TransformationClaimType="plaintext"/>
+          <InputClaim ClaimTypeReferenceId="deviceUserId" TransformationClaimType="salt"/>
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="randomizerSecret" DataType="string" Value="B2C_1A_DeviceInformationSecret" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="deviceId" TransformationClaimType="hash"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="VerifyDeviceId" TransformationMethod="CompareClaims">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="deviceId" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="verifiedDeviceId" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="operator" DataType="string" Value="EQUAL" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="isVerifiedDevice" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>     
+    </ClaimsTransformations>
+
+    <ContentDefinitions>
+       <ContentDefinition Id="api.deviceinformation.collect">
+        <LoadUri>{Settings:DeviceInformationCollectContentDefinitionUri}</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Account verification</Item>
+        </Metadata>
+      </ContentDefinition>
+      <ContentDefinition Id="api.deviceinformation.register">
+        <LoadUri>{Settings:DeviceInformationRegisterContentDefinitionUri}</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Device verification</Item>
+        </Metadata>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Device Information</DisplayName>
+      <TechnicalProfiles>
+        <!--
+          Sample: Collect such information as userAgent, ipAddress, and deviceUserId to calculate deviceId.
+                  Collect previously recorded verifiedDeviceId to compare with calculated deviceId.
+        -->
+        <TechnicalProfile Id="SelfAsserted-DeviceInformation-Collect">
+          <DisplayName>Device Information Collect</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="language.button_continue">Continue</Item>
+            <Item Key="ContentDefinitionReferenceId">api.deviceinformation.collect</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateDeviceUserId"/>
+            <InputClaimsTransformation ReferenceId="HashDeviceUserId"/>
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="authInformation" DefaultValue="Account successfully verified. Please proceed further in order to validate your device information." AlwaysUseDefaultValue="true"/>
+            <InputClaim ClaimTypeReferenceId="deviceUserId" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="authInformation" />
+            <OutputClaim ClaimTypeReferenceId="deviceUserId" />
+            <!--Data collected in JavaScript-->
+            <OutputClaim ClaimTypeReferenceId="userAgent" />
+            <OutputClaim ClaimTypeReferenceId="verifiedDeviceId" />
+            <!--Validation technical profile output-->
+            <OutputClaim ClaimTypeReferenceId="deviceId" />
+            <OutputClaim ClaimTypeReferenceId="isVerifiedDevice" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="SelfAsserted-DeviceInformation-Verify"/>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+
+        <!---Sample: Detect unknown device comparing calculated deviceId with previously registered verifiedDeviceId-->
+        <TechnicalProfile Id="SelfAsserted-DeviceInformation-Verify">
+          <DisplayName>Device Information Validate</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>          
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="ipAddress" DefaultValue="{Context:IPAddress}" AlwaysUseDefaultValue="true"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="deviceId" />
+            <OutputClaim ClaimTypeReferenceId="isVerifiedDevice" />
+          </OutputClaims>
+          <OutputClaimsTransformations>            
+            <OutputClaimsTransformation ReferenceId="FormatIpAddressAndUserAgent"/>            
+            <OutputClaimsTransformation ReferenceId="ComputeDeviceId"/>
+            <OutputClaimsTransformation ReferenceId="VerifyDeviceId"/>    
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+
+        <!--Sample: Provide such information as deviceUserId and deviceId to register device information in the browser-->
+        <TechnicalProfile Id="SelfAsserted-DeviceInformation-Register">
+          <DisplayName>Device Information Register</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="language.button_continue">Continue</Item>
+            <Item Key="ContentDefinitionReferenceId">api.deviceinformation.register</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="authInformation" DefaultValue="Device information has been successfully verified. Please proceed further." AlwaysUseDefaultValue="true"/>
+            <InputClaim ClaimTypeReferenceId="deviceUserId" />
+            <InputClaim ClaimTypeReferenceId="deviceId" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="authInformation" />
+            <!--Data used in JavaScript -->
+            <OutputClaim ClaimTypeReferenceId="deviceUserId" />
+            <OutputClaim ClaimTypeReferenceId="deviceId" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+
+    <UserJourney Id="UnknownDevicesMFASignUpOrSignIn">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Collect and verify device information -->
+        <OrchestrationStep Order="7" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="DeviceInformationCollect" TechnicalProfileReferenceId="SelfAsserted-DeviceInformation-Collect"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Phone verification: If MFA is not required, the next three steps (#5-#7) should be removed.
+             This step checks whether there's a phone number on record,  for the user. If found, then the user is challenged to verify it. -->
+        <OrchestrationStep Order="8" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>isVerifiedDevice</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+         <!--Sample: Register device information for subsequent verifications-->
+        <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="DeviceInformationRegister" TechnicalProfileReferenceId="SelfAsserted-DeviceInformation-Register"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Save MFA phone number: The precondition verifies whether the user provided a new number in the 
+             previous step. If so, then the phone number is stored in the directory for future authentication 
+             requests. -->
+        <OrchestrationStep Order="10" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newPhoneNumberEntered</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="11" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+
+</TrustFrameworkPolicy>

@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "policy"
+		},
+		{
+			"path": "source-code"
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": ["azureadb2ctools.aadb2c"]
+	}
+}
