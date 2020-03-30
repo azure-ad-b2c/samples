@@ -8,19 +8,19 @@ Before generating and sending an OTP, we first take the users email and lookup t
 Using a precondition, on the basis of the objectId existing in the claimbag, we will send out the OTP. The XML snippet below demonstrates this.
 
 ```xml
-          <Action Id="SendCode">
-            <ValidationClaimsExchange>
-              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress-emailAddress" />
-              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AadSspr-SendCode">
-                <Preconditions>
-                  <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-                    <Value>objectId</Value>
-                    <Action>SkipThisValidationTechnicalProfile</Action>
-                  </Precondition>
-                </Preconditions>
-              </ValidationClaimsExchangeTechnicalProfile>
-            </ValidationClaimsExchange>
-          </Action>
+<Action Id="SendCode">
+    <ValidationClaimsExchange>
+        <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress-emailAddress" />
+        <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AadSspr-SendCode">
+        <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+            <Value>objectId</Value>
+            <Action>SkipThisValidationTechnicalProfile</Action>
+            </Precondition>
+        </Preconditions>
+        </ValidationClaimsExchangeTechnicalProfile>
+    </ValidationClaimsExchange>
+</Action>
 ```
 
 
