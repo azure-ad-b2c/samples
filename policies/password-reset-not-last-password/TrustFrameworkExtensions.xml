@@ -9,7 +9,7 @@
 	</BasePolicy>
 	<BuildingBlocks>
 		<ClaimsSchema>
-			<ClaimType Id="samePassword">
+			<ClaimType Id="SamePassword">
 				<DisplayName>samePassword</DisplayName>
 				<DataType>boolean</DataType>
 				<UserHelpText/>
@@ -94,7 +94,7 @@
 							<Preconditions>
 								<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
 									<Value>SamePassword</Value>
-									<Value>true</Value>
+									<Value>True</Value>
 									<Action>SkipThisValidationTechnicalProfile</Action>
 								</Precondition>
 							</Preconditions>
