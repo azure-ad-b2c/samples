@@ -113,6 +113,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - [Unknown Devices MFA](policies/mfa-unknown-devices) - Demonstrates how to detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device. 
     
 ## Generic enhancements
+- [Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) - Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.
+
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
 - [SAML Service Provider](https://docs.microsoft.com/en-us/azure/active-directory-b2c/connect-with-saml-service-providers)  This document walks you through adding a SAML-based Relying party to Azure AD B2C. 
