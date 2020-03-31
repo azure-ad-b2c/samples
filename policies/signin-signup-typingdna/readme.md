@@ -51,7 +51,7 @@ This is modelled with validationTechnicalProfiles within `SelfAsserted-LocalAcco
 
 - If the user obtains a typing pattern that has a high `net_score`, you can save this using the TypingDNA [Save Typing Pattern](https://api.typingdna.com/index.html#api-API_Services-saveUserPattern) endpoint. 
 
-Your API must return a claim  `saveTypingPattern` if you would like the TypingDNA Save Typing Pattern endpoint.
+Your API must return a claim  `saveTypingPattern` if you would like the TypingDNA Save Typing Pattern endpoint to be called by Azure AD B2C (via your API).
 
 - The example in the repo contains an API (TypingDNA-API-Interface) which is configured with the following properties.
 1. Training mode - If the user has less than 2 patterns saved, always prompt for MFA.
