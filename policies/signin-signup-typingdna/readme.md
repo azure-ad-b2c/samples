@@ -88,8 +88,9 @@ These thresholds should be adjusted on your use case.
 - Host the TypingDNA-API-Interface at your hosting provider of choice
 - Replace all instances of `apiKey` and `apiSecret` in TypingDNA-API-Interface solution with the credentials from your TypingDNA dashboard
 - Host the HTML files at your provider of choice following the CORS requirements [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#3-configure-cors)
-- Replace the TenantId's in the policy files and upload them your tenant
+- Replace the TenantId's in the policy files 
 - Replace the ServiceURLs in all TypingDNA REST API Technical profiles (REST-TDNA-VerifyUser, REST-TDNA-SaveUser, REST-TDNA-CheckUser) with the endpoint for your TypingDNA-API-Interface API.
+- Upload policy files to your tenant
 
 ## Live version
 - MFA has been disabled in this test version, but you can see the result on whether MFA would have been prompted by the claim `promptMFA` after authentication.
