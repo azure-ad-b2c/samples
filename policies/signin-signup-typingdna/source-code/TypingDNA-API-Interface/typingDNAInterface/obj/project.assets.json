@@ -12571,11 +12571,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jasuri\\source\\repos\\GTP\\Jasuri\\typingDNAInterface\\typingDNAInterface\\typingDNAInterface.csproj",
+      "projectUniqueName": "C:\\Users\\jasuri\\source\\repos\\Azure AD B2C\\samples\\policies\\signin-signup-typingdna\\source-code\\TypingDNA-API-Interface\\typingDNAInterface\\typingDNAInterface.csproj",
       "projectName": "typingDNAInterface",
-      "projectPath": "C:\\Users\\jasuri\\source\\repos\\GTP\\Jasuri\\typingDNAInterface\\typingDNAInterface\\typingDNAInterface.csproj",
+      "projectPath": "C:\\Users\\jasuri\\source\\repos\\Azure AD B2C\\samples\\policies\\signin-signup-typingdna\\source-code\\TypingDNA-API-Interface\\typingDNAInterface\\typingDNAInterface.csproj",
       "packagesPath": "C:\\Users\\jasuri\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jasuri\\source\\repos\\GTP\\Jasuri\\typingDNAInterface\\typingDNAInterface\\obj\\",
+      "outputPath": "C:\\Users\\jasuri\\source\\repos\\Azure AD B2C\\samples\\policies\\signin-signup-typingdna\\source-code\\TypingDNA-API-Interface\\typingDNAInterface\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\dotnet\\sdk\\NuGetFallbackFolder"

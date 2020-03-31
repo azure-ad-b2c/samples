@@ -27,8 +27,8 @@ namespace typingDNAInterface.Controllers
             }
             b2cUserModel inputClaims = b2cUserModel.Parse(input);
 
-            string apiKey = "cb8eae96f61d90ba1f0246ceaf5e48a7";
-            string apiSecret = "914bf9a71ee253fddaa3209262d387ff";
+            string apiKey = "your-apikey";
+            string apiSecret = "your-apisecret";
             string id = inputClaims.objectid;
             string base_url = string.Format("https://api.typingdna.com/user/{0}", id);
 
@@ -54,8 +54,8 @@ namespace typingDNAInterface.Controllers
                 }
                 b2cUserModel inputClaims = b2cUserModel.Parse(input);
 
-                string apiKey = "cb8eae96f61d90ba1f0246ceaf5e48a7";
-                string apiSecret = "914bf9a71ee253fddaa3209262d387ff";
+                string apiKey = "your-apikey";
+                string apiSecret = "your-apisecret";
                 string id = inputClaims.objectid;
                 string tp = inputClaims.typingPattern;
                 string quality = "2";
@@ -83,8 +83,8 @@ namespace typingDNAInterface.Controllers
             }
             b2cUserModel inputClaims = b2cUserModel.Parse(input);
 
-            string apiKey = "cb8eae96f61d90ba1f0246ceaf5e48a7";
-            string apiSecret = "914bf9a71ee253fddaa3209262d387ff";
+            string apiKey = "your-apikey";
+            string apiSecret = "your-apisecret";
             string id = inputClaims.objectid;
             string tp = inputClaims.typingPattern;
             int count = inputClaims.count;
