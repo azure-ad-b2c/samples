@@ -1,0 +1,15 @@
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\bin\Release\netcoreapp2.1\typingDNAInterface.deps.json
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\bin\Release\netcoreapp2.1\typingDNAInterface.runtimeconfig.json
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\bin\Release\netcoreapp2.1\typingDNAInterface.runtimeconfig.dev.json
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\bin\Release\netcoreapp2.1\typingDNAInterface.dll
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\bin\Release\netcoreapp2.1\typingDNAInterface.pdb
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.csprojAssemblyReference.cache
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.csproj.CoreCompileInputs.cache
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.RazorAssemblyInfo.cache
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.RazorAssemblyInfo.cs
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.AssemblyInfoInputs.cache
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.AssemblyInfo.cs
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.RazorTargetAssemblyInfo.cache
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.dll
+C:\Users\jasuri\source\repos\GTP\Jasuri\typingDNAInterface\typingDNAInterface\obj\Release\netcoreapp2.1\typingDNAInterface.pdb
