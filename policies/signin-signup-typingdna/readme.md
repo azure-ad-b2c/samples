@@ -18,7 +18,7 @@ Azure AD B2C utilizes TypingDNA's technologies to capture the users typing chara
 - The sample contains HTML files with the JavaScript and CSS modifications, and is referenced by the `api.selfasserted.tdnasignin` and `api.selfasserted.tdnasignup` content definitions. Follow [this](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#hosting-the-page-content) to host your HTML files.
 
 - Azure AD B2C now has the typing pattern within the claimbag when the user submits their credentials. It must call an API (yours) to pass this data to the TypingDNA REST API endpoint. This API is included in the sample (TypingDNA-API-Interface). 
-At sign up, the [Check User](https://api.typingdna.com/index.html#api-API_Services-GetUser) endpoint is called to confirm the user does not exist. Then the [https://api.typingdna.com/index.html#api-API_Services-saveUserPattern](Save Pattern) endpoint is called to save the users first typing pattern.
+At sign up, the [Check User](https://api.typingdna.com/index.html#api-API_Services-GetUser) endpoint is called to confirm the user does not exist. Then the [Save Pattern](https://api.typingdna.com/index.html#api-API_Services-saveUserPattern) endpoint is called to save the users first typing pattern.
 
 This is modelled with validationTechnicalProfiles within `LocalAccountSignUpWithLogonEmail-TDNA`:
 ```xml
