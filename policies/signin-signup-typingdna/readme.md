@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This scenario demonstrates how to integrate TypingDNA as a PSD2 SCA compliant authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
+This scenario demonstrates how to integrate TypingDNA as a [PSD2 SCA compliant](https://www.typingdna.com/use-cases/sca-strong-customer-authentication) authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
 
 Azure AD B2C utilizes TypingDNA's technologies to capture the users typing characteristics and have them recorded and analysed for familiarity on each authentication. This can add a layer of protection pertaining to the risky-ness of an authentication. The risk level can be evaluated and Azure AD B2C can invoke other mechanisms to provide further confidence the user is who they claim to be. This can be by invoking Azure MFA, forcing email verification, or any other custom logic for your scenario.
 
-> Note:  This sample policy is based on [SocialAndLocalAccountsWithMfa starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections.
+> Note:  This sample policy is based on [SocialAndLocalAccountsWithMfa starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa).
 
 
 ## How it works
@@ -20,7 +20,9 @@ Azure AD B2C utilizes TypingDNA's technologies to capture the users typing chara
 - Azure AD B2C now has the typing pattern within the claimbag when the user submits their credentials. It must call an API (yours) to pass this data to the TypingDNA REST API endpoint. This API is included in the sample (TypingDNA-API-Interface). 
 At sign up, the [Check User](https://api.typingdna.com/index.html#api-API_Services-GetUser) endpoint is called to confirm the user does not exist. Then the [Save Pattern](https://api.typingdna.com/index.html#api-API_Services-saveUserPattern) endpoint is called to save the users first typing pattern.
 
-This is modelled with validationTechnicalProfiles within `LocalAccountSignUpWithLogonEmail-TDNA`:
+> Note: All calls to the TypingDNA REST API endpoint send a UserId. This must be a hashed value. Azure AD B2C uses the `HashObjectIdWithEmail` claims transformation to hash the email with a random salt and secret.
+
+The REST API calls are modelled with validationTechnicalProfiles within `LocalAccountSignUpWithLogonEmail-TDNA`:
 ```xml
 <ValidationTechnicalProfiles>
     <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail-TDNA" />
@@ -88,6 +90,8 @@ These thresholds should be adjusted on your use case.
 - Host the TypingDNA-API-Interface at your hosting provider of choice
 - Replace all instances of `apiKey` and `apiSecret` in TypingDNA-API-Interface solution with the credentials from your TypingDNA dashboard
 - Host the HTML files at your provider of choice following the CORS requirements [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#3-configure-cors)
+- Replace the LoadURI elements for the `api.selfasserted.tdnasignup` and `api.selfasserted.tdnasignin` content definitions in the `TrustFrameworkExtensions.xml` file to the URI of your hosted HTML files respectively.
+- Create a B2C Policy key under Identity Experience Framework in the Azure AD Blade at the [Azure Portal](https://portal.azure.com). Use the `Generate` option and name this key `tdnaHashedId`.
 - Replace the TenantId's in the policy files 
 - Replace the ServiceURLs in all TypingDNA REST API Technical profiles (REST-TDNA-VerifyUser, REST-TDNA-SaveUser, REST-TDNA-CheckUser) with the endpoint for your TypingDNA-API-Interface API.
 - Upload policy files to your tenant
