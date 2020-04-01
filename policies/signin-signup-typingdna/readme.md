@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This scenario demonstrates how to integrate TypingDNA as a PSD2 SCA compliant authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
+This scenario demonstrates how to integrate TypingDNA as a [PSD2 SCA compliant](https://www.typingdna.com/use-cases/sca-strong-customer-authentication) authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
 
 Azure AD B2C utilizes TypingDNA's technologies to capture the users typing characteristics and have them recorded and analysed for familiarity on each authentication. This can add a layer of protection pertaining to the risky-ness of an authentication. The risk level can be evaluated and Azure AD B2C can invoke other mechanisms to provide further confidence the user is who they claim to be. This can be by invoking Azure MFA, forcing email verification, or any other custom logic for your scenario.
 
