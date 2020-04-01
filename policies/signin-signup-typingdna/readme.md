@@ -90,7 +90,8 @@ These thresholds should be adjusted on your use case.
 - Host the TypingDNA-API-Interface at your hosting provider of choice
 - Replace all instances of `apiKey` and `apiSecret` in TypingDNA-API-Interface solution with the credentials from your TypingDNA dashboard
 - Host the HTML files at your provider of choice following the CORS requirements [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#3-configure-cors)
-- Create a B2C Policy key using Generate option. Name this key `tdnaHashedId`.
+- Replace the LoadURI elements for the `api.selfasserted.tdnasignup` and `api.selfasserted.tdnasignin` to the URI of your hosted HTML files respectively.
+- Create a B2C Policy key under Identity Experience Framework in the Azure AD Blade at the [Azure Portal](https://portal.azure.com). Use the `Generate` option and name this key `tdnaHashedId`.
 - Replace the TenantId's in the policy files 
 - Replace the ServiceURLs in all TypingDNA REST API Technical profiles (REST-TDNA-VerifyUser, REST-TDNA-SaveUser, REST-TDNA-CheckUser) with the endpoint for your TypingDNA-API-Interface API.
 - Upload policy files to your tenant
