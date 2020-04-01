@@ -1,0 +1,1014 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_PH_TrustFrameworkLocalization"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_PH_TrustFrameworkLocalization">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ContentDefinitions>
+      <ContentDefinition Id="api.localaccountsignup">
+        <LocalizedResourcesReferences MergeBehavior="ReplaceAll">
+          <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.localaccountsignup.sv" />
+          <LocalizedResourcesReference Language="no" LocalizedResourcesReferenceId="api.localaccountsignup.nb" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.phonefactor">
+        <LoadUri>~/tenant/templates/AzureBlue/multifactor-1.0.0.cshtml</LoadUri>
+        <!-- <LoadUri>https://yourstorageaccountname.blob.core.windows.net/templates/multifactor-1.0.0.cshtml</LoadUri> -->
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.0</DataUri>
+        <LocalizedResourcesReferences MergeBehavior="ReplaceAll">
+          <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.phonefactor.sv" />
+          <LocalizedResourcesReference Language="no" LocalizedResourcesReferenceId="api.phonefactor.nb" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <!-- <LoadUri>https://yourstorageaccountname.blob.core.windows.net/templates/selfAsserted.cshtml</LoadUri>  -->
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.selfasserted.sv" />
+          <LocalizedResourcesReference Language="no" LocalizedResourcesReferenceId="api.selfasserted.nb" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <LocalizedResourcesReferences MergeBehavior="ReplaceAll">
+          <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.localaccountpasswordreset.sv" />
+          <LocalizedResourcesReference Language="nb" LocalizedResourcesReferenceId="api.localaccountpasswordreset.nb" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+    <Localization Enabled="true">
+      <SupportedLanguages DefaultLanguage="sv" MergeBehavior="ReplaceAll">
+        <SupportedLanguage>sv</SupportedLanguage>
+        <SupportedLanguage>nb</SupportedLanguage>
+        <SupportedLanguage>en</SupportedLanguage>
+      </SupportedLanguages>
+
+      <!-- ///////////////////////////////////// Swedish ///////////////////////////////////////////////// -->
+      <LocalizedResources Id="api.selfasserted.sv">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="countryCode" TargetCollection="Restriction">
+            <Item Value="SE" Text="Sverige(+46)" />
+            <Item Value="NO" Text="Norge (+47)" />
+            <Item Value="DK" Text="Danmark(+45)" />
+            <Item Value="FI" Text="Finland(+358)" />
+            <Item Value="AL" Text="Albanien(+355)" />
+            <Item Value="DZ" Text="Algeriet(+213)" />
+            <Item Value="AS" Text="Amerikansk Samoa(+1684)" />
+            <Item Value="AD" Text="Andorra(+376)" />
+            <Item Value="AO" Text="Angola(+244)" />
+            <Item Value="AI" Text="Anguilla(+1264)" />
+            <Item Value="AQ" Text="Antarktis(+672)" />
+            <Item Value="AG" Text="Antigua og Barbuda(+1268)" />
+            <Item Value="AR" Text="Argentina(+54)" />
+            <Item Value="AM" Text="Armenia(+374)" />
+            <Item Value="AW" Text="Aruba(+297)" />
+            <Item Value="AU" Text="Australia(+61)" />
+            <Item Value="AT" Text="Österrike(+43)" />
+            <Item Value="AZ" Text="Aserbadjan(+994)" />
+            <Item Value="BS" Text="Bahamas(+1242)" />
+            <Item Value="BH" Text="Bahrain(+973)" />
+            <Item Value="BD" Text="Bangladesh(+880)" />
+            <Item Value="BB" Text="Barbados(+1246)" />
+            <Item Value="BY" Text="Vitryssland(+375)" />
+            <Item Value="BE" Text="Belgien(+32)" />
+            <Item Value="BZ" Text="Belize(+501)" />
+            <Item Value="BJ" Text="Benin(+229)" />
+            <Item Value="BM" Text="Bermuda(+1441)" />
+            <Item Value="BT" Text="Bhutan(+975)" />
+            <Item Value="BO" Text="Bolivia(+591)" />
+            <Item Value="BQ" Text="Bonaire(+599)" />
+            <Item Value="BA" Text="Bosnien-Hercegovina(+387)" />
+            <Item Value="BW" Text="Botswana(+267)" />
+            <Item Value="BR" Text="Brasilen(+55)" />
+            <Item Value="VG" Text="Britiska jungfruöarna(+1284)" />
+            <Item Value="BN" Text="Brunei(+673)" />
+            <Item Value="BG" Text="Bulgarien(+359)" />
+            <Item Value="BF" Text="Burkina Faso(+226)" />
+            <Item Value="BI" Text="Burundi(+257)" />
+            <Item Value="KH" Text="Kambodja(+855)" />
+            <Item Value="CM" Text="Kamerun(+237)" />
+            <Item Value="CA" Text="Kanada(+1)" />
+            <Item Value="CV" Text="Cap Verde(+238)" />
+            <Item Value="KY" Text="Caymanöarna(+1345)" />
+            <Item Value="CF" Text="Centralafrikanska republiken(+236)" />
+            <Item Value="TD" Text="Tchad(+235)" />
+            <Item Value="CL" Text="Chile(+56)" />
+            <Item Value="CN" Text="Kina(+86)" />
+            <Item Value="CO" Text="Colombia(+57)" />
+            <Item Value="KM" Text="Komorene(+269)" />
+            <Item Value="CG" Text="Kongo-Brazzaville(+242)" />
+            <Item Value="CK" Text="Cooköarna(+682)" />
+            <Item Value="CR" Text="Costa Rica(+506)" />
+            <Item Value="CI" Text="Elfenbenskusten(+225)" />
+            <Item Value="HR" Text="Kroatien(+385)" />
+            <Item Value="CU" Text="Kuba(+53)" />
+            <Item Value="CZ" Text="Nederländska antillerna(+599)" />
+            <Item Value="CW" Text="Cypern(+357)" />
+            <Item Value="CZ" Text="Tjeckien(+420)" />
+            <Item Value="CD" Text="Kongo(+243)" />
+            <Item Value="DJ" Text="Djibouti(+253)" />
+            <Item Value="DM" Text="Dominica(+1767)" />
+            <Item Value="DO" Text="Donimikanska republiken(+1)" />
+            <Item Value="TL" Text="Timor-Leste(+670)" />
+            <Item Value="EC" Text="Equador(+593)" />
+            <Item Value="EG" Text="Egypten(+20)" />
+            <Item Value="SV" Text="El Salvador(+503)" />
+            <Item Value="GQ" Text="Ekvatorial-Guinea(+240)" />
+            <Item Value="ER" Text="Eritrea(+291)" />
+            <Item Value="EE" Text="Estland(+372)" />
+            <Item Value="ET" Text="Etiopien(+251)" />
+            <Item Value="FK" Text="Falklandsöarna(Malvinas)" />
+            <Item Value="FO" Text="Färöarna(+298)" />
+            <Item Value="FJ" Text="Fiji(+679)" />
+            <Item Value="FR" Text="Frankrike(+33)" />
+            <Item Value="GF" Text="Fransk Guyana(+594)" />
+            <Item Value="PF" Text="Fransk Polynesia(+689)" />
+            <Item Value="GA" Text="Gabon(+241)" />
+            <Item Value="GM" Text="Gambia(+220)" />
+            <Item Value="GE" Text="Georgia(+995)" />
+            <Item Value="DE" Text="Tyskland(+49)" />
+            <Item Value="GH" Text="Ghana(+233)" />
+            <Item Value="GI" Text="Gibraltar(+350)" />
+            <Item Value="GR" Text="Hellas(+30)" />
+            <Item Value="GL" Text="GrÃ¸nland(+299)" />
+            <Item Value="GD" Text="Grenada(+1473)" />
+            <Item Value="GP" Text="Guadeloupe(+590)" />
+            <Item Value="GU" Text="Guam(+1671)" />
+            <Item Value="GT" Text="Guatemala(+502)" />
+            <Item Value="GN" Text="Guinea(+224)" />
+            <Item Value="GW" Text="Guinea-Bissau(+245)" />
+            <Item Value="GY" Text="Guyana(+592)" />
+            <Item Value="HT" Text="Haiti(+509)" />
+            <Item Value="HN" Text="Honduras(+504)" />
+            <Item Value="HK" Text="Hongkong SAR(+852)" />
+            <Item Value="HU" Text="Ungern(+36)" />
+            <Item Value="IS" Text="Island(+354)" />
+            <Item Value="IN" Text="Indien(+91)" />
+            <Item Value="ID" Text="Indonesien(+62)" />
+            <Item Value="IR" Text="Iran(+98)" />
+            <Item Value="IQ" Text="Irak(+964)" />
+            <Item Value="IE" Text="Irland(+353)" />
+            <Item Value="IL" Text="Israel(+972)" />
+            <Item Value="IT" Text="Italien(+39)" />
+            <Item Value="JM" Text="Jamaica(+1)" />
+            <Item Value="JP" Text="Japan(+81)" />
+            <Item Value="JO" Text="Jordanien(+962)" />
+            <Item Value="KZ" Text="Kasakhstan(+7)" />
+            <Item Value="KE" Text="Kenya(+254)" />
+            <Item Value="KI" Text="Kiribati(+686)" />
+            <Item Value="KW" Text="Kuwait(+965)" />
+            <Item Value="KG" Text="Kirgisistan(+996)" />
+            <Item Value="LA" Text="Laos(+856)" />
+            <Item Value="LV" Text="Lettland(+371)" />
+            <Item Value="LB" Text="Libanon(+961)" />
+            <Item Value="LS" Text="Lesotho(+266)" />
+            <Item Value="LR" Text="Liberia(+231)" />
+            <Item Value="LY" Text="Libyen(+218)" />
+            <Item Value="LI" Text="Liechtenstein(+423)" />
+            <Item Value="LT" Text="Litauen(+370)" />
+            <Item Value="LU" Text="Luxemburg(+352)" />
+            <Item Value="MO" Text="Macao SAR(+853)" />
+            <Item Value="MK" Text="Nord-Makedonia(+389)" />
+            <Item Value="MG" Text="Madagaskar(+261)" />
+            <Item Value="MW" Text="Malawi(+265)" />
+            <Item Value="MY" Text="Malaysia(+60)" />
+            <Item Value="MV" Text="Maldiverna(+960)" />
+            <Item Value="ML" Text="Mali(+223)" />
+            <Item Value="MT" Text="Malta(+356)" />
+            <Item Value="MH" Text="Marshallöarna(+692)" />
+            <Item Value="MQ" Text="Martinique(+596)" />
+            <Item Value="MR" Text="Mauritania(+222)" />
+            <Item Value="MU" Text="Mauritius(+230)" />
+            <Item Value="MX" Text="Mexico(+52)" />
+            <Item Value="FM" Text="MikronesiafÃ¸derasjonen(+691)" />
+            <Item Value="MD" Text="Moldova(+373)" />
+            <Item Value="MC" Text="Monaco(+377)" />
+            <Item Value="MN" Text="Mongolia(+976)" />
+            <Item Value="ME" Text="Montenegro(+382)" />
+            <Item Value="MS" Text="Montserrat(+1664)" />
+            <Item Value="MA" Text="Marocko(+212)" />
+            <Item Value="MZ" Text="Mosambik(+258)" />
+            <Item Value="MM" Text="Myanmar(+95)" />
+            <Item Value="NA" Text="Namibia(+264)" />
+            <Item Value="NR" Text="Nauru(+674)" />
+            <Item Value="NP" Text="Nepal(+977)" />
+            <Item Value="NL" Text="Nederländerna(+31)" />
+            <Item Value="NC" Text="Ny-Caledonia(+687)" />
+            <Item Value="NZ" Text="New Zealand(+64)" />
+            <Item Value="NI" Text="Nicaragua(+505)" />
+            <Item Value="NE" Text="Niger(+227)" />
+            <Item Value="NG" Text="Nigeria(+234)" />
+            <Item Value="NU" Text="Niue(+683)" />
+            <Item Value="KP" Text="Nord-Korea(North Korea)" />
+            <Item Value="OM" Text="Oman(+968)" />
+            <Item Value="PK" Text="Pakistan(+92)" />
+            <Item Value="PW" Text="Palau(+680)" />
+            <Item Value="PS" Text="Den palestinske selvstyremyndighet(+970)" />
+            <Item Value="PA" Text="Panama(+507)" />
+            <Item Value="PG" Text="Papua Ny-Guinea(+675)" />
+            <Item Value="PY" Text="Paraguay(+595)" />
+            <Item Value="PE" Text="Peru(+51)" />
+            <Item Value="PH" Text="Filippinene(+63)" />
+            <Item Value="PL" Text="Polen(+48)" />
+            <Item Value="PT" Text="Portugal(+351)" />
+            <Item Value="PR" Text="Puerto Rico(+1)" />
+            <Item Value="QA" Text="Qatar(+974)" />
+            <Item Value="RE" Text="Mayotte(+262)" />
+            <Item Value="RO" Text="Rumänien(+40)" />
+            <Item Value="RU" Text="Ryssland(+7)" />
+            <Item Value="RW" Text="Rwanda(+250)" />
+            <Item Value="SH" Text="St. Helena, Ascension, Tristan da Cunha(+290)" />
+            <Item Value="KN" Text="Saint Kitts og Nevis(+1869)" />
+            <Item Value="LC" Text="St. Lucia(+1758)" />
+            <Item Value="PM" Text="Saint-Pierre-et-Miquelon(+508)" />
+            <Item Value="VC" Text="St. Vincent og Grenadinene(+1784)" />
+            <Item Value="MP" Text="Nord-Marianene(CNMI)" />
+            <Item Value="WS" Text="Samoa(+685)" />
+            <Item Value="SM" Text="San Marino(+378)" />
+            <Item Value="ST" Text="SÃ£o TomÃ© og PrÃ­ncipe(+239)" />
+            <Item Value="SA" Text="Saudi-Arabien(+966)" />
+            <Item Value="SN" Text="Senegal(+221)" />
+            <Item Value="RS" Text="Serbien(+381)" />
+            <Item Value="SC" Text="Seychellene(+248)" />
+            <Item Value="SL" Text="Sierra Leone(+232)" />
+            <Item Value="SG" Text="Singapore(+65)" />
+            <Item Value="SK" Text="Slovakia(+421)" />
+            <Item Value="SI" Text="Slovenia(+386)" />
+            <Item Value="SB" Text="SalomonÃ¸yene(+677)" />
+            <Item Value="SO" Text="Somalia(+252)" />
+            <Item Value="ZA" Text="Sydafrika(+27)" />
+            <Item Value="KR" Text="Syd-Korea(+82)" />
+            <Item Value="SS" Text="Södra Sudan(+211)" />
+            <Item Value="ES" Text="Spanien(+34)" />
+            <Item Value="LK" Text="Sri Lanka(+94)" />
+            <Item Value="SD" Text="Sudan(+249)" />
+            <Item Value="SR" Text="Surinam(+597)" />
+            <Item Value="SZ" Text="Eswatini(+268)" />
+            <Item Value="CH" Text="Schweiz(+41)" />
+            <Item Value="SY" Text="Syrien(+963)" />
+            <Item Value="TW" Text="Taiwan(+886)" />
+            <Item Value="TJ" Text="Tadsjikistan(+992)" />
+            <Item Value="TZ" Text="Tanzania(+255)" />
+            <Item Value="TH" Text="Thailand(+66)" />
+            <Item Value="TG" Text="Togo(+228)" />
+            <Item Value="TK" Text="Tokelau(+690)" />
+            <Item Value="TO" Text="Tonga(+676)" />
+            <Item Value="TT" Text="Trinidad och Tobago(+1868)" />
+            <Item Value="TN" Text="Tunisia(+216)" />
+            <Item Value="TR" Text="Tyrkiet(+90)" />
+            <Item Value="TM" Text="Turkmenistan(+993)" />
+            <Item Value="TC" Text="Turks- og CaicosÃ¸yene(+1649)" />
+            <Item Value="TV" Text="Tuvalu(+688)" />
+            <Item Value="UG" Text="Uganda(+256)" />
+            <Item Value="UA" Text="Ukraina(+380)" />
+            <Item Value="UA" Text="Ukraina(+971)" />
+            <Item Value="GB" Text="Storbritannien(+44)" />
+            <Item Value="US" Text="USA(+1)" />
+            <Item Value="VI" Text="Amerikanska jungfruöarna(+1340)" />
+            <Item Value="UY" Text="Uruguay(+598)" />
+            <Item Value="UZ" Text="Usbekistan(+998)" />
+            <Item Value="VU" Text="Vanuatu(+678)" />
+            <Item Value="VA" Text="Vatikanstaten(Vatican City State)" />
+            <Item Value="VE" Text="Venezuela(+58)" />
+            <Item Value="VN" Text="Vietnam(+84)" />
+            <Item Value="WF" Text="Wallis og Futuna(+681)" />
+            <Item Value="YE" Text="Jemen(+967)" />
+            <Item Value="ZM" Text="Zambia(+260)" />
+            <Item Value="ZW" Text="Zimbabwe(+263)" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="countryCode" StringId="DisplayName">Telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="countryCode" StringId="UserHelpText">Ange det nationella telefonnumret</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="nationalNumber" StringId="DisplayName">Ange det nationella telefonnumret</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="nationalNumber" StringId="UserHelpText">Ange det nationella telefonnumret</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="AgreedToTermsOfService" StringId="DisplayName">Jag godkänner användarvillkoren</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="testPhoneNumber" StringId="DisplayName">Telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="DisplayName">Bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="UserHelpText">En verifieringskod har skickats till din inkorg. Kopiera den till inmatningsrutan nedan.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 tecken, med 3 av 4 av följande: små bokstäver, versaler, siffror (0-9) och en eller flera av följande symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Ange nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Bekräfta nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 tecken, med 3 av 4 av följande: små bokstäver, versaler, siffror (0-9) och en eller flera av följande symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Bekräfta nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">E-Post</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Ange ett giltigt e-postmeddelande</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">E-post som kan användas för att kontakta dig.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">Det finns för många förfrågningar just nu. Vänta lite och försök sedan igen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Uttalandet bekräftas inte: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">En användare med det angivna ID existerar redan. Välj en annan.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Fel mönster för: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} har ogiltig inmatning.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Saknat element: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Fel vid validering: {0}</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClasses">Lösenordet måste innehålla minst {0} av följande:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClassesAll">Lösenordet måste innehålla alla följande:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StrongPassword" StringId="CharacterClasses">Lösenordet måste innehålla minst {0} av följande:</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">Ett ogiltigt tecken angavs.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRange" StringId="HelpText">Datumet måste vara mellan {0} och {1}.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRangeBetween1905AndToday" StringId="HelpText">Datumet måste vara mellan 1905-01-01 och idag.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">Lösenordet får inte starta eller sluta med ett mellanslagstecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="ExactLength" StringId="HelpText">Lösenordet måste innehålla exakt {0} tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="IsLengthBetween8And64" StringId="HelpText">Lösenordet måste innehålla mellan 8 och 64 tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="LengthRange" StringId="HelpText">Lösenordet måste innehålla mellan {0} och {1} tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Lowercase" StringId="HelpText">ett litet bokstav</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Number" StringId="HelpText">ett tal</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="PIN" StringId="HelpText">Lösenordet får endast innehålla siffror.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Symbol" StringId="HelpText">en symbol</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Uppercase" StringId="HelpText">en stor bokstav</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_message">Är du säker på att du vill avbryta ange dina uppgifter?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_no">Nej</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_title">Avbryt och ange dina uppgifter</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_yes">Ja</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsätt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">Användaren har avbrutit identifieringen av självverifierad information</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="day">Dag</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Ett eller flera fält fylls felaktigt in. Kontrollera listorna och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Fältet med lösenordsinmatning matchar inte. Ange samma lösenord i båda fälten och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Ett obligatoriskt fält saknas. Fyll i alla obligatoriska fält och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">Vad är det här?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Ange följande information.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="month">Månad</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="months">Januari, februari, mars, april, maj, juni, juli, augusti, september, oktober, november, december</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Vänta lite</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Denna information är obligatorisk.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_default">Standard</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Ändra e-post</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Skicka ny kod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Skicka kod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Bekräfta koden</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Koden har gått ut. Begär en ny kod.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Du har gjort för många felaktiga försök. Försök igen senare.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Den här koden är felaktig. Försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Vi har problem med att verifiera din e-post. Ange ett giltigt e-postmeddelandemeddelande och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Det har varit för många förfrågningar för att bekräfta detta e-postmeddelande. Vänta lite och försök sedan igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_incorrect_format">Fel format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">En verifieringskod har skickats till din inkorg. Kopiera den till inmatningsrutan nedan.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekräftelse krävs. Klicka på Skicka.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_sent">Verifieringskoden har skickats till:</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-post bekräftad. Du kan fortsätta.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postmeddelandet har bekräftats. Du kan nu fortsätta.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vänta medan vi bearbetar din information.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.phonefactor.sv">
+        <LocalizedCollections></LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="countryList">
+            <![CDATA[{"NO":"Norge","SE":"Sverige","DK":"Danmark","FI":"Finland","AF":"Afghanistan","AL":"Albania","DZ":"Algerie","AS":"Amerikansk Samoa","AD":"Andorra","AO":"Angola","AI":"Anguilla","AQ":"Antarktis","AG":"Antigua og Barbuda","AR":"Argentina","AM":"Armenia","AW":"Aruba","AZ":"Aserbajdsjan","AU":"Australia","BS":"Bahamas","BH":"Bahrain","BD":"Bangladesh","BB":"Barbados","BE":"Belgia","BZ":"Belize","BJ":"Benin","BM":"Bermuda","BT":"Bhutan","BO":"Bolivia","BQ":"Bonaire","BA":"Bosnia-Hercegovina","BW":"Botswana","BV":"Bouvetøya","BR":"Brasil","BN":"Brunei","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","CV":"Cabo Verde","CA":"Canada","KY":"Caymanøyene","CL":"Chile","CX":"Christmasøya","CO":"Colombia","CK":"Cookøyene","CR":"Costa Rica","CU":"Cuba","CW":"Curaçao","VI":"De amerikanske jomfruøyene","VG":"De britiske jomfruøyene","AE":"De forente arabiske emirater","TF":"De franske sørterritorier","DO":"Den dominikanske republikk","PS":"Den palestinske selvstyremyndighet","CF":"Den sentralafrikanske republikk","IO":"Det britiske territoriet i Indiahavet","DJ":"Djibouti","DM":"Dominica","EC":"Ecuador","EG":"Egypt","GQ":"Ekvatorial-Guinea","SV":"El Salvador","CI":"Elfenbenskysten (Côte d’Ivoire)","ER":"Eritrea","EE":"Estland","SZ":"Eswatini","ET":"Etiopia","FK":"Falklandsøyene","FJ":"Fiji","PH":"Filippinene","FR":"Frankrike","GF":"Fransk Guyana","PF":"Fransk Polynesia","FO":"Færøyene","GA":"Gabon","GM":"Gambia","GE":"Georgia","GH":"Ghana","GI":"Gibraltar","GD":"Grenada","GL":"Grønland","GP":"Guadeloupe","GU":"Guam","GT":"Guatemala","GG":"Guernsey","GN":"Guinea","GW":"Guinea-Bissau","GY":"Guyana","HT":"Haiti","GR":"Hellas","HN":"Honduras","HK":"Hongkong SAR","BY":"Hviterussland","IN":"India","ID":"Indonesia","IQ":"Irak","IR":"Iran","IE":"Irland","IS":"Island","IL":"Israel","IT":"Italia","JM":"Jamaica","JP":"Japan","YE":"Jemen","JE":"Jersey","JO":"Jordan","KH":"Kambodsja","CM":"Kamerun","KZ":"Kasakhstan","KE":"Kenya","CN":"Kina","KG":"Kirgisistan","KI":"Kiribati","CC":"Kokosøyene","KM":"Komorene","CD":"Kongo","CG":"Kongo-Brazzaville","HR":"Kroatia","KW":"Kuwait","CY":"Kypros","LA":"Laos","LV":"Latvia","LS":"Lesotho","LB":"Libanon","LR":"Liberia","LY":"Libya","LI":"Liechtenstein","LT":"Litauen","LU":"Luxemburg","MO":"Macao SAR","MG":"Madagaskar","MW":"Malawi","MY":"Malaysia","MV":"Maldivene","ML":"Mali","MT":"Malta","IM":"Man","MA":"Marokko","MH":"Marshalløyene","MQ":"Martinique","MR":"Mauritania","MU":"Mauritius","YT":"Mayotte","MX":"Mexico","FM":"Mikronesiaføderasjonen","MD":"Moldova","MC":"Monaco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MZ":"Mosambik","MM":"Myanmar","NA":"Namibia","NR":"Nauru","NL":"Nederland","NP":"Nepal","NZ":"New Zealand","NI":"Nicaragua","NE":"Niger","NG":"Nigeria","NU":"Niue","KP":"Nord-Korea","MK":"Nord-Makedonia","MP":"Nord-Marianene","NF":"Norfolkøya","NC":"Ny-Caledonia","OM":"Oman","PK":"Pakistan","PW":"Palau","PA":"Panama","PG":"Papua Ny-Guinea","PY":"Paraguay","PE":"Peru","PN":"Pitcairn","PL":"Polen","PT":"Portugal","PR":"Puerto Rico","QA":"Qatar","RE":"Réunion","RO":"Romania","RU":"Russland","RW":"Rwanda","KN":"Saint Kitts og Nevis","BL":"Saint-Barthélemy","MF":"Saint-Martin","PM":"Saint-Pierre-et-Miquelon","SB":"Salomonøyene","WS":"Samoa","SM":"San Marino","ST":"São Tomé og Príncipe","SA":"Saudi-Arabia","SN":"Senegal","RS":"Serbia","SC":"Seychellene","SL":"Sierra Leone","SG":"Singapore","SX":"Sint Maarten","SK":"Slovakia","SI":"Slovenia","SO":"Somalia","ES":"Spania","LK":"Sri Lanka","SH":"St. Helena, Ascension, Tristan da Cunha","LC":"St. Lucia","VC":"St. Vincent og Grenadinene","GB":"Storbritannia","SD":"Sudan","SR":"Surinam","SJ":"Svalbard","CH":"Sveits","SY":"Syria","ZA":"Sør-Afrika","GS":"Sør-Georgia og Sør-Sandwichøyene","KR":"Sør-Korea","SS":"Sør-Sudan","TJ":"Tadsjikistan","TW":"Taiwan","TZ":"Tanzania","HM":"Territoriet Heard- og McDonaldøyene","TH":"Thailand","TL":"Timor-Leste","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad og Tobago","TD":"Tsjad","CZ":"Tsjekkia","TN":"Tunisia","TM":"Turkmenistan","TC":"Turks- og Caicosøyene","TV":"Tuvalu","TR":"Tyrkia","DE":"Tyskland","UG":"Uganda","UA":"Ukraina","HU":"Ungarn","UY":"Uruguay","US":"USA","UM":"USAs ytre øyer","UZ":"Usbekistan","VU":"Vanuatu","VA":"Vatikanstaten","VE":"Venezuela","VN":"Vietnam","WF":"Wallis og Futuna","ZM":"Zambia","ZW":"Zimbabwe","AT":"Østerrike","AX":"Åland"}]]>
+          </LocalizedString>
+          <!-- <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsätt</LocalizedString> -->
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.localaccountpasswordreset.sv">
+        <LocalizedCollections></LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="DisplayName">Bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="UserHelpText">En verifieringskod har skickats till din inkorg. Kopiera den till inmatningsrutan nedan.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="UserId" StringId="DisplayName">Användarnamn</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="UserId" StringId="PatternHelpText">Det angivna användarnamnet är ogiltigt. Det måste börja med ett alfabetiskt tecken eller ett nummer och kan endast innehålla alfanumeriska tecken och följande symboler: _ -</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="UserId" StringId="UserHelpText">Användarnamn som används för inloggning.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">E-Post</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Ange ett giltigt e-postmeddelande</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">E-post som kan användas för att kontakta dig.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 tecken, med 3 av 4 av följande: små bokstäver, versaler, siffror (0-9) och en eller flera av följande symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Ange nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Bekräfta nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 tecken, med 3 av 4 av följande: små bokstäver, versaler, siffror (0-9) och en eller flera av följande symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Bekräfta nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Det gick inte att hitta ett konto för den angivna e-postadressen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">Ditt konto är låst. Kontakta supporten för att låsa upp det och försök igen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsTransformationStringsAreNotEqual">Det gick inte att hitta ett konto för det angivna användar-ID.</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClasses">Lösenordet måste innehålla minst {0} av följande:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClassesAll">Lösenordet måste innehålla alla följande:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StrongPassword" StringId="CharacterClasses">Lösenordet måste innehålla minst {0} av följande:</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">Ett ogiltigt tecken angavs.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRange" StringId="HelpText">Datumet måste vara mellan {0} och {1}.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRangeBetween1905AndToday" StringId="HelpText">Datumet måste vara mellan 1905-01-01 och idag.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">Lösenordet får inte starta eller sluta med ett mellanslagstecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="ExactLength" StringId="HelpText">Lösenordet måste innehålla exakt {0} tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="IsLengthBetween8And64" StringId="HelpText">Lösenordet måste innehålla mellan 8 och 64 tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="LengthRange" StringId="HelpText">Lösenordet måste innehålla mellan {0} och {1} tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Lowercase" StringId="HelpText">ett litet bokstav</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Number" StringId="HelpText">ett tal</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="PIN" StringId="HelpText">Lösenordet får endast innehålla siffror.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Symbol" StringId="HelpText">en symbol</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Uppercase" StringId="HelpText">en stor bokstav</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_message">Är du säker på att du vill avbryta ange dina uppgifter?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_no">Nej</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_title">Avbryt och ange dina uppgifter</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_yes">Ja</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsätt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">Användaren har avbrutit identifieringen av självverifierad information</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="day">Dag</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Ett eller flera fält fylls felaktigt in. Kontrollera listorna och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Fältet med lösenordsinmatning matchar inte. Ange samma lösenord i båda fälten och försök ige.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Ett obligatoriskt fält saknas. Fyll i alla obligatoriska fält och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">Vad är det här?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Ange följande information.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="month">Månad</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="months">Januari, februari, mars, april, maj, juni, juli, augusti, september, oktober, november, december</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Vänta lite</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Denna information är obligatorisk.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_default">Standard</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Ändra e-post</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Skicka ny kod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Skicka bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Bekräfta koden</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Koden har gått ut. Begär en ny kod.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Du har gjort för många felförsök. Försök igen senare.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Den här koden är felaktig. Prov igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Vi har problem med att verifiera din e-post. Ange ett giltigt e-postmeddelande och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Det har vært for mange foresporsler om å bekrefte denne E-Postn. Vänta lite, og prov deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_incorrect_format">Fel format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">En verifieringskod har skickats till din inkorg. Kopiera den till inmatningsrutan nedan.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nodvendig. Klikk Send-knappen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_sent">Verifieringskoden har skickats till:</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-post bekräftad. Du kan fortsätta.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postmeddelandet har bekräftats. Du kan nu fortsätta.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vänta medan vi bearbetar din information.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.localaccountsignup.sv">
+        <LocalizedCollections></LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="AgreedToTermsOfService" StringId="DisplayName">Jag godkänner användarvillkoren</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="testPhoneNumber" StringId="DisplayName">Telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="DisplayName">Bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="UserHelpText">En verifieringskod har skickats till din inkorg. Kopiera den till inmatningsrutan nedan.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 tecken, med 3 av 4 av följande: små bokstäver, versaler, siffror (0-9) och en eller flera av följande symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Ange nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Bekräfta nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 tecken, med 3 av 4 av följande: små bokstäver, versaler, siffror (0-9) och en eller flera av följande symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Bekräfta nytt lösenord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">E-Post</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Ange ett giltigt e-postmeddelande</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">E-post som kan användas för att kontakta dig.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">Det finns för många förfrågningar just nu. Vänta lite och försök sedan igen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Uttalandet bekräftas inte: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">En användare med det angivna ID existerar redan. Välj en annan.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Fel mönster för: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} har ogiltig inmatning.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Saknat element: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Fel vid validering: {0}</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClasses">Lösenordet måste innehålla minst {0} av följande:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClassesAll">Lösenordet måste innehålla alla följande:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StrongPassword" StringId="CharacterClasses">Lösenordet måste innehålla minst {0} av följande:</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">Ett ogiltigt tecken angavs.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRange" StringId="HelpText">Datumet måste vara mellan {0} och {1}.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRangeBetween1905AndToday" StringId="HelpText">Datumet måste vara mellan 1905-01-01 och idag.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">Lösenordet får inte starta eller sluta med ett mellanslagstecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="ExactLength" StringId="HelpText">Lösenordet måste innehålla exakt {0} tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="IsLengthBetween8And64" StringId="HelpText">Lösenordet måste innehålla mellan 8 och 64 tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="LengthRange" StringId="HelpText">Lösenordet måste innehålla mellan {0} och {1} tecken.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Lowercase" StringId="HelpText">ett litet bokstav</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Number" StringId="HelpText">ett tal</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="PIN" StringId="HelpText">Lösenordet får endast innehålla siffror.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Symbol" StringId="HelpText">en symbol</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Uppercase" StringId="HelpText">en stor bokstav</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_message">Är du säker på att du vill avbryta ange dina uppgifter?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_no">Nej</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_title">Avbryt och ange dina uppgifter</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_yes">Ja</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsätt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">Användaren har avbrutit identifieringen av självverifierad information</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="day">Dag</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Ett eller flera fält fylls felaktigt in. Kontrollera listorna och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Fältet med lösenordsinmatning matchar inte. Ange samma lösenord i båda fälten och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Ett obligatoriskt fält saknas. Fyll i alla obligatoriska fält och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">Vad är det här?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Ange följande information.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="month">Månad</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="months">Januari, februari, mars, april, maj, juni, juli, augusti, september, oktober, november, december</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Vänta lite</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Denna information är obligatorisk.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_default">Standard</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Ändra e-post</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Skicka ny kod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Skicka kod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Bekräfta koden</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Koden har gått ut. Begär en ny kod.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Du har gjort för många felaktiga försök. Försök igen senare.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Den här koden är felaktig. Försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Vi har problem med att verifiera din e-post. Ange ett giltigt e-postmeddelandemeddelande och försök igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Det har varit för många förfrågningar för att bekräfta detta e-postmeddelande. Vänta lite och försök sedan igen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_incorrect_format">Fel format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">En verifieringskod har skickats till din inkorg. Kopiera den till inmatningsrutan nedan.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Bekräftelsekod</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekräftelse krävs. Klicka på Skicka.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_sent">Verifieringskoden har skickats till:</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-post bekräftad. Du kan fortsätta.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postmeddelandet har bekräftats. Du kan nu fortsätta.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vänta medan vi bearbetar din information.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
+
+        </LocalizedStrings>
+      </LocalizedResources>
+      <!-- end SE -->
+
+      <!-- ///////////////////////////////////// Norwegian ///////////////////////////////////////////////// -->
+      <LocalizedResources Id="api.selfasserted.nb">
+        <LocalizedCollections>
+          <LocalizedCollection ElementType="ClaimType" ElementId="countryCode" TargetCollection="Restriction">
+            <Item Value="NO" Text="Norge (+47)" />
+            <Item Value="SE" Text="Sverige(+46)" />
+            <Item Value="AL" Text="Albania(+355)" />
+            <Item Value="DZ" Text="Algerie(+213)" />
+            <Item Value="AS" Text="Amerikansk Samoa(+1684)" />
+            <Item Value="AD" Text="Andorra(+376)" />
+            <Item Value="AO" Text="Angola(+244)" />
+            <Item Value="AI" Text="Anguilla(+1264)" />
+            <Item Value="AQ" Text="Antarktis(+672)" />
+            <Item Value="AG" Text="Antigua og Barbuda(+1268)" />
+            <Item Value="AR" Text="Argentina(+54)" />
+            <Item Value="AM" Text="Armenia(+374)" />
+            <Item Value="AW" Text="Aruba(+297)" />
+            <Item Value="AU" Text="Australia(+61)" />
+            <Item Value="AT" Text="Ã˜sterrike(+43)" />
+            <Item Value="AZ" Text="Aserbajdsjan(+994)" />
+            <Item Value="BS" Text="Bahamas(+1242)" />
+            <Item Value="BH" Text="Bahrain(+973)" />
+            <Item Value="BD" Text="Bangladesh(+880)" />
+            <Item Value="BB" Text="Barbados(+1246)" />
+            <Item Value="BY" Text="Hviterussland(+375)" />
+            <Item Value="BE" Text="Belgia(+32)" />
+            <Item Value="BZ" Text="Belize(+501)" />
+            <Item Value="BJ" Text="Benin(+229)" />
+            <Item Value="BM" Text="Bermuda(+1441)" />
+            <Item Value="BT" Text="Bhutan(+975)" />
+            <Item Value="BO" Text="Bolivia(+591)" />
+            <Item Value="BQ" Text="Bonaire(+599)" />
+            <Item Value="BA" Text="Bosnia-Hercegovina(+387)" />
+            <Item Value="BW" Text="Botswana(+267)" />
+            <Item Value="BR" Text="Brasil(+55)" />
+            <Item Value="VG" Text="De britiske jomfruÃ¸yene(+1284)" />
+            <Item Value="BN" Text="Brunei(+673)" />
+            <Item Value="BG" Text="Bulgaria(+359)" />
+            <Item Value="BF" Text="Burkina Faso(+226)" />
+            <Item Value="BI" Text="Burundi(+257)" />
+            <Item Value="KH" Text="Kambodsja(+855)" />
+            <Item Value="CM" Text="Kamerun(+237)" />
+            <Item Value="CA" Text="Canada(+1)" />
+            <Item Value="CV" Text="Cabo Verde(+238)" />
+            <Item Value="KY" Text="CaymanÃ¸yene(+1345)" />
+            <Item Value="CF" Text="Den sentralafrikanske republikk(+236)" />
+            <Item Value="TD" Text="Tsjad(+235)" />
+            <Item Value="CL" Text="Chile(+56)" />
+            <Item Value="CN" Text="Kina(+86)" />
+            <Item Value="CO" Text="Colombia(+57)" />
+            <Item Value="KM" Text="Komorene(+269)" />
+            <Item Value="CG" Text="Kongo-Brazzaville(+242)" />
+            <Item Value="CK" Text="CookÃ¸yene(+682)" />
+            <Item Value="CR" Text="Costa Rica(+506)" />
+            <Item Value="CI" Text="Elfenbenskysten (CÃ´te dâ€™Ivoire)(+225)" />
+            <Item Value="HR" Text="Kroatia(+385)" />
+            <Item Value="CU" Text="Cuba(+53)" />
+            <Item Value="CZ" Text="Tsjekkia(+599)" />
+            <Item Value="CW" Text="CuraÃ§ao(+357)" />
+            <Item Value="CZ" Text="Tsjekkia(+420)" />
+            <Item Value="CD" Text="Kongo(+243)" />
+            <Item Value="DK" Text="Danmark(+45)" />
+            <Item Value="DJ" Text="Djibouti(+253)" />
+            <Item Value="DM" Text="Dominica(+1767)" />
+            <Item Value="DO" Text="Den dominikanske republikk(+1)" />
+            <Item Value="TL" Text="Timor-Leste(+670)" />
+            <Item Value="EC" Text="Ecuador(+593)" />
+            <Item Value="EG" Text="Egypt(+20)" />
+            <Item Value="SV" Text="El Salvador(+503)" />
+            <Item Value="GQ" Text="Ekvatorial-Guinea(+240)" />
+            <Item Value="ER" Text="Eritrea(+291)" />
+            <Item Value="EE" Text="Estland(+372)" />
+            <Item Value="ET" Text="Etiopia(+251)" />
+            <Item Value="FK" Text="FalklandsÃ¸yene(Malvinas)" />
+            <Item Value="FO" Text="FÃ¦rÃ¸yene(+298)" />
+            <Item Value="FJ" Text="Fiji(+679)" />
+            <Item Value="FI" Text="Finland(+358)" />
+            <Item Value="FR" Text="Frankrike(+33)" />
+            <Item Value="GF" Text="Fransk Guyana(+594)" />
+            <Item Value="PF" Text="Fransk Polynesia(+689)" />
+            <Item Value="GA" Text="Gabon(+241)" />
+            <Item Value="GM" Text="Gambia(+220)" />
+            <Item Value="GE" Text="Georgia(+995)" />
+            <Item Value="DE" Text="Tyskland(+49)" />
+            <Item Value="GH" Text="Ghana(+233)" />
+            <Item Value="GI" Text="Gibraltar(+350)" />
+            <Item Value="GR" Text="Hellas(+30)" />
+            <Item Value="GL" Text="GrÃ¸nland(+299)" />
+            <Item Value="GD" Text="Grenada(+1473)" />
+            <Item Value="GP" Text="Guadeloupe(+590)" />
+            <Item Value="GU" Text="Guam(+1671)" />
+            <Item Value="GT" Text="Guatemala(+502)" />
+            <Item Value="GN" Text="Guinea(+224)" />
+            <Item Value="GW" Text="Guinea-Bissau(+245)" />
+            <Item Value="GY" Text="Guyana(+592)" />
+            <Item Value="HT" Text="Haiti(+509)" />
+            <Item Value="HN" Text="Honduras(+504)" />
+            <Item Value="HK" Text="Hongkong SAR(+852)" />
+            <Item Value="HU" Text="Ungarn(+36)" />
+            <Item Value="IS" Text="Island(+354)" />
+            <Item Value="IN" Text="India(+91)" />
+            <Item Value="ID" Text="Indonesia(+62)" />
+            <Item Value="IR" Text="Iran(+98)" />
+            <Item Value="IQ" Text="Irak(+964)" />
+            <Item Value="IE" Text="Irland(+353)" />
+            <Item Value="IL" Text="Israel(+972)" />
+            <Item Value="IT" Text="Italia(+39)" />
+            <Item Value="JM" Text="Jamaica(+1)" />
+            <Item Value="JP" Text="Japan(+81)" />
+            <Item Value="JO" Text="Jordan(+962)" />
+            <Item Value="KZ" Text="Kasakhstan(+7)" />
+            <Item Value="KE" Text="Kenya(+254)" />
+            <Item Value="KI" Text="Kiribati(+686)" />
+            <Item Value="KW" Text="Kuwait(+965)" />
+            <Item Value="KG" Text="Kirgisistan(+996)" />
+            <Item Value="LA" Text="Laos(+856)" />
+            <Item Value="LV" Text="Latvia(+371)" />
+            <Item Value="LB" Text="Libanon(+961)" />
+            <Item Value="LS" Text="Lesotho(+266)" />
+            <Item Value="LR" Text="Liberia(+231)" />
+            <Item Value="LY" Text="Libya(+218)" />
+            <Item Value="LI" Text="Liechtenstein(+423)" />
+            <Item Value="LT" Text="Litauen(+370)" />
+            <Item Value="LU" Text="Luxemburg(+352)" />
+            <Item Value="MO" Text="Macao SAR(+853)" />
+            <Item Value="MK" Text="Nord-Makedonia(+389)" />
+            <Item Value="MG" Text="Madagaskar(+261)" />
+            <Item Value="MW" Text="Malawi(+265)" />
+            <Item Value="MY" Text="Malaysia(+60)" />
+            <Item Value="MV" Text="Maldivene(+960)" />
+            <Item Value="ML" Text="Mali(+223)" />
+            <Item Value="MT" Text="Malta(+356)" />
+            <Item Value="MH" Text="MarshallÃ¸yene(+692)" />
+            <Item Value="MQ" Text="Martinique(+596)" />
+            <Item Value="MR" Text="Mauritania(+222)" />
+            <Item Value="MU" Text="Mauritius(+230)" />
+            <Item Value="MX" Text="Mexico(+52)" />
+            <Item Value="FM" Text="MikronesiafÃ¸derasjonen(+691)" />
+            <Item Value="MD" Text="Moldova(+373)" />
+            <Item Value="MC" Text="Monaco(+377)" />
+            <Item Value="MN" Text="Mongolia(+976)" />
+            <Item Value="ME" Text="Montenegro(+382)" />
+            <Item Value="MS" Text="Montserrat(+1664)" />
+            <Item Value="MA" Text="Marokko(+212)" />
+            <Item Value="MZ" Text="Mosambik(+258)" />
+            <Item Value="MM" Text="Myanmar(+95)" />
+            <Item Value="NA" Text="Namibia(+264)" />
+            <Item Value="NR" Text="Nauru(+674)" />
+            <Item Value="NP" Text="Nepal(+977)" />
+            <Item Value="NL" Text="Nederland(+31)" />
+            <Item Value="NC" Text="Ny-Caledonia(+687)" />
+            <Item Value="NZ" Text="New Zealand(+64)" />
+            <Item Value="NI" Text="Nicaragua(+505)" />
+            <Item Value="NE" Text="Niger(+227)" />
+            <Item Value="NG" Text="Nigeria(+234)" />
+            <Item Value="NU" Text="Niue(+683)" />
+            <Item Value="KP" Text="Nord-Korea(North Korea)" />
+            <Item Value="OM" Text="Oman(+968)" />
+            <Item Value="PK" Text="Pakistan(+92)" />
+            <Item Value="PW" Text="Palau(+680)" />
+            <Item Value="PS" Text="Den palestinske selvstyremyndighet(+970)" />
+            <Item Value="PA" Text="Panama(+507)" />
+            <Item Value="PG" Text="Papua Ny-Guinea(+675)" />
+            <Item Value="PY" Text="Paraguay(+595)" />
+            <Item Value="PE" Text="Peru(+51)" />
+            <Item Value="PH" Text="Filippinene(+63)" />
+            <Item Value="PL" Text="Polen(+48)" />
+            <Item Value="PT" Text="Portugal(+351)" />
+            <Item Value="PR" Text="Puerto Rico(+1)" />
+            <Item Value="QA" Text="Qatar(+974)" />
+            <Item Value="RE" Text="RÃ©union(+262)" />
+            <Item Value="RO" Text="Romania(+40)" />
+            <Item Value="RU" Text="Russland(+7)" />
+            <Item Value="RW" Text="Rwanda(+250)" />
+            <Item Value="SH" Text="St. Helena, Ascension, Tristan da Cunha(+290)" />
+            <Item Value="KN" Text="Saint Kitts og Nevis(+1869)" />
+            <Item Value="LC" Text="St. Lucia(+1758)" />
+            <Item Value="PM" Text="Saint-Pierre-et-Miquelon(+508)" />
+            <Item Value="VC" Text="St. Vincent og Grenadinene(+1784)" />
+            <Item Value="MP" Text="Nord-Marianene(CNMI)" />
+            <Item Value="WS" Text="Samoa(+685)" />
+            <Item Value="SM" Text="San Marino(+378)" />
+            <Item Value="ST" Text="SÃ£o TomÃ© og PrÃ­ncipe(+239)" />
+            <Item Value="SA" Text="Saudi-Arabia(+966)" />
+            <Item Value="SN" Text="Senegal(+221)" />
+            <Item Value="RS" Text="Serbia(+381)" />
+            <Item Value="SC" Text="Seychellene(+248)" />
+            <Item Value="SL" Text="Sierra Leone(+232)" />
+            <Item Value="SG" Text="Singapore(+65)" />
+            <Item Value="SK" Text="Slovakia(+421)" />
+            <Item Value="SI" Text="Slovenia(+386)" />
+            <Item Value="SB" Text="SalomonÃ¸yene(+677)" />
+            <Item Value="SO" Text="Somalia(+252)" />
+            <Item Value="ZA" Text="SÃ¸r-Afrika(+27)" />
+            <Item Value="KR" Text="SÃ¸r-Korea(+82)" />
+            <Item Value="SS" Text="SÃ¸r-Sudan(+211)" />
+            <Item Value="ES" Text="Spania(+34)" />
+            <Item Value="LK" Text="Sri Lanka(+94)" />
+            <Item Value="SD" Text="Sudan(+249)" />
+            <Item Value="SR" Text="Surinam(+597)" />
+            <Item Value="SZ" Text="Eswatini(+268)" />
+            <Item Value="CH" Text="Sveits(+41)" />
+            <Item Value="SY" Text="Syria(+963)" />
+            <Item Value="TW" Text="Taiwan(+886)" />
+            <Item Value="TJ" Text="Tadsjikistan(+992)" />
+            <Item Value="TZ" Text="Tanzania(+255)" />
+            <Item Value="TH" Text="Thailand(+66)" />
+            <Item Value="TG" Text="Togo(+228)" />
+            <Item Value="TK" Text="Tokelau(+690)" />
+            <Item Value="TO" Text="Tonga(+676)" />
+            <Item Value="TT" Text="Trinidad og Tobago(+1868)" />
+            <Item Value="TN" Text="Tunisia(+216)" />
+            <Item Value="TR" Text="Tyrkia(+90)" />
+            <Item Value="TM" Text="Turkmenistan(+993)" />
+            <Item Value="TC" Text="Turks- og CaicosÃ¸yene(+1649)" />
+            <Item Value="TV" Text="Tuvalu(+688)" />
+            <Item Value="UG" Text="Uganda(+256)" />
+            <Item Value="UA" Text="Ukraina(+380)" />
+            <Item Value="UA" Text="Ukraina(+971)" />
+            <Item Value="GB" Text="Storbritannia(+44)" />
+            <Item Value="US" Text="USA(+1)" />
+            <Item Value="VI" Text="De amerikanske jomfruÃ¸yene(+1340)" />
+            <Item Value="UY" Text="Uruguay(+598)" />
+            <Item Value="UZ" Text="Usbekistan(+998)" />
+            <Item Value="VU" Text="Vanuatu(+678)" />
+            <Item Value="VA" Text="Vatikanstaten(Vatican City State)" />
+            <Item Value="VE" Text="Venezuela(+58)" />
+            <Item Value="VN" Text="Vietnam(+84)" />
+            <Item Value="WF" Text="Wallis og Futuna(+681)" />
+            <Item Value="YE" Text="Jemen(+967)" />
+            <Item Value="ZM" Text="Zambia(+260)" />
+            <Item Value="ZW" Text="Zimbabwe(+263)" />
+          </LocalizedCollection>
+        </LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="countryCode" StringId="DisplayName">Telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="countryCode" StringId="UserHelpText">Tast inn nasjonalt telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="nationalNumber" StringId="DisplayName">Tast inn nasjonalt telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="nationalNumber" StringId="UserHelpText">Tast inn nasjonalt telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="AgreedToTermsOfService" StringId="DisplayName">Jeg godtar vilkår for bruk</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="testPhoneNumber" StringId="DisplayName">Telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="DisplayName">Bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="UserHelpText">Bekreftelseskoden er sendt til innboksen din. Kopier den til inndataboksen nedenfor.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 tegn, med 3 av 4 av følgende: små bokstaver, store bokstaver, tall (0-9) og ett eller flere av følgende symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Angi nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Bekreft nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 tegn, med 3 av 4 av følgende: små bokstaver, store bokstaver, tall (0-9) og ett eller flere av følgende symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Bekreft nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">E-postadresse</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Angi en gyldig e-postadresse.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">E-postadressen som kan brukes til å kontakte deg.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">Det er for mange forespørsler for øyeblikket. Vent litt, og prøv deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Erklæringen er ikke bekreftet: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">En bruker med den angitte ID-en finnes allerede. Velg en annen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Feil mønster for: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} har ugyldige inndata.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Mangler påkrevd element: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Feil ved validering av: {0}</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClasses">Passordet må inneholde minst {0} av følgende:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClassesAll">Passordet må inneholde alt av følgende:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StrongPassword" StringId="CharacterClasses">Passordet må inneholde minst {0} av følgende:</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">Et ugyldig tegn ble angitt.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRange" StringId="HelpText">Datoen må være mellom {0} og {1}.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRangeBetween1905AndToday" StringId="HelpText">Datoen må være mellom 01-01-1905 og i dag.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">Passordet må ikke begynne eller slutte med et mellomromstegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="ExactLength" StringId="HelpText">Passordet må inneholde nøyaktig {0} tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="IsLengthBetween8And64" StringId="HelpText">Passordet må inneholde mellom 8 og 64 tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="LengthRange" StringId="HelpText">Passordet må inneholde mellom {0} og {1} tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Lowercase" StringId="HelpText">en liten bokstav</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Number" StringId="HelpText">et tall</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="PIN" StringId="HelpText">Passordet må kun inneholde tall.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Symbol" StringId="HelpText">et symbol</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Uppercase" StringId="HelpText">en stor bokstav</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_message">Er du sikker på at du vil avbryte angivelsen av detaljene dine?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_no">Nei</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_title">Avbryt angivelse av detaljene dine</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_yes">Ja</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsett</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">Brukeren har avbrutt angivelse av selvbekreftet informasjon</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="day">Dag</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Ett eller flere felt er fylt ut på feil måte. Kontroller oppføringene, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Passordoppføringsfeltene samsvarer ikke. Angi det samme passordet i begge feltene, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Et obligatorisk felt mangler. Fyll ut alle obligatoriske felt, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">Hva er dette?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Oppgi følgende detaljer.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="month">Måned</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="months">Januar, februar, mars, april, mai, juni, juli, august, september, oktober, november, desember</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Vent litt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Denne informasjonen er obligatorisk.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_default">Standard</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Endre e-post</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send ny kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Bekreft kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Koden er utløpt. Be en ny kode.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Du har gjort for mange feil forsøk. Prøv på nytt senere.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Denne koden er feil. Prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Vi har problemer med å verifisere e-postadressen din. Skriv inn en gyldig e-postadresse, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Det har vært for mange forespørsler om å bekrefte denne e-postadressen. Vent litt, og prøv deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_incorrect_format">Feil format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Bekreftelseskoden er sendt til innboksen din. Kopier den til inndataboksen nedenfor.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nødvendig. Klikk Send-knappen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_sent">Bekreftelseskode har blitt sendt til:</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-postadresse bekreftet. Du kan fortsette.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postadressen er bekreftet. Du kan nå fortsette.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vent litt mens vi behandler informasjonen din.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.phonefactor.nb">
+        <LocalizedCollections></LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="countryList">
+            <![CDATA[{"NO":"Norge","SE":"Sverige","DK":"Danmark","FI":"Finland","AF":"Afghanistan","AL":"Albania","DZ":"Algerie","AS":"Amerikansk Samoa","AD":"Andorra","AO":"Angola","AI":"Anguilla","AQ":"Antarktis","AG":"Antigua og Barbuda","AR":"Argentina","AM":"Armenia","AW":"Aruba","AZ":"Aserbajdsjan","AU":"Australia","BS":"Bahamas","BH":"Bahrain","BD":"Bangladesh","BB":"Barbados","BE":"Belgia","BZ":"Belize","BJ":"Benin","BM":"Bermuda","BT":"Bhutan","BO":"Bolivia","BQ":"Bonaire","BA":"Bosnia-Hercegovina","BW":"Botswana","BV":"Bouvetøya","BR":"Brasil","BN":"Brunei","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","CV":"Cabo Verde","CA":"Canada","KY":"Caymanøyene","CL":"Chile","CX":"Christmasøya","CO":"Colombia","CK":"Cookøyene","CR":"Costa Rica","CU":"Cuba","CW":"Curaçao","VI":"De amerikanske jomfruøyene","VG":"De britiske jomfruøyene","AE":"De forente arabiske emirater","TF":"De franske sørterritorier","DO":"Den dominikanske republikk","PS":"Den palestinske selvstyremyndighet","CF":"Den sentralafrikanske republikk","IO":"Det britiske territoriet i Indiahavet","DJ":"Djibouti","DM":"Dominica","EC":"Ecuador","EG":"Egypt","GQ":"Ekvatorial-Guinea","SV":"El Salvador","CI":"Elfenbenskysten (Côte d’Ivoire)","ER":"Eritrea","EE":"Estland","SZ":"Eswatini","ET":"Etiopia","FK":"Falklandsøyene","FJ":"Fiji","PH":"Filippinene","FR":"Frankrike","GF":"Fransk Guyana","PF":"Fransk Polynesia","FO":"Færøyene","GA":"Gabon","GM":"Gambia","GE":"Georgia","GH":"Ghana","GI":"Gibraltar","GD":"Grenada","GL":"Grønland","GP":"Guadeloupe","GU":"Guam","GT":"Guatemala","GG":"Guernsey","GN":"Guinea","GW":"Guinea-Bissau","GY":"Guyana","HT":"Haiti","GR":"Hellas","HN":"Honduras","HK":"Hongkong SAR","BY":"Hviterussland","IN":"India","ID":"Indonesia","IQ":"Irak","IR":"Iran","IE":"Irland","IS":"Island","IL":"Israel","IT":"Italia","JM":"Jamaica","JP":"Japan","YE":"Jemen","JE":"Jersey","JO":"Jordan","KH":"Kambodsja","CM":"Kamerun","KZ":"Kasakhstan","KE":"Kenya","CN":"Kina","KG":"Kirgisistan","KI":"Kiribati","CC":"Kokosøyene","KM":"Komorene","CD":"Kongo","CG":"Kongo-Brazzaville","HR":"Kroatia","KW":"Kuwait","CY":"Kypros","LA":"Laos","LV":"Latvia","LS":"Lesotho","LB":"Libanon","LR":"Liberia","LY":"Libya","LI":"Liechtenstein","LT":"Litauen","LU":"Luxemburg","MO":"Macao SAR","MG":"Madagaskar","MW":"Malawi","MY":"Malaysia","MV":"Maldivene","ML":"Mali","MT":"Malta","IM":"Man","MA":"Marokko","MH":"Marshalløyene","MQ":"Martinique","MR":"Mauritania","MU":"Mauritius","YT":"Mayotte","MX":"Mexico","FM":"Mikronesiaføderasjonen","MD":"Moldova","MC":"Monaco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MZ":"Mosambik","MM":"Myanmar","NA":"Namibia","NR":"Nauru","NL":"Nederland","NP":"Nepal","NZ":"New Zealand","NI":"Nicaragua","NE":"Niger","NG":"Nigeria","NU":"Niue","KP":"Nord-Korea","MK":"Nord-Makedonia","MP":"Nord-Marianene","NF":"Norfolkøya","NC":"Ny-Caledonia","OM":"Oman","PK":"Pakistan","PW":"Palau","PA":"Panama","PG":"Papua Ny-Guinea","PY":"Paraguay","PE":"Peru","PN":"Pitcairn","PL":"Polen","PT":"Portugal","PR":"Puerto Rico","QA":"Qatar","RE":"Réunion","RO":"Romania","RU":"Russland","RW":"Rwanda","KN":"Saint Kitts og Nevis","BL":"Saint-Barthélemy","MF":"Saint-Martin","PM":"Saint-Pierre-et-Miquelon","SB":"Salomonøyene","WS":"Samoa","SM":"San Marino","ST":"São Tomé og Príncipe","SA":"Saudi-Arabia","SN":"Senegal","RS":"Serbia","SC":"Seychellene","SL":"Sierra Leone","SG":"Singapore","SX":"Sint Maarten","SK":"Slovakia","SI":"Slovenia","SO":"Somalia","ES":"Spania","LK":"Sri Lanka","SH":"St. Helena, Ascension, Tristan da Cunha","LC":"St. Lucia","VC":"St. Vincent og Grenadinene","GB":"Storbritannia","SD":"Sudan","SR":"Surinam","SJ":"Svalbard","CH":"Sveits","SY":"Syria","ZA":"Sør-Afrika","GS":"Sør-Georgia og Sør-Sandwichøyene","KR":"Sør-Korea","SS":"Sør-Sudan","TJ":"Tadsjikistan","TW":"Taiwan","TZ":"Tanzania","HM":"Territoriet Heard- og McDonaldøyene","TH":"Thailand","TL":"Timor-Leste","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad og Tobago","TD":"Tsjad","CZ":"Tsjekkia","TN":"Tunisia","TM":"Turkmenistan","TC":"Turks- og Caicosøyene","TV":"Tuvalu","TR":"Tyrkia","DE":"Tyskland","UG":"Uganda","UA":"Ukraina","HU":"Ungarn","UY":"Uruguay","US":"USA","UM":"USAs ytre øyer","UZ":"Usbekistan","VU":"Vanuatu","VA":"Vatikanstaten","VE":"Venezuela","VN":"Vietnam","WF":"Wallis og Futuna","ZM":"Zambia","ZW":"Zimbabwe","AT":"Østerrike","AX":"Åland"}]]>
+          </LocalizedString>
+          <!-- <LocalizedString ElementType="UxElement" StringId="button_continue">Opprett</LocalizedString> -->
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      
+      <LocalizedResources Id="api.localaccountpasswordreset.nb">
+        <LocalizedCollections></LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="DisplayName">Bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="UserHelpText">Bekreftelseskoden er sendt til innboksen din. Kopier den til inndataboksen nedenfor.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="UserId" StringId="DisplayName">Brukernavn</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="UserId" StringId="PatternHelpText">Det angitte brukernavnet er ugyldig. Det må begynne med et alfabetisk tegn eller tall, og kan bare inneholde alfanumeriske tegn og folgende symboler: _ -</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="UserId" StringId="UserHelpText">Brukernavn brukt til pålogging.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">E-postadresse</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Angi en gyldig e-postadresse.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">E-postadressen som kan brukes til å kontakte deg.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 tegn, med 3 av 4 av folgende: små bokstaver, store bokstaver, tall (0-9) og ett eller flere av folgende symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Angi nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Bekreft nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 tegn, med 3 av 4 av folgende: små bokstaver, store bokstaver, tall (0-9) og ett eller flere av folgende symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Bekreft nytt passord</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalDoesNotExist">Finner ikke en konto for den oppgitte e-postadressen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">Kontoen din har blitt låst. Ta kontakt med brukerstotte for å låse den opp, og prov deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsTransformationStringsAreNotEqual">Finner ikke en konto for den oppgitte bruker-ID-en.</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClasses">Passordet må inneholde minst {0} av folgende:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClassesAll">Passordet må inneholde alt av folgende:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StrongPassword" StringId="CharacterClasses">Passordet må inneholde minst {0} av folgende:</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">Et ugyldig tegn ble angitt.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRange" StringId="HelpText">Datoen må være mellom {0} og {1}.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRangeBetween1905AndToday" StringId="HelpText">Datoen må være mellom 01-01-1905 og i dag.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">Passordet må ikke begynne eller slutte med et mellomromstegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="ExactLength" StringId="HelpText">Passordet må inneholde noyaktig {0} tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="IsLengthBetween8And64" StringId="HelpText">Passordet må inneholde mellom 8 og 64 tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="LengthRange" StringId="HelpText">Passordet må inneholde mellom {0} og {1} tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Lowercase" StringId="HelpText">en liten bokstav</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Number" StringId="HelpText">et tall</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="PIN" StringId="HelpText">Passordet må kun inneholde tall.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Symbol" StringId="HelpText">et symbol</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Uppercase" StringId="HelpText">en stor bokstav</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_message">Er du sikker på at du vil avbryte angivelsen av detaljene dine?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_no">Nei</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_title">Avbryt angivelse av detaljene dine</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_yes">Ja</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsett</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">Brukeren har avbrutt angivelse av selvbekreftet informasjon</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="day">Dag</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Ett eller flere felt er fylt ut på feil måte. Kontroller oppforingene, og prov på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Passordoppforingsfeltene samsvarer ikke. Angi det samme passordet i begge feltene, og prov på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Et obligatorisk felt mangler. Fyll ut alle obligatoriske felt, og prov på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">Hva er dette?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Oppgi folgende detaljer.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="month">Måned</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="months">Januar, februar, mars, april, mai, juni, juli, august, september, oktober, november, desember</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Vent litt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Denne informasjonen er obligatorisk.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_default">Standard</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Endre e-post</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send ny kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Bekreft kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Koden er utlopt. Be en ny kode.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Du har gjort for mange feil forsok. Prov på nytt senere.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Denne koden er feil. Prov på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Vi har problemer med å verifisere e-postadressen din. Skriv inn en gyldig e-postadresse, og prov på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Det har vært for mange foresporsler om å bekrefte denne e-postadressen. Vent litt, og prov deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_incorrect_format">Feil format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Bekreftelseskoden er sendt til innboksen din. Kopier den til inndataboksen nedenfor.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nodvendig. Klikk Send-knappen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_sent">Bekreftelseskode har blitt sendt til:</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-postadresse bekreftet. Du kan fortsette.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postadressen er bekreftet. Du kan nå fortsette.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vent litt mens vi behandler informasjonen din.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+
+      <LocalizedResources Id="api.localaccountsignup.nb">
+        <LocalizedCollections></LocalizedCollections>
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="AgreedToTermsOfService" StringId="DisplayName">Jeg godtar vilkår for bruk</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="testPhoneNumber" StringId="DisplayName">Telefonnummer</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="DisplayName">Bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="VerificationCode" StringId="UserHelpText">Bekreftelseskoden er sendt til innboksen din. Kopier den til inndataboksen nedenfor.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="DisplayName">Nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="PatternHelpText">8-16 tegn, med 3 av 4 av følgende: små bokstaver, store bokstaver, tall (0-9) og ett eller flere av følgende symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="newPassword" StringId="UserHelpText">Angi nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="DisplayName">Bekreft nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="PatternHelpText">8-16 tegn, med 3 av 4 av følgende: små bokstaver, store bokstaver, tall (0-9) og ett eller flere av følgende symboler: @ # $ % ^ &amp; * - _ + = [ ] { } | \ : ' , ? / ` ~ " ( ) ; .</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="reenterPassword" StringId="UserHelpText">Bekreft nytt passord</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="DisplayName">E-postadresse</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Angi en gyldig e-postadresse.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="UserHelpText">E-postadressen som kan brukes til å kontakte deg.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="ServiceThrottled">Det er for mange forespørsler for øyeblikket. Vent litt, og prøv deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimNotVerified">Erklæringen er ikke bekreftet: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfClaimsPrincipalAlreadyExists">En bruker med den angitte ID-en finnes allerede. Velg en annen.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfIncorrectPattern">Feil mønster for: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidInput">{0} har ugyldige inndata.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMissingRequiredElement">Mangler påkrevd element: {0}</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfValidationError">Feil ved validering av: {0}</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClasses">Passordet må inneholde minst {0} av følgende:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="CustomPassword" StringId="CharacterClassesAll">Passordet må inneholde alt av følgende:</LocalizedString>
+          <LocalizedString ElementType="InputValidation" ElementId="StrongPassword" StringId="CharacterClasses">Passordet må inneholde minst {0} av følgende:</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="AllowedAADCharacters" StringId="HelpText">Et ugyldig tegn ble angitt.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRange" StringId="HelpText">Datoen må være mellom {0} og {1}.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DateRangeBetween1905AndToday" StringId="HelpText">Datoen må være mellom 01-01-1905 og i dag.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="DisallowedWhitespace" StringId="HelpText">Passordet må ikke begynne eller slutte med et mellomromstegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="ExactLength" StringId="HelpText">Passordet må inneholde nøyaktig {0} tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="IsLengthBetween8And64" StringId="HelpText">Passordet må inneholde mellom 8 og 64 tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="LengthRange" StringId="HelpText">Passordet må inneholde mellom {0} og {1} tegn.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Lowercase" StringId="HelpText">en liten bokstav</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Number" StringId="HelpText">et tall</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="PIN" StringId="HelpText">Passordet må kun inneholde tall.</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Symbol" StringId="HelpText">et symbol</LocalizedString>
+          <LocalizedString ElementType="Predicate" ElementId="Uppercase" StringId="HelpText">en stor bokstav</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_message">Er du sikker på at du vil avbryte angivelsen av detaljene dine?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_no">Nei</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_title">Avbryt angivelse av detaljene dine</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="alert_yes">Ja</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Opprett</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="cancel_message">Brukeren har avbrutt angivelse av selvbekreftet informasjon</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="day">Dag</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_fieldIncorrect">Ett eller flere felt er fylt ut på feil måte. Kontroller oppføringene, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_passwordEntryMismatch">Passordoppføringsfeltene samsvarer ikke. Angi det samme passordet i begge feltene, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="error_requiredFieldMissing">Et obligatorisk felt mangler. Fyll ut alle obligatoriske felt, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="helplink_text">Hva er dette?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="initial_intro">Oppgi følgende detaljer.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="month">Måned</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="months">Januar, februar, mars, april, mai, juni, juli, august, september, oktober, november, desember</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="preloader_alt">Vent litt</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="required_field">Denne informasjonen er obligatorisk.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_default">Standard</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_edit">Endre e-post</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_resend">Send ny kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_send">Send kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_but_verify">Bekreft kode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_code_expired">Koden er utløpt. Be en ny kode.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_no_retry">Du har gjort for mange feil forsøk. Prøv på nytt senere.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_retry">Denne koden er feil. Prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_server">Vi har problemer med å verifisere e-postadressen din. Skriv inn en gyldig e-postadresse, og prøv på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_fail_throttled">Det har vært for mange forespørsler om å bekrefte denne e-postadressen. Vent litt, og prøv deretter på nytt.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_incorrect_format">Feil format.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_info_msg">Bekreftelseskoden er sendt til innboksen din. Kopier den til inndataboksen nedenfor.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_input">Bekreftelseskode</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nødvendig. Klikk Send-knappen.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_sent">Bekreftelseskode har blitt sendt til:</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-postadresse bekreftet. Du kan fortsette.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postadressen er bekreftet. Du kan nå fortsette.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vent litt mens vi behandler informasjonen din.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
+
+        </LocalizedStrings>
+      </LocalizedResources>
+      <!-- end NO -->
+
+    </Localization>
+  </BuildingBlocks>
+</TrustFrameworkPolicy>

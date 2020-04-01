@@ -1,0 +1,661 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_PH_SUSI" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_PH_SUSI"
+>
+  <!-- for AppInsights, copy these to above
+    DeploymentMode="Development" 
+    UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights" 
+  -->
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_PH_TrustFrameworkLocalization</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+
+    <ClaimsSchema>
+      <ClaimType Id="signInNames.phoneNumber">
+        <DisplayName>+4XXXXXXXX</DisplayName>
+        <DataType>phoneNumber</DataType>
+        <UserHelpText>Tast inn ditt Telefonnummer +47XXXXXXXXXXX</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="signInName">
+        <DisplayName>+47XXXXXXXXXXX</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Tast inn ditt Telefonnummer +47XXXXXXXXXXX</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="phoneNumber">
+        <DisplayName>Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter Phone Number</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+        <PredicateValidationReference Id="internationalOrNationalPhoneNumber" />
+      </ClaimType>
+      <ClaimType Id="nationalNumber">
+        <DisplayName>Enter Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter Phone Number</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+        <Restriction>
+          <Pattern RegularExpression="^[0-9]{1,10}$" HelpText="" />
+        </Restriction>
+      </ClaimType>
+
+      <ClaimType Id="countryCode">
+        <DisplayName>Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Phone Number</UserHelpText>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Sweden(+46)" Value="SE" SelectByDefault="true"/>
+          <Enumeration Text="Norway(+47)" Value="NO" />
+          <Enumeration Text="Albania(+355)" Value="AL" />
+          <Enumeration Text="Algeria(+213)" Value="DZ" />
+          <Enumeration Text="American Samoa(+1684)" Value="AS" />
+          <Enumeration Text="Andorra(+376)" Value="AD" />
+          <Enumeration Text="Angola(+244)" Value="AO" />
+          <Enumeration Text="Anguilla(+1264)" Value="AI" />
+          <Enumeration Text="Antarctica(+672)" Value="AQ" />
+          <Enumeration Text="Antigua and Barbuda(+1268)" Value="AG" />
+          <Enumeration Text="Argentina(+54)" Value="AR" />
+          <Enumeration Text="Armenia(+374)" Value="AM" />
+          <Enumeration Text="Aruba(+297)" Value="AW" />
+          <Enumeration Text="Australia(+61)" Value="AU" />
+          <Enumeration Text="Austria(+43)" Value="AT" />
+          <Enumeration Text="Azerbaijan(+994)" Value="AZ" />
+          <Enumeration Text="Bahamas(+1242)" Value="BS" />
+          <Enumeration Text="Bahrain(+973)" Value="BH" />
+          <Enumeration Text="Bangladesh(+880)" Value="BD" />
+          <Enumeration Text="Barbados(+1246)" Value="BB" />
+          <Enumeration Text="Belarus(+375)" Value="BY" />
+          <Enumeration Text="Belgium(+32)" Value="BE" />
+          <Enumeration Text="Belize(+501)" Value="BZ" />
+          <Enumeration Text="Benin(+229)" Value="BJ" />
+          <Enumeration Text="Bermuda(+1441)" Value="BM" />
+          <Enumeration Text="Bhutan(+975)" Value="BT" />
+          <Enumeration Text="Bolivia(+591)" Value="BO" />
+          <Enumeration Text="Bonaire, Sint Eustatius and Saba(+599)" Value="BQ" />
+          <Enumeration Text="Bosnia and Herzegovina(+387)" Value="BA" />
+          <Enumeration Text="Botswana(+267)" Value="BW" />
+          <Enumeration Text="Brazil(+55)" Value="BR" />
+          <Enumeration Text="British Virgin Islands (+1284)" Value="VG" />
+          <Enumeration Text="Brunei Darussalam(+673)" Value="BN" />
+          <Enumeration Text="Bulgaria(+359)" Value="BG" />
+          <Enumeration Text="Burkina Faso(+226)" Value="BF" />
+          <Enumeration Text="Burundi(+257)" Value="BI" />
+          <Enumeration Text="Cambodia(+855)" Value="KH" />
+          <Enumeration Text="Cameroon(+237)" Value="CM" />
+          <Enumeration Text="Canada(+1)" Value="CA" />
+          <Enumeration Text="Cape Verde(+238)" Value="CV" />
+          <Enumeration Text="Cayman Islands(+1345)" Value="KY" />
+          <Enumeration Text="Central African Republic(+236)" Value="CF" />
+          <Enumeration Text="Chad(+235)" Value="TD" />
+          <Enumeration Text="Chile(+56)" Value="CL" />
+          <Enumeration Text="China(+86)" Value="CN" />
+          <Enumeration Text="Colombia(+57)" Value="CO" />
+          <Enumeration Text="Comoros(+269)" Value="KM" />
+          <Enumeration Text="Congo(+242)" Value="CG" />
+          <Enumeration Text="Cook Islands(+682)" Value="CK" />
+          <Enumeration Text="Costa Rica(+506)" Value="CR" />
+          <Enumeration Text="Côte d'Ivoire(+225)" Value="CI" />
+          <Enumeration Text="Croatia(+385)" Value="HR" />
+          <Enumeration Text="Cuba(+53)" Value="CU" />
+          <Enumeration Text="Curaçao(+599)" Value="CZ" />
+          <Enumeration Text="Cyprus(+357)" Value="CW" />
+          <Enumeration Text="Czech Republic(+420)" Value="CZ" />
+          <Enumeration Text="Congo (+243)" Value="CD" />
+          <Enumeration Text="Denmark(+45)" Value="DK" />
+          <Enumeration Text="Djibouti(+253)" Value="DJ" />
+          <Enumeration Text="Dominica(+1767)" Value="DM" />
+          <Enumeration Text="Dominican Republic(+1)" Value="DO" />
+          <Enumeration Text="Timor-Leste(+670)" Value="TL" />
+          <Enumeration Text="Ecuador(+593)" Value="EC" />
+          <Enumeration Text="Egypt(+20)" Value="EG" />
+          <Enumeration Text="El Salvador(+503)" Value="SV" />
+          <Enumeration Text="Equatorial Guinea(+240)" Value="GQ" />
+          <Enumeration Text="Eritrea(+291)" Value="ER" />
+          <Enumeration Text="Estonia(+372)" Value="EE" />
+          <Enumeration Text="Ethiopia(+251)" Value="ET" />
+          <Enumeration Text="Falkland Islands (Malvinas)(+500)" Value="FK" />
+          <Enumeration Text="Faroe Islands(+298)" Value="FO" />
+          <Enumeration Text="Fiji(+679)" Value="FJ" />
+          <Enumeration Text="Finland(+358)" Value="FI" />
+          <Enumeration Text="France(+33)" Value="FR" />
+          <Enumeration Text="French Guiana(+594)" Value="GF" />
+          <Enumeration Text="French Polynesia(+689)" Value="PF" />
+          <Enumeration Text="Gabon(+241)" Value="GA" />
+          <Enumeration Text="Gambia(+220)" Value="GM" />
+          <Enumeration Text="Georgia(+995)" Value="GE" />
+          <Enumeration Text="Germany(+49)" Value="DE" />
+          <Enumeration Text="Ghana(+233)" Value="GH" />
+          <Enumeration Text="Gibraltar(+350)" Value="GI" />
+          <Enumeration Text="Greece(+30)" Value="GR" />
+          <Enumeration Text="Greenland(+299)" Value="GL" />
+          <Enumeration Text="Grenada(+1473)" Value="GD" />
+          <Enumeration Text="Guadeloupe(+590)" Value="GP" />
+          <Enumeration Text="Guam(+1671)" Value="GU" />
+          <Enumeration Text="Guatemala(+502)" Value="GT" />
+          <Enumeration Text="Guinea(+224)" Value="GN" />
+          <Enumeration Text="Guinea-Bissau(+245)" Value="GW" />
+          <Enumeration Text="Guyana(+592)" Value="GY" />
+          <Enumeration Text="Haiti(+509)" Value="HT" />
+          <Enumeration Text="Honduras(+504)" Value="HN" />
+          <Enumeration Text="Hong Kong(+852)" Value="HK" />
+          <Enumeration Text="Hungary(+36)" Value="HU" />
+          <Enumeration Text="Iceland(+354)" Value="IS" />
+          <Enumeration Text="India(+91)" Value="IN" />
+          <Enumeration Text="Indonesia(+62)" Value="ID" />
+          <Enumeration Text="Iran(+98)" Value="IR" />
+          <Enumeration Text="Iraq(+964)" Value="IQ" />
+          <Enumeration Text="Ireland(+353)" Value="IE" />
+          <Enumeration Text="Israel(+972)" Value="IL" />
+          <Enumeration Text="Italy(+39)" Value="IT" />
+          <Enumeration Text="Jamaica(+1)" Value="JM" />
+          <Enumeration Text="Japan(+81)" Value="JP" />
+          <Enumeration Text="Jordan(+962)" Value="JO" />
+          <Enumeration Text="Kazakhstan(+7)" Value="KZ" />
+          <Enumeration Text="Kenya(+254)" Value="KE" />
+          <Enumeration Text="Kiribati(+686)" Value="KI" />
+          <Enumeration Text="Kuwait(+965)" Value="KW" />
+          <Enumeration Text="Kyrgyzstan(+996)" Value="KG" />
+          <Enumeration Text="Lao People's Democratic Republic(+856)" Value="LA" />
+          <Enumeration Text="Latvia(+371)" Value="LV" />
+          <Enumeration Text="Lebanon(+961)" Value="LB" />
+          <Enumeration Text="Lesotho(+266)" Value="LS" />
+          <Enumeration Text="Liberia(+231)" Value="LR" />
+          <Enumeration Text="Libya(+218)" Value="LY" />
+          <Enumeration Text="Liechtenstein(+423)" Value="LI" />
+          <Enumeration Text="Lithuania(+370)" Value="LT" />
+          <Enumeration Text="Luxembourg(+352)" Value="LU" />
+          <Enumeration Text="Macao(+853)" Value="MO" />
+          <Enumeration Text="North Macedonia, Republic of (+389)" Value="MK" />
+          <Enumeration Text="Madagascar(+261)" Value="MG" />
+          <Enumeration Text="Malawi(+265)" Value="MW" />
+          <Enumeration Text="Malaysia(+60)" Value="MY" />
+          <Enumeration Text="Maldives(+960)" Value="MV" />
+          <Enumeration Text="Mali(+223)" Value="ML" />
+          <Enumeration Text="Malta(+356)" Value="MT" />
+          <Enumeration Text="Marshall Islands(+692)" Value="MH" />
+          <Enumeration Text="Martinique(+596)" Value="MQ" />
+          <Enumeration Text="Mauritania(+222)" Value="MR" />
+          <Enumeration Text="Mauritius(+230)" Value="MU" />
+          <Enumeration Text="Mexico(+52)" Value="MX" />
+          <Enumeration Text="Micronesia(+691)" Value="FM" />
+          <Enumeration Text="Moldova, Republic of(+373)" Value="MD" />
+          <Enumeration Text="Monaco(+377)" Value="MC" />
+          <Enumeration Text="Mongolia(+976)" Value="MN" />
+          <Enumeration Text="Montenegro(+382)" Value="ME" />
+          <Enumeration Text="Montserrat(+1664)" Value="MS" />
+          <Enumeration Text="Morocco(+212)" Value="MA" />
+          <Enumeration Text="Mozambique(+258)" Value="MZ" />
+          <Enumeration Text="Myanmar(+95)" Value="MM" />
+          <Enumeration Text="Namibia(+264)" Value="NA" />
+          <Enumeration Text="Nauru(+674)" Value="NR" />
+          <Enumeration Text="Nepal(+977)" Value="NP" />
+          <Enumeration Text="Netherlands(+31)" Value="NL" />
+          <Enumeration Text="New Caledonia(+687)" Value="NC" />
+          <Enumeration Text="New Zealand(+64)" Value="NZ" />
+          <Enumeration Text="Nicaragua(+505)" Value="NI" />
+          <Enumeration Text="Niger(+227)" Value="NE" />
+          <Enumeration Text="Nigeria(+234)" Value="NG" />
+          <Enumeration Text="Niue(+683)" Value="NU" />
+          <Enumeration Text="Korea, Democratic People's Republic of (North Korea)(+850)" Value="KP" />
+          <Enumeration Text="Oman(+968)" Value="OM" />
+          <Enumeration Text="Pakistan(+92)" Value="PK" />
+          <Enumeration Text="Palau(+680)" Value="PW" />
+          <Enumeration Text="Palestine, State of(+970)" Value="PS" />
+          <Enumeration Text="Panama(+507)" Value="PA" />
+          <Enumeration Text="Papua New Guinea(+675)" Value="PG" />
+          <Enumeration Text="Paraguay(+595)" Value="PY" />
+          <Enumeration Text="Peru(+51)" Value="PE" />
+          <Enumeration Text="Philippines(+63)" Value="PH" />
+          <Enumeration Text="Poland(+48)" Value="PL" />
+          <Enumeration Text="Portugal(+351)" Value="PT" />
+          <Enumeration Text="Puerto Rico(+1)" Value="PR" />
+          <Enumeration Text="Qatar(+974)" Value="QA" />
+          <Enumeration Text="Réunion(+262)" Value="RE" />
+          <Enumeration Text="Romania(+40)" Value="RO" />
+          <Enumeration Text="Russian Federation(+7)" Value="RU" />
+          <Enumeration Text="Rwanda(+250)" Value="RW" />
+          <Enumeration Text="Saint Helena, Ascension and Tristan da Cunha(+290)" Value="SH" />
+          <Enumeration Text="Saint Kitts and Nevis(+1869)" Value="KN" />
+          <Enumeration Text="Saint Lucia(+1758)" Value="LC" />
+          <Enumeration Text="Saint Pierre and Miquelon(+508)" Value="PM" />
+          <Enumeration Text="Saint Vincent and the Grenadines(+1784)" Value="VC" />
+          <Enumeration Text="Northern Mariana Islands(CNMI)(+1670)" Value="MP" />
+          <Enumeration Text="Samoa(+685)" Value="WS" />
+          <Enumeration Text="San Marino(+378)" Value="SM" />
+          <Enumeration Text="Sao Tome and Principe(+239)" Value="ST" />
+          <Enumeration Text="Saudi Arabia(+966)" Value="SA" />
+          <Enumeration Text="Senegal(+221)" Value="SN" />
+          <Enumeration Text="Serbia(+381)" Value="RS" />
+          <Enumeration Text="Seychelles(+248)" Value="SC" />
+          <Enumeration Text="Sierra Leone(+232)" Value="SL" />
+          <Enumeration Text="Singapore(+65)" Value="SG" />
+          <Enumeration Text="Slovakia(+421)" Value="SK" />
+          <Enumeration Text="Slovenia(+386)" Value="SI" />
+          <Enumeration Text="Solomon Islands(+677)" Value="SB" />
+          <Enumeration Text="Somalia(+252)" Value="SO" />
+          <Enumeration Text="South Africa(+27)" Value="ZA" />
+          <Enumeration Text="Korea, Republic of(+82)" Value="KR" />
+          <Enumeration Text="South Sudan(+211)" Value="SS" />
+          <Enumeration Text="Spain(+34)" Value="ES" />
+          <Enumeration Text="Sri Lanka(+94)" Value="LK" />
+          <Enumeration Text="Sudan(+249)" Value="SD" />
+          <Enumeration Text="Suriname(+597)" Value="SR" />
+          <Enumeration Text="Swaziland(+268)" Value="SZ" />
+          <Enumeration Text="Switzerland(+41)" Value="CH" />
+          <Enumeration Text="Syrian Arab Republic(+963)" Value="SY" />
+          <Enumeration Text="Taiwan, Province of China(+886)" Value="TW" />
+          <Enumeration Text="Tajikistan(+992)" Value="TJ" />
+          <Enumeration Text="Tanzania, United Republic of(+255)" Value="TZ" />
+          <Enumeration Text="Thailand(+66)" Value="TH" />
+          <Enumeration Text="Togo(+228)" Value="TG" />
+          <Enumeration Text="Tokelau(+690)" Value="TK" />
+          <Enumeration Text="Tonga(+676)" Value="TO" />
+          <Enumeration Text="Trinidad and Tobago(+1868)" Value="TT" />
+          <Enumeration Text="Tunisia(+216)" Value="TN" />
+          <Enumeration Text="Turkey(+90)" Value="TR" />
+          <Enumeration Text="Turkmenistan(+993)" Value="TM" />
+          <Enumeration Text="Turks and Caicos Islands(+1649)" Value="TC" />
+          <Enumeration Text="Tuvalu(+688)" Value="TV" />
+          <Enumeration Text="Uganda(+256)" Value="UG" />
+          <Enumeration Text="Ukraine(+380)" Value="UA" />
+          <Enumeration Text="United Arab Emirates(+971)" Value="UA" />
+          <Enumeration Text="United Kingdom(+44)" Value="GB" />
+          <Enumeration Text="United States(+1)" Value="US" />
+          <Enumeration Text="Virgin Islands, U.S.(+1340)" Value="VI" />
+          <Enumeration Text="Uruguay(+598)" Value="UY" />
+          <Enumeration Text="Uzbekistan(+998)" Value="UZ" />
+          <Enumeration Text="Vanuatu(+678)" Value="VU" />
+          <Enumeration Text="Holy See (Vatican City State)(+379)" Value="VA" />
+          <Enumeration Text="Venezuela, Bolivarian Republic of(+58)" Value="VE" />
+          <Enumeration Text="Viet Nam(+84)" Value="VN" />
+          <Enumeration Text="Wallis and Futuna(+681)" Value="WF" />
+          <Enumeration Text="Yemen(+967)" Value="YE" />
+          <Enumeration Text="Zambia(+260)" Value="ZM" />
+          <Enumeration Text="Zimbabwe(+263)" Value="ZW" />
+        </Restriction>
+      </ClaimType>
+
+    </ClaimsSchema>
+
+    <Predicates>
+      <Predicate Id="email" Method="MatchesRegex">
+        <UserHelpText>Please enter a valid email address.</UserHelpText>
+        <Parameters>
+          <!--
+            This regex is constructed mostly from RFC 5322 for email, with intentional omissions based on discovery of characters that don't work for other services we use
+            # the below two lines cover the local part of the email, before the '@' sign
+            [a-zA-Z0-9!#$%&amp;'+^_`{}~-]+         # matches lower or upper case letters, digits, and certain special characters
+            (?:\.[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+)*  # same list as above, but including an optional '.' character at the beginning, repeated
+            # together, the above two lines prevent the '.' character from appearing at the start, end, or twice in a row in the local part
+            @                                      # the '@' symbol appears exactly once, seperating the local and domain sections
+            (?:[a-zA-Z0-9]                         # matches lower and uppercase letters and digits
+            (?:[a-zA-Z0-9-]*                       # same as above, but also allowing '-'
+            [a-zA-Z0-9])                           # only lower and uppercase letters and digits again
+            ?\.)+                                  # allows for a '.' character to terminate a section
+            # the above lines mean that '.' can create segments, and segments can't begin or end with a '-'. Also, no repeating '.' chars
+            [a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$
+            # the above line is the essentially same as the previous section, but forces the email to not end with a '.'
+          -->
+          <Parameter Id="RegularExpression">^[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+(?:\.[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$</Parameter>
+        </Parameters>
+      </Predicate>
+      <Predicate Id="internationalOrNationalPhoneNumber" Method="MatchesRegex">
+        <UserHelpText>The value entered needs to be a phone number.</UserHelpText>
+        <Parameters>
+          <!--
+              This regex will match a string with an optional leading "+", 4 to 16 digits, and any number of dashes, parentheses, and spaces, in any order.
+              It is intentionally overinclusive to allow the user to continue their journey with any input that might be an international or national phone number 
+              in any country with any customary punctuation/formatting. In this policy, the ConvertStringToPhoneNumberClaim claims converter will do the the final validation, 
+              ignoring the dashes, parentheses, and spaces.
+            -->
+          <Parameter Id="RegularExpression">^\+?(?:[-()\s]*\d[-()\s]*){4,16}$</Parameter>
+        </Parameters>
+      </Predicate>
+      <Predicate Id="noLeadingPlus" Method="MatchesRegex">
+        <UserHelpText>The national number should not include a country code.</UserHelpText>
+        <Parameters>
+          <!-- Combine this with the predicate above to match only a national phone number -->
+          <Parameter Id="RegularExpression">^[^\\+]+$</Parameter>
+        </Parameters>
+      </Predicate>
+    </Predicates>
+    <PredicateValidations>
+      <PredicateValidation Id="email">
+        <PredicateGroups>
+          <PredicateGroup Id="email">
+            <PredicateReferences>
+              <PredicateReference Id="email" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+      <PredicateValidation Id="phoneOrEmailSignInName">
+        <PredicateGroups>
+          <PredicateGroup Id="phoneOrEmailSignInName">
+            <UserHelpText>Please enter a valid email address or phone number.</UserHelpText>
+            <PredicateReferences MatchAtLeast="1">
+              <PredicateReference Id="email" />
+              <PredicateReference Id="internationalOrNationalPhoneNumber" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+      <PredicateValidation Id="nationalNumber">
+        <PredicateGroups>
+          <PredicateGroup Id="internationalOrNationalPhoneNumber">
+            <PredicateReferences>
+              <PredicateReference Id="internationalOrNationalPhoneNumber" />
+            </PredicateReferences>
+          </PredicateGroup>
+          <PredicateGroup Id="noLeadingPlus">
+            <PredicateReferences>
+              <PredicateReference Id="noLeadingPlus" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+      <PredicateValidation Id="internationalOrNationalPhoneNumber">
+        <PredicateGroups>
+          <PredicateGroup Id="internationalOrNationalPhoneNumber">
+            <UserHelpText>Please enter a valid phone number.</UserHelpText>
+            <PredicateReferences>
+              <PredicateReference Id="internationalOrNationalPhoneNumber" />
+            </PredicateReferences>
+          </PredicateGroup>
+        </PredicateGroups>
+      </PredicateValidation>
+    </PredicateValidations>
+
+    <ClaimsTransformations>
+
+      <ClaimsTransformation Id="CopySignInNameIntostrongAuthenticationPhoneNumber" TransformationMethod="ConvertPhoneNumberClaimToString">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" TransformationClaimType="phoneNumber" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" TransformationClaimType="phoneNumberString" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CopyPhoneNumberIntoDisplayName" TransformationMethod="ConvertPhoneNumberClaimToString">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" TransformationClaimType="phoneNumber" />
+      </InputClaims>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" TransformationClaimType="phoneNumberString" />
+      </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateRandomUPNUserName" TransformationMethod="CreateRandomString">
+        <InputParameters>
+          <InputParameter Id="randomGeneratorType" DataType="string" Value="GUID" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="upnUserName" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateCustomUserIdForMFA" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="upnUserName" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="{0}@{RelyingPartyTenantId}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdForMFA" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="ConvertStringToPhoneNumber" TransformationMethod="ConvertStringToPhoneNumberClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="countryCode" TransformationClaimType="country" />
+          <InputClaim ClaimTypeReferenceId="nationalNumber" TransformationClaimType="phoneNumberString" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+    </ClaimsTransformations>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Username based Sign In</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Username">
+          <DisplayName>Local Account Signin</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="countryCode" />
+            <InputClaim ClaimTypeReferenceId="nationalNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="countryCode" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="nationalNumber" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" Required="false" />
+            <OutputClaim ClaimTypeReferenceId="displayname" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="CombineCountryCodeAndNationalNumber" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingPhoneNumber" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="CombineCountryCodeAndNationalNumber">
+          <DisplayName>Combine country code and national number</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="ConvertStringToPhoneNumber" />
+          </InputClaimsTransformations>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+  
+        <TechnicalProfile Id="AAD-UserReadUsingPhoneNumber">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+
+            <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <OutputClaim ClaimTypeReferenceId="displayname" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>PhoneFactor</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="PhoneFactor-InputOrVerify-PhoneLogon">
+          <DisplayName>PhoneFactor</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.PhoneFactorProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.phonefactor</Item>
+            <Item Key="ManualPhoneNumberEntryAllowed">true</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <InputClaimsTransformation ReferenceId="CreateCustomUserIdForMFA" />
+            <InputClaimsTransformation ReferenceId="CopySignInNameIntostrongAuthenticationPhoneNumber" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userIdForMFA" PartnerClaimType="UserId" />
+            <InputClaim ClaimTypeReferenceId="strongAuthenticationPhoneNumber" PartnerClaimType="signInNames.phoneNumber" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="Verified.OfficePhone" />
+            <OutputClaim ClaimTypeReferenceId="newPhoneNumberEntered" PartnerClaimType="newPhoneNumberEntered" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Username based Sign Up</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserWriteUsingPhoneNumber">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
+          </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CopyPhoneNumberIntoDisplayName" /> <!-- copy phone nbr to displayName -->
+          </InputClaimsTransformations>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+            <PersistedClaim ClaimTypeReferenceId="displayName" /> 
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="newUser" DefaultValue="True" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-NewUser-WriteProfile">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId"/>
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
+            <PersistedClaim ClaimTypeReferenceId="givenName" />
+            <PersistedClaim ClaimTypeReferenceId="surname" />
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId"/>
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="PhoneSignInUp">
+      <OrchestrationSteps>
+
+        <!--
+           Ask the user for the phone number. 
+           The ValidationTechnicalProfile tries to read the user from the directory using the phone number
+        -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignIn" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Username" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- 
+          Verify the phone number via SMS or Callback
+         -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActiveMFASession</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify-PhoneLogon" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- 
+          If the user didn't exist previously, create the object in the directory
+        -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteUser" TechnicalProfileReferenceId="AAD-UserWriteUsingPhoneNumber" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--
+          return the JWT token
+        -->
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="PhoneSignInUp" />
+    <!-- for AppInsight - add your key
+    <UserJourneyBehaviors>
+      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="...guid..." DeveloperMode="true" ClientEnabled="true" ServerEnabled="true" TelemetryVersion="1.0.0" /> 
+    </UserJourneyBehaviors>
+    -->
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="signinnames.phoneNumber" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="displayname" />
+        <OutputClaim ClaimTypeReferenceId="newUser" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
