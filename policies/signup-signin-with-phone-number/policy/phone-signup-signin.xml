@@ -641,11 +641,12 @@
 
   <RelyingParty>
     <DefaultUserJourney ReferenceId="PhoneSignInUp" />
-    <!-- for AppInsight - add your key
     <UserJourneyBehaviors>
+    <!-- for AppInsight - add your key
       <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="...guid..." DeveloperMode="true" ClientEnabled="true" ServerEnabled="true" TelemetryVersion="1.0.0" /> 
-    </UserJourneyBehaviors>
     -->
+      <ScriptExecution>Allow</ScriptExecution>  
+    </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />

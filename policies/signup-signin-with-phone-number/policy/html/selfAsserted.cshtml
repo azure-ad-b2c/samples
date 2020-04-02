@@ -65,5 +65,47 @@
             </div>
         </div>
     </div>
+    <script>
+        console.log('init javascript...');
+        // try to select the countryCode as per the ui_locales 
+        var vUiLocales = getQueryStringByName("ui_locales");
+        console.log(vUiLocales);
+        if ( vUiLocales != null ) {
+            var res = vUiLocales.split("-")
+            var defLang = res[1].toUpperCase();
+            document.getElementById('countryCode').value = defLang;
+        }
+        // B2C really needs the input field to be of 'type=text' for validation to work, so therefor
+        // we set it to 'type=tel' when the field receives focus and set it back when focus is lost 
+        // on iOS, it needs to be 'type=tel' on page load for it to work, so therefor we start by setting it to that
+        var natNbr = document.getElementById("nationalNumber");
+        if ( natNbr != null ) {
+            console.log('modifying object nationalNumber');
+            natNbr.type = 'tel';
+            natNbr.addEventListener('focus', onFocusInHandler, true);
+            natNbr.addEventListener('blur', onFocusOutHandler, true);
+        }
+        function onFocusInHandler(e) {
+            console.log('onFocusInHandler');
+            var natNbr = document.getElementById("nationalNumber");
+            natNbr.type = 'tel';
+            console.log(natNbr.type);
+        }
+        function onFocusOutHandler(e) {
+            console.log('onFocusOutHandler');
+            var natNbr = document.getElementById("nationalNumber");
+            natNbr.type = 'text';
+            console.log(natNbr.type);
+        }
+        function getQueryStringByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+    </script>
 </body>
 </html>

@@ -64,5 +64,14 @@
             </div>
         </div>
     </div>
+    <script>
+        console.log('init javascript...');
+        var verCode = document.getElementById("verificationCode");
+        if ( verCode != null ) {
+            console.log('modifying object verificationCode');
+            verCode.autocomplete = "one-time-code";
+            verCode.type = "number";
+        }
+    </script>
 </body>
 </html>

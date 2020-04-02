@@ -13,15 +13,17 @@ The file [TrustFrameworkLocalization.xml](policy/TrustFrameworkLocalization.xml)
 ### UX Customization
 Since the signin page runs in the browser, styling the UX is something you may want to do to keep the visual style close to your smartphone app. For this purpose you may edit the [TrustFrameworkLocalization.xml](policy/TrustFrameworkLocalization.xml) file in the ContentDefinitions for ``api.selfasserted`` and ``api.phonefactor`` as indicated. This [documentation page](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#hosting-the-page-content) explains how to host UX content in Azure Blob Storage. Follow those instructions and upload the [selfAsserted.cshtml](policy/html/selfAsserted.cshtml) and the [multifactor-1.0.0.cshtml](policy/html/multifactor-1.0.0.cshtml) files. Before you upload them you need to edit them and replace ***yourtenant*** with your tenant name and ***yourstorageaccountname*** with your Azure Storage account name.
 
-The cshtml files are only modified to have a more visible border around the input fields and to add a custom logo.  
+The CSS in the cshtml files are only modified to have a more visible border around the input fields and to add a custom logo.  
+
+The cshtml files also make use of javascript. On the first page [selfAsserted.cshtml](policy/html/selfAsserted.cshtml) The javascript changes the input type of the national phone number field to ``<input type='tel'>`` so that the numeric only keyboard is displayed on the smartphone (see first screenshot). The javascript in the subsequent pages, served by [multifactor-1.0.0.cshtml](policy/html/multifactor-1.0.0.cshtml), we set the ``autocomplete='one-time-code'`` to enable autofill of the verifiaction code as described [here](https://developer.apple.com/documentation/security/password_autofill/enabling_password_autofill_on_an_html_input_element).
 
 ### Screenshots
 
-![Start page](media/phone-susi-01.png) ![Send code page](media/phone-susi-02.png) ![Verify code page](media/phone-susi-03.png) 
+![Start page](media/phone-susi-00.png) ![Send code page](media/phone-susi-02.png) ![Verify code page](media/phone-susi-03.png) 
 
 ## Phone Authentication Documentation
 
-[Phone Authentication](https://docs.microsoft.com/en-us/azure/active-directory-b2c/phone-authentication) is in docs.microsoft.com and there you also find a different.
+[Phone Authentication](https://docs.microsoft.com/en-us/azure/active-directory-b2c/phone-authentication) is in docs.microsoft.com and there you also find a different sample.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
