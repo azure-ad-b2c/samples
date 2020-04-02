@@ -17,7 +17,7 @@
       <ContentDefinition Id="api.localaccountsignup">
         <LocalizedResourcesReferences MergeBehavior="ReplaceAll">
           <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.localaccountsignup.sv" />
-          <LocalizedResourcesReference Language="no" LocalizedResourcesReferenceId="api.localaccountsignup.nb" />
+          <LocalizedResourcesReference Language="nb" LocalizedResourcesReferenceId="api.localaccountsignup.nb" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.phonefactor">
@@ -27,7 +27,7 @@
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="ReplaceAll">
           <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.phonefactor.sv" />
-          <LocalizedResourcesReference Language="no" LocalizedResourcesReferenceId="api.phonefactor.nb" />
+          <LocalizedResourcesReference Language="nb" LocalizedResourcesReferenceId="api.phonefactor.nb" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.selfasserted">
@@ -37,7 +37,7 @@
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.selfasserted.sv" />
-          <LocalizedResourcesReference Language="no" LocalizedResourcesReferenceId="api.selfasserted.nb" />
+          <LocalizedResourcesReference Language="nb" LocalizedResourcesReferenceId="api.selfasserted.nb" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.localaccountpasswordreset">
