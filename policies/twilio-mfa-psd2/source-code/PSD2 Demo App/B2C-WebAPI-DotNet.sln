@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskWebApp", "TaskWebApp\TaskWebApp.csproj", "{07D1C353-4626-4D20-A804-531517BCF3F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskService", "TaskService\TaskService.csproj", "{FEBD0A38-D884-403D-89C5-1FEFE80BB550}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{84AE09B1-A124-4886-B44D-B68ABF36AB67}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEBD0A38-D884-403D-89C5-1FEFE80BB550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEBD0A38-D884-403D-89C5-1FEFE80BB550}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEBD0A38-D884-403D-89C5-1FEFE80BB550}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEBD0A38-D884-403D-89C5-1FEFE80BB550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07D1C353-4626-4D20-A804-531517BCF3F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07D1C353-4626-4D20-A804-531517BCF3F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07D1C353-4626-4D20-A804-531517BCF3F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07D1C353-4626-4D20-A804-531517BCF3F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

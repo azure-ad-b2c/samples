@@ -1,0 +1,22 @@
+﻿@using System.Security.Claims
+@{
+    ViewBag.Title = "Claims";
+}
+<h2>@ViewBag.Title</h2>
+
+<h4>Claims Present in the Claims Identity:</h4>
+
+<table class="table-hover claim-table">
+    <tr>
+        <th class="claim-type claim-data claim-head">Claim Type</th>
+        <th class="claim-data claim-head">Claim Value</th>
+    </tr>
+
+    @foreach (Claim claim in ClaimsPrincipal.Current.Claims)
+    {
+        <tr>
+            <td class="claim-type claim-data">@claim.Type</td>
+            <td class="claim-data">@claim.Value</td>
+        </tr>
+    }
+</table>

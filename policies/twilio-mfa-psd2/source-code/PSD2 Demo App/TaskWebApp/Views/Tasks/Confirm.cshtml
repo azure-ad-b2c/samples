@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Confirm";
+}
+@model TaskWebApp.Models.paymentModel
+<h2>Confirm</h2>
+
+<td>Payee Name:</td>
+<td>@Html.TextBoxFor(Models => Model.Payee, new { @class = "form-control", style = "width:380px;", disabled = "disabled" })</td>
+
+<td>Account Number:</td>
+<td>@Html.TextBoxFor(Models => Model.AccountNumber, new { @class = "form-control", style = "width:380px;", disabled = "disabled", InputType="number" })</td>
+
+<td>Amount (£):</td>
+<td>@Html.TextBoxFor(Models => Model.Amount, new { @class = "form-control", style = "width:380px;", disabled = "disabled", InputType = "number" })</td>
+
+@using (Html.BeginForm("Confirmed", "Tasks", FormMethod.Post))
+{
+    <div>
+        <button type="submit">Confirm</button>
+    </div>
+}

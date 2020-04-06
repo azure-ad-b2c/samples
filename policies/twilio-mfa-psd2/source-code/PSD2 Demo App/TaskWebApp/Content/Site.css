@@ -1,0 +1,94 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+#profile-options {
+    display:none;
+    z-index:100;
+    background-color: rgb(238, 238, 238);
+    position:absolute;
+    border:solid;
+    border-color: rgb(128, 128, 128);
+    border-width:thin;
+}
+
+.profile-link {
+    /*display:table-cell;*/
+    white-space:nowrap;
+
+}
+
+.profile-links {
+    list-style-type:none;
+    padding-left:10px;
+    padding-right:10px;
+    /*display:table-row;*/
+}
+
+#profile-link {
+    cursor:pointer;
+}
+
+.claim-table, table, td, th {
+    margin-bottom:30px;
+    border: solid;
+    border-width:thin;
+    border-color:rgb(187, 187, 187);
+    background-color:rgb(238,238,238);
+    width:100%;
+    table-layout:fixed;
+}
+
+.claim-type {
+    padding-right: 30px;
+    text-align:left;
+}
+
+.claim-data {
+    padding-left:5px;
+    overflow-x:hidden;
+    text-overflow:ellipsis;
+}
+
+.claim-head {
+    background-color:rgb(157, 201, 212);
+}

@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Send Money";
+}
+@model TaskWebApp.Models.paymentModel
+
+
+<h2>Send Money</h2>
+@using (Html.BeginForm("Create", "Tasks", FormMethod.Post))
+{
+
+    <td>Payee Name:</td><br />
+    <td>@Html.TextBoxFor(model => model.Payee)</td><br />
+    @Html.ValidationMessageFor(model => model.Payee)
+    <td>Account Number:</td><br />
+    <td>@Html.TextBoxFor(model => model.AccountNumber)</td><br />
+    @Html.ValidationMessageFor(model => model.AccountNumber)
+    <td>Amount (£):</td><br />
+    <td>@Html.TextBoxFor(model => model.Amount)</td><br />
+    @Html.ValidationMessageFor(model => model.Amount)<br />
+    <button type="submit">Continue</button>
+
+}
+<br />

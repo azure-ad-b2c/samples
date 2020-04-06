@@ -1,0 +1,29 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <text>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a id="profile-link">@User.Identity.Name</a>
+                <div id="profile-options" class="nav navbar-nav navbar-right">
+                    <ul class="profile-links">
+                        <li class="profile-link">
+                            @Html.ActionLink("Edit Profile", "EditProfile", "Account")
+                        </li>
+                        <li class="profile-link">
+                            @Html.ActionLink("Reset Password", "ResetPassword", "Account")
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                @Html.ActionLink("Sign out", "SignOut", "Account")
+            </li>
+        </ul>
+    </text>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Sign up / Sign in", "SignUpSignIn", "Account", routeValues: null, htmlAttributes: new { id = "signUpSignInLink" })</li>
+    </ul>
+}
