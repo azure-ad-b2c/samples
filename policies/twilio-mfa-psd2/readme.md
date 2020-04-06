@@ -35,8 +35,8 @@ You can pre-enrol users into the directory with **known verified** Phone Numbers
 1. At this step, the `Custom-SMS-Verify` self asserted technical profile is executed
 1. The `inputClaimsTransformation` takes the Phone Number from the session claim and converts it to a read only state
 1. The Display Control `phoneVerificationControl-ReadOnly` calls the Twilio Verify API to initiate and verify the OTP requests
-1. The REST API technical profile `TwilioRestAPI-Verify-Step1` models the Twilio Verify API REST API request to generate and send a PSD2 compliant SMS
-1. The REST API technical profile `TwilioRestAPI-Verify-Step2` models the Twilio Verify API REST API request to verify the entered OTP
+1. The REST API technical profile `TwilioRestAPI-Verify-Step1` models the Twilio Verify API REST API request to generate and send a PSD2 compliant SMS, (see [Send a Verification Token](https://www.twilio.com/docs/verify/api?code-sample=code-step-2-send-a-verification-token&code-language=curl&code-sdk-version=json))
+1. The REST API technical profile `TwilioRestAPI-Verify-Step2` models the Twilio Verify API REST API request to verify the entered OTP, (see [Check the Verification Token](https://www.twilio.com/docs/verify/api?code-sample=code-step-2-send-a-verification-token&code-language=curl&code-sdk-version=json))
 1. Since the Twilio API returns a HTTP 200 with a status of the OTP verification in the JSON Body, Azure AD B2C needs to check the JSON payload for the `valid` OTP status. To do this, the REST API Technical Profile invokes an `outputClaimsTransform` to assert that the value of `status` is "approved"
 ```xml
 <!-- Capture the "status" value from the JSON response. Set a comparison 
@@ -63,7 +63,7 @@ claim with a static value (dummyStatus) for the known good value-->
 </ClaimsTransformation>
 ```
 
-In the `Custom-SMS-Verify` technical profile add a the metadata item to provide an error when the Claims Transform comparison does not return True.
+In the `Custom-SMS-Verify` technical profile add the metadata item to provide an error when the [Claims Transform](https://docs.microsoft.com/en-us/azure/active-directory-b2c/string-transformations#assertstringclaimsareequal) comparison does not return True.
 ```xml
 <Item Key="UserMessageIfClaimsTransformationStringsAreNotEqual">Incorrect verification code. Try again.</Item>
 ```
