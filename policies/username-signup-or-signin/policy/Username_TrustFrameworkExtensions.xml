@@ -196,7 +196,7 @@
 						<Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
 					</CryptographicKeys>
 					<OutputClaims>
-						<OutputClaim ClaimTypeReferenceId="userId" Required="true" />
+						<OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
 						<OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
 						<OutputClaim ClaimTypeReferenceId="emails" />
 						<OutputClaim ClaimTypeReferenceId="objectId" />
@@ -220,7 +220,7 @@
 						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
 					</Metadata>
 					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="userId" PartnerClaimType="signInNames.userName" Required="true" />
+						<InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.userName" Required="true" />
 					</InputClaims>
 					<OutputClaims>
 						<OutputClaim ClaimTypeReferenceId="objectId" />
