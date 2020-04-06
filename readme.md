@@ -95,6 +95,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Multi factor authentication enhancements
 
+- [Integrate Twilio Verify API for PSD2 SCA](policies/twilio-mfa-psd2) - The following sample guides you through integrating Azure AD B2C authentication with Twilio Verify API to enable your organization to meet PSD2 SCA requirements.
+
 - [Edit MFA phone number](policies/edit-mfa-phone-number) - Demonstrates how to allow user to provide and validate a new MFA phone number. After the user changes their MFA phone number, on the next login, the user needs to provide the new phone number instead of the old one.
 
 - [TOTP multi-factor authentication](policies/custom-mfa-totp) - Custom MFA solution, based on TOTP code. Allowing users to sign-in with Microsoft or Google authenticator apps.
