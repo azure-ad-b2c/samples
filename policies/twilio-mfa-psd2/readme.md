@@ -99,8 +99,7 @@ The claim name (`phoneNumberString`) needs to be consistent across all policies.
     <add key="ida:SigningCertThumbprint" value="4F39D6014818082CBB763E5BA5F230E545212E89" />
     <add key="ida:SigningCertAlgorithm" value="RS256" /> <!-- leave as-is-->
 ```
-
-1. Upload the demo application to your hosting provider of choice - Guidance for Azure App Services is [here](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite#hosting-the-application-in-azure-app-service) to also upload your certificate
+2. Upload the demo application to your hosting provider of choice - Guidance for Azure App Services is [here](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite#hosting-the-application-in-azure-app-service) to also upload your certificate
 1. Update your Azure AD B2C application registration by adding a Reply URL equivalent to the URL at which the application is hosted at
 1. Open the policy files and replace all instances of `yourtenant` with your tenant name. For a tenant such as "contoso.onmicrosoft.com", replace all instances of `yourtenant` with `contoso`
 1. Find the Twilio REST API technical profile `Custom-SMS-Enrol` and update the `ServiceURL` with your **Twilio AccountSID** and the `From` number to your purchased phone number
