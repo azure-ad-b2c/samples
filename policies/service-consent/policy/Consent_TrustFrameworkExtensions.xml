@@ -86,7 +86,7 @@
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="MergeRequiredAndOptionalConsentRequest"/>
           </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
