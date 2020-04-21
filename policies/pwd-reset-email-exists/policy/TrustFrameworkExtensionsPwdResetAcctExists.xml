@@ -60,7 +60,7 @@
         <Actions>
           <Action Id="SendCode">
             <ValidationClaimsExchange>
-              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress-emailAddress" />
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress-emailAddress" ContinueOnError="false"/>
               <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AadSspr-SendCode">
                 <Preconditions>
                   <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
@@ -73,14 +73,7 @@
           </Action>
           <Action Id="VerifyCode">
             <ValidationClaimsExchange>
-              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AadSspr-VerifyCode">
-                <Preconditions>
-                  <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-                    <Value>objectId</Value>
-                    <Action>SkipThisValidationTechnicalProfile</Action>
-                  </Precondition>
-                </Preconditions>
-              </ValidationClaimsExchangeTechnicalProfile>
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AadSspr-VerifyCode"/>
             </ValidationClaimsExchange>
           </Action>
         </Actions>
@@ -127,7 +120,7 @@
         <TechnicalProfile Id="AAD-UserReadUsingEmailAddress-emailAddress">
           <Metadata>
             <Item Key="Operation">Read</Item>
-            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
             <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
           </Metadata>
           <IncludeInSso>false</IncludeInSso>
