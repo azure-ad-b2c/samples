@@ -15,15 +15,15 @@ For scenarios where the login Id is a username and then password reset requires 
 
 **Verify SMS - SendCode**
 
-![Verify SMS - SendCode](media/Screen2_a.png)
+![Verify SMS - SendCode](media/Screen2_a.PNG)
 
 **Verify SMS - Enter Code**
 
-![Verify SMS - Enter Code](media/Screen2_b.png)
+![Verify SMS - Enter Code](media/Screen2_b.PNG)
 
 **New Password**
 
-![New Password](media/Screen3.png)
+![New Password](media/Screen3.PNG)
 
 ## Notes
 > Note:  This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the necessary changes in the **Demo action required** sections.
