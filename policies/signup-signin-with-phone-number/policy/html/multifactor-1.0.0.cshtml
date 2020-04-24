@@ -69,8 +69,8 @@
         var verCode = document.getElementById("verificationCode");
         if ( verCode != null ) {
             console.log('modifying object verificationCode');
-            verCode.autocomplete = "one-time-code";
-            verCode.inputmode = "number";
+            verCode.setAttribute("autocomplete", "one-time-code"); 
+            verCode.setAttribute("inputmode", "numeric"); 
         }
     </script>
 </body>
