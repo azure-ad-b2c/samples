@@ -45,7 +45,16 @@ $("#selectedemail")[0].value = $("#emailselect option:selected")[0].value
 });
 ```
 
-
+Also below is an example response from the REST API in the sample (https://yourfunction.azurewebsites.net/api/GetEmails)
+```JSON
+{
+    "emails": [
+        "email1@contoso.com",
+        "email2@contoso.com",
+        "email3@notrealemail.com"
+    ]
+}
+```
 
 
 ## Community Help and Support
