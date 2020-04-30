@@ -1,4 +1,4 @@
-# Azure AD B2C: Sing-up with social and local account
+# Azure AD B2C: Sign-up with social and local account
 
 With Azure AD B2C a user can have multiple identities. Sign-in with local account, and link a social account to an existing local account. This Azure AD B2C sample demonstrates how to create a single account with social and local identities.
 
