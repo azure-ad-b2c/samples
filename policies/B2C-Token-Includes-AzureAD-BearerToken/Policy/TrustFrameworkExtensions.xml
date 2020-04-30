@@ -113,7 +113,7 @@
             <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="givenName"/>
             <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="surname"/>
             <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="userPrincipalName"/>
-            <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="id"/>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id"/>
             <OutputClaim ClaimTypeReferenceId="identityProviderAccessToken" PartnerClaimType="{oauth2:access_token}"/>
           </OutputClaims>
           <OutputClaimsTransformations>
