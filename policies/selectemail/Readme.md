@@ -8,13 +8,13 @@ The Policy also has a Policy side validation on the email address that has been 
 
 
 ## Policy artifacts
-1. The `Get-Emails` Technical Profile will retrive the claims from rest provider and store them in the `otheremails` claim. This technical profile also calls the `emailstodelimemails` claims transformation, to converted the string collection to a comma seperated list of values.
+1. The `Get-Emails` Technical Profile will retrieve the claims from rest provider and store them in the `otheremails` claim. This technical profile also calls the `emailstodelimemails` claims transformation, to converted the string collection to a comma seperated list of values.
 1. The `SelectEmail` technical profile will then present the comma seperated list value to the user and prompt for an input claim called selectedemail. This claim will have a regular expresion restriction to ensure it is an email.
 
 ##  User interface changes
 In this solution, the comma seperated list of values provided to the page as a readonly claim will be used to generate the dropdown. CSS will also be used to hide the B2C Elements.
 
-An example of these can be seen in the [selfAsserted.cshtml](./html-templates/selfAsserted.cshtml) file.
+An example of these can be seen in the [selfAssertedDynamicDropDown.cshtml](./html-templates/selfAssertedDynamicDropDown.cshtml) file.
 
 Below is an exert of the javascript from the above file;
 ```JavaScript

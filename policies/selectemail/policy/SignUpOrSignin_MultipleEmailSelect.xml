@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_SignUpOrSignin_MultipleEmailSelect" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin" DeploymentMode="Development">
-
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_SignUpOrSignin_MultipleEmailSelect" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_MultipleEmailSelect">
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
-   <BuildingBlocks>
+  <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="emailsdelim">
         <DisplayName>emailsdelim</DisplayName>
@@ -82,9 +81,9 @@
     </ClaimsTransformations>
     <ContentDefinitions>
       <ContentDefinition Id="api.selfasserted.selectemail">
-        <LoadUri>https://yourblob.blob.core.windows.net/multipleemail/selfAsserted.cshtml</LoadUri>
+        <LoadUri>https://b2ccustompage.blob.core.windows.net/b2ccustompage/selfAssertedDynamicDropDown.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Collect information from user page</Item>
         </Metadata>
@@ -101,11 +100,14 @@
           <DisplayName>Get Secure Value</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://yourfunction.azurewebsites.net/api/GetEmails</Item>
+            <Item Key="ServiceUrl">https://selectemailwebapi.azurewebsites.net/api/identity/checkemails</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="identifier" DefaultValue="anything"/>
+          </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="otherMails" PartnerClaimType="emails"/>
           </OutputClaims>
@@ -169,6 +171,9 @@
 
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignIn_SelectEmail" />
+    <UserJourneyBehaviors>
+      <ScriptExecution>Allow</ScriptExecution>
+    </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
