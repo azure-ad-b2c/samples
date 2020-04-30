@@ -27,7 +27,7 @@ With the link and unlink policy, we append and remove federated identities to th
 ```
 
 
-## Link flow
+## Link and unlink flow
 
 1. To link a local or federated account to another federated identity, user fist sign-in (with a local or federated account).
 
