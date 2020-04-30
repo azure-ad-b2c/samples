@@ -9,10 +9,10 @@ The Policy also has a Policy side validation on the email address that has been 
 
 ## Policy artifacts
 1. The `Get-Emails` Technical Profile will retrieve the claims from rest provider and store them in the `otheremails` claim. This technical profile also calls the `emailstodelimemails` claims transformation, to converted the string collection to a comma seperated list of values.
-1. The `SelectEmail` technical profile will then present the comma seperated list value to the user and prompt for an input claim called selectedemail. This claim will have a regular expresion restriction to ensure it is an email.
+1. The `SelectEmail` technical profile will then present the comma separated list value to the user and prompt for an input claim called selectedemail. This claim will have a regular expresion restriction to ensure it is an email.
 
 ##  User interface changes
-In this solution, the comma seperated list of values provided to the page as a readonly claim will be used to generate the dropdown. CSS will also be used to hide the B2C Elements.
+In this solution, the comma separated list of values provided to the page as a readonly claim will be used to generate the dropdown. CSS will also be used to hide the B2C Elements.
 
 An example of these can be seen in the [selfAssertedDynamicDropDown.cshtml](./html-templates/selfAssertedDynamicDropDown.cshtml) file.
 
@@ -45,16 +45,29 @@ $("#selectedemail")[0].value = $("#emailselect option:selected")[0].value
 });
 ```
 
-Also below is an example response from the REST API in the sample (https://yourfunction.azurewebsites.net/api/GetEmails)
+Also below is an example response from the REST API in the sample (https://selectemailwebapi.azurewebsites.net/api/identity/checkemails)
 ```JSON
 {
-    "emails": [
-        "email1@contoso.com",
-        "email2@contoso.com",
-        "email3@notrealemail.com"
-    ]
+    "version":"1.0.0.0",
+    "status":200,
+    "userMessage":"",
+    "emails":
+        [
+            "test@contoso.com",
+            "fake@gmail.com",
+            "john@fabrikam.com"
+        ]
 }
 ```
+
+## Quick start
+1. Modify the policy by replacing all instances of `yourtenant.onmicrosoft.com` with your tenant name.
+1. Host the `selfAssertedDynamicDropDown.cshtml` in a [storage account](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#hosting-the-page-content) and [configure CORS](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#3-configure-cors) to allow your b2clogin.com domain.
+1. Host the .Net Core 3.0 API at your cloud provider.
+1. Modify the `api.selfasserted.selectemail` content definition's `LoadUri` to the HTTP endpoint which hosts your selfAssertedDynamicDropDown.cshtml. 
+1. Modify the `Get-Emails` technical profile's `serviceUrl` to point to your REST API endpoint which responds with the JSON payload of the email array.
+1. Upload the policy files into your tenant.
+
 
 
 ## Community Help and Support
