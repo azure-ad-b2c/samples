@@ -40,10 +40,10 @@ $url = "https://graph.windows.net/b2cprod.onmicrosoft.com/users?api-version=1.6"
 Invoke-WebRequest -Headers $authHeader -Uri $url -Method Post -Body $body
 ```
 
-The signInNames.oidToLink is the identifier you will use from the federated IdP to match to the precreated B2C user account. In this case the objectId (oid) is written to the signInNames collection.
-And the objectId is obtained from the IdP's `oid` claim.
+The `signInNames.oidToLink` is the identifier you will use from the federated IdP to match to the pre-created B2C user account. In this case the `objectId` (oid) is written to the `signInNames` collection.
+And the `objectId` is obtained from the IdP's `oid` claim at runtime to do the matching.
 
-You can create any mapping you like, for example the users email from the external IdP.
+You can create any mapping you like, for example the users email from the external IdP. 
 
 ```xml
 <TechnicalProfile Id="O365AADProfile">
