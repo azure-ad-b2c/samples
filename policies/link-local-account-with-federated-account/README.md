@@ -13,20 +13,58 @@ The user would only need to be sent a link to the B2C logon page, where they wil
 
 ## How it works
 
-1.	Create the account using PowerShell (Graph API) with the required attributes and the extension attribute, requiresMigration=true
+1.	Create the account using PowerShell (Graph API) with the required attributes and the extension attribute, requiresMigrationBool=true
+
+```powershell
+$body = @"
+{
+  "accountEnabled": true,
+  "creationType": "LocalAccount",
+  "displayName": "Link Me",
+  "extension_74467a80b26148fcbaa42f7b7f335d4c_requiresMigrationBool": true,
+  "passwordProfile": {
+    "password": "Password!&*^806DSAdf060%£ASDFd0ad",
+    "forceChangePasswordNextLogin": false
+  },
+  "signInNames": [
+    {
+      "type": "oidToLink",
+      "value": "90847c2a-e29d-4d2f-9f54-c5b4d3f26471"
+    }
+  ]
+}
+"@
+
+$authHeader = @{"Authorization"= $oauth.access_token;"Content-Type"="application/json";"ContentLength"=$body.length }
+$url = "https://graph.windows.net/b2cprod.onmicrosoft.com/users?api-version=1.6"
+Invoke-WebRequest -Headers $authHeader -Uri $url -Method Post -Body $body
+```
+
+The signInNames.oidToLink is the identifier you will use from the federated IdP to match to the precreated B2C user account. In this case the objectId (oid) is written to the signInNames collection.
+And the objectId is obtained from the IdP's `oid` claim.
+
+You can create any mapping you like, for example the users email from the external IdP.
+
+```xml
+<TechnicalProfile Id="O365AADProfile">
+...
+    <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="oid"/>
+...
+```
+
 2.	Login through the B2C Sign In link via AAD as the federated IdP
-3.	B2C takes the UPN from the AAD id_token
+3.	B2C takes the `oid` from the the federated IdP id_token
 
-    a. B2C finds a B2C account with a signInName.emailAddress that matches the AAD UPN (AAD-UserReadUsingUPN)
+    a. B2C finds a B2C account with a `signInNames.oidToLink` that matches the AAD ObjectId using the `AAD-FindB2CUserWithAADOid` technical profile. B2C throws an error if the account does not exist. The account should exist as part of the pre-creation.
+    ```xml
+    <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+    ```
 
-    b. B2C reads the objectId and extension_requiresMigration
+    b. B2C reads the `objectId` and `extension_requiresMigration` of the B2C user object
 
-    c. B2C throws an error if the account does not exist
+    c. B2C then makes sure that another federated identity is not already in the directory using `AAD-UserReadUsingUserIdentityToLink-NoError` and presents an error with `SelfAsserted-Error-DupeAccount` if one already exists. This is accomplished by generating the unique userIdentities object as part of the federated login technical profile and checking that it is not already present in the B2C directory. For debug, the error screen displays the offending B2C user objectId. This user needs to be deleted.
 
-4.	B2C will check if extension_requiresMigration = true (AAD-MergeAccount), if so:
+    c. B2C will check if `extension_requiresMigrationBool = true`. And then the `userIdentities` collection is merged with the pre-created account using `AAD-UserUpdateWithUserIdentities` technical profile and changes `extension_requiresMigrationBool` to `false`.
 
-    a. Write the AltSecId to the account
-
-    b.	Change extension_requiresMigration to false
 5.	Account is now linked
-6.	Any other extension attributes can be read by adding output claims to AAD-UserReadUsingAlternativeSecurityId for AAD users.
+6.	Any other extension attributes can be read by adding output claims to `AAD-UserReadUsingUserIdentity-NoError`` for the federated IdP users.
