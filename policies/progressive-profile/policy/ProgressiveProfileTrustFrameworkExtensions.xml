@@ -10,7 +10,7 @@
   
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
@@ -24,37 +24,6 @@
   </BuildingBlocks>
 
   <ClaimsProviders>
-
-    <ClaimsProvider>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <Metadata>
-            <Item Key="client_id">facebook_clientid</Item>
-            <Item Key="scope">email public_profile</Item>
-            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-          </Metadata>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
-            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="{Settings:ProxyIdentityExperienceFrameworkAppId}" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="{Settings:IdentityExperienceFrameworkAppId}" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>Self Asserted</DisplayName>
       <TechnicalProfiles>
