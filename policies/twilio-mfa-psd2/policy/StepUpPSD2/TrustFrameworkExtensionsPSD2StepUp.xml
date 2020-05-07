@@ -191,6 +191,7 @@
             <!--Sample: Read the email cliam from the id_token_hint-->
             <OutputClaim ClaimTypeReferenceId="amount" />
             <OutputClaim ClaimTypeReferenceId="payee" />
+            <OutputClaim ClaimTypeReferenceId="accountnumber" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
