@@ -18,6 +18,7 @@
       <InputClaims>
         <InputClaim ClaimTypeReferenceId="amount" PartnerClaimType="amount" />
         <InputClaim ClaimTypeReferenceId="payee" PartnerClaimType="payee" />
+        <InputClaim ClaimTypeReferenceId="accountnumber" PartnerClaimType="accountnumber" />
       </InputClaims>
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="displayName" />
