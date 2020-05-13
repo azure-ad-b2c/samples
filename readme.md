@@ -22,6 +22,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign In and Sign Up with Username or Email](policies/username-or-email) - This sample combines the UX of both the Email and Username based journeys.
 
+- [Split Signup into separate steps for email verification and account creation](policies/split-email-verification-and-signup) - When you dont want to use the default Signup page which shows both email verification and user registration controls on the same page at once. This sample splits the default signup behaviour into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.
+
 - [Provide consent UI to API scopes](policies/service-consent) - For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.
 
 - [Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou) - Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.
