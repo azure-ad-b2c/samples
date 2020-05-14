@@ -12,8 +12,10 @@ Steps:
 2. Open the ***App registrations (Preview)*** blade in ***Azure Active Directory*** [or use this link](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredAppsPreview)
 3. ***+ New registration***, add ``http://localhost`` as Redirect URIs > Register
 4. Copy the ***Application (client) ID*** as you will need it later 
-5. ***API Permissions*** > ***+ Add a permission*** > ***Azure Active Directory Graph*** > ***Application permissions*** > ***Directory*** > check ***Directory.ReadWrite.All*** and Add permissions. Grant admin consent so that status chanmges to "Granted"
-6. ***Certificates & secrets*** > ***+ New client secret*** > give description and Add. Copy this ***client secret value**
+5. ***API Permissions*** > ***+ Add a permission*** > ***Azure Active Directory Graph*** > ***Application permissions*** > ***Directory*** > check ***Directory.ReadWrite.All*** and Add permissions. 
+5. ***API Permissions*** > ***+ Add a permission*** > ***Microsoft Graph*** > ***Application permissions*** > ***Applications*** > check ***Applications.ReadWrite.All*** and Add permissions. 
+6. Grant admin consent so that status changes to "Granted"
+7. ***Certificates & secrets*** > ***+ New client secret*** > give description and Add. Copy this ***client secret value**
 
 ### Creating the App Registration via scripts
 There is a script you can run that will create the App Registration for you. It uses the standard AzureAD powershell cmdlets
@@ -35,11 +37,13 @@ Creating ServicePrincipal...
 
 You need to Grant permission for this app i portal.azure.com under ***API Permissions***
 
+The script sets the applications AppId and secret as two environment variables called $env:client_id and $env:client_secret
+
 ### Test App Regitration
 Update the default value in script [client-cred-login.ps1](scripts/client-cred-login.ps1) and enter the copied values for the $client_id and the $client_secret parameters. Test that the [client-cred-login.ps1](scripts/client-cred-login.ps1) script works by running it in the Powershell command prompt. The output be as below and you now have a valid access token in the environment variable ***OAUTH_access_token*** that is valid for 60 minutes. The other scripts rely on this envvar.
 
 ```Powershell
-.\client-cred-login.ps1
+.\client-cred-login.ps1 -t yourtenant.onmicrosoft.com -c $env:client_id -s $env:client_secret
 Environment variable set $env:OAUTH_access_token
 Access Token valid until  YYYY-MM-DDTHH:MM:SS
 ```
@@ -50,17 +54,18 @@ This migration example uses two custom attributes, ``requiresMigration`` and ``p
 To create the custom attributes we need to run the script [create-ext-attribute.ps1](scripts/create-ext-attribute.ps1) twice - once per attribute. 
 The parameters to pass to the script are
 * -t : your tenant name
-* -o : ***ObjectID*** of the App Registration you did above (Note! **Not** the Application (client) ID, but the Object ID)
 * -n : ``phoneNumberVerified`` and ``requiresMigration`` for the names
 * -d : boolean for the datatype
 
 ```Powershell
-.\create-ext-attribute.ps1 -t "yourtenant.onmicrosoft.com" -o "7b...f3" -n "phoneNumberVerified" -d "boolean"
+.\create-ext-attribute.ps1 -t "yourtenant.onmicrosoft.com" -n "phoneNumberVerified" -d "boolean"
 extension_89...c2_phoneNumberVerified
 
-.\create-ext-attribute.ps1 -t "yourtenant.onmicrosoft.com" -o "7b...f3" -n "requiresMigration" -d "boolean"
+.\create-ext-attribute.ps1 -t "yourtenant.onmicrosoft.com" -n "requiresMigration" -d "boolean"
 extension_89...c2_requiresMigration
 ```
+
+Custom attributes are registered on an application and the script uses the ***b2c-extensions-app. Do not modify***. You can specify another objectId via the -o parameter. 
 
 Note two things: 1) You will not see these attributes listed in the portal as those attributes are for User Flows, not Custom Policies. 2) These attributes only will be visible on a user when they have a value. Null valued custom attributes don't show.
 
@@ -71,14 +76,16 @@ The migration script [migrate-users-from-aws-cognito.ps1](scripts/migrate-users-
 The parameters for running the migration script are:
 * -t : your tenant name
 * -p : AWS Cognito UserPool Id
-* -c : Client ID of the App Registration created above that was used to create the custom attributes
 
 ```Powershell
-.\client-cred-login.ps1
+.\client-cred-login.ps1 -t yourtenant.onmicrosoft.com -c $env:client_id -s $env:client_secret
 Environment variable set $env:OAUTH_access_token
 Access Token valid until  YYYY-MM-DDTHH:MM:SS
 
-.\migrate-users-from-aws-cognito.ps1 -t "yourtenant.onmicrosoft.com" -p $newPool.UserPools.Id -c "89...c2"
+# if you need to get your AWS Cognito UserPool 
+$pools = (aws cognito-idp list-user-pools --max-results 60) | ConvertFrom-json
+
+.\migrate-users-from-aws-cognito.ps1 -t "yourtenant.onmicrosoft.com" -p $pools.UserPools.Id 
 ```
 
 Note that the migration script generates a random password for the users that is never outputed somewhere. This means that no one knows the temporary password the B2C users where created with and it is not possible to login without going through the password migration part in the Custom Policy. 
@@ -91,6 +98,13 @@ After you have the migration script you can verify that the custom attributes we
 userType                              : Member
 extension_89...c2_phoneNumberVerified : True
 extension_89...c2_requiresMigration   : True
+```
+
+You can do the same with the Azure AD Powershell cmdlets
+
+```Powershell
+$user = Get-AzureADUser -Filter "signInNames/any(x:x/value eq 'youruser@domain.com')"
+Get-AzureADUserextension -objectid $user.ObjectId
 ```
 
 ---
@@ -114,33 +128,30 @@ To test that the Azure Function works, copy the full URL for calling it and upda
 
 ---
 ## Edit the Custom Policies
-The B2C Custom Policy files comes from the Azure AD B2C Starter Pack [SocialAndLocalAccountsWithMfa](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa)
+The B2C Custom Policy files comes from the Azure AD B2C Starter Pack [SocialAndLocalAccountsWithMfa](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa). You need do download the [TrustFrameworkBase.xml](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/master/SocialAndLocalAccounts/TrustFrameworkBase.xml) file and modify the header values for TenantId and PolicyId.
 
-There are a number of edits you need to do before uploading the policies
+The [TrustFrameworkExtensions.xml](https://github.com/azure-ad-b2c/samples/blob/master/policies/signin-migration/b2c/policy/TrustFrameworkExtensions.xml) and the [SignUpOrSignin.xml](https://github.com/azure-ad-b2c/samples/blob/master/policies/signin-migration/b2c/policy/SignUpOrSignin.xml) files you get from this github repo. You need to do the same headr modifications of the PolicyId and TenantId to replace ***yourtenant.onmicrosoft.com*** with your B2C tenant name:
 
-### AAD-Common Technical Profile in TrustFrameworkBase.xml
-In the file [TrustFrameworkBase.xml](policy/TrustFrameworkBase.xml) we need to update the Technical Profile AAD-Common to include the ObjectID and the ClientID of the App Registration we created above and we used to create the custom attributes. This is the way to get the Custom Policy to "see" our custom attributes.
+Then, there are a number of edits you need to do before uploading the policies.
+
+### AAD-Common Technical Profile in TrustFrameworkExtension.xml
+In the file [TrustFrameworkExtension.xml](policy/TrustFrameworkExtension.xml) update the Technical Profile AAD-Common to include the ObjectID and the ClientID of the App Registration named ***b2c-extensions-app***. This is the way to get the Custom Policy to "see" our custom attributes. AAD-Common is defined in TrustFrameworkBase.xml and it is only additions we do in the Extension file for AAD-Common. 
 
 ```Xml
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
         <TechnicalProfile Id="AAD-Common">
-            <DisplayName>Azure Active Directory</DisplayName>
-            <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureActiveDirectoryProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-            <!-- Provide objectId and appId before using extension properties. -->
-            <Metadata>
-                <Item Key="ApplicationObjectId">7b...f3</Item>
-                <Item Key="ClientId">89...c2</Item>
-			</Metadata>
-			<!-- End of changes -->
-            <CryptographicKeys>
-                <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
-            </CryptographicKeys>
-          <!-- We need this here to suppress the SelfAsserted provider from invoking SSO on validation profiles. -->
-          <IncludeInSso>false</IncludeInSso>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <Metadata>
+            <Item Key="ApplicationObjectId">7b...f3</Item>
+            <Item Key="ClientId">89...c2</Item>
+          </Metadata>
         </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
 ```
 ### login-NonInteractive Technical Profile in TrustFrameworkExtension.xml
-The second change is the once change you allways need to do to adapt the starter pack files. In file [TrustFrameworkExtension.xml](policy/TrustFrameworkExtension.xml) we need to provide our values for the IdentityExperienceFramework and ProxyIdentityExperienceFramework as explained in the [Custom Policy Get Started](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications#register-identity-experience-framework-applications) guide.
+The second change is also in file [TrustFrameworkExtension.xml](policy/TrustFrameworkExtension.xml) where we need to provide our values for the IdentityExperienceFramework and ProxyIdentityExperienceFramework as explained in the [Custom Policy Get Started](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications#register-identity-experience-framework-applications) guide.
 
 ```Xml
         <TechnicalProfile Id="login-NonInteractive">
@@ -170,7 +181,7 @@ The endpoint for calling the Azure Function needs to be updated. Copy the full U
 ```
 
 ### Update tenant name and upload
-Finally, you need to do a search-and-replace in all xml policy files from ``yourtenant.onmicrosoft.com`` to your tenant name.
+Finally, make sure you have done the search-and-replace in all xml policy files from ``yourtenant.onmicrosoft.com`` to your tenant name.
 
 Then, upload Base, Extension and SignUpOrSignin xml files to your B2C tenant.
 

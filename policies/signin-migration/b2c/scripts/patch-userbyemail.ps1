@@ -1,5 +1,5 @@
 param (
-    [Parameter(Mandatory=$True)][Alias('t')][string]$Tenant = "yourtenant",
+    [Parameter(Mandatory=$True)][Alias('t')][string]$Tenant = "",
     [Parameter(Mandatory=$True)][Alias('e')][string]$email = "",
     [Parameter(Mandatory=$True)][Alias('a')][string]$attributeName = "", 
     [Parameter(Mandatory=$False)][Alias('v')][string]$attributeValue = ""
@@ -15,7 +15,6 @@ $result = Invoke-WebRequest -Headers $authHeader -Uri $url -Method GET -ContentT
 $user=($result.Content | ConvertFrom-json).value
 $userObjectId = $user.objectId
 
-#$body = "{`"$attributeName`": `"$attributeValue`" }"
 $body = @"
         {
           "$attributeName": "$attributeValue"

@@ -1,41 +1,67 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_UsrMig_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_UsrMig_TrustFrameworkExtensions">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+PolicySchemaVersion="0.3.0.0" 
+TenantId="yourtenant.onmicrosoft.com" 
+PolicyId="B2C_1A_UsrMig_TrustFrameworkExtensions" 
+PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_UsrMig_TrustFrameworkExtensions"
+>
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_UsrMig_TrustFrameworkBase</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
+    <!-- additional Claims we need for user migration -->
     <ClaimsSchema>
+      <!-- 
+				requiresMigration is set to True during batch user import. If True, then we need to complete user password
+				migration at next signin/password-reset and then update it to False so subsequent signins skip this process
+			-->
       <ClaimType Id="extension_requiresMigration">
         <DisplayName>extension_requiresMigration</DisplayName>
         <DataType>boolean</DataType>
         <AdminHelpText>extension_requiresMigration</AdminHelpText>
         <UserHelpText>extension_requiresMigration</UserHelpText>
       </ClaimType>
+      <!--
+				phoneNumberVerified is set to True if the IdP we migrated from did have a mobile phone number that it 
+				considered to be verified. We trust that claim and if value is True, we update the strong auth phone number 
+				attribute used for MFA during the password migration
+			-->
       <ClaimType Id="extension_phoneNumberVerified">
         <DisplayName>extension_phoneNumberVerified</DisplayName>
         <DataType>boolean</DataType>
         <AdminHelpText>extension_phoneNumberVerified</AdminHelpText>
         <UserHelpText>extension_phoneNumberVerified</UserHelpText>
       </ClaimType>
+      <!--
+				tokenSuccess is a non-persistent claim that only exists at runtime during policy execution. If the REST API
+				returns 200 OK, the it will return tokenSucces == True which is our signal to continue and do the password migration
+			-->
       <ClaimType Id="tokenSuccess">
         <DisplayName>tokenSuccess</DisplayName>
         <DataType>boolean</DataType>
         <AdminHelpText>tokenSuccess</AdminHelpText>
         <UserHelpText>tokenSuccess</UserHelpText>
       </ClaimType>
+      <!--
+				migrationRequired is a non-persistent claim that only exists at runtime during policy execution. If the REST API
+				returns 200 OK, it will return migrationRequired == False. It returns False as we later copy it to requiresMigration
+				to flip that flag. Basically it signals "password check went ok, you are done with migrating the user"
+			-->
       <ClaimType Id="migrationRequired">
         <DisplayName>migrationRequired</DisplayName>
         <DataType>boolean</DataType>
         <AdminHelpText>migrationRequired</AdminHelpText>
         <UserHelpText>migrationRequired</UserHelpText>
       </ClaimType>
+      <!--
+				The mobile attribute is the standard mobile attribute that exists in the AAD tenant. Since it is not defined by the
+				TrustFrameworkBase.xml by default, we need to define it here. During batch user import, we update the mobile attribute
+				in order to keep the information. The extension attribute phoneNumberVerified tells us the state of the mobile number 
+			-->
       <ClaimType Id="mobile">
         <DisplayName>mobile</DisplayName>
         <DataType>string</DataType>
@@ -44,224 +70,209 @@
       </ClaimType>
     </ClaimsSchema>
   </BuildingBlocks>
-
   <ClaimsProviders>
-	<!-- Signin TP - lots of VTPs that do migration of user, update of user object and finally login -->
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-Common">
+          <Metadata>
+            <Item Key="ApplicationObjectId">...</Item>
+            <Item Key="ClientId">...</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- We modify TP login-NonInteractive to add additional validation steps during signin -->
     <ClaimsProvider>
       <DisplayName>Local Account SignIn</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="login-NonInteractive">
           <Metadata>
-            <Item Key="client_id">ec...7f</Item> <!-- ProxyIdentityExperienceFramework-Native -->
-            <Item Key="IdTokenAudience">b4...e6</Item> <!-- IdentityExperienceFramework -->
+            <Item Key="client_id">...</Item>
+            <!-- ProxyIdentityExperienceFramework -->
+            <Item Key="IdTokenAudience">...</Item>
+            <!-- IdentityExperienceFramework -->
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ec...7f" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="b4...e6" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="..." />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="..." />
           </InputClaims>
         </TechnicalProfile>
-
-		<TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
-			<OutputClaims>
-				<OutputClaim ClaimTypeReferenceId="extension_requiresMigration" />
-			</OutputClaims>
-			<ValidationTechnicalProfiles>
-				<!--Add user migration validation technical profiles before login-NonInteractive -->
-
-				<!-- Populate extension_requireMigration into the claims pipeline -->
-				<ValidationTechnicalProfile ReferenceId="Get-requiresMigration-status-signin" ContinueOnError="false" />
-
-				<!-- If extension_requireMigration is true, call the legacy IdP via the REST API -->
-				<ValidationTechnicalProfile ReferenceId="UserMigrationViaLegacyIdp" ContinueOnError="false">
-				<Preconditions>
-					<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-						<Value>extension_requiresMigration</Value>
-						<Value>False</Value>
-						<Action>SkipThisValidationTechnicalProfile</Action>
-					</Precondition>
-				</Preconditions>
-				</ValidationTechnicalProfile>
-
-				<!-- If the API returned 'tokensuccess', write the new password and unmark the account for migration -->
-				<ValidationTechnicalProfile ReferenceId="AAD-WritePasswordAndFlipMigratedFlag" ContinueOnError="false">
-				<Preconditions>
-					<Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-						<Value>tokenSuccess</Value>
-						<Action>SkipThisValidationTechnicalProfile</Action>
-					</Precondition>
-				</Preconditions>
-				</ValidationTechnicalProfile>
-
-				<!-- 
-					During migration we wrote mobile phone nbr to attribute 'mobile'. 
-					Now we write it to strongAuthenticationPhoneNumber attribute which GraphAPI can't write to so MFA is setup
+        <!--
+					Add values to the SelfAsserted-LocalAccountSignin-Email TP, defined in Base. 
+					We add:
+						- requiresMigration as output claim so we can hae it in the JWT
+						- VTP to read the requiresMigration extension attribute so we can see if we should do user password migration
+						- VTP that does the REST API call to verify userid/password with old IdP
+						- VTP that writes the verified password if REST API said ok + flipping the requiresMigration flag
+						- VTP that writes the mobile attribute to strongAuthenticationPhoneNumber attribute if phoneNumberAttribute == True (and password ok)
 				-->
-				<ValidationTechnicalProfile ReferenceId="AAD-WriteMfaPhoneDuringMigration" ContinueOnError="false">
-				<Preconditions>
-					<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-						<Value>extension_phoneNumberVerified</Value>
-						<Value>False</Value>
-						<Action>SkipThisValidationTechnicalProfile</Action>
-					</Precondition>
-				</Preconditions>
-				</ValidationTechnicalProfile>
-
-				<!-- Initiate a normal logon against Azure AD B2C -->
-				<ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
-			</ValidationTechnicalProfiles>
-		</TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_requiresMigration" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <!--Add user migration validation technical profiles before login-NonInteractive -->
+            <!-- Populate extension_requireMigration into the claims pipeline -->
+            <ValidationTechnicalProfile ReferenceId="Get-requiresMigration-status-signin" ContinueOnError="false" />
+            <!-- If extension_requireMigration is true, call the legacy IdP via the REST API -->
+            <ValidationTechnicalProfile ReferenceId="UserMigrationViaLegacyIdp" ContinueOnError="false">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>extension_requiresMigration</Value>
+                  <Value>False</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- If the API returned 'tokensuccess', write the new password and unmark the account for migration -->
+            <ValidationTechnicalProfile ReferenceId="AAD-WritePasswordAndFlipMigratedFlag" ContinueOnError="false">
+              <Preconditions>
+                <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                  <Value>tokenSuccess</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- 
+							During migration we wrote mobile phone nbr to attribute 'mobile'. 
+							Now we write it to strongAuthenticationPhoneNumber attribute which GraphAPI can't write to so MFA is setup
+						-->
+            <ValidationTechnicalProfile ReferenceId="AAD-WriteMfaPhoneDuringMigration" ContinueOnError="false">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>extension_phoneNumberVerified</Value>
+                  <Value>False</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- Initiate a normal logon against Azure AD B2C -->
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
       </TechnicalProfiles>
-
     </ClaimsProvider>
+    <!-- TP for reading the user's additional attributes we need by email -->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn - Read migration status</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Get-requiresMigration-status-signin">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.emailAddress" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <!-- Set a default value (false) in the case the account does not have this attribute defined -->
+            <OutputClaim ClaimTypeReferenceId="extension_requiresMigration" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="extension_phoneNumberVerified" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="mobile" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- TP for calling the REST API -->
+    <ClaimsProvider>
+      <DisplayName>REST API to communicate with Legacy IdP</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="UserMigrationViaLegacyIdp">
+          <DisplayName>REST API call to communicate with Legacy IdP</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://yourtenant-azfunc-api.azurewebsites.net/api/ValidateUserAwsCognito?code=iR...A==</Item>            
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+            <InputClaim ClaimTypeReferenceId="password" />
+            <InputClaim ClaimTypeReferenceId="mobile" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="tokenSuccess" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="migrationRequired" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- 
+			TP for writing verified password and flipping the requiresMigration flag True->False. 
+			We also disable strong since we have no idea about the old IdP's password policy and just need to accept the existing password
+		-->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn - Write new password and unmark for migration</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-WritePasswordAndFlipMigratedFlag">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+            <PersistedClaim ClaimTypeReferenceId="displayName" />
+            <PersistedClaim ClaimTypeReferenceId="password" PartnerClaimType="password" />
+            <PersistedClaim ClaimTypeReferenceId="migrationRequired" PartnerClaimType="extension_requiresMigration" />
+            <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration, DisableStrongPassword" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- This TP can not be combined with the above as you can not write the new password AND set the MFA Phone number in the same call -->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn - Write new MFA phone number</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-WriteMfaPhoneDuringMigration">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+            <PersistedClaim ClaimTypeReferenceId="displayName" />
+            <PersistedClaim ClaimTypeReferenceId="mobile" PartnerClaimType="strongAuthenticationPhoneNumber" DefaultValue="+46118118" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!--
+			Modify TP LocalAccountWritePasswordUsingObjectId, defined in Base, that is used during PasswordReset UserJourney
+					We add:
+						- requiresMigration as output claim so we can hae it in the JWT
+						- VTP to read the requiresMigration extension attribute so we can see if we should do user password migration
+						- VTP that flips the requiredMigration flag to False
+						- VTP that writes the mobile attribute to strongAuthenticationPhoneNumber attribute if phoneNumberAttribute == True (and password ok)
 
-	<ClaimsProvider>
-		<DisplayName>Local Account SignIn - Read migration status</DisplayName>
-		<TechnicalProfiles>
-			<TechnicalProfile Id="Get-requiresMigration-status-signin">
-			<Metadata>
-				<Item Key="Operation">Read</Item>
-				<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
-				<Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
-			</Metadata>
-			<IncludeInSso>false</IncludeInSso>
-			<InputClaims>
-				<InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.emailAddress" Required="true" />
-			</InputClaims>
-			<OutputClaims>
-				<OutputClaim ClaimTypeReferenceId="objectId" />
-				<!-- Set a default value (false) in the case the account does not have this attribute defined -->
-				<OutputClaim ClaimTypeReferenceId="extension_requiresMigration" DefaultValue="false" />
-				<OutputClaim ClaimTypeReferenceId="extension_phoneNumberVerified" DefaultValue="false" />
-				<OutputClaim ClaimTypeReferenceId="mobile" />
-			</OutputClaims>
-			<IncludeTechnicalProfile ReferenceId="AAD-Common" />
-			</TechnicalProfile>
-		</TechnicalProfiles>
-	</ClaimsProvider>
-
-	<ClaimsProvider>
-		<DisplayName>REST API to communicate with Legacy IdP</DisplayName>
-		<TechnicalProfiles>
-			<TechnicalProfile Id="UserMigrationViaLegacyIdp">
-			<DisplayName>REST API call to communicate with Legacy IdP</DisplayName>
-			<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-			<Metadata>
-				<Item Key="ServiceUrl">https://yourtenant-azfunc-api.azurewebsites.net/api/ValidateUserAwsCognito?code=iR...A==</Item>            
-				<Item Key="AuthenticationType">None</Item>
-				<Item Key="SendClaimsIn">Body</Item>
-			</Metadata>
-			<InputClaims>
-				<InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
-				<InputClaim ClaimTypeReferenceId="password" />
-				<InputClaim ClaimTypeReferenceId="mobile" />
-			</InputClaims>
-			<OutputClaims>
-				<OutputClaim ClaimTypeReferenceId="tokenSuccess" DefaultValue="false"/>
-				<OutputClaim ClaimTypeReferenceId="migrationRequired"/>
-			</OutputClaims> 
-			<UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-			</TechnicalProfile>
-		</TechnicalProfiles>
-	</ClaimsProvider>
-
-	<ClaimsProvider>
-		<DisplayName>Local Account SignIn - Write new password and unmark for migration</DisplayName>
-		<TechnicalProfiles>
-			<TechnicalProfile Id="AAD-WritePasswordAndFlipMigratedFlag">
-			<Metadata>
-				<Item Key="Operation">Write</Item>
-				<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
-			</Metadata>
-			<IncludeInSso>false</IncludeInSso>
-			<InputClaims>
-				<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
-			</InputClaims>
-			<PersistedClaims>
-				<PersistedClaim ClaimTypeReferenceId="objectId" />
-				<PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
-				<PersistedClaim ClaimTypeReferenceId="displayName" />
-				<PersistedClaim ClaimTypeReferenceId="password" PartnerClaimType="password"/>
-				<PersistedClaim ClaimTypeReferenceId="migrationRequired" PartnerClaimType="extension_requiresMigration" />
-				<PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration, DisableStrongPassword" />
-			</PersistedClaims>
-			<IncludeTechnicalProfile ReferenceId="AAD-Common" />
-			<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-			</TechnicalProfile>
-		</TechnicalProfiles>
-	</ClaimsProvider>
-
-	<!-- This TP can not be combined with the above as you can not write the new password AND set the MFA Phone number in the same call -->
-	<ClaimsProvider>
-		<DisplayName>Local Account SignIn - Write new MFA phone number</DisplayName>
-		<TechnicalProfiles>
-			<TechnicalProfile Id="AAD-WriteMfaPhoneDuringMigration">
-			<Metadata>
-				<Item Key="Operation">Write</Item>
-				<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
-			</Metadata>
-			<IncludeInSso>false</IncludeInSso>
-			<InputClaims>
-				<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
-			</InputClaims>
-			<PersistedClaims>
-				<PersistedClaim ClaimTypeReferenceId="objectId" />
-				<PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
-				<PersistedClaim ClaimTypeReferenceId="displayName" />
-				<PersistedClaim ClaimTypeReferenceId="mobile" PartnerClaimType="strongAuthenticationPhoneNumber" DefaultValue="+46734082742"/>
-			</PersistedClaims>
-			<IncludeTechnicalProfile ReferenceId="AAD-Common" />
-			<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-			</TechnicalProfile>
-		</TechnicalProfiles>
-	</ClaimsProvider>
-
-	<ClaimsProvider>
-		<DisplayName>Local Account Password Reset - Read migration flag</DisplayName>
-		<TechnicalProfiles>
-			<TechnicalProfile Id="Get-requiresMigration-status-password-reset">
-			<Metadata>
-				<Item Key="Operation">Read</Item>
-				<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
-				<Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
-			</Metadata>
-			<IncludeInSso>false</IncludeInSso>
-			<InputClaims>
-				<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
-			</InputClaims>
-			<OutputClaims>
-				<OutputClaim ClaimTypeReferenceId="extension_requiresMigration" DefaultValue="false" />
-			</OutputClaims>
-			<IncludeTechnicalProfile ReferenceId="AAD-Common" />
-			</TechnicalProfile>
-		</TechnicalProfiles>
-	</ClaimsProvider>
-
-	<ClaimsProvider>
-		<DisplayName>Local Account Password Reset - Flip migration flag</DisplayName>
-		<TechnicalProfiles>
-			<TechnicalProfile Id="AAD-FlipMigratedFlag">
-			<Metadata>
-				<Item Key="Operation">Write</Item>
-				<Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
-			</Metadata>
-			<IncludeInSso>false</IncludeInSso>
-			<InputClaims>
-				<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
-			</InputClaims>
-			<PersistedClaims>
-				<PersistedClaim ClaimTypeReferenceId="objectId" />
-				<PersistedClaim ClaimTypeReferenceId="migrationRequired" PartnerClaimType="extension_requiresMigration" DefaultValue="false" AlwaysUseDefaultValue="true"/>
-			</PersistedClaims>
-			<IncludeTechnicalProfile ReferenceId="AAD-Common" />
-			<UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-			</TechnicalProfile>
-		</TechnicalProfiles>
-	</ClaimsProvider>
-
+		-->
     <ClaimsProvider>
       <DisplayName>Local Account Password Reset - Write Password</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_requiresMigration" />
+          </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="Get-requiresMigration-status-password-reset" ContinueOnError="false" />
             <ValidationTechnicalProfile ReferenceId="AAD-FlipMigratedFlag" ContinueOnError="false">
@@ -273,17 +284,78 @@
                 </Precondition>
               </Preconditions>
             </ValidationTechnicalProfile>
+            <!-- 
+							During migration we wrote mobile phone nbr to attribute 'mobile'. 
+							Now we write it to strongAuthenticationPhoneNumber attribute which GraphAPI can't write to so MFA is setup
+						-->
+            <ValidationTechnicalProfile ReferenceId="AAD-WriteMfaPhoneDuringMigration" ContinueOnError="false">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>extension_phoneNumberVerified</Value>
+                  <Value>False</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
             <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+    <!-- TP used to read the additional attributes we need during PasswordReset flow -->
+    <ClaimsProvider>
+      <DisplayName>Local Account Password Reset - Read migration flag</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Get-requiresMigration-status-password-reset">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_requiresMigration" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="extension_phoneNumberVerified" DefaultValue="false" />
+            <OutputClaim ClaimTypeReferenceId="mobile" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- TP to flip the requiresMigration flag True->False during the PasswordReset flow -->
+    <ClaimsProvider>
+      <DisplayName>Local Account Password Reset - Flip migration flag</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-FlipMigratedFlag">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+            <PersistedClaim ClaimTypeReferenceId="displayName" />
+            <PersistedClaim ClaimTypeReferenceId="migrationRequired" PartnerClaimType="extension_requiresMigration" DefaultValue="false" AlwaysUseDefaultValue="true" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
   </ClaimsProviders>
-
   <UserJourneys>
+    <!-- 
+			We modify the UserJourney SignUpOrSignIn to remove facebook as IdP
+		-->
     <UserJourney Id="SignUpOrSignIn">
       <OrchestrationSteps>
-
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
@@ -292,7 +364,6 @@
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -304,19 +375,15 @@
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <!-- This step reads any user attributes that we may not have received when in the token. -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
   </UserJourneys>
-
 </TrustFrameworkPolicy>

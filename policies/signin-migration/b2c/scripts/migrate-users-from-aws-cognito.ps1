@@ -1,7 +1,7 @@
 param (
-    [Parameter(Mandatory=$False)][Alias('t')][string]$Tenant = "yourtenant.onmicrosoft.com",
+    [Parameter(Mandatory=$False)][Alias('t')][string]$Tenant = "",
     [Parameter(Mandatory=$False)][Alias('p')][string]$CognitoUserPoolId = "",
-    [Parameter(Mandatory=$False)][Alias('c')][string]$client_id = "89...c2" # the Client ID used to register the attribute
+    [Parameter(Mandatory=$False)][Alias('c')][string]$client_id = "" # the Client ID used to register the attribute
     )
 
 if ( $null -eq $env:OAUTH_access_token ) {
@@ -9,7 +9,16 @@ if ( $null -eq $env:OAUTH_access_token ) {
     exit 1
 }
 
-# Test*1234RANDOM!
+if ( !($Tenant -imatch ".onmicrosoft.com") ) {
+    $Tenant = $Tenant + ".onmicrosoft.com"
+}
+
+# if no appObjectId given, use the standard b2c-extensions-app
+if ( "" -eq $client_id ) {
+    $appExt = Get-AzureADApplication -SearchString "b2c-extensions-app"
+    $client_id = $appExt.AppId   
+}
+
 $tmpPwd = "Aa$([guid]::NewGuid())!"
 
 $extId = $client_id.Replace("-", "") # the name is w/o hyphens

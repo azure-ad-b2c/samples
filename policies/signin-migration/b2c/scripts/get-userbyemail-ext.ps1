@@ -19,3 +19,18 @@ $user=($result.Content | ConvertFrom-json).value
 $userObjectId = $user.objectId
 
 $user
+
+$url = "https://graph.windows.net/$tenant/users/$userObjectId/`$links/memberOf?api-version=1.6"
+$result = Invoke-WebRequest -Headers $authHeader -Uri $url -Method GET -ContentType "application/json"
+$groups=($result.Content | ConvertFrom-json).value
+
+$groupList = @()
+foreach( $groupUrl in $groups ) {
+    $url = "$($groupUrl.url)?api-version=1.6&`$select=displayName"
+    $result = Invoke-WebRequest -Headers $authHeader -Uri $url -Method GET -ContentType "application/json"
+    $groupName=($result.Content | ConvertFrom-json).displayName
+    $groupList += $groupName
+}
+if ( $groupList -gt 0 ) {
+    write-host "Group memberships: " $groupList
+}

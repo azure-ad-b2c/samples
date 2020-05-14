@@ -5,75 +5,86 @@ param (
     )
 
 # -------------------------------------------------------------------------------------------------------------------------------    
-# assumes you have run .\Connect-AzureAdB2C -t "yourtenant" before this
-
-write-host "Getting Tenant info..."
+write-output "Getting Tenant info..."
 $tenant = Get-AzureADTenantDetail
 $tenantName = $tenant.VerifiedDomains[0].Name
-write-host "$tenantName`n$($tenant.ObjectId)"
+write-output "$tenantName`n$($tenant.ObjectId)"
 
 # -------------------------------------------------------------------------------------------------------------------------------    
-# This generate the client_secret for the app
-function Create-AesManagedObject($key, $IV) {
-    $aesManaged = New-Object "System.Security.Cryptography.AesManaged"
-    $aesManaged.Mode = [System.Security.Cryptography.CipherMode]::CBC
-    $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::Zeros
-    $aesManaged.BlockSize = 128
-    $aesManaged.KeySize = 256
-    if ($IV) {
-        if ($IV.getType().Name -eq "String") {
-            $aesManaged.IV = [System.Convert]::FromBase64String($IV)
-        } else {
-            $aesManaged.IV = $IV
-        }
+$requiredResourceAccessW=@"
+[
+    {
+        "resourceAppId": "00000002-0000-0000-c000-000000000000",
+        "resourceAccess": [
+            {
+                "id": "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175",
+                "type": "Scope"
+            }
+        ]
+    },
+    {
+        "resourceAppId": "00000003-0000-0000-c000-000000000000",
+        "resourceAccess": [
+            {
+                "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+                "type": "Scope"
+            },
+            {
+                "id": "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9",
+                "type": "Role"
+            }
+        ]
     }
-    if ($key) {
-        if ($key.getType().Name -eq "String") {
-            $aesManaged.Key = [System.Convert]::FromBase64String($key)
-        } else {
-            $aesManaged.Key = $key
-        }
+]
+"@ | ConvertFrom-json
+
+$requiredResourceAccessR=@"
+[
+    {
+        "resourceAppId": "00000002-0000-0000-c000-000000000000",
+        "resourceAccess": [
+            {
+                "id": "311a71cc-e848-46a1-bdf8-97ff7156d8e6",
+                "type": "Scope"
+            }
+        ]
+    },
+    {
+        "resourceAppId": "00000003-0000-0000-c000-000000000000",
+        "resourceAccess": [
+            {
+                "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+                "type": "Scope"
+            }
+        ]
     }
-    $aesManaged
+]
+"@ | ConvertFrom-json
+
+if ( $WriteAccess -eq $true ) { 
+    $requiredResourceAccess = $requiredResourceAccessW 
+} else { 
+    $requiredResourceAccess = $requiredResourceAccessR
 }
 
-function Create-AesKey() {
-    $aesManaged = Create-AesManagedObject
-    $aesManaged.GenerateKey()
-    [System.Convert]::ToBase64String($aesManaged.Key)
-}
-
-$AppClientSecret = Create-AesKey
-
-$psadCredential = New-Object Microsoft.Azure.Commands.Resources.Models.ActiveDirectory.PSADPasswordCredential
-$startDate = Get-Date
-$psadCredential.StartDate = $startDate
-$psadCredential.EndDate = $startDate.AddYears(1)
-$psadCredential.KeyId = [guid]::NewGuid()
-$psadCredential.Password = $AppClientSecret
-
-# -------------------------------------------------------------------------------------------------------------------------------    
-Function CreateRequiredResourceAccess([string]$ResourceAppId,[string]$ResourceAccessId, [string]$Type) {
+$reqAccess=@()
+foreach( $resApp in $requiredResourceAccess ) {
     $req = New-Object -TypeName "Microsoft.Open.AzureAD.Model.RequiredResourceAccess"
-    $req.ResourceAppId = $ResourceAppId
-    $req.ResourceAccess = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList $ResourceAccessId,$Type
-    return $req
+    $req.ResourceAppId = $resApp.resourceAppId
+    foreach( $ra in $resApp.resourceAccess ) {
+        $req.ResourceAccess += New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess" -ArgumentList $ra.Id,$ra.type
+    }
+    $reqAccess += $req
 }
 
+write-output "Creating App..."
+$app = New-AzureADApplication -DisplayName $displayName -IdentifierUris "http://$tenantName/$displayName" -ReplyUrls $ReplyUrls -PasswordCredentials $psadCredential -RequiredResourceAccess $reqAccess
+$startDate = Get-Date
+$endDate = $startDate.AddYears(1)
+$appKey = New-AzureADApplicationPasswordCredential -ObjectId $App.ObjectID -CustomKeyIdentifier "key1" -StartDate $startDate -EndDate $endDate
+write-output "ObjectID:`t$($App.ObjectID)`nClientID:`t`t$($app.AppId)`nSecret:`t$($appKey.Value)"
 
-write-host "Creating App..."
-$app = New-AzureADApplication -DisplayName $displayName -IdentifierUris "http://$tenantName/$displayName" -ReplyUrls $ReplyUrls -PasswordCredentials $psadCredential
-write-host "ObjectID:`t$($App.ObjectID)`nClientID:`t`t$($app.AppId)`nSecret:`t$AppClientSecret"
-
-# Add the Required Permissions "Microsoft Graph (Delegated permision)" and "Windows Azure Active Directory (Application permission - read/write directory data)"
-write-host "Adding RequiredResourceAccess..."
-$req1 = CreateRequiredResourceAccess -ResourceAppId "00000002-0000-0000-c000-000000000000" -ResourceAccessId "78c8a3c8-a07e-4b9e-af1b-b5ccab50a175" -Type "Role"
-$req2 = CreateRequiredResourceAccess -ResourceAppId "00000003-0000-0000-c000-000000000000" -ResourceAccessId "e1fe6dd8-ba31-4d61-89e7-88639da4683d" -Type "Scope"
-
-# update the required permissions
-Set-AzureADApplication -ObjectId $app.ObjectId -RequiredResourceAccess @($req1, $req2)
-
-write-host "Creating ServicePrincipal..."
+write-output "Creating ServicePrincipal..."
 $sp = New-AzureADServicePrincipal -AccountEnabled $true -AppId $App.AppId -AppRoleAssignmentRequired $false -DisplayName $displayName 
 <#
 $App = Get-AzureADApplication -SearchString $displayName
@@ -81,7 +92,20 @@ $sp = Get-AzureADServicePrincipal -SearchString $displayName
 #>
 
 if ( $WriteAccess -eq $true ) {
-    write-host "Adding ServicePrincipal to role DirectoryWriter..."
+    $env:client_id=$app.AppId
+    $env:client_secret=$appKey.Value
+    write-output "Adding ServicePrincipal to role DirectoryWriter..."
     $roleWriter = Get-AzureADDirectoryRole | Where-Object { $_.DisplayName -eq "Directory Writers" } 
     Add-AzureADDirectoryRoleMember -ObjectId $roleWriter.ObjectId -RefObjectId $sp.ObjectId
+} else {
+    $env:web_client_id=$app.AppId
+    $env:web_client_secret=$appKey.Value
+    write-output "Sleeping 15 seconds to wait for replication"
+    Start-Sleep 15
+    write-output "Updating SignInAudience to AzureADandPersonalMicrosoftAccount"
+    $oauthBody  = @{grant_type="client_credentials";resource="https://graph.microsoft.com/";client_id=$env:client_id;client_secret=$env:client_secret;scope="https://graph.microsoft.com/.default Application.ReadWrite.All"}
+    $oauth      = Invoke-RestMethod -Method Post -Uri "https://login.microsoft.com/$tenantName/oauth2/token?api-version=1.0" -Body $oauthBody
+    $body = @{ SignInAudience = "AzureADandPersonalMicrosoftAccount" }
+    $apiUrl = "https://graph.microsoft.com/v1.0/applications/$($app.objectId)"
+    Invoke-RestMethod -Uri $apiUrl -Headers @{Authorization = "Bearer $($oauth.access_token)" }  -Method PATCH -Body $($body | convertto-json) -ContentType "application/json"
 }

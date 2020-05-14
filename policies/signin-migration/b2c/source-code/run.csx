@@ -26,8 +26,8 @@ public static async Task<HttpResponseMessage> Run(HttpRequest req, ILogger log)
     // and ALLOW_USER_PASSWORD_AUTH enabled
     var awsRegion = System.Environment.GetEnvironmentVariable("AWS_Region"); //
     log.LogInformation("AWS Region = " + awsRegion );
-    var url = "https://cognito-idp." + awsRegion + ".amazonaws.com/";   // region should really be in config
-    var awsUserPoolClientId = System.Environment.GetEnvironmentVariable("AWS_CognitoUserPoolAppClientId"); //"2kic3iid460k1npcecko2gc1ts";     // should really be in config
+    var url = "https://cognito-idp." + awsRegion + ".amazonaws.com/";   
+    var awsUserPoolClientId = System.Environment.GetEnvironmentVariable("AWS_CognitoUserPoolAppClientId"); 
 
     // body we pass to AWS Cognito
     var initAuthBody = new {AuthFlow = "USER_PASSWORD_AUTH", ClientId = awsUserPoolClientId,

@@ -8,12 +8,12 @@ The node.js app is based on the examples in this [github repo](https://github.co
 To get the website up and running, you need to do the following
 1. [Install node and npm](https://nodejs.org/en/download/)
 2. Open a command prompt in the ***website*** folder and run ``npm install`` to install the website dependancies
-3. Edit file [start-website-aws.cmd](start-website-aws.cmd) to update 
+3. Edit file [start-website-aws.cmd](start-website-aws.cmd) or [start-website-aws.ps1](start-website-aws.ps1)
 * CLIENT_ID = from the AWS Console under ***General settings*** > ***App clients*** (not the *Ropc app)
 * CLIENT_SECRET = from the AWS Console under ***General settings*** > ***App clients*** (not the *Ropc app)
 * AUTH_DOMAIN = from the AWS Console under ***App integration*** > ***Domain name*** (copy everything from https:// to .com)
 * SCOPES = <your-prefix>AppScopes/demo.read under ***App integration*** > ***App client settings*** (copy everything from https:// to .com)
-4. Start the website by the command ``start-website-aws.cmd`` 
+4. Start the website by the command ``start-website-aws.cmd`` or ``start-website-aws.ps1``
 
 ## How to use the website for AWS Cognito
 Open your browser and navigate to [http://localhost:3000/](http://localhost:3000/) and click ***Login with AWS Cognito***. You will be redirected to AWS Cognito's login page and the first time you signin with an imported user you will be required to change the password. If you successful authenticate, you will be presented with a page with links to view your tokens with jwt.ms. Remember that you have a session going in your browser and subsequent login attempts will bypass the AWS Cognito login page and give you the token directly
@@ -31,11 +31,11 @@ In Azure portal and in the B2C tenant.
 
 1. Goto ***App Registrations*** blade and select ***+ New registration***
 2. Give the app a name (B2C migration testapp) and specify ``http:localhost:3000/callback`` for the ***Redirect URI***, Register
-3. Edit file [start-website-b2c.cmd](start-website-b2c.cmd) to update
+3. Edit file [start-website-b2c.cmd](start-website-b2c.cmd) and/or [start-website-b2c.ps1](start-website-b2c.ps1)
 * B2C_TENANT=yourtenant (without.onmicrosoft.com)
 * CLIENT_ID=Application (client) ID from the portal
 * CLIENT_SECRET=create a key in ***Certificates & secrets*** in the portal. (Remember to escape characters as needed) 
-4. Start the website by the command ``start-website-b2c.cmd`` 
+4. Start the website by the command ``start-website-b2c.cmd`` or ``start-website-b2c.ps1``
 
 You can script the App Registration if you like by running the following commands. 
 
@@ -54,10 +54,12 @@ Adding RequiredResourceAccess...
 Creating ServicePrincipal...
 ```
 
-You need to Grant permission for this app i portal.azure.com under ***API Permissions***
+The script new-azureadb2c.ps1 sets two environment variables, named ***web_client_id*** and ***web_client_secret*** that you can use to edit the start files start-website.b2c.*.
 
-Notice that we don't change to a Microsoft authentication library and that we are still using simple-oauth which knows nothing about Azure AD B2C.
+Notice that we don't change to a Microsoft library, like MSAL, and that we are still using simple-oauth which knows nothing about Azure AD B2C.
 
 Open your browser and navigate to [http://localhost:3000/](http://localhost:3000/) and click ***Login with Azure AD B2C***. You will be redirected to B2C's Custom Policy signin page and the first time you signin, the policy will check with AWS Cognito, via your Azure Function, and it AWS says thumbs up on the authentication, the Custom Policy will complete the migration via setting the password in the B2C tenant. If the ``phoneNumberVerified`` attribute is ``True``, the phone number will be updated as the verified MFA number. You can see that MFA has been migrated by viewing the "Phone" attribute under ***Authentication methods***
 
 You can see the migration in action if you open the Logs / Console window on the Azure Function.
+
+If you type the wrong password, you will get an error message saying ***Could not verify migrated user in old system***. This comes from the Azure Function [code](../b2c/source-code/run.csx) and is only there to show that AWS rejected the password. In a real world case you would have a more neutral error message.

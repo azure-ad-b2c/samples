@@ -4,13 +4,13 @@ param (
 
 # invoke the Azure Function and pass userid/password to authenticate the user  
 #$url = "http://localhost:7071/api/UserMigrationValidateUser"    # if you run it in vscode
-$url = "https://your-azfunc-api-name.azurewebsites.net/api/ValidateUserAwsCognito?code=iR...A=="    
+$url = "https://your-azfunc-api-name.azurewebsites.net/api/ValidateUserAwsCognito?code=iR...A==" 
 
 # ask for credentials
-$cred = Get-Credential -UserName $UserName -Message "Enter userid for $Tenant"
+$cred = Get-Credential -UserName $UserName -Message "Enter Password"
 
 try {
-    $body = @{email=$cred.UserName;password=$cred.GetNetworkCredential().Password;mobile="+46111222333"}
+    $body = @{email=$cred.UserName;password=$cred.GetNetworkCredential().Password;mobile="+46112"}
     $result = Invoke-RestMethod $url -Method Post -Body (ConvertTo-Json $body) -ContentType "application/json" 
 } catch {
     # NotFound = user is not found in the Azure STorage Table for migrated users
