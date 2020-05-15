@@ -18,9 +18,9 @@ During the sign in, the B2C Custom Policy will read the user object and check th
 ## How to get started
 
 1. Follow the [AWS instruction](aws/README.md) for how to deploy a working AWS Cognito environment
-2. Follow the first part of the [website instructions](website/README.md) for how to verify your dpeloyment with AWS Cognito
+2. Follow the first part of the [website instructions](website/README.md) for how to verify your deployment with AWS Cognito
 3. Follow the [B2C instructions](b2c/README.md) for how to migrate the users and deploy the B2C Custom Policies, etc.
-4. Follow the second part of the [website instructions](website/README.md) for how to verify your dpeloyment Azure AD B2C
+4. Follow the second part of the [website instructions](website/README.md) for how to verify your deployment Azure AD B2C
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

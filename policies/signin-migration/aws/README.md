@@ -4,7 +4,7 @@
 You need to create an [AWS Account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/). The registration process currently requires you to register a credit card to cover any costs. AWS Cognito is free up to 50K users, so there shouldn't be any cost incured, but please check the latest [pricing](https://aws.amazon.com/cognito/pricing/).
 
 ## Install AWS CLI
-This sample uses AWS CLI (Command Line Interface) to script the creation of AWS Cognito resources and also as part of the migration process. You therefor need to [install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html). Currently, the scripts are written in Powershell, so if you want to run this on a Mac, you need [Powershell for Mac](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7).
+This sample uses AWS CLI (Command Line Interface) to script the creation of AWS Cognito resources and also as part of the migration process. You therefor need to [install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html). Currently, the scripts are written in Powershell but the AzureAD module isn't available on Mac yet, so these scripts only run on Windows.
 
 In order to use AWS CLI, you need to configure it so it can access your AWS Account. The instructions for this configuration can be found [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration).
 
