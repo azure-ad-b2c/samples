@@ -19,7 +19,7 @@ steps:
   displayName: 'Run a multi-line script'
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(agent.builddirectory)'
+    SourceFolder: '/home/vsts/work/1/s'
     Contents: '**\html_files**'
     TargetFolder: '$(build.artifactstagingdirectory)/ui_files'
 - task: PublishBuildArtifacts@1
