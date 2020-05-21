@@ -14,8 +14,9 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
+    echo Check current dir and list.
     pwd
+    ls -la
   displayName: 'Run a multi-line script'
 - task: CopyFiles@2
   inputs:
