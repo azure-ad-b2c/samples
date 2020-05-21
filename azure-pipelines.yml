@@ -17,3 +17,12 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+- task: CopyFiles@2
+  inputs:
+    Contents: '**\html_files**'
+    TargetFolder: '$(build.artifactstagingdirectory)\ui_files'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)\ui_files'
+    ArtifactName: 'uifiles_drop'
+    publishLocation: 'Container'
