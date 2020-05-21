@@ -15,12 +15,12 @@ steps:
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
+    pwd
   displayName: 'Run a multi-line script'
 - task: CopyFiles@2
   inputs:
     SourceFolder: '/home/vsts/work/1/s'
-    Contents: '**\html_files**'
+    Contents: '**\html-templates**'
     TargetFolder: '$(build.artifactstagingdirectory)/ui_files'
 - task: PublishBuildArtifacts@1
   inputs:
