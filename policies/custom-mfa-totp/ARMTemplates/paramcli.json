@@ -1,0 +1,17 @@
+{
+    "siteName": {
+        "value": "qrcode{UNIQUE}"
+    },
+    "hostingPlanName": {
+        "value": "ASP{UNIQUE}"
+    },
+    "siteLocation": {
+        "value": "{LOCATION}"
+    },
+    "repoUrl": {
+        "value": "{REPO}"
+    },
+    "branch": {
+        "value": "{BRANCH}"
+    }
+}
