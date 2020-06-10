@@ -502,6 +502,7 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Authenticator_TrustFra
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
             <ClaimsExchange Id="PasswordlessUsingAuthenticatorExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress-TOTP" />
           </ClaimsExchanges>
         </OrchestrationStep>
