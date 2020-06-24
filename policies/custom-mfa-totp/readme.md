@@ -17,8 +17,8 @@ Following component are involved in the Azure AD B2C TOTP multi-factor authentic
     - [Add the ScriptExecution element to the relying party policy](https://docs.microsoft.com/en-us/azure/active-directory-b2c/javascript-samples).
     - Set the [page contract](https://docs.microsoft.com/en-us/azure/active-directory-b2c/page-contract) for **all** content definitions in the base/extension policy with the new DataUri value. 
  
-- The .Net core solution use following NuGet packages: OtpSharp
-and	QRCode 
+- The .Net core solution use following NuGet packages: OtpNet
+and	QRCoder 
 
 - The solution is based on an extension attribute. Read here how to [configure extension attributes](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom). 
 
