@@ -5,7 +5,6 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <h2>@ViewData["Message"] </h2>
 </div>
 
 <form method="get" asp-controller="Home">
@@ -30,7 +29,7 @@
         <div class="form-group" hidden>
             <label class="control-label col-md-2" for="phone">Phone number (with country prefix):</label>
             <div class="col-md-10">
-                <input class="form-control" type="text" id="phone" name="phone" value=""  />
+                <input class="form-control" type="text" id="phone" name="phone" value="" />
                 <span class="text-danger field-validation-valid" data-valmsg-for="phone" data-valmsg-replace="true"></span>
             </div>
         </div>
@@ -41,4 +40,4 @@
             </div>
         </div>
     </div>
- </form>
+</form>

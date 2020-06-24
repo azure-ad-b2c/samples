@@ -1,6 +1,6 @@
 using System;
 
-namespace AADB2C.Invite.Models
+namespace AzureADB2C.Invite.Models
 {
     public class ErrorViewModel
     {

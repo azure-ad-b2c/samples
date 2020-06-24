@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using AADB2C.Invite.Models;
+using AzureADB2C.Invite.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-namespace AADB2C.Invite.Controllers
+namespace AzureADB2C.Invite.Controllers
 {
     public class OidcController : Controller
     {
         private static Lazy<X509SigningCredentials> SigningCredentials;
         private readonly AppSettingsModel AppSettings;
-        private readonly IHostingEnvironment HostingEnvironment;
+        private readonly IWebHostEnvironment HostingEnvironment;
+        private readonly ILogger<HomeController> _logger;
 
         // Sample: Inject an instance of an AppSettingsModel class into the constructor of the consuming class, 
         // and let dependency injection handle the rest
-        public OidcController(IOptions<AppSettingsModel> appSettings, IHostingEnvironment hostingEnvironment)
+        public OidcController(ILogger<HomeController> logger, IOptions<AppSettingsModel> appSettings, IWebHostEnvironment hostingEnvironment)
         {
             this.AppSettings = appSettings.Value;
             this.HostingEnvironment = hostingEnvironment;
+            this._logger = logger;
 
             // Sample: Load the certificate with a private key (must be pfx file)
             SigningCredentials = new Lazy<X509SigningCredentials>(() =>
@@ -58,7 +60,7 @@ namespace AADB2C.Invite.Controllers
                 JwksUri = Url.Link("JWKS", null),
 
                 // Sample: Include the supported signing algorithms
-                IdTokenSigningAlgValuesSupported = new[] { OidcController.SigningCredentials.Value.Algorithm},
+                IdTokenSigningAlgValuesSupported = new[] { OidcController.SigningCredentials.Value.Algorithm },
             }), "application/json");
         }
 

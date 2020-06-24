@@ -4,31 +4,60 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using AzureADB2C.Invite.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.Mail;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Http.Extensions;
-using AADB2C.Invite.Models;
-using System.Net.Mail;
-using System.Net;
 
-namespace AADB2C.Invite.Controllers
+namespace AzureADB2C.Invite.Controllers
 {
+    //    public class HomeController : Controller
+    //    {
+    //        private readonly ILogger<HomeController> _logger;
+
+    //        public HomeController(ILogger<HomeController> logger)
+    //        {
+    //            _logger = logger;
+    //        }
+
+    //        public IActionResult Index()
+    //        {
+    //            return View();
+    //        }
+
+    //        public IActionResult Privacy()
+    //        {
+    //            return View();
+    //        }
+
+    //        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    //        public IActionResult Error()
+    //        {
+    //            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    //        }
+    //    }
+    //}
+
     public class HomeController : Controller
     {
         private static Lazy<X509SigningCredentials> SigningCredentials;
         private readonly AppSettingsModel AppSettings;
-        private readonly IHostingEnvironment HostingEnvironment;
+        private readonly IWebHostEnvironment HostingEnvironment;
+        private readonly ILogger<HomeController> _logger;
 
         // Sample: Inject an instance of an AppSettingsModel class into the constructor of the consuming class, 
         // and let dependency injection handle the rest
-        public HomeController(IOptions<AppSettingsModel> appSettings, IHostingEnvironment hostingEnvironment)
+        public HomeController(ILogger<HomeController> logger, IOptions<AppSettingsModel> appSettings, IWebHostEnvironment hostingEnvironment)
         {
             this.AppSettings = appSettings.Value;
             this.HostingEnvironment = hostingEnvironment;
+            this._logger = logger;
 
             // Sample: Load the certificate with a private key (must be pfx file)
             SigningCredentials = new Lazy<X509SigningCredentials>(() =>

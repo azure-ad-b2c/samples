@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AADB2C.Invite.Models
+namespace AzureADB2C.Invite.Models
 {
     public class OidcModel
     {

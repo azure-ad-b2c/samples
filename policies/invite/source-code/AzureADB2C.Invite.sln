@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureADB2C.Invite", "AzureADB2C.Invite\AzureADB2C.Invite.csproj", "{D27AFA52-AEC8-4BBF-B17A-257BDF85D7FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D27AFA52-AEC8-4BBF-B17A-257BDF85D7FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27AFA52-AEC8-4BBF-B17A-257BDF85D7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27AFA52-AEC8-4BBF-B17A-257BDF85D7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D27AFA52-AEC8-4BBF-B17A-257BDF85D7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E5C29BEB-2CC2-4B69-B161-DAC58788C8F3}
+	EndGlobalSection
+EndGlobal
