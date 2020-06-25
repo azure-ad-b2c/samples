@@ -17,32 +17,7 @@ using System.IO;
 
 namespace AzureADB2C.Invite.Controllers
 {
-    //    public class HomeController : Controller
-    //    {
-    //        private readonly ILogger<HomeController> _logger;
 
-    //        public HomeController(ILogger<HomeController> logger)
-    //        {
-    //            _logger = logger;
-    //        }
-
-    //        public IActionResult Index()
-    //        {
-    //            return View();
-    //        }
-
-    //        public IActionResult Privacy()
-    //        {
-    //            return View();
-    //        }
-
-    //        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    //        public IActionResult Error()
-    //        {
-    //            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    //        }
-    //    }
-    //}
 
     public class HomeController : Controller
     {
@@ -89,7 +64,7 @@ namespace AzureADB2C.Invite.Controllers
                 return View();
             }
 
-            string token = BuildIdToken(Name, email);
+            string token = BuildIdToken(Name, email, phone);
             string link = BuildUrl(token);
 
             string Body = string.Empty;
@@ -122,14 +97,19 @@ namespace AzureADB2C.Invite.Controllers
         }
 
 
-        private string BuildIdToken(string Name, string ClubId)
+        private string BuildIdToken(string Name, string email, string phone)
         {
             string issuer = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase.Value}/";
 
             // All parameters send to Azure AD B2C needs to be sent as claims
             IList<System.Security.Claims.Claim> claims = new List<System.Security.Claims.Claim>();
             claims.Add(new System.Security.Claims.Claim("name", Name, System.Security.Claims.ClaimValueTypes.String, issuer));
-            claims.Add(new System.Security.Claims.Claim("email", ClubId, System.Security.Claims.ClaimValueTypes.String, issuer));
+            claims.Add(new System.Security.Claims.Claim("email", email, System.Security.Claims.ClaimValueTypes.String, issuer));
+
+            if (!string.IsNullOrEmpty(phone))
+            {
+                claims.Add(new System.Security.Claims.Claim("phone", phone, System.Security.Claims.ClaimValueTypes.String, issuer));
+            }
 
             // Create the token
             JwtSecurityToken token = new JwtSecurityToken(
