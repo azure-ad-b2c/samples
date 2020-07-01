@@ -241,3 +241,4 @@
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
+</TrustFrameworkPolicy>
