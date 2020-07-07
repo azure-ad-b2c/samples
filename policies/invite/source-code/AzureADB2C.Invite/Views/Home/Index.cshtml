@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<form method="get" asp-controller="Home">
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-4" for="Name">Name:</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" id="Name" name="Name" value="Western Miller" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-4" for="email">Email address:</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" id="email" name="email" value="" required />
+                <span class="text-danger field-validation-valid" data-valmsg-for="email" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4" for="phone">Phone number, with country prefix (optional):</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" id="phone" name="phone" value="" />
+                <span class="text-danger field-validation-valid" data-valmsg-for="phone" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Send invite" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
