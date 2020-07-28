@@ -141,6 +141,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
  - [Obtain the Microsoft Graph access token for an Azure AD Federated logon](policies/B2C-Token-Includes-AzureAD-BearerToken) - For scenarios where we would like to obtain the Microsoft Graph API token for a Azure AD federated logon in the context of the logged in user. For example this could be used to read the users Exchange Online mailbox within an Azure AD B2C application.
 
+ - [AAD Authentication with REST](policies/AAD-SignIn-with-REST) - Pass through authentication to Azure AD (no user created in B2C), then calls a REST API to obtain more claims. 
+
 ## App migration
 - [Angular5](policies/app-migration-angular5) This guide shows how to migrate an exiting Angular SPA application to be protected with Azure AD B2C authentication.
 

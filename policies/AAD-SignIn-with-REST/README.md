@@ -6,7 +6,7 @@ If you find a bug in the sample, please raise the issue on [GitHub Issues](https
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
-This policy utilises passthrough authentication to B2C. THe user wil *NOT* be stored within the B2C directory. Each authentication will call AAD retrived the provided claims and then call a REST API to augment additional claims to send to the target Applications.
+This policy utilises passthrough authentication to B2C. The user wil *NOT* be stored within the B2C directory. Each authentication will call AAD retrieve the provided claims and then call a REST API to augment additional claims to send to the target Applications.
 This policy is based on the [Azure AD Single tenant implementation](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/identity-provider-azure-ad-single-tenant-custom?tabs=app-reg-ga) as well as the ["Integrate REST API claims"](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-rest-api-intro) documentation.
 
 ## Implementation
