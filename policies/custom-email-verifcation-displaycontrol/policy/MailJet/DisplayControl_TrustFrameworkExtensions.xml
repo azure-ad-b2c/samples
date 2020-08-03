@@ -197,7 +197,7 @@
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail-CustomEmail">
           <DisplayName>Email signup</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
