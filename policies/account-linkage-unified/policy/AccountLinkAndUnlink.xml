@@ -117,7 +117,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!--Sample: Displays the sign-in the social account buttons for account linking and unlinking.-->
+        <!--Sample: (Link and unlink) Displays the sign-in the social account buttons for account linking and unlinking.-->
         <OrchestrationStep Order="7" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.idpselections">
           <ClaimsProviderSelections DisplayOption="ShowSingleProvider">
             <!--Sample: Facebook-->
@@ -135,7 +135,7 @@
           </ClaimsProviderSelections>
         </OrchestrationStep>
 
-        <!-- Sample: Redirect the user to the selected social provider, to complete the sign-in and link the new account -->
+        <!-- Sample: (Link and unlink) Redirect the user to the selected social provider, to complete the sign-in and link the new account -->
         <OrchestrationStep Order="8" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="LinkFacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH-Link"/>
@@ -149,14 +149,21 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Attempt to find the second user account in the directory. -->
+        <!-- Sample: (Link only) Attempt to find the second user account in the directory. -->
         <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>linkOrUnlink</Value>
+              <Value>unlink</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="AAADUserReadUsingUserIdentityToLink" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentityToLink-NoError"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Check whether second user account is existed in the directory. 
+        <!-- Sample: (Link only) Check whether second user account is existed in the directory. 
                      If yes, we can't link second account to the existing one, as the second one already exists as a stand along account. -->
         <OrchestrationStep Order="10" Type="ClaimsExchange">
           <Preconditions>
@@ -175,7 +182,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Update the identities collection with the link or unlink identity. -->
+        <!-- Sample: (Link and unlink) Update the identities collection with the link or unlink identity. -->
         <OrchestrationStep Order="11" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="UpdateUserIdentities" TechnicalProfileReferenceId="AAD-UserUpdateWithUserIdentities"/>

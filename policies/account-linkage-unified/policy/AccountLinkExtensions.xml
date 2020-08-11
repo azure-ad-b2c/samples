@@ -190,6 +190,15 @@
           <OutputClaim ClaimTypeReferenceId="issuersToUnlink" TransformationClaimType="issuersCollection" />
         </OutputClaims>
       </ClaimsTransformation>
+
+      <ClaimsTransformation Id="ExtractIssuersToUnlinkForLocalAccount" TransformationMethod="GetIssuersFromUserIdentityCollectionTransformation">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="userIdentityCollection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuersToUnlink" TransformationClaimType="issuersCollection" />
+        </OutputClaims>
+      </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
 
@@ -325,7 +334,10 @@
             <OutputClaim ClaimTypeReferenceId="userIdentities" />
           </OutputClaims>
           <OutputClaimsTransformations>
+            <!-- Sample: Get the list of issuers user has registered -->
             <OutputClaimsTransformation ReferenceId="ExtractIssuers" />
+            <!-- Sample: Get the list of issuers user has registered used to show the unlink technical profiles -->
+            <OutputClaimsTransformation ReferenceId="ExtractIssuersToUnlinkForLocalAccount" />
           </OutputClaimsTransformations>
         </TechnicalProfile>      
 
