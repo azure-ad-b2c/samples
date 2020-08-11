@@ -84,6 +84,12 @@
         <DataType>stringCollection</DataType>
         <UserHelpText>User identity providers. This information is received from alternativeSecurityIds</UserHelpText>
       </ClaimType>
+
+     <ClaimType Id="linkOrUnlink">
+        <DisplayName>linkOrUnlink</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Define whether the user is link or unlink an account</UserHelpText>
+      </ClaimType>
     </ClaimsSchema>
      
     <ClaimsTransformations>  
@@ -440,6 +446,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="id" />
             <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="link" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
               <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
@@ -458,6 +465,7 @@
             </Metadata>        
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="unlink" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
         </TechnicalProfile>             
@@ -517,6 +525,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="id" />
             <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="google.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="link" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
               <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
@@ -534,6 +543,7 @@
             </Metadata>        
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="google.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="unlink" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
         </TechnicalProfile>             
@@ -582,7 +592,7 @@
          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
         </TechnicalProfile>
 
-        <TechnicalProfile Id="MSA-OAUTH-Link">
+        <TechnicalProfile Id="MSA-OIDC-Link">
           <DisplayName>Link Microsoft</DisplayName>
           <Metadata>
             <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
@@ -591,6 +601,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="sub" />
             <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="live.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="link" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
               <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
@@ -608,6 +619,7 @@
             </Metadata>        
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="live.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="unlink" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
         </TechnicalProfile>    
@@ -663,6 +675,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="user_id" />
             <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="twitter.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="link" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
               <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
@@ -680,6 +693,7 @@
             </Metadata>        
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="twitter.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="linkOrUnlink" DefaultValue="unlink" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="SocialAccount-Unlink" />
         </TechnicalProfile> 
