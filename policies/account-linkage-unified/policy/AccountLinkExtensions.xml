@@ -19,14 +19,16 @@
       <ClaimType Id="userIdentities">
         <DisplayName>userIdentities</DisplayName>
         <DataType>userIdentityCollection</DataType>
-        <AdminHelpText>userIdentities</AdminHelpText>
         <UserHelpText>userIdentities</UserHelpText>
       </ClaimType>
-
+      <ClaimType Id="userIdentitiesToUnlink">
+        <DisplayName>userIdentitiesToUnlink</DisplayName>
+        <DataType>userIdentityCollection</DataType>
+        <UserHelpText>userIdentities</UserHelpText>
+      </ClaimType>
       <ClaimType Id="userIdentity">
         <DisplayName>userIdentity</DisplayName>
         <DataType>userIdentity</DataType>
-        <AdminHelpText>userIdentity</AdminHelpText>
         <UserHelpText>userIdentity</UserHelpText>
       </ClaimType>
 
@@ -47,35 +49,30 @@
       <ClaimType Id="issuerToUnlink">
         <DisplayName>issuerToUnlink</DisplayName>
         <DataType>string</DataType>
-        <AdminHelpText>issuerToUnlink</AdminHelpText>
         <UserHelpText>issuerToUnlink</UserHelpText>
       </ClaimType>
 
       <ClaimType Id="issuerToLink">
         <DisplayName>issuerToLink</DisplayName>
         <DataType>string</DataType>
-        <AdminHelpText>issuerToLink</AdminHelpText>
         <UserHelpText>issuerToLink</UserHelpText>
       </ClaimType>
 
       <ClaimType Id="issuerUserId">
         <DisplayName>issuerUserId</DisplayName>
         <DataType>string</DataType>
-        <AdminHelpText>issuerUserId</AdminHelpText>
         <UserHelpText>issuerUserId</UserHelpText>
       </ClaimType>
 
       <ClaimType Id="issuerUserIdToLink">
         <DisplayName>issuerUserIdToLink</DisplayName>
         <DataType>string</DataType>
-        <AdminHelpText>issuerUserIdToLink</AdminHelpText>
         <UserHelpText>issuerUserIdToLink</UserHelpText>
       </ClaimType>
 
       <ClaimType Id="userIdentityToLink">
         <DisplayName>userIdentityToLink</DisplayName>
         <DataType>userIdentity</DataType>
-        <AdminHelpText>userIdentityToLink</AdminHelpText>
         <UserHelpText>userIdentityToLink</UserHelpText>
       </ClaimType>
 
@@ -84,7 +81,11 @@
         <DataType>stringCollection</DataType>
         <UserHelpText>User identity providers. This information is received from alternativeSecurityIds</UserHelpText>
       </ClaimType>
-
+      <ClaimType Id="issuersToUnlink">
+        <DisplayName>issuersToUnlink</DisplayName>
+        <DataType>stringCollection</DataType>
+        <UserHelpText>User identity providers. This information is received from alternativeSecurityIds</UserHelpText>
+      </ClaimType>
      <ClaimType Id="linkOrUnlink">
         <DisplayName>linkOrUnlink</DisplayName>
         <DataType>string</DataType>
@@ -170,6 +171,25 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+
+      <ClaimsTransformation Id="RemoveUserIdentityFromCollectionByIssuerToUnlink" TransformationMethod="RemoveUserIdentityFromCollectionByIssuer">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="identityProvider" TransformationClaimType="issuer" />
+          <InputClaim ClaimTypeReferenceId="userIdentities" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userIdentitiesToUnlink" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="ExtractIssuersToUnlink" TransformationMethod="GetIssuersFromUserIdentityCollectionTransformation">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="userIdentitiesToUnlink" TransformationClaimType="userIdentityCollection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="issuersToUnlink" TransformationClaimType="issuersCollection" />
+        </OutputClaims>
+      </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
 
@@ -214,7 +234,14 @@
             <OutputClaim ClaimTypeReferenceId="surname" />
           </OutputClaims>
           <OutputClaimsTransformations>
+            <!-- Sample: Get the list of issuers user has registered -->
             <OutputClaimsTransformation ReferenceId="ExtractIssuers" />
+
+            <!-- Sample: Remote the current issuer name, so the user will not be able to remove the IDP has sign-in with -->
+            <OutputClaimsTransformation ReferenceId="RemoveUserIdentityFromCollectionByIssuerToUnlink" />
+
+            <!-- Sample: Get the list of issuers user has registered used to show the unlink technical profiles -->
+            <OutputClaimsTransformation ReferenceId="ExtractIssuersToUnlink" />
           </OutputClaimsTransformations>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
@@ -377,7 +404,7 @@
           <DisplayName>Unlink Microsoft</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
             <Metadata>
-              <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
+              <Item Key="ClaimTypeOnWhichToEnable">issuersToUnlink</Item>
             </Metadata>    
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="" AlwaysUseDefaultValue="true" />
