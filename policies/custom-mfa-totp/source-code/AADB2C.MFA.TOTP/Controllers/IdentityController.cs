@@ -9,9 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AADB2C.MFA.TOTP.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using OtpSharp;
+using OtpNet;
 using QRCoder;
 
 namespace AADB2C.RestoreUsername.API.Controllers
@@ -66,10 +67,11 @@ namespace AADB2C.RestoreUsername.API.Controllers
                 // authentication apps running on the mobile device
                 byte[] secretKey = KeyGeneration.GenerateRandomKey(20);
 
-                string TOTPUrl = KeyUrl.GetTotpUrl(secretKey, $"{AppSettings.TOTPAccountPrefix}:{inputClaims.userName}",
-                    AppSettings.TOTPTimestep);
-
-                TOTPUrl = $"{TOTPUrl}&issuer={AppSettings.TOTPIssuer.Replace(" ", "%20")}";
+                string TOTPUrl = GetTotpUrl(secretKey
+                    , inputClaims.userName
+                    , AppSettings.TOTPIssuer
+                    , AppSettings.TOTPTimestep
+                    , AppSettings.TOTPAccountPrefix);
 
                 // Generate QR code for the above URL
                 var qrCodeGenerator = new QRCodeGenerator();
@@ -210,6 +212,22 @@ namespace AADB2C.RestoreUsername.API.Controllers
                 }
             }
             return cipherText;
+        }
+
+        public string GetTotpUrl(byte[] key, string userName, string issuer, int timestep = 30, string prefix = null)
+        {
+            // if no prefix, we use the issuer
+            prefix = prefix ?? issuer;
+
+            // Escape any space, custom characters
+            prefix = Uri.EscapeDataString(prefix);
+            issuer = Uri.EscapeDataString(issuer);
+
+            // Encode the key
+            var secret = Base32Encoding.ToString(key);
+
+            return string.Format("otpauth://totp/{0}:{1}?secret={2}&period={3}&issuer={0}"
+                , prefix , userName, secret, timestep, issuer);
         }
     }
 }

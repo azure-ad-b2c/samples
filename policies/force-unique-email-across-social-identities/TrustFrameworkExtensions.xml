@@ -154,7 +154,7 @@
       <TechnicalProfiles>
         <!--Demo: this technical profile displays the message to the user-->
         <TechnicalProfile Id="SelfAsserted-UniqueUserMessage">
-          <DisplayName>Password reset</DisplayName>
+          <DisplayName>Email unique validation</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>

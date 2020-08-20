@@ -27,7 +27,7 @@
   </ClaimsProviders>
   <UserJourneys>
     <UserJourney Id="AccountLinkAndUnlink">
-      <OrchestrationSteps>    
+      <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <!--Sample: IDP selection for sign-in with local or federated account -->
@@ -117,30 +117,30 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!--Sample: Displays the sign-in the social account buttons for account linking and unlinking.-->
+        <!--Sample: (Link and unlink) Displays the sign-in the social account buttons for account linking and unlinking.-->
         <OrchestrationStep Order="7" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.idpselections">
           <ClaimsProviderSelections DisplayOption="ShowSingleProvider">
             <!--Sample: Facebook-->
             <ClaimsProviderSelection TargetClaimsExchangeId="LinkFacebookExchange"/>
             <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkFacebookExchange"/>
-             <!--Sample: MSA-->
+            <!--Sample: MSA-->
             <ClaimsProviderSelection TargetClaimsExchangeId="LinkMSAExchange"/>
             <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkMSAExchange"/>
-             <!--Sample: Google-->
+            <!--Sample: Google-->
             <ClaimsProviderSelection TargetClaimsExchangeId="LinkGoogleExchange"/>
             <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkGoogleExchange"/>
-             <!--Sample: Twitter-->
+            <!--Sample: Twitter-->
             <ClaimsProviderSelection TargetClaimsExchangeId="LinkTwitterExchange"/>
             <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkTwitterExchange"/>
           </ClaimsProviderSelections>
         </OrchestrationStep>
 
-        <!-- Sample: Redirect the user to the selected social provider, to complete the sign-in and link the new account -->
+        <!-- Sample: (Link and unlink) Redirect the user to the selected social provider, to complete the sign-in and link the new account -->
         <OrchestrationStep Order="8" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="LinkFacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH-Link"/>
             <ClaimsExchange Id="UnLinkFacebookExchange" TechnicalProfileReferenceId="Facebook-Unlink"/>
-            <ClaimsExchange Id="LinkMSAExchange" TechnicalProfileReferenceId="MSA-OAUTH-Link"/>
+            <ClaimsExchange Id="LinkMSAExchange" TechnicalProfileReferenceId="MSA-OIDC-Link"/>
             <ClaimsExchange Id="UnlinkMSAExchange" TechnicalProfileReferenceId="MSA-Unlink"/>
             <ClaimsExchange Id="LinkGoogleExchange" TechnicalProfileReferenceId="Google-OAUTH-Link"/>
             <ClaimsExchange Id="UnlinkGoogleExchange" TechnicalProfileReferenceId="Google-Unlink"/>
@@ -149,16 +149,29 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Attempt to find the second user account in the directory. -->
+        <!-- Sample: (Link only) Attempt to find the second user account in the directory. -->
         <OrchestrationStep Order="9" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>linkOrUnlink</Value>
+              <Value>unlink</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="AAADUserReadUsingUserIdentityToLink" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentityToLink-NoError"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Check whether the user not existed in the directory -->
+        <!-- Sample: (Link only) Check whether second user account is existed in the directory. 
+                     If yes, we can't link second account to the existing one, as the second one already exists as a stand along account. -->
         <OrchestrationStep Order="10" Type="ClaimsExchange">
           <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>linkOrUnlink</Value>
+              <Value>unlink</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
               <Value>objectIdToLink</Value>
               <Action>SkipThisOrchestrationStep</Action>
@@ -169,7 +182,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Link the new soicla account. -->
+        <!-- Sample: (Link and unlink) Update the identities collection with the link or unlink identity. -->
         <OrchestrationStep Order="11" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="UpdateUserIdentities" TechnicalProfileReferenceId="AAD-UserUpdateWithUserIdentities"/>
@@ -177,11 +190,11 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="12" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
- 
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb"/>
 
-   </UserJourney>
+    </UserJourney>
   </UserJourneys>
   <RelyingParty>
     <DefaultUserJourney ReferenceId="AccountLinkAndUnlink" />
