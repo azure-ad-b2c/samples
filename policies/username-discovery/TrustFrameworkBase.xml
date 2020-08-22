@@ -519,7 +519,8 @@
             <Item Key="response_types">id_token</Item>
             <Item Key="response_mode">query</Item>
             <Item Key="scope">email openid</Item>
-            
+            <Item Key="grant_type">password</Item>
+
             <!-- Demo: configuration -->
             <Item Key="LocalAccountProfile">true</Item>
             <!-- /Demo -->

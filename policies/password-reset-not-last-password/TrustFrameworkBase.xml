@@ -703,6 +703,7 @@
 						<Item Key="response_types">id_token</Item>
 						<Item Key="response_mode">query</Item>
 						<Item Key="scope">email openid</Item>
+						<Item Key="grant_type">password</Item>
 
 						<!-- Policy Engine Clients -->
 						<Item Key="UsePolicyInRedirectUri">false</Item>
@@ -1077,6 +1078,7 @@
 						<Item Key="response_types">id_token</Item>
 						<Item Key="response_mode">query</Item>
 						<Item Key="scope">email openid</Item>
+						<Item Key="grant_type">password</Item>
 						<Item Key="UsePolicyInRedirectUri">false</Item>
 						<Item Key="HttpBinding">POST</Item>
 						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
