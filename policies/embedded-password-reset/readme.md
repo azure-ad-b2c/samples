@@ -24,10 +24,10 @@ and [Customize the user interface of your application using a custom policy](htt
 $("#forgotPassword").remove()
 
 // Move the new password reset button to the right position
-$("#PasswordResetUsingEmailAddressExchange").detach().appendTo("label[for='password']");
+$("#StartPasswordResetFlowExchange").detach().appendTo("label[for='password']");
 
 // Set the style of the passwrod reset button to look like a link
-$("#PasswordResetUsingEmailAddressExchange").attr("style", "background: none!important; color:#2872DD; border:none;  padding:0!important; font-size: .75em;  height: auto; width: auto;  margin-left: 5px")
+$("#StartPasswordResetFlowExchange").attr("style", "background: none!important; color:#2872DD; border:none;  padding:0!important; font-size: .75em;  height: auto; width: auto;  margin-left: 5px")
 ```
 
 ## Community Help and Support
