@@ -4,6 +4,7 @@
   TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_DisplayControl_TrustFrameworkExtensions" 
   PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_DisplayControl_TrustFrameworkExtensions">
+  
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -74,8 +75,15 @@
       <ContentDefinition Id="api.localaccountsignup">
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.0.0</DataUri>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
-          <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.localaccountsignup.es" />
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.custom-email.en" />
+          <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.custom-email.es" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.0.0</DataUri>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.custom-email.en" />
+          <LocalizedResourcesReference Language="es" LocalizedResourcesReferenceId="api.custom-email.es" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
@@ -84,7 +92,7 @@
         <SupportedLanguage>en</SupportedLanguage>
         <SupportedLanguage>es</SupportedLanguage>
       </SupportedLanguages>
-      <LocalizedResources Id="api.localaccountsignup.en">
+      <LocalizedResources Id="api.custom-email.en">
         <LocalizedStrings>
           <!--Email template parameters-->
           <LocalizedString ElementType="GetLocalizedStringsTransformationClaimType" StringId="email_subject">Contoso account email verification code</LocalizedString>
@@ -93,22 +101,22 @@
           <LocalizedString ElementType="GetLocalizedStringsTransformationClaimType" StringId="email_signature">Sincerely</LocalizedString>
 
           <!-- Display control UI elements-->
-          <LocalizedString ElementType="UxElement" StringId="verification_control_but_change_claims">#5 Change</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="verification_control_fail_send_code">#5 Failed to send the code, please try again later.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="verification_control_fail_verify_code">#5 Failed to verify the code, please try again later.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="verification_control_but_send_code">#5 Send Code</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="verification_control_but_send_new_code">#5 Send New Code</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="verification_control_but_verify_code">#5 Verify Code</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="verification_control_code_sent">#5 Verification code has been sent. Please copy it to the input box below.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_but_change_claims">Change</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_fail_send_code">Failed to send the code, please try again later.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_fail_verify_code">Failed to verify the code, please try again later.</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_but_send_code">Send Code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_but_send_new_code">Send New Code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_but_verify_code">Verify Code</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="verification_control_code_sent">Verification code has been sent. Please copy it to the input box below.</LocalizedString>
 
           <!-- Email validation error messages-->
-          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfSessionDoesNotExist">#5 You have exceed the maximum time allowed.</LocalizedString>
-          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMaxRetryAttempted">#5 You have exceed the number of retries allowed.</LocalizedString>
-          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidCode">#5 You have entered the wrong code.</LocalizedString>
-          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfSessionConflict">#5 Cannot verify the code, please try again later.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfSessionDoesNotExist">You have exceed the maximum time allowed.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfMaxRetryAttempted">You have exceed the number of retries allowed.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfInvalidCode">You have entered the wrong code.</LocalizedString>
+          <LocalizedString ElementType="ErrorMessage" StringId="UserMessageIfSessionConflict">Cannot verify the code, please try again later.</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-      <LocalizedResources Id="api.localaccountsignup.es">
+      <LocalizedResources Id="api.custom-email.es">
         <LocalizedStrings>
           <!-- Email validation error messages-->
           <LocalizedString ElementType="GetLocalizedStringsTransformationClaimType" StringId="email_subject">Código de verificación del correo electrónico de la cuenta de Contoso</LocalizedString>
@@ -152,7 +160,7 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.OneTimePasswordProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="Operation">GenerateCode</Item>
-            <Item Key="CodeExpirationInSeconds">30</Item>
+            <Item Key="CodeExpirationInSeconds">60</Item>
             <Item Key="CodeLength">6</Item>
             <Item Key="CharacterSet">0-9</Item>
             <Item Key="ReuseSameCode">true</Item>
@@ -191,7 +199,7 @@
             <Item Key="ClaimUsedForRequestPayload">emailRequestBody</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
+            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridApiKey" />
           </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateEmailRequestBody" />
@@ -206,19 +214,9 @@
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
-          <DisplayName>Email signup</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
-            <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
-            <Item Key="language.button_continue">Create</Item>
-          </Metadata>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GetLocalizedStringsForEmail" />
           </InputClaimsTransformations>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="email" />
-          </InputClaims>
           <DisplayClaims>
             <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
             <DisplayClaim ClaimTypeReferenceId="displayName" Required="true" />
@@ -227,17 +225,14 @@
             <DisplayClaim ClaimTypeReferenceId="newPassword" Required="true" />
             <DisplayClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
           </DisplayClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="email" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="objectId" />
-            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
-            <OutputClaim ClaimTypeReferenceId="newUser" />
-          </OutputClaims>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
-          </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="GetLocalizedStringsForEmail" />
+          </InputClaimsTransformations>
+          <DisplayClaims>
+            <DisplayClaim DisplayControlReferenceId="emailVerificationControl" />
+          </DisplayClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>

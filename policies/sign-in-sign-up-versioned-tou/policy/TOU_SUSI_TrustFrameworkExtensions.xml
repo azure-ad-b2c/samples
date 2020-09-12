@@ -232,6 +232,13 @@
             <PersistedClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" DefaultValue="V1" />
           </PersistedClaims>
         </TechnicalProfile>
+
+        <TechnicalProfile Id="SM-AAD">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
+          </PersistedClaims>
+        </TechnicalProfile>
+
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
