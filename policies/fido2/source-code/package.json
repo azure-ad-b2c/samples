@@ -18,7 +18,7 @@
     "jsonwebtoken": "^8.3.0",
     "jwk-to-pem": "^2.0.0",
     "mongoose": "^5.2.3",
-    "npm": "^6.1.0",
+    "npm": "^6.14.6",
     "uuid-parse": "^1.0.0"
   },
   "engines": {
