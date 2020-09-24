@@ -17,7 +17,7 @@
     "express-sslify": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
     "jwk-to-pem": "^2.0.0",
-    "mongoose": "^5.2.3",
+    "mongoose": "^5.7.5",
     "npm": "^6.1.0",
     "uuid-parse": "^1.0.0"
   },
