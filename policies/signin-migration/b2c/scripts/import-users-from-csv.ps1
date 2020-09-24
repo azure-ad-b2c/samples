@@ -27,6 +27,20 @@ $requiresMigrationAttributeName = "extension_$($extId)_requiresMigration"
 $phoneNumberVerifiedAttributeName = "extension_$($extId)_phoneNumberVerified"
 
 function CreateUserInB2C( $usr ) {
+    $pwd = $tmpPwd
+    $requiresMigrationAttribute = "true"
+    $passwordPolicies = "`"passwordPolicies`": `"DisablePasswordExpiration`","
+    # if we DO have the password in the CSV file, we are good to go and need no further migration
+    if ( $usr.password.Length -gt 0 ) {
+        $pwd = $usr.password
+        $requiresMigrationAttribute = "false"
+        $passwordPolicies = "`"passwordPolicies`": `"DisablePasswordExpiration,DisableStrongPassword`","
+    }
+
+    $mobileLine = ""
+    if ( "" -ne $usr.mobile ) {
+        $mobileLine = "`"mobile`": `"$($usr.mobile)`","
+    }
     $enabled=$usr.accountEnabled.ToLower()
     $body = @"
         {
@@ -35,10 +49,10 @@ function CreateUserInB2C( $usr ) {
           "displayName": "$($usr.displayName)",
           "surname": "$($usr.surname)",
           "givenname": "$($usr.givenname)",
-          "mobile": "$($usr.mobile)",
-          "passwordPolicies": "DisablePasswordExpiration",
+          $mobileLine
+          $passwordPolicies
           "passwordProfile": {
-            "password": "$tmpPwd",
+            "password": "$pwd",
             "forceChangePasswordNextLogin": false
           },
           "signInNames": [
@@ -51,7 +65,7 @@ function CreateUserInB2C( $usr ) {
               "value": "$($usr.emailAddress)"
             }
           ],
-          "$requiresMigrationAttributeName": true,
+          "$requiresMigrationAttributeName": $requiresMigrationAttribute,
           "$phoneNumberVerifiedAttributeName": $($usr.phoneNumberVerified)
         }
 "@
