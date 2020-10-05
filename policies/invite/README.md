@@ -6,7 +6,7 @@ To invite a user, from the application, type the user's **email address** and cl
 ![User flow](media/flow.png)
 
 ## Sending Application Data
-The key of sending data to Azure AD B2C custom policy is to package the data into a [JWT token as claims using id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint. In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
+The key of sending data to Azure AD B2C custom policy is to package the data into a [JWT token as claims using id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
 
 ID tokens are JSON Web Tokens (JWTs) and, in this application, are signed using RSA certificates. This application hosts an Open ID Connect metatdata endpoint and JSON Web Keys (JWKs) endpoint which are used by Azure AD B2C to validate the signature of the ID token.
 
