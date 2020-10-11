@@ -28,7 +28,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou) - Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.
 
-- [Delete my account](policies/delete-my-account) - Demonstrates how to delete a local or social account from the directory
 
 - [Local account change sign-in name email address](policies/change-sign-in-name) - During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.
 
@@ -129,6 +128,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - [Render dynamic dropdown box](policies/selectemail) - For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.
 
 ## Generic enhancements
+
+- [Delete my account](policies/delete-my-account) - Demonstrates how to delete a local or social account from the directory
 
 - [Integrating Azure AD B2C with TypingDNA](policies/signin-signup-typingdna) - This sample demonstrates how to integrate TypingDNA as a PSD2 SCA compliant authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
 
