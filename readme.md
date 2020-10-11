@@ -137,8 +137,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
-- [SAML Service Provider](https://docs.microsoft.com/en-us/azure/active-directory-b2c/connect-with-saml-service-providers) This document walks you through adding a SAML-based Relying party to Azure AD B2C.
-
 - [Sign-up with social and local account](policies/sign-up-with-social-and-local-account) - Demonstrate how to create a policy that allows a user to sign-up with a social account linked to local account
 
 - [Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api) - A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).
