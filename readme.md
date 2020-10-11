@@ -20,8 +20,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Local account policy enhancements
 
-- [Render dynamic dropdown box](policies/selectemail) - For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.
-
 - [Sign In and Sign Up with Username or Email](policies/username-or-email) - This sample combines the UX of both the Email and Username based journeys.
 
 - [Split Signup into separate steps for email verification and account creation](policies/split-email-verification-and-signup) - When you dont want to use the default Signup page which shows both email verification and user registration controls on the same page at once. This sample splits the default signup behaviour into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.
@@ -125,6 +123,10 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
   3. The user is logging in from a different IP than they last logged in from.
 
 - [Unknown Devices MFA](policies/mfa-unknown-devices) - Demonstrates how to detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device.
+
+## User interface enhancements
+
+- [Render dynamic dropdown box](policies/selectemail) - For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.
 
 ## Generic enhancements
 
