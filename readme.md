@@ -19,6 +19,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## Local account policy enhancements
+- [Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone) - This demonstrates how to verify a user via Email or SMS on a single screen.
 
 - [Sign In and Sign Up with Username or Email](policies/username-or-email) - This sample combines the UX of both the Email and Username based journeys.
 
