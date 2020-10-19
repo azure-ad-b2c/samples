@@ -19,8 +19,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## Local account policy enhancements
-
-- [Render dynamic dropdown box](policies/selectemail) - For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.
+- [Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone) - This demonstrates how to verify a user via Email or SMS on a single screen.
 
 - [Sign In and Sign Up with Username or Email](policies/username-or-email) - This sample combines the UX of both the Email and Username based journeys.
 
@@ -30,7 +29,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou) - Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.
 
-- [Delete my account](policies/delete-my-account) - Demonstrates how to delete a local or social account from the directory
 
 - [Local account change sign-in name email address](policies/change-sign-in-name) - During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.
 
@@ -126,15 +124,19 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Unknown Devices MFA](policies/mfa-unknown-devices) - Demonstrates how to detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device.
 
+## User interface enhancements
+
+- [Render dynamic dropdown box](policies/selectemail) - For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.
+
 ## Generic enhancements
+
+- [Delete my account](policies/delete-my-account) - Demonstrates how to delete a local or social account from the directory
 
 - [Integrating Azure AD B2C with TypingDNA](policies/signin-signup-typingdna) - This sample demonstrates how to integrate TypingDNA as a PSD2 SCA compliant authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
 
 - [Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) - Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.
 
 - [Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac) - Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
-
-- [SAML Service Provider](https://docs.microsoft.com/en-us/azure/active-directory-b2c/connect-with-saml-service-providers) This document walks you through adding a SAML-based Relying party to Azure AD B2C.
 
 - [Sign-up with social and local account](policies/sign-up-with-social-and-local-account) - Demonstrate how to create a policy that allows a user to sign-up with a social account linked to local account
 
@@ -153,6 +155,10 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 ## App migration
 
 - [Angular5](policies/app-migration-angular5) This guide shows how to migrate an exiting Angular SPA application to be protected with Azure AD B2C authentication.
+
+## Conditional Access
+
+- [sign-in with Conditional access](policies/conditional-access)
 
 ## Web Test
 
