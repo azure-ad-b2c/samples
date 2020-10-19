@@ -19,11 +19,12 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## Local account policy enhancements
+
 - [Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone) - This demonstrates how to verify a user via Email or SMS on a single screen.
 
 - [Sign In and Sign Up with Username or Email](policies/username-or-email) - This sample combines the UX of both the Email and Username based journeys.
 
-- [Split Signup into separate steps for email verification and account creation](policies/split-email-verification-and-signup) - When you dont want to use the default Signup page which shows both email verification and user registration controls on the same page at once. This sample splits the default signup behaviour into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.
+- [Split Sign-up into separate steps for email verification and account creation](policies/split-email-verification-and-signup) - When you don't want to use the default Sign-up page which shows both email verification and user registration controls on the same page at once. This sample splits the default sign-up behavior into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.
 
 - [Provide consent UI to API scopes](policies/service-consent) - For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.
 
@@ -32,9 +33,9 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Local account change sign-in name email address](policies/change-sign-in-name) - During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.
 
-- [Password-less sign-in with email verification](policies/passwordless-email) - Passwordless authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).
+- [Password-less sign-in with email verification](policies/passwordless-email) - Password-less authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).
 
-- [Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample refernced on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email)
+- [Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) - Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample reference on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email)
 
 - [Custom SMS provider - DisplayControls](policies/custom-sms-displaycontrol) Integrate a custom SMS provider in Azure Active Directory B2C (Azure AD B2C) to customized SMS' to users that perform multi factor authentication to your application. By using DisplayControls (currently in preview) and a third-party SMS provider, you can use your own contextualised SMS message, custom Phone Number, as well as support localization and custom one-time password (OTP) settings.
 
@@ -54,7 +55,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Google Captcha on Sign In](policies/captcha-integration) - An example set of policies which integrate Google Captcha into the sign in journey.
 
-- [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies for passwordless login via Phone Number (SMS or Phone Call).
+- [Login with Phone Number](policies/signup-signin-with-phone-number) - An example set of policies for password-less login via Phone Number (SMS or Phone Call).
 
 - [Password Reset with Phone Number](policies/password-reset-with-phone-number) - An example policy to reset a users password using Phone Number (SMS or Phone Call).
 
@@ -75,6 +76,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - [Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery) - Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.
 
 - [Terms of Service with Sign-in or Sign-up](policies/terms-of-service) - Demonstrates how to implement Terms of Service within a SUSI experience. This policy writes a configurable policy version onto an attribute stored in the directory. If you update the version within the policy, it will prompt the user during the next login to force the user to accept the new terms of service agreement.
+
+- [sign-up or sign-in policy with a link to sign-up page](policies/susi-with-link-to-sign-up) Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.
 
 ## Social account policy enhancements
 
@@ -130,8 +133,6 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 
 ## Generic enhancements
-
-- [sign-up or sign-in policy with a link to sign-up page](policies/susi-with-link-to-sign-up) Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.
 
 - [Delete my account](policies/delete-my-account) - Demonstrates how to delete a local or social account from the directory
 
