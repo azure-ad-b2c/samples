@@ -23,7 +23,7 @@ Use the scripts in the b2c\scripts folder
 ```
 
 ## Importing users to Azure Storage
-Edit the file [newusers.csv](newusers.csv) to hold the users you want to import. Make sure to change to emails you are in possesion if you want to do password recovery later in B2C. Also, edit the mobile phone number if you plan to use MFA with B2C. If you just want to test migration, you can stick with `alice@contoso.com`. 
+Edit the file [newusers.csv](scripts/newusers.csv) to hold the users you want to import. Make sure to change to emails you are in possesion if you want to do password recovery later in B2C. Also, edit the mobile phone number if you plan to use MFA with B2C. If you just want to test migration, you can stick with `alice@contoso.com`. 
 
 You run the script from a powershell commandline like this
 ```Powershell
