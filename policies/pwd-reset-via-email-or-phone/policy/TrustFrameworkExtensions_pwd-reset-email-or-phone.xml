@@ -146,16 +146,6 @@
 
     <ClaimsProviders>
         <ClaimsProvider>
-            <DisplayName>Local Account</DisplayName>
-            <TechnicalProfiles>
-                <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
-                    <Metadata>
-                        <Item Key="EnforceEmailVerification">false</Item>
-                    </Metadata>
-                </TechnicalProfile>
-            </TechnicalProfiles>
-        </ClaimsProvider>
-        <ClaimsProvider>
             <DisplayName>Local Account Sign Up With Phone</DisplayName>
             <TechnicalProfiles>
                 <TechnicalProfile Id="VerifyEmailOrPhone">
