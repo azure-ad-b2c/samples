@@ -12,7 +12,7 @@ This adds a sign-up button to the IDP selection section.
 
 ![User flow](media/user-flow.png)
 
-Use HTML customization with CSS to hide this button.
+Use [HTML customization](https://docs.microsoft.com/azure/active-directory-b2c/custom-policy-ui-customization) with CSS to hide this button.
 
 ```css
 #SignUpWithLogonEmailExchange {
