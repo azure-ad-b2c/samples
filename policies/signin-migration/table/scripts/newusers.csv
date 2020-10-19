@@ -1,0 +1,3 @@
+id;userName;emailAddress;emailVerified;accountEnabled;displayName;surname;givenname;mobile;phoneNumberVerified;Password
+327f0832-c6a3-4b8b-ab16-a0e193094cd8;alice;alice@contoso.com;true;true;Alice Contoso (Storage);Contoso;Alice;+46112112;true;YadaYada1!
+0aaab2d6-110e-49e7-8cf0-f6aa22cf7e5f;bob;bob@contoso.com;true;true;Bob Contoso (Storage);Contoso;Bob;+46112112;true;YadaYada1!

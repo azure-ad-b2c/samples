@@ -51,7 +51,7 @@ Access Token valid until  YYYY-MM-DDTHH:MM:SS
 ```
 
 ```Powershell
-PS C:\> .\import-users-from-csv.ps1 -Path .\users.csv -Tenant "yourtenant"
+PS C:\> .\import-users-from-csv.ps1 -Path .\users.csv -Tenant "yourtenant" -ImportPassword
 Creating user: developer / developer@gmail.com
  == 9661b46c-8739-4154-b6b5-3f29e0e13e6f
 Creating user: maintainer / maintainer@gmail.com

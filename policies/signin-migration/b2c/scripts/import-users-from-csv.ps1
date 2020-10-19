@@ -2,7 +2,8 @@ param (
     [Parameter(Mandatory=$False)][Alias('t')][string]$Tenant = "",
     [Parameter(Mandatory=$True)][Alias('f')][string]$Path = ".\users.csv",
     [Parameter(Mandatory=$False)][Alias('d')][string]$Delimiter = ";", # the delimiter used in file 
-    [Parameter(Mandatory=$False)][Alias('c')][string]$client_id = "" # the Client ID used to register the attribute
+    [Parameter(Mandatory=$False)][Alias('c')][string]$client_id = "", # the Client ID used to register the attribute
+    [Parameter(Mandatory=$false)][switch]$ImportPassword = $False
     )
 
 if ( $null -eq $env:OAUTH_access_token ) {
@@ -31,7 +32,7 @@ function CreateUserInB2C( $usr ) {
     $requiresMigrationAttribute = "true"
     $passwordPolicies = "`"passwordPolicies`": `"DisablePasswordExpiration`","
     # if we DO have the password in the CSV file, we are good to go and need no further migration
-    if ( $usr.password.Length -gt 0 ) {
+    if ( $True -eq $ImportPassword -and $usr.password.Length -gt 0 ) {
         $pwd = $usr.password
         $requiresMigrationAttribute = "false"
         $passwordPolicies = "`"passwordPolicies`": `"DisablePasswordExpiration,DisableStrongPassword`","
