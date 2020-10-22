@@ -7,11 +7,9 @@ This example imports users into Azure Table Storage from a CSV file and performs
 First, deploy the Azure Function to Azure. Make sure to do the following
 1. Create an Azure Storage Account
 1. Create an Azure Function name `TableStorageUser` and deploy file [run.csx](./source-code/run.csx) to it.
-1. Upload file [function.proj](./source-code/function.proj) to the Azure Function so that nuget packages will be downloaded correctly.  
+1. Create the file [function.proj](./source-code/function.proj) in the Azure Function. This file is needed so that nuget packages will be downloaded correctly. An easy way to create this file is to go to the Console for the Function App, change directory to your function, then do a `copy function.json function.proj`, then go back to the Function App code editor and paste in the right content.  
 1. Copy the ConnectString for the storage account and store it as Configuration Setting named `STORAGE_CONNECTSTRING` for the Azure Function.
 1. Get the Function Url and update the three powershell [scripts here](./scripts)
-
-If you don't know how to upload the files to Azure Functions, you can use the script ftp-upload.ps1 to upload files to Azure Functions. Get the credentials from `Get Publishing Profile` in portal.azure.com.
  
 ## Importing users to B2C
 
@@ -23,7 +21,7 @@ Use the scripts in the b2c\scripts folder
 ```
 
 ## Importing users to Azure Storage
-Edit the file [newusers.csv](scripts/newusers.csv) to hold the users you want to import. Make sure to change to emails you are in possesion if you want to do password recovery later in B2C. Also, edit the mobile phone number if you plan to use MFA with B2C. If you just want to test migration, you can stick with `alice@contoso.com`. 
+Edit the file [newusers.csv](newusers.csv) to hold the users you want to import. Make sure to change to emails you are in possesion if you want to do password recovery later in B2C. Also, edit the mobile phone number if you plan to use MFA with B2C. If you just want to test migration, you can stick with `alice@contoso.com`. 
 
 You run the script from a powershell commandline like this
 ```Powershell
@@ -40,8 +38,11 @@ To validate username and password, run the below script
 ```Powershell
 .\signin-user-test.ps1
 ```
+## Next step is to migrate users
+To migrate users, you should continue [here](../b2c/README.md)
+There is one change you need to do and that is to make the B2C policy call the Azure Function you just deployed, which is described below.
 
-## Change B2C Custom Policy 
+### Change B2C Custom Policy 
 
 To let the B2C Custom Policy use Azure Table Storage for Seamless Migration, edit [TrustFrameworkExtensions.xml](https://github.com/azure-ad-b2c/samples/blob/master/policies/signin-migration/b2c/policy/TrustFrameworkExtensions.xml) TechnicalProfile `UserMigrationViaLegacyIdp` to point to the deployed Azure Function above. You only need to change ServiceUrl
 
