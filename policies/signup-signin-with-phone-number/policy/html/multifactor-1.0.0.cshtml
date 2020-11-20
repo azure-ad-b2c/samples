@@ -67,11 +67,33 @@
     <script>
         console.log('init javascript...');
         var verCode = document.getElementById("verificationCode");
-        if ( verCode != null ) {
+        if ( null != verCode ) {
             console.log('modifying object verificationCode');
             verCode.setAttribute("autocomplete", "one-time-code"); 
             verCode.setAttribute("inputmode", "numeric"); 
         }
+        var verPhone = document.getElementById("verifyPhone");
+        if ( null != verPhone ) {
+            console.log('modifying object verifyPhone');
+            verPhone.parentNode.removeChild(verPhone);
+        }
+        var introText = document.getElementById('api').getElementsByTagName('P')[0];
+        if ( null != introText ) {
+            console.log('modifying object verifyCode');
+            document.getElementById("verifyCode").setAttribute("aria-label", introText.innerHTML); 
+        }
+        function verifyCodeTimer() {
+           setTimeout(function () {
+                if ( verCode.value.length >= parseInt(verCode.getAttribute("maxlength")) ) {
+                    document.getElementById("verifyCode").click();
+                } else {
+                    verifyCodeTimer();
+                }
+            }, 1000);
+        }        
+        document.getElementById("sendCode").addEventListener("click", function() {
+            verifyCodeTimer();
+        });
     </script>
 </body>
 </html>
