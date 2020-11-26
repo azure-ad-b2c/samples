@@ -5,8 +5,8 @@ This solution demonstrates how to force user to reset password on the first logo
 To create the extension attribute extension_mustResetPassword, you should upload the policy and create one account. When you create an account, B2C also creates the attribute in the WebApp-GraphAPI-DirectoryExtensions app. Then COMMENT OUT **AAD-UserWriteUsingLogonEmail** technical profile in the extension policy. Note: you can also create the extension attribute using Graph API, but I'd recomend you using this safe method.
 
 After you create the first account, you can run following Graph query, to make sure the extension attribute is created:
-https://graph.windows.net/myorganization/applications/00000000-0000-0000-0000-000000000000/extensionProperties.
-Replace the 00000000-0000-0000-0000-000000000000 with your application object Id. the result of this query should look like
+`https://graph.microsoft.com/v1.0/applications/<b2c-extensions-app_OBJECTID>/extensionProperties`.
+Replace the <b2c-extensions-app_OBJECTID> with your b2c-extensions-app registration's objectId. the result of this query should look like
 ```JSON
 "value": [
     {
