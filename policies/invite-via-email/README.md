@@ -2,7 +2,7 @@
 This sample demonstrates an email based invite to signup to a B2C Local Account. It uses a signed B2C JWT token as a magic link in the email.
 
 ## User flow
-![User flow](media/ivite-via-email-flow.png)
+![User flow](media/invite-via-email-flow.png)
 
 This sample uses a [powershell script](test/send-invite.ps1) for testing the flow. This functionality should be integrated with your app and that it is powershell here is just a simple way test drive the sample. The below picture illustrates how the sample works.
 
