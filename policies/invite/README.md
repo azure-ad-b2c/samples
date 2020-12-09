@@ -6,7 +6,7 @@ To invite a user, from the application, type the user's **email address** and cl
 ![User flow](media/flow.png)
 
 ## Sending Application Data
-The key of sending data to Azure AD B2C custom policy is to package the data into a [JWT token as claims using id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
+The key to sending data to Azure AD B2C custom policy is to package the data into a [JWT token as claims using id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
 
 ID tokens are JSON Web Tokens (JWTs) and, in this application, are signed using RSA certificates. This application hosts an Open ID Connect metatdata endpoint and JSON Web Keys (JWKs) endpoint which are used by Azure AD B2C to validate the signature of the ID token.
 
@@ -64,7 +64,7 @@ You can have B2C genreate the below mentioned metadata endpoints if you dont wis
 * **/.well-known/keys**
 
 #### Steps to have B2C create these metadata endpoints. 
-In order for B2C to use these metada for us we will need to upload the certificate we generated to sign our id_token_hint to B2C. We can either upload the pfx + password or just the cer file to the B2C key container. We will then reference this certificate as the signing key in one of the custom policy set we would create. 
+In order for B2C to manage this metadata for us we will need to upload the certificate we generated to sign our id_token_hint to B2C. We can either upload the pfx + password or just the cer file to the B2C key container. We will then reference this certificate as the signing key in one of the custom policy set we would create. 
 1. In the "Policy Keys" blade, Click Add to create a new key and select Upload in the options. 
 2. Give it a name, something like Id_Token_Hint_Cert and select key type to be RSA and usage to be Signature. You can optionally set the expiration to the epxiration of the cert. Save the name of new generated key.  
 3. Create a dummy set of new base, extension and relying party files. You can do so by downloading it from the starter pack here https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack. To keep things simple we will use https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/LocalAccounts but any starter pack can be used. 
