@@ -50,7 +50,7 @@ Replace the id with your application Id
     "userPrincipalName": "1de4141d-d1c2-448d-877d-c9e92bda87f5@yourtenant.onmicrosoft.com",
     
     // Add this line to your JSON
-    "extension_00000000000000000000000000000000_mustResetPassword": true
+    "extension_YOURAPPIDGUIDWITHOUTDASHES_mustResetPassword": true
 }
 ```
 The name of the extension attribute is “extension” _ “the application ID” _ the name you give the attribute. While in B2C custom policy you don’t need to specify the application ID.
