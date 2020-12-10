@@ -25,7 +25,7 @@ Replace the <b2c-extensions-app_OBJECTID> with your b2c-extensions-app registrat
 ]
 ```
 After the extension attribute is configured, when you create the accounts using Graph API, just set the value of this extension attribute. 
-Replace the id with your application Id
+Replace `YOURAPPIDGUIDWITHOUTDASHES` with your application Id
 ```JSON
 {
     "objectId": null,
