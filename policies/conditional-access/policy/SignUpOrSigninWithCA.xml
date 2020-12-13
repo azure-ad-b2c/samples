@@ -1,8 +1,8 @@
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenent.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_with_ca" PublicPolicyUri="http://yourtenent.onmicrosoft.com/B2C_1A_CA_signup_signin">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_with_ca" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_CA_signup_signin">
   <BasePolicy>
-    <TenantId>yourtenent.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensionsWithCA</PolicyId>
   </BasePolicy>
   <RelyingParty>
