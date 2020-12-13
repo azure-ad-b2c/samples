@@ -11,7 +11,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - See our Custom Policy Schema reference [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
 
 ## Prerequisites
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup).
+- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup). Some policies can be deployed directly through this app via the **Experimental** menu.
 
 - You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
 
