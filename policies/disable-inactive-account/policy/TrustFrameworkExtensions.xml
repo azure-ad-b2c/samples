@@ -5,7 +5,7 @@
 
 	<BasePolicy>
 		<TenantId>yourtenant.onmicrosoft.com</TenantId>
-		<PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+		<PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
 	</BasePolicy>
 	<BuildingBlocks>
 		<ClaimsSchema>
@@ -72,7 +72,16 @@
 				</OutputClaims>
 			</ClaimsTransformation>
 		</ClaimsTransformations>
-
+		<ContentDefinitions>
+			<ContentDefinition Id="api.disableduser">
+				<LoadUri>~/tenant/default/selfAsserted.cshtml</LoadUri>
+				<RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+				<DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+				<Metadata>
+					<Item Key="DisplayName">Collect information from user page</Item>
+				</Metadata>
+			</ContentDefinition>
+			</ContentDefinitions>
 	</BuildingBlocks>
 
 	<ClaimsProviders>
@@ -111,7 +120,6 @@
 					</InputClaims>
 					<OutputClaims>
 						<OutputClaim ClaimTypeReferenceId="extension_lastLogonTime" DefaultValue="2018-10-01T15:00:00.0000000Z"/>
-						<OutputClaim ClaimTypeReferenceId="CurrentTime" />
 					</OutputClaims>
 					<OutputClaimsTransformations>
 						<OutputClaimsTransformation ReferenceId="CompareTimetoLastLogonTime" />
@@ -169,7 +177,7 @@
 						<InputClaim ClaimTypeReferenceId="objectId" Required="true" />
 					</InputClaims>
 					<OutputClaims>
-						<OutputClaim ClaimTypeReferenceId="email"/>
+						<OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress"/>
 					</OutputClaims>
 					<OutputClaimsTransformations>
 						<OutputClaimsTransformation ReferenceId="AssertAccountEnabledIsTrue" />
