@@ -28,31 +28,21 @@
 
       <ContentDefinition Id="api.signuporsignin">
         <LoadUri>https://b2ccaptcha.blob.core.windows.net/b2ccustompage/customCaptcha.html</LoadUri>
-        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:1.0.0</DataUri>
-        <Metadata>
-          <Item Key="DisplayName">Signin and Signup</Item>
-        </Metadata>
       </ContentDefinition>
 
 
       <ContentDefinition Id="api.selfasserted">
         <LoadUri>https://b2ccaptcha.blob.core.windows.net/b2ccustompage/customCaptcha2.html</LoadUri>
-        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
-        <Metadata>
-          <Item Key="DisplayName">Collect information from user page</Item>
-        </Metadata>
       </ContentDefinition>
 
-      <ContentDefinition Id="api.selfasserted.profileupdate">
+      <!--<ContentDefinition Id="api.selfasserted.profileupdate">
         <LoadUri>~/tenant/default/updateProfile.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.1.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Collect information from user page</Item>
         </Metadata>
-      </ContentDefinition>
+      </ContentDefinition>-->
     </ContentDefinitions>
   </BuildingBlocks>
   <ClaimsProviders>
@@ -98,6 +88,8 @@
             <!-- JSON, Form, Header, and Query String formats supported -->
             <Item Key="ClaimsFormat">Body</Item>
             <!-- Defines format to expect claims returning to B2C -->
+            <!-- REMOVE the following line in production environments -->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="g-recaptcha-response-toms" PartnerClaimType="captcha" DefaultValue="0" />
