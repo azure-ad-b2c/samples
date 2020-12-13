@@ -6,7 +6,7 @@
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_SUSI_BannedPasswordList"
-  PublicPolicyUri="http://yourtenent.onmicrosoft.com/B2C_1A_SUSI_BannedPasswordList">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_SUSI_BannedPasswordList">
 
 	<BasePolicy>
 		<TenantId>yourtenant.onmicrosoft.com</TenantId>
