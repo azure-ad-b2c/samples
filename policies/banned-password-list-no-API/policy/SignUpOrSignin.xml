@@ -9,7 +9,7 @@
   PublicPolicyUri="http://yourtenent.onmicrosoft.com/B2C_1A_SUSI_BannedPasswordList">
 
 	<BasePolicy>
-		<TenantId>yourtenent.onmicrosoft.com</TenantId>
+		<TenantId>yourtenant.onmicrosoft.com</TenantId>
 		<PolicyId>B2C_1A_Extensions_BannedPasswordList</PolicyId>
 	</BasePolicy>
 
