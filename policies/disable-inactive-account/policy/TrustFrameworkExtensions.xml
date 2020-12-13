@@ -86,25 +86,6 @@
 
 	<ClaimsProviders>
 		<ClaimsProvider>
-			<DisplayName>Local Account SignIn</DisplayName>
-			<TechnicalProfiles>
-				<TechnicalProfile Id="login-NonInteractive">
-					<Metadata>
-						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
-						<!-- Native App -->
-						<Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
-						<!-- Web Api -->
-					</Metadata>
-					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
-						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
-					</InputClaims>
-				</TechnicalProfile>
-			</TechnicalProfiles>
-		</ClaimsProvider>
-
-
-		<ClaimsProvider>
 			<DisplayName>Disable inactive account</DisplayName>
 			<TechnicalProfiles>
 				<!-- Reads the times the user last logged in and last changed password, will output boolean claims
@@ -220,6 +201,7 @@
 					<PersistedClaims>
 						<!-- Required claims -->
 						<PersistedClaim ClaimTypeReferenceId="objectId"/>
+						<PersistedClaim ClaimTypeReferenceId="userPrincipalName"/>
 						<PersistedClaim ClaimTypeReferenceId="accountEnabled" AlwaysUseDefaultValue="false" DefaultValue="false" />
 					</PersistedClaims>
 					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
