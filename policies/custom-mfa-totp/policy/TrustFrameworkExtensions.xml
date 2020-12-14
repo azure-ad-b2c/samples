@@ -1,12 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_TOTP_TrustFrameworkExtensions"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TOTP_TrustFrameworkExtensions">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TOTP_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TOTP_TrustFrameworkExtensions">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -53,7 +48,7 @@
         <LoadUri>https://your-app.azurewebsites.net/selfasserted-appfactor-registration.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
-         <Metadata>
+        <Metadata>
           <Item Key="DisplayName">App Factor</Item>
         </Metadata>
       </ContentDefinition>
@@ -236,7 +231,7 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
+  </ClaimsProviders>
   <UserJourneys>
     <UserJourney Id="SignUpOrSignIn">
       <OrchestrationSteps>
@@ -343,11 +338,10 @@
               <Value>strongAuthenticationAppQRCodeBitmap</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-           <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>isActiveMFASession</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
-          </Preconditions>
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="AppFactorRegisterExchange" TechnicalProfileReferenceId="AppFactor-Register" />
