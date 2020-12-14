@@ -61,7 +61,7 @@ Follow the demo comments in the extension policy. To merge the policy with yours
 3.	Add the extra orchestration steps 7 and 8 before the last orchestration step
 
 ## Test the policy by using Run Now
-1. Create an account using Graph API, and set the value of **extension_00000000000000000000000000000000_mustResetPassword** extension attribute to **true**
+1. Create an account using Graph API, and set the value of **extension_YOURAPPIDGUIDWITHOUTDASHES_mustResetPassword** extension attribute to **true**
 1. From Azure Portal select **Azure AD B2C Settings**, and then select **Identity Experience Framework**.
 1. Open **B2C_1A_signup_signin**, the relying party (RP) custom policy that you uploaded, and then select **Run now**.
 1. Sign-in with the account you created. 
