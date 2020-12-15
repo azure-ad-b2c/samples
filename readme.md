@@ -50,7 +50,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Username discovery](policies/username-discovery) - This example shows how to discover a username by email address. It's useful when a user forgot their username and remembers only their email address.
 
-- [Azure AD B2C Invitation](policies/invite) This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.
+- [Azure AD B2C Invitation](policies/invite) - This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.
 
 - [Email Verification at Sign In](policies/signin-email-verification) - For scenarios where you would like users to validate their email via TOTP on every sign in.
 
@@ -90,9 +90,9 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Sign-in with social identity provider and force email uniqueness](policies/force-unique-email-across-social-identities) - Demonstrates how to force a social account user to provide and validate their email address, and also checks that there is no other account with the same email address.
 
-- [Account linkage](policies/account-linkage-unified) (new version, one policy for both link and unlink) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity. Unified policy for link and unlink.
+- [Account linkage](policies/account-linkage-unified) - (new version, one policy for both link and unlink) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity. Unified policy for link and unlink.
 
-- [Account linkage](policies/account-linkage) (a policy for link and another policy for unlink.) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity.
+- [Account linkage](policies/account-linkage) - (a policy for link and another policy for unlink.) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity.
 
 - [Link a local account to federated account](policies/link-local-account-with-federated-account) - Demonstrates how to link a user who logged in via a federated provider to a pre-created AAD B2C Local Account.
 
@@ -163,7 +163,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Conditional Access
 
-- [sign-in with Conditional access](policies/conditional-access) -
+- [Sign-in with Conditional access](policies/conditional-access) - Azure Active Directory (Azure AD) Conditional Access is the tool used by Azure AD B2C to bring signals together, make decisions, and enforce organizational policies. Automating risk assessment with policy conditions means risky sign-ins are at once identified and remediated or blocked.
 
 ## Web Test
 
