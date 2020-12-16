@@ -10,7 +10,7 @@
   
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
   <ClaimsSchema>
@@ -27,16 +27,6 @@
    <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>  
-        <TechnicalProfile Id="AAD-Common">
-          <DisplayName>Azure Active Directory</DisplayName>
-          <!--  Demo action required: Provide objectId and appId before using extension properties.
-                For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom 
-                Action required: Insert objectId and appId here -->
-          <Metadata>
-            <Item Key="ApplicationObjectId">00000000-0000-0000-0000-000000000000</Item>
-            <Item Key="ClientId">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-        </TechnicalProfile>
 
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
@@ -69,30 +59,6 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
-    <!-- Local account Sign-In claims provider -->
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-          <InputClaims>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
 
     <!-- Facebook claims provider -->
 	<ClaimsProvider>
