@@ -1,29 +1,33 @@
 # Encrypted profile
-This sample demonstrates a way to encrypt the attributes stored on a user object in Azure AD B2C, inlcuding the `signInName`.
+This sample demonstrates a way to encrypt the attributes stored on a user object in Azure AD B2C, including the `signInName`.
 
 ## Scenario
 In some applications data residency is an issue which requires a user's profile to be stored in a certain country or in a dedicated data center. For this, you have the [remote profile](https://github.com/azure-ad-b2c/samples/tree/master/policies/remote-profile) samples. But in other applications, with tough security requirements, the question is that what you store can not be in clear text. For instance, it can not be readable like in portal.azure.com for IT Admins regardless the appropriate permissions. It must be anonymous and encrypted.
 
 This sample will encrypt a user's profile attributes, like displayName, givenName, etc, so that it is unreadable. A user would look like this in portal.azure.com.
+
 ![User Profile](media/encrypted-profile-portal.png)
 
-If you use [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) to query the user object, the the `signInName` attribute will also be encrypted in order not to reveal the user's the email. 
+If you use [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) to query the user object created with this signup policy, the the `signInName` attribute will also be encrypted in order not to reveal the user's the email. 
+
 ![User Profile SigninName](media/encrypted-profile-userobj.png)
   
 
 ## Encrypting the attributes
-The encryption in this sample is done in an Azure Function where the [run.csx](/source-code/run.csx) file contains the implementation. During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then written to the user object. The `email` value is persisted as a `username` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
+The encryption in this sample is done in an Azure Function where the [run.csx](source-code/run.csx) file contains the implementation. During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then persisted to the user object. The `email` value is persisted as a `username` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
 
 What happens during **signin** is that the user enters the email in clear text in the user interface, since that is what he/she knows. The B2C policy then calls the Azure Function to encrypt the email before validating the userid/password.
+
 ![Signin](media/encrypted-profile-signin.png)
 
 To decrypt the additional attributes so they can appear in clear text in the JWT token, the Azure Function is called again at the end of the signin user journey to decrypt attributes like displayName, etc. 
+
 ![Signin-JWT](media/encrypted-profile-signin-jwt.png)
 
 ## B2C Custom Policy explained
 
 ### Signup encryption
-During **signup** there are two steps in the UserJourney that first calls the REST API to encrypt the attributes and then (re)writes them. The reason this is not done in a `ValidationTechnicalProfile` step is that if you plan to extend this and capture more info in secondary UX pages, you need to do it after all user input is captured. It is also worth noting that the (re)write is responsible for removing the `signInNAmes.emailAddress` and replacing it with `signInNames.username`. 
+During **signup** there are two steps in the UserJourney that first calls the REST API to encrypt the attributes and then (re)writes them. The reason that this is not done in a `ValidationTechnicalProfile` step is that if you plan to extend this and capture more info in secondary UX pages, you need to do it after all user input is captured. It is also worth noting that the (re)write is responsible for removing the `signInNAmes.emailAddress` and replacing it with `signInNames.username`. 
 
 ```xml
 <!-- next 2 steps are only executed during SignUp. It calls the REST API to encrypt and rewrites the persisted values -->
@@ -52,8 +56,7 @@ During **signup** there are two steps in the UserJourney that first calls the RE
 ```
 
 ### Signin encryption / decryption
-During **signin** we must take what the user typed in the UX and encrypt it before attepting to authenticate the local account.
-Therefor, the TechinalProfile `SelfAsserted-LocalAccountSignin-Email` is modified in the [TrustFrameworkExtensions.xml](policies/TrustFrameworkExtensions.xml) file to include a call to the REST API. It will pass what the user typed in the `signInName` and get back a claim called `emailEncrypted`.
+During **signin** we must take what the user typed in the UX and encrypt it before attepting to authenticate the local account, as the email doesn't work as a unique identifier for the user anymore. Therefor, the TechinalProfile `SelfAsserted-LocalAccountSignin-Email` is modified in the [TrustFrameworkExtensions.xml](policies/TrustFrameworkExtensions.xml) file to include a call to the REST API. It will pass what the user typed in the `signInName` and get back a claim called `emailEncrypted`.
 
 ```xml
 <!-- before validating the userid/password, encrypt what the user entered and use that -->
@@ -68,7 +71,7 @@ Therefor, the TechinalProfile `SelfAsserted-LocalAccountSignin-Email` is modifie
 </TechnicalProfile>
 ```
 
-Then, we must modify `login-NonInteractive` to use `emailEncrypted` as the username. ***Note*** that you must also edit the [TrustFrameworkBase.xml](policies/TrustFrameworkBase.xml) file to remove the similar line where is sends `signInName` as username as it otherwise will not work. 
+Then, we must modify `login-NonInteractive` to use `emailEncrypted` as the username. ***Note*** that you must also edit the [TrustFrameworkBase.xml](policies/TrustFrameworkBase.xml) file to remove the similar line where is sends `signInName` as username as it will not work otherwise. 
 
 ```xml
 <TechnicalProfile Id="login-NonInteractive">
