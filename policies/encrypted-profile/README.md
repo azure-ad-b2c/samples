@@ -16,7 +16,7 @@ If you use [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/grap
 ## Encrypting the attributes
 The encryption in this sample is done in an Azure Function that is called with B2C's RESTful Provider. In this sample, there are two versions of the Azure Function, where the [run.csx](source-code/run.csx) file contains the implementation just doing base64 encode/decode and where the [run_encrypted.csx](source-code/run_encrypted.csx) file contains the implementation that hashes the `email` with a salt and does symmetric encryption of attributes. The purpose of the simple base64 encode/decode function is to keep it simple and get you going without too much setup. The purpose of the function with encryption is to show how real encryption could be done. If you plan to use the Azure Function with encryption, please see instructions at the bottom for deploying the Azure Function together with Azure Key Valut.
 
-During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then persisted to the user object. The `email` value is persisted as a `username` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
+During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then persisted to the user object. The `email` value is persisted as a `userid` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
 
 What happens during **signin** is that the user enters the email in clear text in the user interface, since that is what he/she knows. The B2C policy then calls the Azure Function to encrypt the email before validating the userid/password.
 
@@ -29,7 +29,7 @@ To decrypt the additional attributes so they can appear in clear text in the JWT
 ## B2C Custom Policy explained
 
 ### Signup encryption
-During **signup** there are two steps in the UserJourney that first calls the REST API to encrypt the attributes and then (re)writes them. The reason that this is not done in a `ValidationTechnicalProfile` step is that if you plan to extend this and capture more info in secondary UX pages, you need to do it after all user input is captured. It is also worth noting that the (re)write is responsible for removing the `signInNAmes.emailAddress` and replacing it with `signInNames.userid`. We don't use `signInNames.username` as that has a max length limit of 64 chars while using another name, like `userid` gives us 100 chars to persist. From a functional perspective, it doesn't matter.
+During **signup** there are two steps in the UserJourney that first calls the REST API to encrypt the attributes and then (re)writes them. The reason that this is not done in a `ValidationTechnicalProfile` step is that if you plan to extend this and capture more info in secondary UX pages, you need to do it after all user input is captured. It is also worth noting that the (re)write is responsible for removing the `signInNames.emailAddress` and replacing it with `signInNames.userid`. We don't use `signInNames.username` as that has a max length limit of 64 chars while using another name, like `userid` gives us 100 chars to persist. From a functional perspective, it doesn't matter.
 
 ```xml
 <!-- next 2 steps are only executed during SignUp. It calls the REST API to encrypt and rewrites the persisted values -->
@@ -106,6 +106,15 @@ At the end of the signin UserJourney, there is a orchestration step that decrypt
 </OrchestrationStep>
 ```
 
+## Azure Function with encryption - how it works
+The Azure Function [run_encrypted.csx](source-code/run_encrypted.csx) does the following
+
+1. Gets the parameters signInName, email, displayName, givenName and surName
+1. Looks for the hash salt and AES Key + IV as Environment Variables
+1. If there are no environment variables, calls Azure Key Vault to obtain the secrets and sets them as Environment Variables. This serves as some basic way of caching as we don't need to obtain them again until the service is restarted.
+1. If operation is encoding, hash the signInName/email with the salt obtained from Azure Key Vault and encrypt the other attributes
+1. If operation is decoding, do nothing with the signInName/email and decrypt the other attributes
+
 ## Azure Function and Azure Key Vault configuration
 In order to use the Azure Function [run_encrypted.csx](source-code/run_encrypted.csx) that implements real encryption, you need to do the following steps.
 
@@ -119,7 +128,7 @@ The hast salt and AES Key and IV (Initialization Vector) are stored in Azure Key
 
 ### Azure Key Vault
 
-1. Deploy an Azure Key Vault in an Azure subscription if you don't have one
+1. [Deploy an Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal) in an Azure subscription if you don't have one
 1. Under `Access policies`, select `+Add Access Policy`.
     1. Key permissions = you don't need to select anything
     1. Secret permissions = select `Get, List`
@@ -139,7 +148,7 @@ Last part is to add some configuration for your Azure Function. Find `Configurat
 1. KV_TENANTID = the `tenantid` of your Azure AD (not the B2C tenant)
 1. KV_CLIENTID = the `AppID` of your Azure AD service principal you created above
 1. KV_CLIENTSECRET = the `secret` of your Azure AD service principal you created above
-1. KV_NAME = the `NAme` of your Azure Key Vault 
+1. KV_NAME = the `Name` of your Azure Key Vault 
 
 ### Edit TrustFrameworkExtensions.xml 
 Edit the TrustFrameworkExtensions.xml file so that the `ServiceUrl` points to your new Azure Function. Then upload the policies again.
