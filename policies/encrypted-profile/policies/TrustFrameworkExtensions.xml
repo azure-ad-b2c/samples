@@ -141,8 +141,9 @@ PublicPolicyUri="http://cljunyourtenantgdemob2c.onmicrosoft.com/B2C_1A_ENC_Trust
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="objectId" />
             <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
-            <!-- store the encrypted claims. username replaces emailAddress as it is not in email format anymore -->
-            <PersistedClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="signInNames.username" /> 
+            <!-- store the encrypted claims. userid replaces emailAddress as it is not in email format anymore
+                 attribute 'username' has a max length of 64 chars, while others, like 'userid' have 100 max length -->
+            <PersistedClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="signInNames.userid" /> 
             <PersistedClaim ClaimTypeReferenceId="displayNameEncrypted" PartnerClaimType="displayName" />
             <PersistedClaim ClaimTypeReferenceId="givenNameEncrypted" PartnerClaimType="givenName" />
             <PersistedClaim ClaimTypeReferenceId="surnameEncrypted" PartnerClaimType="surname" />
@@ -179,6 +180,7 @@ PublicPolicyUri="http://cljunyourtenantgdemob2c.onmicrosoft.com/B2C_1A_ENC_Trust
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncodeClaims</Item>
+            <!--<Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncryptClaims</Item>-->
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="AllowInsecureAuthInProduction">true</Item>
@@ -205,6 +207,7 @@ PublicPolicyUri="http://cljunyourtenantgdemob2c.onmicrosoft.com/B2C_1A_ENC_Trust
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncodeClaims</Item>
+            <!--<Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncryptClaims</Item>-->
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="AllowInsecureAuthInProduction">true</Item>

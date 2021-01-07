@@ -14,7 +14,9 @@ If you use [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/grap
   
 
 ## Encrypting the attributes
-The encryption in this sample is done in an Azure Function where the [run.csx](source-code/run.csx) file contains the implementation. During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then persisted to the user object. The `email` value is persisted as a `username` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
+The encryption in this sample is done in an Azure Function that is called with B2C's RESTful Provider. In this sample, there are two versions of the Azure Function, where the [run.csx](source-code/run.csx) file contains the implementation just doing base64 encode/decode and where the [run_encrypted.csx](source-code/run_encrypted.csx) file contains the implementation that hashes the `email` with a salt and does symmetric encryption of attributes. The purpose of the simple base64 encode/decode function is to keep it simple and get you going without too much setup. The purpose of the function with encryption is to show how real encryption could be done. If you plan to use the Azure Function with encryption, please see instructions at the bottom for deploying the Azure Function together with Azure Key Valut.
+
+During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then persisted to the user object. The `email` value is persisted as a `username` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
 
 What happens during **signin** is that the user enters the email in clear text in the user interface, since that is what he/she knows. The B2C policy then calls the Azure Function to encrypt the email before validating the userid/password.
 
@@ -27,7 +29,7 @@ To decrypt the additional attributes so they can appear in clear text in the JWT
 ## B2C Custom Policy explained
 
 ### Signup encryption
-During **signup** there are two steps in the UserJourney that first calls the REST API to encrypt the attributes and then (re)writes them. The reason that this is not done in a `ValidationTechnicalProfile` step is that if you plan to extend this and capture more info in secondary UX pages, you need to do it after all user input is captured. It is also worth noting that the (re)write is responsible for removing the `signInNAmes.emailAddress` and replacing it with `signInNames.username`. 
+During **signup** there are two steps in the UserJourney that first calls the REST API to encrypt the attributes and then (re)writes them. The reason that this is not done in a `ValidationTechnicalProfile` step is that if you plan to extend this and capture more info in secondary UX pages, you need to do it after all user input is captured. It is also worth noting that the (re)write is responsible for removing the `signInNAmes.emailAddress` and replacing it with `signInNames.userid`. We don't use `signInNames.username` as that has a max length limit of 64 chars while using another name, like `userid` gives us 100 chars to persist. From a functional perspective, it doesn't matter.
 
 ```xml
 <!-- next 2 steps are only executed during SignUp. It calls the REST API to encrypt and rewrites the persisted values -->
@@ -87,7 +89,7 @@ Then, we must modify `login-NonInteractive` to use `emailEncrypted` as the usern
 </TechnicalProfile>
 ```
 
-At the end of the signin UserJourney, there is a orchestration step that decrypts the additional attributes, like displayName, since you want these attributes in clear text in the JWT token. To keep it simple in this sample, it is the same Azure Function that has the responsibility of also decrypting values and the REST API is passed a flag `restApiOperation` to signal if it is encryption or decryption it should perform. Also note that the Azure Function doesn't really implement any encryption worth mentioning. It only transforms strings to base64 and back. You have to implement real encryption.
+At the end of the signin UserJourney, there is a orchestration step that decrypts the additional attributes, like displayName, since you want these attributes in clear text in the JWT token. To keep it simple in this sample, it is the same Azure Function that has the responsibility of also decrypting values and the REST API is passed a flag `restApiOperation` to signal if it is encryption or decryption it should perform. 
 
 ```xml
 <!-- the next step is only executed during Signin. It decrypts displayName, etc, so you can get them in clear text in the JWT -->
@@ -103,6 +105,44 @@ At the end of the signin UserJourney, there is a orchestration step that decrypt
     </ClaimsExchanges>
 </OrchestrationStep>
 ```
+
+## Azure Function and Azure Key Vault configuration
+In order to use the Azure Function [run_encrypted.csx](source-code/run_encrypted.csx) that implements real encryption, you need to do the following steps.
+
+### Azure Function - part 1
+1. Deploy and Azure Function with OS=Windows and Runtime=.Net Core 3.1 with type=HttpTrigger and give it a name like `EncryptClaims`. Set the Authorization level to `Anonymous`.
+1. Copy the code in [run_encrypted.csx](source-code/run_encrypted.csx) and paste it over the code in `run.csx`
+1. Do a `Test/Run` of the function passing a Body of `{ "restApiOperation": "generate" }` and copy the response output to somewhere since we will add these values as Azure Key Vault secrets. This step helps you to generate the hash salt and AES Key and IV.
+
+### Azure AD Service Principal for accessing Azure Key Vault
+The hast salt and AES Key and IV (Initialization Vector) are stored in Azure Key Vault. In order for the Azure Function to retrieve these values, you need to do an App Registration in the Azure AD that protects the Azure Key Vault you plan to use (ie, do NOT register this app in the B2C tenant). The documentation is available [here](https://docs.microsoft.com/en-us/azure/key-vault/general/authentication) but you just need to register an application and create a secret. Make sure you copy and save `tenantid` of your Azure AD (not the B2C tenant), the `AppID` and the secret as we need to configure these values in the Azure Function - part 2.
+
+### Azure Key Vault
+
+1. Deploy an Azure Key Vault in an Azure subscription if you don't have one
+1. Under `Access policies`, select `+Add Access Policy`.
+    1. Key permissions = you don't need to select anything
+    1. Secret permissions = select `Get, List`
+    1. Select principal = Search for you service principal via your `AppID` guid
+1. Under `Secrets`, select `+Generate/Import`
+    1. Upload options = Manual
+    1. Name = `B2CEncryptionSalt` 
+    1. Value = the value for B2CEncryptionSalt you saved in above step (Azure Function - part 1). This should be a base64 string
+1. Under `Secrets`, select `+Generate/Import`
+    1. Upload options = Manual
+    1. Name = `B2CAesKeyIV` 
+    1. Value = the value for B2CAesKeyIV you saved in above step (Azure Function - part 1). This should be two base64 strings separated by a "."
+
+### Azure Function - part 2
+Last part is to add some configuration for your Azure Function. Find `Configuration` in the menu and do `+New application settings` once for each setting mentioned below.
+
+1. KV_TENANTID = the `tenantid` of your Azure AD (not the B2C tenant)
+1. KV_CLIENTID = the `AppID` of your Azure AD service principal you created above
+1. KV_CLIENTSECRET = the `secret` of your Azure AD service principal you created above
+1. KV_NAME = the `NAme` of your Azure Key Vault 
+
+### Edit TrustFrameworkExtensions.xml 
+Edit the TrustFrameworkExtensions.xml file so that the `ServiceUrl` points to your new Azure Function. Then upload the policies again.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
