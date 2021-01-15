@@ -59,7 +59,12 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="REST-Login"/>
           </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-NOOP"/>
+          <!-- If you want to experience SSO, the ReferenceId has to be "SM-AAD". Also, the SM-AAD technical profile must persist the claim 
+               AlternativeSecurityId (<PersistedClaim ClaimTypeReferenceId="AlternativeSecurityId" />) 
+
+               The session behavior settings must also be configured in the relying party policy. 
+               See https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy for details. -->
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
