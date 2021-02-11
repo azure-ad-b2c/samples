@@ -1,6 +1,6 @@
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensionsWithCA" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsWithCA">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensionsCA" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsCA">
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -13,16 +13,16 @@
         <AdminHelpText />
         <UserHelpText />
       </ClaimType>
+      <ClaimType Id="isLocalAccountSignUp">
+        <DisplayName>isLocalAccountSignUp</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>
       <ClaimType Id="responseMsg">
-        <DisplayName>responseMsg</DisplayName>
+        <DisplayName></DisplayName>
         <DataType>string</DataType>
         <AdminHelpText>A claim responsible for holding response messages to send to the relying party</AdminHelpText>
         <UserHelpText>A claim responsible for holding response messages to send to the relying party</UserHelpText>
         <UserInputType>Paragraph</UserInputType>
-      </ClaimType>
-      <ClaimType Id="KMSI">
-        <DisplayName>KMSI Flag</DisplayName>
-        <DataType>string</DataType>
       </ClaimType>
       <!-- CA claims  -->
       <ClaimType Id="conditionalAccessClaimCollection">
@@ -35,7 +35,6 @@
         <DataType>string</DataType>
         <UserHelpText>TtrustFrameworkPolicy name.</UserHelpText>
       </ClaimType>
-
       <ClaimType Id="ConditionalAccessStatus">
         <DisplayName>The status of CA evaluation</DisplayName>
         <DataType>stringCollection</DataType>
@@ -61,12 +60,6 @@
         <DataType>boolean</DataType>
         <AdminHelpText>Is user registered for MFA</AdminHelpText>
       </ClaimType>
-
-      <ClaimType Id="isConditionalAccessOn">
-        <DisplayName>isConditionalAccessOn</DisplayName>
-        <DataType>boolean</DataType>
-      </ClaimType>
-
       <ClaimType Id="CAChallengeIsMfa">
         <DisplayName>CAChallengeIsMfa</DisplayName>
         <DataType>boolean</DataType>
@@ -82,12 +75,18 @@
 
       <!-- End of CA claims -->
 
+      <!--MFA claims-->
+      <ClaimType Id="strongAuthenticationPhoneNumber">
+        <DisplayName>Phone Number</DisplayName>
+        <DataType>string</DataType>
+        <Mask Type="Simple">XXX-XXX-</Mask>
+        <UserHelpText>Your telephone number</UserHelpText>
+      </ClaimType>
 
     </ClaimsSchema>
 
     <ClaimsTransformations>
-      <!-- ISP - CA Transforms-->
-
+      <!-- Conditional access claims transformations-->
       <ClaimsTransformation Id="AddToAuthenticationMethodsUsed" TransformationMethod="AddItemToStringCollection">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="AuthenticationMethodUsed" TransformationClaimType="item" />
@@ -97,7 +96,6 @@
           <OutputClaim ClaimTypeReferenceId="AuthenticationMethodsUsed" TransformationClaimType="collection" />
         </OutputClaims>
       </ClaimsTransformation>
-
       <ClaimsTransformation Id="CreatePasswordAuthenticationMethodClaim" TransformationMethod="CreateStringClaim">
         <InputParameters>
           <InputParameter Id="value" DataType="string" Value="Password" />
@@ -106,7 +104,6 @@
           <OutputClaim ClaimTypeReferenceId="AuthenticationMethodUsed" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-
       <ClaimsTransformation Id="CreateOneTimePasscodeAuthenticationMethodClaim" TransformationMethod="CreateStringClaim">
         <InputParameters>
           <InputParameter Id="value" DataType="string" Value="OneTimePasscode" />
@@ -123,7 +120,6 @@
           <OutputClaim ClaimTypeReferenceId="IsMfaRegistered" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-
       <ClaimsTransformation Id="SetCAChallengeIsMfa" TransformationMethod="StringCollectionContains">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="conditionalAccessClaimCollection" TransformationClaimType="inputClaim" />
@@ -160,7 +156,6 @@
           <OutputClaim ClaimTypeReferenceId="CAChallengeIsBlock" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-
     </ClaimsTransformations>
   </BuildingBlocks>
   <ClaimsProviders>
@@ -169,44 +164,28 @@
       <DisplayName>Local Account SignIn</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
-          <DisplayName>Local Account Signin</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
-            <Item Key="setting.operatingMode">Username</Item>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
-            <Item Key="setting.enableRememberMe">True</Item>
-            <Item Key="UserMessageIfClaimsTransformationStringsAreNotEqual">The email addresses you provided are not the same</Item>
+            <Item Key="LocalAccountProfile">true</Item>
           </Metadata>
-          <IncludeInSso>false</IncludeInSso>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="signInName" DefaultValue="{OIDC:LoginHint}"/>
-            <InputClaim ClaimTypeReferenceId="KMSI" DefaultValue="{Context:KMSI}" AlwaysUseDefaultValue="true" />
-          </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="password" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="objectId" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="isFederated" DefaultValue="false" AlwaysUseDefaultValue="true" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreatePasswordAuthenticationMethodClaim" />
             <OutputClaimsTransformation ReferenceId="AddToAuthenticationMethodsUsed" />
           </OutputClaimsTransformations>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
-          </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
 
-
+    <ClaimsProvider>
+      <DisplayName>Conditional Access</DisplayName>
+      <TechnicalProfiles>
         <TechnicalProfile Id="ConditionalAccessEvaluation">
           <DisplayName>Conditional Access Provider</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ConditionalAccessProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="OperationType">Evaluation</Item>
-            <!-- <Item Key="ConditionalAccessPoliciesToEvaluate">[]</Item> -->
           </Metadata>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="IsMfaRegisteredCT" />
@@ -222,7 +201,6 @@
             <OutputClaim ClaimTypeReferenceId="ConditionalAccessStatus" PartnerClaimType="MultiConditionalAccessStatus" />
           </OutputClaims>
         </TechnicalProfile>
-
         <TechnicalProfile Id="ConditionalAccessRemediation">
           <DisplayName>Conditional Access Remediation</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ConditionalAccessProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
@@ -233,7 +211,6 @@
             <InputClaim ClaimTypeReferenceId="conditionalAccessClaimCollection" PartnerClaimType="ChallengesSatisfied" />
           </InputClaims>
         </TechnicalProfile>
-
         <TechnicalProfile Id="GenerateCAClaimFlags">
           <DisplayName>GenerateCAClaimFlags</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -248,29 +225,34 @@
             <OutputClaimsTransformation ReferenceId="SetCAChallengeIsBlock" />
           </OutputClaimsTransformations>
         </TechnicalProfile>
-
-
       </TechnicalProfiles>
     </ClaimsProvider>
 
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
+
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isLocalAccountSignUp" DefaultValue="true" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+        </TechnicalProfile>
+
         <TechnicalProfile Id="ShowBlockPage">
           <DisplayName>Show Block message</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
             <Item Key="TokenLifeTimeInSeconds">3600</Item>
             <Item Key="AllowGenerationOfClaimsWithNullValues">true</Item>
             <Item Key="setting.showContinueButton">false</Item>
             <Item Key="setting.showCancelButton">false</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer"/>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
           </CryptographicKeys>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="responseMsg" DefaultValue="The user is blocked due to conditional access check."/>
+            <InputClaim ClaimTypeReferenceId="responseMsg" DefaultValue="Due to recent activity associated with your account, your login has been temporarily blocked."/>
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="responseMsg"/>
@@ -284,15 +266,112 @@
 
 
   <UserJourneys>
-    <UserJourney Id="SignUpOrSignInSamWithCA">
+    <UserJourney Id="SignUpOrSignInWithCA">
+      <OrchestrationSteps>
+
+        <!-- Start the sign-up or sign-in flow. -->
+        <OrchestrationStep Order="1" Type="InvokeSubJourney">
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="IdentityProviderSelection_SignUpSignIn"/>
+          </JourneyList>
+        </OrchestrationStep>
+
+        <!-- Conditional access evaluation-->
+        <OrchestrationStep Order="2" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isLocalAccountSignUp</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="ConditionalAccess_Evaluation"/>
+          </JourneyList>
+        </OrchestrationStep>
+
+        <!-- Conditional access block user -->
+        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>CAChallengeIsBlock</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>CAChallengeIsBlock</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="BlockUser" />
+          </JourneyList>
+        </OrchestrationStep>
+
+        <!-- Calling MFA sub-journey -->
+        <!-- <OrchestrationStep Order="4" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>needToPerformMfa</Value>
+              <Value>False</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="MFA-ExtraUserVerification" />
+          </JourneyList>
+        </OrchestrationStep> -->
+
+        <!-- Conditional access remediation -->
+        <OrchestrationStep Order="4" Type="InvokeSubJourney">
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="ConditionalAccess_Remediation" />
+          </JourneyList>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+    
+    <UserJourney Id="SignUpOrSignInWithCA-WhatIf">
+      <OrchestrationSteps>
+
+        <!-- Start the sign-up or sign-in flow. -->
+        <OrchestrationStep Order="1" Type="InvokeSubJourney">
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="IdentityProviderSelection_SignUpSignIn"/>
+          </JourneyList>
+        </OrchestrationStep>
+
+        <!-- Conditional access evaluation-->
+        <OrchestrationStep Order="2" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isLocalAccountSignUp</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="ConditionalAccess_Evaluation"/>
+          </JourneyList>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+
+
+  <SubJourneys>
+    <SubJourney Id="IdentityProviderSelection_SignUpSignIn" Type="Call">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
-            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
-
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
           </ClaimsProviderSelections>
           <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- Check if the user has selected to sign in using one of the social providers -->
@@ -304,13 +383,40 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <!-- For social IDP authentication, attempt to find the user account in the directory. -->
-
         <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>authenticationSource</Value>
@@ -319,89 +425,31 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
           </ClaimsExchanges>
         </OrchestrationStep>
-
-        <OrchestrationStep Order="4" Type="InvokeSubJourney">
-          <JourneyList>
-            <Candidate SubJourneyReferenceId="ConditionalAccess_Evaluation" />
-          </JourneyList>
-        </OrchestrationStep>
-
-        <!--MFA based on Conditional Access-->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>CAChallengeIsMfa</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>CAChallengeIsMfa</Value>
-              <Value>False</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-
-        <!--Save MFA phone number: The precondition verifies whether the user provided a new number in the 
-             previous step. If so, then the phone number is stored in the directory for future authentication 
-             requests.-->
+        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
           <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>newPhoneNumberEntered</Value>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId"/>
           </ClaimsExchanges>
         </OrchestrationStep>
-
-        <OrchestrationStep Order="7" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>CAChallengeIsBlock</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
-              <Value>CAChallengeIsBlock</Value>
-              <Value>True</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="ShowBlockPage" TechnicalProfileReferenceId="ShowBlockPage" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!--If a user has reached this far that means a remediation was applied-->
-        <OrchestrationStep Order="8" Type="InvokeSubJourney">
-          <JourneyList>
-            <Candidate SubJourneyReferenceId="ConditionalAccess_Remediation" />
-          </JourneyList>
-        </OrchestrationStep>
-
-
-        <OrchestrationStep Order="9" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-  </UserJourneys>
-
-
-  <SubJourneys>
+    </SubJourney>
 
     <SubJourney Id="ConditionalAccess_Evaluation" Type="Call">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="ConditionalAccessEvaluation" TechnicalProfileReferenceId="ConditionalAccessEvaluation" />
+            <ClaimsExchange Id="ConditionalAccessEvaluation" TechnicalProfileReferenceId="ConditionalAccessEvaluation"/>
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="2" Type="ClaimsExchange">
@@ -412,7 +460,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="GenerateCAClaimFlags" TechnicalProfileReferenceId="GenerateCAClaimFlags" />
+            <ClaimsExchange Id="GenerateCAClaimFlags" TechnicalProfileReferenceId="GenerateCAClaimFlags"/>
           </ClaimsExchanges>
         </OrchestrationStep>
       </OrchestrationSteps>
@@ -428,28 +476,21 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="ConditionalAccessRemediation" TechnicalProfileReferenceId="ConditionalAccessRemediation" />
+            <ClaimsExchange Id="ConditionalAccessRemediation" TechnicalProfileReferenceId="ConditionalAccessRemediation"/>
           </ClaimsExchanges>
         </OrchestrationStep>
       </OrchestrationSteps>
     </SubJourney>
 
-    <!--<SubJourney Id="CheckWhetherNeedToPerformMFA" Type="Call">
+    <SubJourney Id="BlockUser" Type="Call">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>needToPerformMfa</Value>
-              <Value>True</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="GenerateNeedToPerformMFAFlag" TechnicalProfileReferenceId="GenerateNeedToPerformMFAFlag" />
+            <ClaimsExchange Id="ShowBlockPage" TechnicalProfileReferenceId="ShowBlockPage"/>
           </ClaimsExchanges>
         </OrchestrationStep>
       </OrchestrationSteps>
-    </SubJourney>-->
+    </SubJourney>
 
   </SubJourneys>
 
