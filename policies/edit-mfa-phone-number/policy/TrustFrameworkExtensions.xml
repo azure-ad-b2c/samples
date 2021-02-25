@@ -143,7 +143,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Demo: ave MFA phone number -->
+        <!-- Demo: save MFA phone number -->
         <OrchestrationStep Order="7" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
