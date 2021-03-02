@@ -40,6 +40,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Custom SMS provider - DisplayControls](policies/custom-sms-displaycontrol) Integrate a custom SMS provider in Azure Active Directory B2C (Azure AD B2C) to customized SMS' to users that perform multi factor authentication to your application. By using DisplayControls (currently in preview) and a third-party SMS provider, you can use your own contextualised SMS message, custom Phone Number, as well as support localization and custom one-time password (OTP) settings.
 
+- [Force password reset](policies/force-password-reset) - As an administrator, you can reset a user's password if the user forgets their password. Or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.
+
 - [Force password reset first logon](policies/force-password-reset-first-logon) - Demonstrates how to force a user to reset their password on the first logon.
 
 - [Sign-up and sign-in with embedded password reset](policies/embedded-password-reset) - This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.
