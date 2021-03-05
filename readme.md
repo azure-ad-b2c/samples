@@ -82,6 +82,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [sign-up or sign-in policy with a link to sign-up page](policies/susi-with-link-to-sign-up) - Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.
 
+- [sign-up or sign-in policy checks client Id](policies/allow-list-applications) - Checks if the application is allowed to call the b2c sign-in sign-up policy. Uses a claims resolver to get the client ID from the incoiming OIDC request, and uses a claims transformation to see if the client id is on an allow list of application ID's.  If the client Id is not on the allowed list, a customizable error message on a block page is shown to the user, blocking users from signing in.
+
 ## Social account policy enhancements
 
 - [Social identity provider force email verification](policies/social-idp-force-email) - When a user signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.
