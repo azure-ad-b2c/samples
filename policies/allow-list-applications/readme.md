@@ -5,14 +5,20 @@ If you find a bug in the sample, please raise the issue on [GitHub Issues](https
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
-This policy checks to see if the client id in the OIDC request is on an allow list of applications ID's.  If yes, the flow allows users to attemp sign in, sign up, else, a block page will be displayed with an customizable error message will be shown to the to the user. 
+This policy checks to see if the client id in the OIDC request is on an "allowed list" of applications ID's.  If yes, the flow allows users to attemp sign-in or sign-up, else, a block page will be returned with a customizable error message. 
+
+Key components of this B2C custom policy:
+1. User journey steps 1 and 2 checks if the calling application client id is allowed, and will block sign-in sign-up if not allowed.
+2. A block page that simply shows the "you cannot access this application" message to the user - the message can be customized.
+3. Use of a technical profile "checkIfAppIsAllowed" that collects the incoming client Id (using a claims resolver {OIDC:ClientId}), and calls a claims transformation type LookUpValue, and returns true or false if the client Id is on the allow list.
+
 
 ## Implementation
 To implement this use case follow the following steps;
 1. Ensure you have followed the ["Get Started with custom policies"](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-get-started) steps within the Microsoft documentation site. 
-1. Change the refernces in the [Policy](policy/B2C_1A_SignUpOrSignin_checkAppId.xml) from "yourtenant.onmicrosoft.com" to the name of your B2C Tenant.
-1. Update the OIDC-Contoso technical profile to reflect your azureAd tenant details as per the [Microsoft dcumentation](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/identity-provider-azure-ad-single-tenant-custom?tabs=app-reg-ga#add-a-claims-provider).
-1. [Uplaod](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-get-started#upload-the-policies) and run your policy.
+1. Change the references in the [Policy](policy/B2C_1A_SignUpOrSignin_checkAppId.xml) from "yourtenant.onmicrosoft.com" to the name of your B2C Tenant.
+1. Update the ClaimsTransformation with Id="isAppAllowed" to reflect your list of allowed client id's. For more information about B2C claims transformations [Microsoft Azure AD B2C Claims Transformation documentation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/claimstransformations).
+1. [Upload](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-get-started#upload-the-policies) and run your policy.
 
 
 ## Notes
