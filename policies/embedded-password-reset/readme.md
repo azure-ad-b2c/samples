@@ -1,6 +1,3 @@
-## Deprecated
-This sample is now deprecated, you can find the up to date version [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/add-password-reset-policy?pivots=b2c-custom-policy#self-service-password-reset-recommended).
-
 # Sign-up and Sign-in with embedded password reset
 
 By default when you create a sign-up or sign-in policy (with local accounts), you see a Forgot password? link on the first page of the experience. Clicking this link doesn't automatically trigger a password reset policy. Instead, the error code AADB2C90118 is returned to your app. Your app needs to handle this error code by invoking a specific password reset policy.
