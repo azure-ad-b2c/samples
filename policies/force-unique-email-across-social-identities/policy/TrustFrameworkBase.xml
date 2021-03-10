@@ -575,7 +575,7 @@
 
             <!-- Optional claims -->
             <!--Demo: you may want to store the email in strongAuthenticationEmailAddress -->
-            <!---<PersistedClaim ClaimTypeReferenceId="eamil" PartnerClaimType="strongAuthenticationEmailAddress" />-->
+            <!---<PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="strongAuthenticationEmailAddress" />-->
 
             <PersistedClaim ClaimTypeReferenceId="otherMails" />
             <PersistedClaim ClaimTypeReferenceId="givenName" />
