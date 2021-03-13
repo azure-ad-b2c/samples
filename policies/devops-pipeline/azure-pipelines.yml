@@ -16,5 +16,5 @@ steps:
   - script: npm install -g ieftool
     displayName: 'Install IEF Tool'
 
-  - script: ieftool deploy -t TENANT_ID -c CLIENT_ID -s CLIENT_SECRET -p ./src
+  - script: ieftool deploy -t TENANT_ID -c CLIENT_ID -s CLIENT_SECRET -p ./policy
     displayName: 'Uploading IEF policies'
