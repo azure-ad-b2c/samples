@@ -173,6 +173,10 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [SignIn Web test](policies/signin-webtest) - This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.
 
+## CI/CD
+
+- [Azure Devops](policies/devops-pipeline) - An example AzureDevOps pipeline that uploads policies regardless of naming convention.
+
 ## Community Help and Support
 
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
