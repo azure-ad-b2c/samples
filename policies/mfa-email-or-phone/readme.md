@@ -5,6 +5,9 @@ Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to
 If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
+## Prerequisites
+This scenario contains the use of extension attributes. Please follow instructions indicated [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/user-flow-custom-attributes?pivots=b2c-custom-policy) to enable your custom policies for extension attributes.
+
 ## Scenario
 For scenarios where you would like to give users the choice to use Email verification or SMS/Phone Call as the second authentication factor, and allow them to change this choice at a later point via Profile Edit.
 
