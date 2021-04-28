@@ -127,28 +127,16 @@ token = JWT.encode claims, ecdsa_key, 'ES256', headers
 puts token
 ```
 
-## Creating the OIDC metadata endpoint
-
-Apple does not expose an OpenID Connect metadata endpoint. In order to use it as an identity provider in Azure AD B2C, you must host a metadata document which B2C can access over the internet. You could host this file in Azure Blob Storage (with public access enabled), on your website, in an [Azure Function](source-code/B2CSignInWithApple/SigninWithApple_OpenidConfiguration/run.csx), or in some other location. In the source code for this sample, there is a function app which exposes this metadata.
-
-The metadata document is a JSON file with the following content:
-```json
-{
-    "issuer": "https://appleid.apple.com",
-    "authorization_endpoint": "https://appleid.apple.com/auth/authorize",
-    "token_endpoint": "https://appleid.apple.com/auth/token",
-    "jwks_uri": "https://appleid.apple.com/auth/keys"
-}
-```
-
-_Note: Ensure the URL to the metadata ends in exactly: `/.well-known/openid-configuration`_
+## The OIDC metadata endpoint
+_Update 2020-02-02:_ Apple exposes a OpenID Connect metadata endpoint that should be used when setting up the OpenId Identity Provider in Azure B2C. 
+https://appleid.apple.com/.well-known/openid-configuration 
 
 ## Using **Sign in with Apple** in a user flow (built-in policy)
 
 Now that you have created and collected the necessary configuration values which are necessary to configure **Sign in with Apple** as an identity provider, you can do so in the Azure AD B2C blade in the Azure Portal.
 
 Choose *OpenID Connect* as the identity provider type and use these configuration values:
-- **Metadata url:** URL to the metadata endpoint you created
+- **Metadata url:** 'https://appleid.apple.com/.well-known/openid-configuration'
 - **Client id:** The Apple Service ID (e.g. com.mycompany.app1)
 - **Client secret:** The signed JWT you created
 - **Scope:** `name` and/or `email` may be specified, however, please see the note below
