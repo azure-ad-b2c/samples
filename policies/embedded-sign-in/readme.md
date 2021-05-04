@@ -1,6 +1,6 @@
-# Sign-up and Sign-in with embedded sign-in
+# Embedded Sign-up and Sign-in with iframe
 
-By default when you create a sign-up or sign-in policy, it cannot be embedded in an iframe within your application. To allow your Azure AD B2C user interface to be embedded in an iframe, a content security policy Content-Security-Policy and frame options X-Frame-Options must be included in the Azure AD B2C HTTP response headers. These headers allow the Azure AD B2C user interface to run under your application domain name.
+By default when you create a sign-up or sign-in policy, it cannot be embedded in an iframe within your application. To allow your Azure AD B2C user interface to be embedded in an iframe, a content security policy `Content-Security-Policy` and frame options `X-Frame-Options` must be included in the Azure AD B2C HTTP response headers. These headers allow the Azure AD B2C user interface to run under your application domain name.
 
 This policy adds a JourneyFraming element inside the RelyingParty element. The UserJourneyBehaviors element must follow the DefaultUserJourney. Your UserJourneyBehaviors element should look like this example:
 
