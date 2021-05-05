@@ -42,7 +42,7 @@ For more infomation, see:
 You can also use other authorization method, such as calling a REST API to check is user is allowed to impersonate.
 
 ## Handling users with Social Accounts
-BVy default this sample will not work for users who login with a social account or a federated Identity Provider. This is beacuse the Admin locates the account by the users Email address, which is stored in `signInNames.emailAddress`. Federated accounts do not populate the property by default. This allows federted users to sign up for a Local Account with the same email as their federated email.
+By default this sample will not work for users who login with a social account or a federated Identity Provider. This is beacuse the Admin locates the account by the users Email address, which is stored in `signInNames.emailAddress`. Federated accounts do not populate the property by default. This allows federted users to sign up for a Local Account with the same email as their federated email.
 
 If this functionality is not desired, it is possible to write the federated account's email address into `signInNames.emailAddress` when the account is created using the `AAD-UserWriteUsingAlternativeSecurityId` technical profile.
 
