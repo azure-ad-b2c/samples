@@ -10,6 +10,21 @@ The `SignUpOrSigninWithCA` policy uses the starterpack [B2C_1A_TrustFrameworkExt
 
 In this version the policy block high risk sign-in. MFA is not included as a remediation in this policy.  
 
+## Important notes
+
+The claim used inside the `IsMfaRegisteredCT` claimstransformation must not be empty to ensure `IsMfaRegistered` evaluates to `True`. If it evaluates to `Fasle`, the evaluate always results in a `Block` grant type. Also, you can use any valid claim within `IsMfaRegisteredCT` which carries a MFA value (Email or Phone). 
+
+```XML
+ <ClaimsTransformation Id="IsMfaRegisteredCT" TransformationMethod="DoesClaimExist">
+  <InputClaims>
+    <InputClaim ClaimTypeReferenceId="strongAuthenticationEmailAddress" TransformationClaimType="inputClaim" />
+  </InputClaims>
+  <OutputClaims>
+    <OutputClaim ClaimTypeReferenceId="IsMfaRegistered" TransformationClaimType="outputClaim" />
+  </OutputClaims>
+ </ClaimsTransformation>
+```
+
 ## Solution artifacts
 
 The policy contains the following components:
