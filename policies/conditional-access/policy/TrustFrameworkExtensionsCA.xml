@@ -72,6 +72,11 @@
         <DisplayName>CAChallengeIsBlock</DisplayName>
         <DataType>boolean</DataType>
       </ClaimType>
+      <ClaimType Id="estsRequestId">
+        <DisplayName>estsRequestId</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>stores request id from ests</AdminHelpText>
+      </ClaimType>
 
       <!-- End of CA claims -->
 
@@ -169,6 +174,7 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="isFederated" DefaultValue="false" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="estsRequestId" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreatePasswordAuthenticationMethodClaim" />
@@ -195,6 +201,7 @@
             <InputClaim ClaimTypeReferenceId="AuthenticationMethodsUsed" />
             <InputClaim ClaimTypeReferenceId="IsFederated" DefaultValue="false" />
             <InputClaim ClaimTypeReferenceId="IsMfaRegistered" />
+            <InputClaim ClaimTypeReferenceId="estsRequestId" DefaultValue="00000000-0000-0000-0000-000000000000" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="conditionalAccessClaimCollection" PartnerClaimType="Challenges" />
@@ -493,5 +500,4 @@
     </SubJourney>
 
   </SubJourneys>
-
 </TrustFrameworkPolicy>
