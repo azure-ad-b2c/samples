@@ -35,6 +35,7 @@ The policy contains the following components:
   - **AuthenticationMethodsUsed** - The list of authentication methods used.
   - **AuthenticationMethodUsed** - The authentication method used. Possible values: `Password`, and `OneTimePasscode`.
   - **IsFederated** - Indicates whether the user authenticated via an external identity provider, or a local account.
+  - **estsRequestId** - The request identifier that is created during non-interactive login for local accounts. This identifier should be set as an output claim from the technical profile that represents non-interactive login.
 
 - Evaluation output:
   - **conditionalAccessClaimCollection** - The list of claims which are the result of conditional access evaluation phase
