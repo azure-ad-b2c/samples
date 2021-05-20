@@ -77,7 +77,7 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <!--Demo: Change the service URL with your REST API location-->
-            <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/Identity</Item>
+            <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/Identity/isMemberOf/Item>
             
             <!--Demo: Change the AuthenticationType to basic or ClientCertificate.
             For more information, see: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-custom-rest-api-netfw-secure-cert-->
