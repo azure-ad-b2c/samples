@@ -22,7 +22,7 @@ We also recommend using Visual Studio Code and installing the Azure AD B2C exten
 
 **1. Register a Multi-tenant application - this allows users from Azure AD tenants to sign-in to your B2C tenant**
 
-From the Azure AD B2C portal, select App registration, create a friendly name for the app, and select the “Accounts in any organization directory or any identity provider…” under the Supported Account Types.  By selecting this application option, it makes the application type to be a Multi-tenant app, thus making it available to Azure AD tenants.  Details about Multi-tenant Azure AD applications can be found here:  https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant
+From the Azure AD B2C portal, select App registration, create a friendly name for the app, and select the "Accounts in any organizational directory…" under the Supported Account Types.  By selecting this application option, it makes the application type to be a Multi-tenant app, thus making it available to Azure AD tenants.  Details about Multi-tenant Azure AD applications can be found here:  https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant
 
 The reply url (redirect URI) should be your b2c tenant instance’s reply uRL  (replace “your-B2C-tenant-name” with your tenant’s name.).  
 https://your-B2C-tenant-name.b2clogin.com/your-B2C-tenant-name.onmicrosoft.com/oauth2/authresp
