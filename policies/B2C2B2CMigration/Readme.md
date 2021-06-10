@@ -19,11 +19,11 @@ This example builds upon the Social and Local Display Control Starter pack sampl
 
 ## Configure the sample
 
-The following chnages will need to be made to [B2CMigrate_Extensions](policy/B2CMigrate_Extensions.xml) file:
+The following chnages will need to be made to [B2CMigrate_Extensions](Policy/B2CMigrate_Extensions.xml) file:
 1. Change the refernces from "yourtenant.onmicrosoft.com" to the name of your B2C Tenant.
-1. Change the refernce from "remoteb2ctenant" on Lines [36](policy/B2CMigrate_Extensions.xml#L36) and [37](policy/B2CMigrate_Extensions.xml#L37) to your legacy B2C tenant name.
-1. Change the reference of "RemoteB2CProxyIdentityExperienceFrameworkAppId" on Lines [44](policy/B2CMigrate_Extensions.xml#L44) and [53](policy/B2CMigrate_Extensions.xml#L53) to the Proxy Identitiy Experience Framework Applicaiton Objects Client Id from your legacy tenant.
-1. Change the reference of "RemoteB2CIdentityExperienceFrameworkAppId" on Lines [45](policy/B2CMigrate_Extensions.xml#L45) and [54](policy/B2CMigrate_Extensions.xml#L54) to the Identitiy Experience Framework Applicaiton Objects Client Id from your legacy tenant.
+1. Change the refernce from "remoteb2ctenant" on Lines [36](Policy/B2CMigrate_Extensions.xml#L36) and [37](policy/B2CMigrate_Extensions.xml#L37) to your legacy B2C tenant name.
+1. Change the reference of "RemoteB2CProxyIdentityExperienceFrameworkAppId" on Lines [44](Policy/B2CMigrate_Extensions.xml#L44) and [53](Policy/B2CMigrate_Extensions.xml#L53) to the Proxy Identitiy Experience Framework Applicaiton Objects Client Id from your legacy tenant.
+1. Change the reference of "RemoteB2CIdentityExperienceFrameworkAppId" on Lines [45](Policy/B2CMigrate_Extensions.xml#L45) and [54](Policy/B2CMigrate_Extensions.xml#L54) to the Identitiy Experience Framework Applicaiton Objects Client Id from your legacy tenant.
 
 
 ## Community Help and Support
