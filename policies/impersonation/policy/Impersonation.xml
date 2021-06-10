@@ -149,7 +149,7 @@
           <InputClaim ClaimTypeReferenceId="targetEmail" PartnerClaimType="signInNames" Required="true"/>
         </InputClaims>
         <OutputClaims>
-          <!-- Sample: Reutrns the value in targetEmail and check in signInNames collection, then 
+          <!-- Sample: Returns the value in targetEmail and check in signInNames collection, then 
                  returns value in SignInName and pipe into impersonatedUser-->
           <OutputClaim ClaimTypeReferenceId="impersonatedUser" PartnerClaimType="signInNames.emailAddress" /> 
         </OutputClaims>
