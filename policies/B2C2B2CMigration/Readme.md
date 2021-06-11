@@ -10,8 +10,11 @@ On next login the user will exist in the tenant so the normal authenticaiton pro
 
 The following diagram illustrates the migration flow:
 
-![B2C Migration Flow](media/B2CMigrateImage.jpg)
+<p align="center">
+  <img src="media/B2CMigrateImage.jpg" />
+</p>
 
+  
 To configure this solution, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  Review the getting started with custom B2C applications:
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom?tabs=applications
 
