@@ -2,11 +2,11 @@
 > Disclaimer: This sample is provided AS IS - a best effort will be made to update this sample as the service evolves.
 
 This sample solution demonstrates how to migrate users from one B2C instance to another using Just In Time (JIT) Migration.
-The policy will check to see if the user exists in the current tenant, and if they exist then the normal authenication rocess is followed (login-Noninteractive).
+The policy will check to see if the user exists in the current tenant, and if they exist then the normal authenication process is followed (login-Noninteractive).
 If the user does not exist within the curren tenant a seperate Remote login call is made to the legacy B2C instance using ROPC.
 On successfull Authenitcaion to the legacy tenant, the user details (including password) are written to the local Tenant.
 
-On next login the user will exist in the tenant so the normal authenticaiton procss will be followed.
+On next login the user will exist in the tenant so the normal authenticaiton process will be followed.
 
 The following diagram illustrates the migration flow:
 
@@ -19,7 +19,7 @@ This example builds upon the Social and Local Display Control Starter pack sampl
 
 ## Configure the sample
 
-The following chnages will need to be made to [B2CMigrate_Extensions](Policy/B2CMigrate_Extensions.xml) file:
+The following changes will need to be made to [B2CMigrate_Extensions](Policy/B2CMigrate_Extensions.xml) file:
 1. Change the refernces from "yourtenant.onmicrosoft.com" to the name of your B2C Tenant.
 1. Change the refernce from "remoteb2ctenant" on Lines [36](Policy/B2CMigrate_Extensions.xml#L36) and [37](policy/B2CMigrate_Extensions.xml#L37) to your legacy B2C tenant name.
 1. Change the reference of "RemoteB2CProxyIdentityExperienceFrameworkAppId" on Lines [44](Policy/B2CMigrate_Extensions.xml#L44) and [53](Policy/B2CMigrate_Extensions.xml#L53) to the Proxy Identitiy Experience Framework Applicaiton Objects Client Id from your legacy tenant.
