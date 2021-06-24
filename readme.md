@@ -165,6 +165,16 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Angular5](policies/app-migration-angular5) - This guide shows how to migrate an exiting Angular SPA application to be protected with Azure AD B2C authentication.
 
+## User migration
+
+- [just in time migration v1](/../../../user-migration/tree/master/jit-migration-v1) - In this sample Azure AD B2C calls a REST API that validates the credential, and migrate the account with a Graph API call.
+
+- [just in time migration v2](/../../../user-migration/tree/master/jit-migration-v2) - In this sample Azure AD B2C calls a REST API to validate the credentials, return the user profile to B2C from an Azure Table, and B2C creates the account in the directory.
+
+- [seamless-account-migration](/../../../user-migration/tree/master/seamless-account-migration) - Where accounts have been pre-migrated into Azure AD B2C and you want to update the password on the account on initial sign in. Azure AD B2C calls a REST API to validate the credentials for accounts marked as requiring migration (via attribute) against a legacy identity provider, returns a successful response to Azure AD B2C, and Azure AD B2C writes the password to the account in the directory.
+
+- [B2C to B2C Migration](policies/B2C2B2CMigration) - Migrate users from one B2C instance to another using just in time migration.
+
 ## Conditional Access
 
 - [Sign-in with Conditional access](policies/conditional-access) - Azure Active Directory (Azure AD) Conditional Access is the tool used by Azure AD B2C to bring signals together, make decisions, and enforce organizational policies. Automating risk assessment with policy conditions means risky sign-ins are at once identified and remediated or blocked.
