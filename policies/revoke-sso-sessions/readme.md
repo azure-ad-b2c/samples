@@ -6,9 +6,9 @@ If you find a bug in the sample, please raise the issue on [GitHub Issues](https
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
-A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies must be revoked. This prevents a user on another device to be able to obtain a new set of tokens using the Azure AD B2C [web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
+A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies can be revoked. This prevents a user on another device to be able to obtain a new set of tokens using the Azure AD B2C [web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
 
-A common scenario can be when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to reauthenticate.
+Common scenarios include when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to re-authenticate. The user on the device which made the operation, should remain logged in, with a valid SSO session.
 
 ## Refresh token revocation
 To revoke the users Refresh Token, use the [powershell command](https://docs.microsoft.com/en-us/powershell/module/azuread/revoke-azureaduserallrefreshtoken?view=azureadps-2.0):
@@ -21,9 +21,9 @@ Revoke-AzureADUserAllRefreshToken
 This command sets the users `refreshTokensValidFromDateTime` attribute to the current time. All refresh tokens issued prior to this time will thereby be rejected by Azure AD B2C.
 
 ## Revoke the users Azure AD B2C web sessions
-To revoke the users Azure AD B2C web sessions, a custom policy which compares the users initial login time, to the `refreshTokensValidFromDateTime` attribute can be used. This comparison forces the last fresh logon time to always be **after** the `refreshTokensValidFromDateTime` value. If the last login time was prior to the  `refreshTokensValidFromDateTime` value, then Azure AD B2C returns an error message back to the application.
+To revoke the users Azure AD B2C web sessions, a custom policy which compares the users initial login time, to the `refreshTokensValidFromDateTime` attribute can be used. If the last login time was prior to the  `refreshTokensValidFromDateTime` value, then Azure AD B2C returns an error message back to the application.
 
-The users initial login time can be stored inside the Azure AD B2C web session cookie, and will be evaluated in all user journeys to ensure the session is still valid in respect the `refreshTokensValidFromDateTime` attribute.
+The users initial login time can be stored inside the Azure AD B2C web session cookie, and will be evaluated in all user journeys to ensure the session is still valid in respect to the `refreshTokensValidFromDateTime` attribute.
 
 ### How it works
 
@@ -59,7 +59,7 @@ Store the `lastLogonTime` claim into the session cookie:
   </TechnicalProfile>
 ```
 
-First read the `refreshTokensValidFromDateTime` attribute:
+Read the `refreshTokensValidFromDateTime` attribute:
 ```xml
   <OrchestrationStep Order="3" Type="ClaimsExchange">
     <ClaimsExchanges>
@@ -95,8 +95,11 @@ Compare the lastLogin date claim with the refreshTokensValidFromDateTime date cl
   </ClaimsTransformation>
 ```
 
-**Web sessions that are created within 10 seconds of the `refreshTokensValidFromDateTime` value will continue to be valid.**
-Any web session created more than 10seconds in the past compared to the current time will be invalid, and `isSessionRevoked` will return as `True`.
+Any web session created after the time at which the refresh token was revoked will be valid, and `isSessionRevoked` will return as `False`.
+Any web session created before the time at which the refresh token was revoked will be invalid, and `isSessionRevoked` will return as `True`.
+**Web sessions that are created within 10 seconds prior to revoking the refresh token will continue to be valid.**
+
+This logic allows any **password change** journey to continue to provide the user a valid SSO session, and only other devices are logged out.
 
 If `isSessionRevoked` has returned as `True`, call the OAuth2 error technical profile:
 ```xml
