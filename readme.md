@@ -20,7 +20,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## Local account policy enhancements
-- [Password reset via Email or Phone verification](policies/revoke-sso-sessions) - Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.
+- [Revoke Azure AD B2C session cookies](policies/revoke-sso-sessions) - Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.
 
 - [Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone) - This demonstrates how to verify a user via Email or SMS on a single screen.
 
