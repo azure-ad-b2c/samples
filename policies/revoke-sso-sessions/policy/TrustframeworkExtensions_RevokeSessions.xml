@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions_revoke_sessions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_revoke_sessions">
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="errorCode">
+        <DisplayName>client_id</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Special parameter passed to EvoSTS.</AdminHelpText>
+        <UserHelpText>Special parameter passed to EvoSTS.</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="errorMessage">
+        <DisplayName>client_id</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Special parameter passed to EvoSTS.</AdminHelpText>
+        <UserHelpText>Special parameter passed to EvoSTS.</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="lastLogonTime">
+        <DisplayName>client_id</DisplayName>
+        <DataType>dateTime</DataType>
+        <AdminHelpText>Special parameter passed to EvoSTS.</AdminHelpText>
+        <UserHelpText>Special parameter passed to EvoSTS.</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="refreshTokensValidFromDateTime">
+        <DisplayName>refreshTokensValidFromDateTime</DisplayName>
+        <DataType>dateTime</DataType>
+        <AdminHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</AdminHelpText>
+        <UserHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="isSessionRevoked">
+        <DisplayName>isSessionRevoked</DisplayName>
+        <DataType>boolean</DataType>
+        <AdminHelpText>isSessionRevoked</AdminHelpText>
+        <UserHelpText>isSessionRevoked</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="lastLogonTime" TransformationClaimType="currentDateTime" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CompareLastLogonTimeToRTRevocationTime" TransformationMethod="DateTimeComparison">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="lastLogonTime" TransformationClaimType="firstDateTime" />
+          <InputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" TransformationClaimType="secondDateTime" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="operator" DataType="string" Value="earlier than" />
+          <InputParameter Id="timeSpanInSeconds" DataType="int" Value="10" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="isSessionRevoked" TransformationClaimType="result" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="GenerateErrorCode" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="Error_SessionRevoked" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorCode" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="GenerateErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="Session has been revoked due to refresh token revocation." />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <!--
+    A list of all the claim providers that can be used in the technical policies. If a claims provider is not listed 
+    in this section, then it cannot be used in a technical policy.
+  -->
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Refresh token journey</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" PartnerClaimType="refreshTokensValidFromDateTime"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ReturnOAuth2Error">
+          <DisplayName>Return OAuth2 error</DisplayName>
+          <Protocol Name="None" />
+          <OutputTokenFormat>OAuth2Error</OutputTokenFormat>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorCode" />
+            <InputClaim ClaimTypeReferenceId="errorMessage"/>
+          </InputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SM-AAD">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="lastLogonTime" />
+          </PersistedClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="CT-CompareSessionTime">
+          <DisplayName>Compare Email And Verify Email</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="generateErrorCode" />
+            <InputClaimsTransformation ReferenceId="generateErrorMessage" />
+          </InputClaimsTransformations>
+          <InputClaims>
+            <!-- always use a default here to -->
+            <InputClaim ClaimTypeReferenceId="lastLogonTime" DefaultValue="2021-06-06T15:00:00.0000000Z" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isSessionRevoked" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CompareLastLogonTimeToRTRevocationTime" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignIn" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- compare lastLogonTime with refreshTokensValidFromDateTime-->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CompareSessionsTime" TechnicalProfileReferenceId="CT-CompareSessionTime" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="ReturnOAuth2Error">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>isSessionRevoked</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+    <UserJourney Id="ProfileEditCustom" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+        
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CompareSessionsTime" TechnicalProfileReferenceId="CT-CompareSessionTime" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="ReturnOAuth2Error">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>isSessionRevoked</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+  </UserJourneys>
+</TrustFrameworkPolicy>
