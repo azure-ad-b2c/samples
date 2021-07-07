@@ -9,22 +9,22 @@
   <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="errorCode">
-        <DisplayName>client_id</DisplayName>
+        <DisplayName>errorCode</DisplayName>
         <DataType>string</DataType>
-        <AdminHelpText>Special parameter passed to EvoSTS.</AdminHelpText>
-        <UserHelpText>Special parameter passed to EvoSTS.</UserHelpText>
+        <AdminHelpText>errorCode</AdminHelpText>
+        <UserHelpText>errorCode</UserHelpText>
       </ClaimType>
       <ClaimType Id="errorMessage">
-        <DisplayName>client_id</DisplayName>
+        <DisplayName>errorMessage</DisplayName>
         <DataType>string</DataType>
-        <AdminHelpText>Special parameter passed to EvoSTS.</AdminHelpText>
-        <UserHelpText>Special parameter passed to EvoSTS.</UserHelpText>
+        <AdminHelpText>errorMessage</AdminHelpText>
+        <UserHelpText>errorMessage</UserHelpText>
       </ClaimType>
       <ClaimType Id="lastLogonTime">
-        <DisplayName>client_id</DisplayName>
+        <DisplayName>lastLogonTime</DisplayName>
         <DataType>dateTime</DataType>
-        <AdminHelpText>Special parameter passed to EvoSTS.</AdminHelpText>
-        <UserHelpText>Special parameter passed to EvoSTS.</UserHelpText>
+        <AdminHelpText>lastLogonTime</AdminHelpText>
+        <UserHelpText>lastLogonTime</UserHelpText>
       </ClaimType>
       <ClaimType Id="refreshTokensValidFromDateTime">
         <DisplayName>refreshTokensValidFromDateTime</DisplayName>
@@ -81,8 +81,8 @@
   </BuildingBlocks>
 
   <!--
-    A list of all the claim providers that can be used in the technical policies. If a claims provider is not listed 
-    in this section, then it cannot be used in a technical policy.
+  A list of all the claim providers that can be used in the technical policies. If a claims provider is not listed 
+  in this section, then it cannot be used in a technical policy.
   -->
   <ClaimsProviders>
     <ClaimsProvider>
@@ -107,24 +107,22 @@
           </InputClaims>
         </TechnicalProfile>
 
-        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-        </TechnicalProfile>
-
-        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-        </TechnicalProfile>
-
         <TechnicalProfile Id="SM-AAD">
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="lastLogonTime" />
           </PersistedClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="CT-RecordFirstLogonTime">
+          <DisplayName>Compare Email And Verify Email</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="lastLogonTime" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
 
         <TechnicalProfile Id="CT-CompareSessionTime">
@@ -153,8 +151,13 @@
   <UserJourneys>
     <UserJourney Id="SignUpOrSignIn" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
       <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RecordFirstLogonTime" TechnicalProfileReferenceId="CT-RecordFirstLogonTime" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
 
-        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
@@ -163,7 +166,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
@@ -176,20 +179,20 @@
         </OrchestrationStep>
 
         <!-- This step reads any user attributes that we may not have received when in the token. -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
         <!-- compare lastLogonTime with refreshTokensValidFromDateTime-->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="CompareSessionsTime" TechnicalProfileReferenceId="CT-CompareSessionTime" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="ReturnOAuth2Error">
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="ReturnOAuth2Error">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
               <Value>isSessionRevoked</Value>
@@ -199,7 +202,7 @@
           </Preconditions>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
@@ -213,7 +216,7 @@
             <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
         </OrchestrationStep>
-        
+
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />

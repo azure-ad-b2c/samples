@@ -10,6 +10,9 @@ A users refresh token maybe revoked to prevent continued long term access to an 
 
 Common scenarios include when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to re-authenticate. The user on the device which made the operation, should remain logged in, with a valid SSO session.
 
+The sample will work for both Local and Federated/Social accounts.
+The sample will also be applicable where Keep Me Signed In is used.
+
 ## Refresh token revocation
 To revoke the users Refresh Token, use the [powershell command](https://docs.microsoft.com/en-us/powershell/module/azuread/revoke-azureaduserallrefreshtoken?view=azureadps-2.0):
 ```powershell
@@ -29,19 +32,11 @@ The users initial login time can be stored inside the Azure AD B2C web session c
 
 Generate the lastLogonTime at the initial sign in and sign up screen:
 ```xml
-  <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
-    <OutputClaimsTransformations>
-      <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
-    </OutputClaimsTransformations>
-    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-  </TechnicalProfile>
-
-  <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
-    <OutputClaimsTransformations>
-      <OutputClaimsTransformation ReferenceId="GetSystemDateTime" />
-    </OutputClaimsTransformations>
-    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-  </TechnicalProfile>
+  <OrchestrationStep Order="1" Type="ClaimsExchange">
+    <ClaimsExchanges>
+      <ClaimsExchange Id="RecordFirstLogonTime" TechnicalProfileReferenceId="CT-RecordFirstLogonTime" />
+    </ClaimsExchanges>
+  </OrchestrationStep>
 
   <ClaimsTransformation Id="GetSystemDateTime" TransformationMethod="GetCurrentDateTime">
     <OutputClaims>
