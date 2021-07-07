@@ -1,3 +1,5 @@
+## Allow/Deny access to Azure AD B2C Custom Policy based on the Hostname
+
 
 ### Overview
 
