@@ -11,7 +11,6 @@ using AADB2C.MFA.TOTP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using OtpNet;
 using QRCoder;
 
@@ -28,6 +27,9 @@ namespace AADB2C.RestoreUsername.API.Controllers
         {
             this.AppSettings = appSettings.Value;
         }
+
+        [HttpGet(Name = "TestMe")]
+        public string TestMe() => "OK";
 
         [HttpPost(Name = "Generate")]
         public async Task<ActionResult> Generate()
@@ -166,7 +168,7 @@ namespace AADB2C.RestoreUsername.API.Controllers
             }
         }
 
-        public string EncryptAndBase64(string encryptString)
+        private string EncryptAndBase64(string encryptString)
         {
             string EncryptionKey = this.AppSettings.EncryptionKey;
             byte[] clearBytes = Encoding.Unicode.GetBytes(encryptString);
@@ -188,7 +190,7 @@ namespace AADB2C.RestoreUsername.API.Controllers
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(encryptString));
         }
 
-        public string DecryptAndBase64(string cipherText)
+        private string DecryptAndBase64(string cipherText)
         {
             // Base64 decode
             cipherText = Encoding.UTF8.GetString(Convert.FromBase64String(cipherText));
@@ -214,7 +216,7 @@ namespace AADB2C.RestoreUsername.API.Controllers
             return cipherText;
         }
 
-        public string GetTotpUrl(byte[] key, string userName, string issuer, int timestep = 30, string prefix = null)
+        private string GetTotpUrl(byte[] key, string userName, string issuer, int timestep = 30, string prefix = null)
         {
             // if no prefix, we use the issuer
             prefix = prefix ?? issuer;
