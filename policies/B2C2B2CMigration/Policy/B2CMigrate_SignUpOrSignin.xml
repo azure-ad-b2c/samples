@@ -4,7 +4,7 @@
     <PolicyId>B2C_1A_B2CMigrate_Extensions</PolicyId>
   </BasePolicy>
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpOrSignIn-Migrate" />
+    <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
