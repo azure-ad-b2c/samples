@@ -8,9 +8,9 @@ To provide product feedback, visit the Azure Active Directory B2C [Feedback page
 ## Scenario
 A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies can be revoked. This prevents a user on another device to be able to obtain a new set of tokens using the Azure AD B2C [web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
 
-Common scenarios include when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to re-authenticate. The user on the device which made the operation, should remain logged in, with a valid SSO session.
+Common scenarios include when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to re-authenticate. The user on the device which made the operation, will also lose their web session SSO cookies. To allow the active device to maintain a session, you can bootstrap a new authentication journey using an [id_token_hint]https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint).
 
-The sample will work for both Local and Federated/Social accounts.
+The sample will work for both Local and Federated/Social accounts. 
 The sample will also be applicable where Keep Me Signed In is used.
 
 ## Refresh token revocation
@@ -114,12 +114,12 @@ If `isSessionRevoked` has returned as `True`, call the OAuth2 error technical pr
 
 When the **OAuth2 error technical profile** (ReturnOAuth2Error) executes, it will also destroy the Azure AD B2C web session SSO cookie on this device. Therefore a logout request to Azure AD B2C is not necessary for further clean up.
 
-You must include this logic to protect all user journeys that you offer.
+You must include this logic to protect all user journeys that you offer. See how this is used in the profile edit journey to evaluate the session before presenting the profile edit page.
 
 ## Testing
 To test the policy:
-1. Use the SignUpOrSignIn policy to sign in or sign up
-1. Wait 10 seconds, then using powershell revoke the users refresh token: `Revoke-AzureADUserAllRefreshToken -ObjectId GUID`
+1. Use the **SignUpOrSignIn** policy to sign in or sign up
+1. Wait 10 seconds, then using powershell revoke the users refresh token: `Revoke-AzureADUserAllRefreshToken -ObjectId <GUID>`
 1. Launch the SignUpOrSignIn policy or the ProfileEdit policy (remove the prompt query parameter)
 1. You should be presented with an error from Azure AD B2C: `AAD_Custom_Error_SessionRevoked: Session has been revoked due to refresh token revocation.`
  
