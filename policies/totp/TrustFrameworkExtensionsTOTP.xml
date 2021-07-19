@@ -1,15 +1,21 @@
 ﻿<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_TrustFrameworkExtensionsTOTP" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsTOTP">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="harshaseeja.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensionsTOTPv2" PublicPolicyUri="http://harshaseeja.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsTOTPv2">
   <BasePolicy>
-    <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensionsTOTP</PolicyId>
+    <TenantId>harshaseeja.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_ha-genpoc-TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
       <!--TOTP claims-->
-
+  <ClaimType Id="emails">
+        <DisplayName>Email Addresses</DisplayName>
+        <DataType>stringCollection</DataType>
+        <AdminHelpText>Email addresses of the user.</AdminHelpText>
+        <UserHelpText>Your email addresses.</UserHelpText>
+      </ClaimType>
+      
     <ClaimType Id="totpIdentifier">
       <DisplayName>UserId, Phone number or Email which can present the user's identity</DisplayName>
       <DataType>string</DataType>
@@ -22,7 +28,18 @@
       <UserInputType>Paragraph</UserInputType>
     </ClaimType>
 
-
+    <ClaimType Id="QrCodeScanInstruction">
+        <DisplayName>You can download the Microsoft Authenticator app or use any other authenticator app of your choice.</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+      
+      <ClaimType Id="QrCodeVerifyInstruction">
+        <DisplayName>Enter the verification code from your authenticator app​.</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+          
     <ClaimType Id="qrCodeContent">
       <DisplayName>QR Code Text</DisplayName>
       <DataType>string</DataType>
@@ -31,7 +48,7 @@
     </ClaimType>
 
     <ClaimType Id="secretKey">
-      <DisplayName>Secret Key</DisplayName>
+      <DisplayName>If you cant't scan the image, enter the Secret Key:</DisplayName>
       <DataType>string</DataType>
       <UserHelpText>QR code secret</UserHelpText>
       <UserInputType>Paragraph</UserInputType>
@@ -76,6 +93,23 @@
     
     
     <!--TOTP Claim Transforms-->
+     <ClaimsTransformation Id="GetEmailFromReadOnlyEmail" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="ReadOnlyEmail" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="email" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    
+        <ClaimsTransformation Id="GetEmailFromEmails" TransformationMethod="GetSingleItemFromStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="emails" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="ReadOnlyEmail" TransformationClaimType="extractedItem" />
+        </OutputClaims>
+      </ClaimsTransformation>
 
     <ClaimsTransformation Id="CreateSecret" TransformationMethod="CreateOtpSecret">
       <OutputClaims>
@@ -120,6 +154,15 @@
       </OutputClaims>
     </ClaimsTransformation>
 
+     <ClaimsTransformation Id="SignInNameToTotpIdentifier" TransformationMethod="CopyClaim">
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim" />
+      </InputClaims>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="totpIdentifier" TransformationClaimType="outputClaim" />
+      </OutputClaims>
+    </ClaimsTransformation>
+    
     <ClaimsTransformation Id="EmailToTotpIdentifier" TransformationMethod="CopyClaim">
       <InputClaims>
         <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="inputClaim" />
@@ -128,6 +171,7 @@
         <OutputClaim ClaimTypeReferenceId="totpIdentifier" TransformationClaimType="outputClaim" />
       </OutputClaims>
     </ClaimsTransformation>
+    
     <ClaimsTransformation Id="UserIdToLogonIdentifier" TransformationMethod="CopyClaim">
       <InputClaims>
         <InputClaim ClaimTypeReferenceId="UserId" TransformationClaimType="inputClaim" />
@@ -153,46 +197,36 @@
   </ClaimsTransformations>
     
   <ContentDefinitions>
-      <ContentDefinition Id="api.selfasserted.2.1.0">
+
+  
+  <ContentDefinition Id="api.selfasserted.totp">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.0</DataUri>
+       <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.1</DataUri>
         <Metadata>
           <Item Key="DisplayName">Collect information from user page</Item>
         </Metadata>
         <LocalizedResourcesReferences>
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.2.1.0.en" />
+        <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.totp.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
-
-      <ContentDefinition Id="api.selfasserted.2.1.0.customized">
-        <LoadUri>https://malova.blob.core.windows.net/root/signupwithotp.html</LoadUri>
-        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.0</DataUri>
-        <Metadata>
-          <Item Key="DisplayName">Collect information from user page</Item>
-        </Metadata>
-        <LocalizedResourcesReferences>
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.2.1.0.en" />
-        </LocalizedResourcesReferences>
-      </ContentDefinition>
-
+        
     </ContentDefinitions>
 
-
-
-    <!--TOTP localization-->
-    <Localization>
-      <LocalizedResources Id="api.selfasserted.2.1.0.en">
+      <Localization>
+      
+        <LocalizedResources Id="api.selfasserted.totp.en">
         <LocalizedStrings>
-          <LocalizedString ElementType="DisplayControl" ElementId="qrCodeControlId" StringId="info_msg">Scan this QR code or manually enter the following secret key in your Authenticator app.</LocalizedString>
-        </LocalizedStrings>
+          <LocalizedString ElementType="DisplayControl" ElementId="totpQrCodeControl" StringId="info_msg">You can download the Microsoft Authenticator app or use any other authenticator app of your choice.</LocalizedString>
+       </LocalizedStrings>
       </LocalizedResources>
-    </Localization>
+      </Localization>
+
+
+  <DisplayControls>
 
     <!--TOTP controls-->
-    <DisplayControls>
-      <DisplayControl Id="qrCodeControlId" UserInterfaceControlType="QrCodeControl" >
+    <DisplayControl Id="totpQrCodeControl" UserInterfaceControlType="QrCodeControl" > 
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="qrCodeContent" />
         </InputClaims>
@@ -200,32 +234,38 @@
           <DisplayClaim ClaimTypeReferenceId="qrCodeContent" ControlClaimType="QrCodeContent" />
         </DisplayClaims>
       </DisplayControl>
+      
+
+    
     </DisplayControls>
     
     <!--End of TOTP contols-->
-
+  </BuildingBlocks>
+  
     <ClaimsProviders>
       <!--Start TOTP-->
-
-        <TechnicalProfile Id="AzureMfa-BeginVerifyOTP">
-          <DisplayName>Create Device</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="Operation">BeginVerifyOTP</Item>
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="secretKey" />
-            <InputClaim ClaimTypeReferenceId="objectId" />
-            <InputClaim ClaimTypeReferenceId="userPrincipalName" />
-          </InputClaims>
-        </TechnicalProfile>
-        
+      <ClaimsProvider>
+        <DisplayName>TOTPTP</DisplayName>
+        <TechnicalProfiles>
+          <TechnicalProfile Id="AzureMfa-BeginVerifyOTP">
+            <DisplayName>Create Device</DisplayName>
+            <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+            <Metadata>
+              <Item Key="Operation">BeginVerifyOTP</Item>
+            </Metadata>
+            <InputClaims>
+              <InputClaim ClaimTypeReferenceId="secretKey" />
+              <InputClaim ClaimTypeReferenceId="objectId" />
+              <InputClaim ClaimTypeReferenceId="userPrincipalName" />
+            </InputClaims>
+          </TechnicalProfile>
+      
+      
         <TechnicalProfile Id="AzureMfa-VerifyOTP">
           <DisplayName>Verify OTP</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="Operation">VerifyOTP</Item>
-            <Item Key="allowTestOtpPassthrough">true</Item>
           </Metadata>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="otpCode" />
@@ -262,10 +302,8 @@
           <DisplayName>Sign up with Authenticator app</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.2.1.0</Item>
-            <!--Custom UI for Enable OTP authetication page -->
-            <!--Item Key="ContentDefinitionReferenceId">api.selfasserted.2.1.0.customized</Item-->
-            <Item Key="language.button_continue">Verify</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.totp</Item>
+            <Item Key="language.button_continue">Continue</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
@@ -281,19 +319,14 @@
             <InputClaim ClaimTypeReferenceId="secretKey" />
           </InputClaims>
           <DisplayClaims>
-            <DisplayClaim DisplayControlReferenceId="qrCodeControlId" />
+            <DisplayClaim ClaimTypeReferenceId="QrCodeScanInstruction" />
+            <DisplayClaim DisplayControlReferenceId="totpQrCodeControl" />
             <DisplayClaim ClaimTypeReferenceId="secretKey" />
-            <DisplayClaim ClaimTypeReferenceId="otpCode" Required="true"/>
           </DisplayClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="secretKey" />
-            <OutputClaim ClaimTypeReferenceId="otpCode" />
           </OutputClaims>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AzureMfa-BeginVerifyOTP" />
-            <ValidationTechnicalProfile ReferenceId="AzureMfa-VerifyOTP" />
-          </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
         
@@ -302,16 +335,16 @@
           <DisplayName>Sign in with Authenticator app</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.2.1.0</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.totp</Item>
             <Item Key="language.button_continue">Verify</Item>
           </Metadata>
           <CryptographicKeys>
             <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
           </CryptographicKeys>
           <InputClaims>
-            <!--InputClaim secretKey with NULL value is passed to AzureMfa-BeginVerifyOTP-->
           </InputClaims>
           <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="QrCodeVerifyInstruction" />
             <DisplayClaim ClaimTypeReferenceId="otpCode" Required="true"/>
           </DisplayClaims>
           <OutputClaims>
@@ -330,7 +363,7 @@
           <DisplayName>Delete all available devices</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.2.1.0</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.totp</Item>
             <Item Key="language.button_continue">Remove the device</Item>
           </Metadata>
           <CryptographicKeys>
@@ -370,6 +403,18 @@
             <OutputClaimsTransformation ReferenceId="UserIdToLogonIdentifier" />
           </OutputClaimsTransformations>
         </TechnicalProfile>
+          
+         <TechnicalProfile Id="CreateTotpIdentifier-SignInName">
+          <DisplayName>Set Totp Default Values</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="totpIdentifier" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="SignInNameToTotpIdentifier" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+          
         <TechnicalProfile Id="CreateTotpIdentifier-Email">
           <DisplayName>Set Totp Default Values</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -381,6 +426,27 @@
           </OutputClaimsTransformations>
         </TechnicalProfile>
         
+          <TechnicalProfile Id="GetEmailFromReadOnlyEmail">
+          <DisplayName>Get Email From ReadOnlyEmail</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetEmailFromReadOnlyEmail" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+        <TechnicalProfile Id="GetEmailAddress">
+          <DisplayName>Get Email Address</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="ReadOnlyEmail" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="GetEmailFromEmails" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+          
         <!--<TechnicalProfile Id="CreateTotpIdentifier-Phone">
           <DisplayName>Set Totp Default Values</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -393,9 +459,11 @@
         </TechnicalProfile>-->
         
         <!--end of TOTP-->
+            </TechnicalProfiles>
+        </ClaimsProvider>
     </ClaimsProviders>
-
-   <UserJourney Id="SignUpOrSignInTOTP-V2">
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignInTOTP-V2">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
@@ -431,162 +499,233 @@
             <Candidate SubJourneyReferenceId="TotpFactor-Input" />
           </JourneyList>
         </OrchestrationStep>
-        
+
         <OrchestrationStep Order="5" Type="InvokeSubJourney">
-          
+
           <JourneyList>
             <Candidate SubJourneyReferenceId="TotpFactor-Verify" />
           </JourneyList>
         </OrchestrationStep>
+        
         <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
     </UserJourney>
-
+  </UserJourneys>
     <SubJourneys>
 
       <!--TOTP subjourneys-->
       <!-- Authenticator Subjourney -->
       <SubJourney Id="SetTotpInitialValue" Type="Call">
-        <OrchestrationSteps>
-          <OrchestrationStep Order="1" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-                <Value>numberOfAvailableDevices</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="SetTotpDefaultValue" TechnicalProfileReferenceId="SetTotpDefaultValue" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-          <OrchestrationStep Order="2" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-                <Value>totpIdentifier</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-              <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-                <Value>UserId</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="SetTotpIdentifierAsUserId" TechnicalProfileReferenceId="CreateTotpIdentifier-UserId" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-          <OrchestrationStep Order="3" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-                <Value>totpIdentifier</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-              <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-                <Value>email</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="SetTotpIdentifierAsEmail" TechnicalProfileReferenceId="CreateTotpIdentifier-Email" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-          <!--<OrchestrationStep Order="4" Type="ClaimsExchange">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>numberOfAvailableDevices</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SetTotpDefaultValue" TechnicalProfileReferenceId="SetTotpDefaultValue" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>totpIdentifier</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>phoneNumber</Value>
+              <Value>UserId</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SetTotpIdentifierAsPhone" TechnicalProfileReferenceId="CreateTotpIdentifier-Phone" />
+            <ClaimsExchange Id="SetTotpIdentifierAsUserId" TechnicalProfileReferenceId="CreateTotpIdentifier-UserId" />
           </ClaimsExchanges>
-        </OrchestrationStep>-->
-        </OrchestrationSteps>
-      </SubJourney>
-      <SubJourney Id="TotpFactor-Verify" Type="Call">
-        <OrchestrationSteps>
-          <OrchestrationStep Order="1" Type="InvokeSubJourney">
-            <JourneyList>
-              <Candidate SubJourneyReferenceId="SetTotpInitialValue" />
-            </JourneyList>
-          </OrchestrationStep>
-          <OrchestrationStep Order="2" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                <Value>newUser</Value>
-                <Value>True</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="CheckAvailableDevices" TechnicalProfileReferenceId="AzureMfa-GetAvailableDevices" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-          <OrchestrationStep Order="3" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                <Value>numberOfAvailableDevices</Value>
-                <Value>0</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="AuthenticatorForSignIn" TechnicalProfileReferenceId="OTPVerification" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-        </OrchestrationSteps>
-      </SubJourney>
-      <SubJourney Id="TotpFactor-Input" Type="Call">
-        <OrchestrationSteps>
-          <OrchestrationStep Order="1" Type="InvokeSubJourney">
-            <JourneyList>
-              <Candidate SubJourneyReferenceId="SetTotpInitialValue" />
-            </JourneyList>
-          </OrchestrationStep>
-          <OrchestrationStep Order="2" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-                <Value>newUser</Value>
-                <Value>True</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="CheckAvailableDevices" TechnicalProfileReferenceId="AzureMfa-GetAvailableDevices" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-          <OrchestrationStep Order="3" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
-                <Value>numberOfAvailableDevices</Value>
-                <Value>0</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="AuthenticatorForSignUp" TechnicalProfileReferenceId="EnableOTPAuthentication" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-          <OrchestrationStep Order="4" Type="ClaimsExchange">
-            <Preconditions>
-              <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
-                <Value>numberOfAvailableDevices</Value>
-                <Value>0</Value>
-                <Action>SkipThisOrchestrationStep</Action>
-              </Precondition>
-            </Preconditions>
-            <ClaimsExchanges>
-              <ClaimsExchange Id="AuthenticatorForSignIn" TechnicalProfileReferenceId="OTPVerification" />
-            </ClaimsExchanges>
-          </OrchestrationStep>
-        </OrchestrationSteps>
-      </SubJourney>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>totpIdentifier</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>email</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SetTotpIdentifierAsEmail" TechnicalProfileReferenceId="CreateTotpIdentifier-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        
+        <OrchestrationStep Order="4" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>totpIdentifier</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>emails</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="ExtractEmailFromEmailsForTotpIdentifier" />
+          </JourneyList>
+        </OrchestrationStep>
+      
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>totpIdentifier</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>signInName</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SetTotpIdentifierAsSignInName" TechnicalProfileReferenceId="CreateTotpIdentifier-SignInName" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      
+      </OrchestrationSteps>
+    </SubJourney>
+    <SubJourney Id="ExtractEmailFromEmailsForTotpIdentifier" Type="Call">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>emails</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="GetEmailAddress" TechnicalProfileReferenceId="GetEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>ReadOnlyEmail</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="GetEmailFromReadOnlyEmail" TechnicalProfileReferenceId="GetEmailFromReadOnlyEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>email</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SetTotpIdentifierAsEmail" TechnicalProfileReferenceId="CreateTotpIdentifier-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+      <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>signInName</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SetTotpIdentifierAsSignInName" TechnicalProfileReferenceId="CreateTotpIdentifier-SignInName" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+          
+      </OrchestrationSteps>
+    </SubJourney>
+    <SubJourney Id="TotpFactor-Verify" Type="Call">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="InvokeSubJourney">
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="SetTotpInitialValue" />
+          </JourneyList>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>newUser</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CheckAvailableDevices" TechnicalProfileReferenceId="AzureMfa-GetAvailableDevices" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>numberOfAvailableDevices</Value>
+              <Value>0</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AuthenticatorForSignIn" TechnicalProfileReferenceId="OTPVerification" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+    <SubJourney Id="TotpFactor-Input" Type="Call">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="InvokeSubJourney">
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="SetTotpInitialValue" />
+          </JourneyList>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>newUser</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CheckAvailableDevices" TechnicalProfileReferenceId="AzureMfa-GetAvailableDevices" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>numberOfAvailableDevices</Value>
+              <Value>0</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AuthenticatorForSignUp" TechnicalProfileReferenceId="EnableOTPAuthentication" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>numberOfAvailableDevices</Value>
+              <Value>0</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AuthenticatorForSignIn" TechnicalProfileReferenceId="OTPVerification" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </SubJourney>
+   
     </SubJourneys>
     
     
-  </BuildingBlocks>
+
 </TrustFrameworkPolicy>
