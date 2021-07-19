@@ -2,13 +2,13 @@
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-                      TenantId="harshaseeja.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_with_totp"
+                      TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_with_totp"
                       DeploymentMode="Development"
                       UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
-                      PublicPolicyUri="http://harshaseeja.onmicrosoft.com/B2C_1A_signup_signin_with_totp">
+                      PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with_totp">
 
   <BasePolicy>
-    <TenantId>harshaseeja.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TRUSTFRAMEWORKEXTENSIONSTOTPV2</PolicyId>
   </BasePolicy>
 
@@ -19,7 +19,7 @@
       <SessionExpiryType>Absolute</SessionExpiryType>
       <SessionExpiryInSeconds>604800</SessionExpiryInSeconds>
       <JourneyInsights TelemetryEngine="ApplicationInsights"
-                       InstrumentationKey="ea37fcc3-3bde-4bcf-9ae7-99f0ffb19ffe" DeveloperMode="true"
+                       InstrumentationKey="yourInstrumentationKey" DeveloperMode="true"
     ClientEnabled="false" ServerEnabled="true"
                        TelemetryVersion="1.0.0" />
     </UserJourneyBehaviors>
