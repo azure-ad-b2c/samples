@@ -2,7 +2,7 @@
 
 To provide an higher assurance multi-factor option we are enabling "time based one time passcode" using Authenticator as an MFA choice for B2C customers. This option will allow customers  to save on the telephony charges associated with every step-up and still provide higher security than ever before for their end users accessing critical applications.
 
-
+End users can download the Microsoft Authenticator app or any other authenticator app of their liking that supports the TOTP protocol. 
 
 
 ## Disclaimer
@@ -15,10 +15,11 @@ The "Delete" device technical profiles are exposed here but the flows for those 
 
 ## Usage
 
-- [Userflow](media/userflow.png)
- All V3 userflows (recommend) wil have this new option enabled under the "Type of Method" MFA section in the properties blade 
+- All V3 userflows (Recommended) wil have a new option for TOTP enabled under the "Type of Method" MFA section in the properties blade. [Userflow](media/userflow.png)
 
 -  For custom policies see details below and the sample in the policies folder
+-  Microsoft Authenticator app can be downloaded from here:  https://www.microsoft.com/en-us/account/authenticator
+- When end users are adding/scanning the QR code to add the new account to the Microsoft Authenticator app, choose "Other (Google, facebook, etc.)" option to add your B2C account. [AuthApp](media/AuthApp.jpg)
 
 ## Custom Policy Overview
 
