@@ -463,6 +463,43 @@
         </ClaimsProvider>
     </ClaimsProviders>
   <UserJourneys>
+   <UserJourney Id="PasswordResetWithTOTP">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="InvokeSubJourney">
+
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="TotpFactor-Input" />
+          </JourneyList>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="TotpFactor-Verify" />
+          </JourneyList>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="UserJourneyContext" TechnicalProfileReferenceId="SimpleUJContext" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
     <UserJourney Id="SignUpOrSignInTOTP-V2">
       <OrchestrationSteps>
 
