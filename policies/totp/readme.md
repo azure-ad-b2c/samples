@@ -21,14 +21,14 @@ The "Delete" device technical profiles are exposed here but the flows for those 
 - You can customize the TOTP screens by providing the branded HTML files like you do for other pages by going to the "Page Layouts" blade of the userflows. [PageLayout](media/userflows-pagelayout.png)
 
 ### Custom Policies
--  For custom policies see details below and the sample in the policies folder
+-  For custom policies see details below and the sample in the 'Policy' folder. 
 
 ### Using the Authenticator App 
 - Microsoft Authenticator app can be downloaded from here:  https://www.microsoft.com/en-us/account/authenticator. Susbequent release of this feautre will have download links on the QR scan page for end users to download the app. 
 
 - You can have your end users also use any other app of your choosing. You can add the download links to this app on the QR Code page. 
 
-- When end users are adding/scanning the QR code to add the new account to the Microsoft Authenticator app, choose "Other (Google, facebook, etc.)" option to add your B2C account. [AuthApp](media/AuthApp.jpg)
+- When end users are adding/scanning the QR code to add the new account to the Microsoft Authenticator app, choose "Other (Google, Facebook, etc.)" option to add your B2C account. [AuthApp](media/AuthApp.jpg)
 
 ## Custom Policy Overview
 
