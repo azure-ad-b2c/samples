@@ -115,13 +115,6 @@
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="AAD-Common">
-          <!-- Provide objectId and appId before using extension properties. -->
-          <Metadata>
-            <Item Key="ApplicationObjectId">insert objectId here</Item>
-            <Item Key="ClientId">insert appId here</Item>
-          </Metadata>
-        </TechnicalProfile>   
 
         <TechnicalProfile Id="AAD-UserWriteMFAMethod">
           <Metadata>

@@ -1,12 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_TOTP_TrustFrameworkExtensions"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TOTP_TrustFrameworkExtensions">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TOTP_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TOTP_TrustFrameworkExtensions">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -52,7 +47,7 @@
         <!--<LoadUri>~/tenant/default/selfasserted.cshtml</LoadUri>-->
         <LoadUri>https://your-app.azurewebsites.net/selfasserted-appfactor-registration.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">App Factor</Item>
         </Metadata>
@@ -176,11 +171,12 @@
             <OutputClaim ClaimTypeReferenceId="strongAuthenticationAppCode" Required="true" />
             <OutputClaim ClaimTypeReferenceId="strongAuthenticationAppQRCodeBitmap" />
             <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationAppTimeStepMatched" />
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AppFactor-VerifyTotpWebHook" />
           </ValidationTechnicalProfiles>
-          <!--<UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />-->
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />
         </TechnicalProfile>
 
         <!-- Demo: The following technical profile asks the user to provide the TOTP code
@@ -202,12 +198,25 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="strongAuthenticationAppCode" Required="true" />
             <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationAppTimeStepMatched" />
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="AppFactor-VerifyTotpWebHook" />
           </ValidationTechnicalProfiles>
-          <!--<UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />-->
+          <UseTechnicalProfileForSessionManagement ReferenceId="SSOSession-PhoneFactor" />
         </TechnicalProfile>
+
+        <TechnicalProfile Id="SSOSession-PhoneFactor">
+          <DisplayName>Session Mananagement Provider</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.DefaultSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="extension_StrongAuthenticationAppTimeStepMatched" />
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
       </TechnicalProfiles>
     </ClaimsProvider>
 
@@ -222,46 +231,7 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
-    <!-- Local account Sign-In claims provider -->
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-          <InputClaims>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-    <!-- Facebook claims provider -->
-    <ClaimsProvider>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <Metadata>
-            <Item Key="client_id">708931959302288</Item>
-            <Item Key="scope">email public_profile</Item>
-            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-          </Metadata>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
   </ClaimsProviders>
-
   <UserJourneys>
     <UserJourney Id="SignUpOrSignIn">
       <OrchestrationSteps>
@@ -366,6 +336,10 @@
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
               <Value>strongAuthenticationAppQRCodeBitmap</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>isActiveMFASession</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
           </Preconditions>

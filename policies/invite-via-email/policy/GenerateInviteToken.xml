@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_INV_genlink" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_INV_genlink"
+  DeploymentMode="Development" 
+  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <ClaimsProviders>
+    <!-- variant of default JwtIssuer to lower the token lifetime for the invite we send -->
+    <ClaimsProvider>
+      <DisplayName>Token Issuer</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="JwtIssuerInvite">
+          <DisplayName>JWT Issuer Invite</DisplayName>
+          <Metadata>
+            <Item Key="id_token_lifetime_secs">900</Item> <!-- 900 secs = 15 min -->
+            <Item Key="token_lifetime_secs">900</Item>
+            <Item Key="refresh_token_lifetime_secs">86400</Item>
+          </Metadata>
+          <InputClaims />
+          <OutputClaims />
+          <IncludeTechnicalProfile ReferenceId="JwtIssuer" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <!-- this mini-userjourney will generate a signed JWT that can be sent in an email. 
+         Do NOT intruduce anything that will cause a UX to be displayed as that will break this
+     -->
+    <UserJourney Id="GenerateInviteToken">    
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuerInvite" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="GenerateInviteToken" />
+    <UserJourneyBehaviors>
+      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="...add your AppInsights InstrumentationKey here..." DeveloperMode="true" ClientEnabled="true" ServerEnabled="true" TelemetryVersion="1.0.0" />
+      <ScriptExecution>Allow</ScriptExecution>
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="sub" DefaultValue="{OIDC:LoginHint}" />
+        <OutputClaim ClaimTypeReferenceId="email" DefaultValue="{OIDC:LoginHint}" />
+        <OutputClaim ClaimTypeReferenceId="displayName" DefaultValue="{OAUTH-KV:displayName}" AlwaysUseDefaultValue="true" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" ExcludeAsClaim="false" />
+    </TechnicalProfile>
+  </RelyingParty>
+
+</TrustFrameworkPolicy>

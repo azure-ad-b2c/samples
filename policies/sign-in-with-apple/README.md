@@ -56,7 +56,7 @@ Apple requires the JWT token which will be used as your client secret to have a 
 ```json
 {
   "alg": "ES256",
-  "typ": "JWT"
+  "kid": "URKEYID001",
 }.{
   "sub": "com.yourcompany.app1",
   "nbf": 1560203207,
@@ -72,6 +72,8 @@ Apple requires the JWT token which will be used as your client secret to have a 
 
 _Note: Apple does not accept client secret JWTs with an expiration date more than six months after the creation (or not-before) date. That means you'll need to rotate your client secret, at minimum, every six months._
 
+More information about generating and validating tokens can be found in [Apple's developer documentation](https://developer.apple.com/documentation/sign_in_with_apple/generate_and_validate_tokens). 
+
 ### Signing the client secret JWT
 You'll use the `.p8` file you downloaded previously to sign the client secret JWT. This file is a [PCKS#8 file](https://en.wikipedia.org/wiki/PKCS_8) which contains the private signing key in PEM format. There are many libraries which can create and sign the JWT for you. One way of doing this is by running a small amount of code in an Azure Function.
 
@@ -79,6 +81,7 @@ The [`SigninWithApple_ClientSecret` Azure Function](source-code/B2CSignInWithApp
 ```json
 {
     "appleTeamId": "ABC123DEFG",
+    "appleKeyId": "URKEYID001",
     "appleServiceId": "com.yourcompany.app1",
     "p8key": "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg+s07NiAcuGEu8rxsJBG7ttupF6FRe3bXdHxEipuyK82gCgYIKoZIzj0DAQehRANCAAQnR1W/KbbaihTQayXH3tuAXA8Aei7u7Ij5OdRy6clOgBeRBPy1miObKYVx3ki1msjjG2uGqRbrc1LvjLHINWRD"
 }
@@ -102,28 +105,38 @@ _Note: The sample Azure Function generates a JWT which is valid for 180 days. Yo
 
 _Note: Ensure the `WEBSITE_LOAD_USER_PROFILE` configuration setting is set to `1` in your Azure Functions app environment - this provides access to the cryptographic context which is required to load the private key._
 
-## Creating the OIDC metadata endpoint
+_Note-2:_ If you get this token wrong, you will be able to redirect to Apple's authorize endpoint, enter your credentials, but the call to the token endpoint will fail with error: invalid_client. A blog post for how to troubleshoot this error can be found [here](https://fluffy.es/how-to-solve-invalid_client-error-in-sign-in-with-apple/).
 
-Apple does not expose an OpenID Connect metadata endpoint. In order to use it as an identity provider in Azure AD B2C, you must host a metadata document which B2C can access over the internet. You could host this file in Azure Blob Storage (with public access enabled), on your website, in an [Azure Function](source-code/B2CSignInWithApple/SigninWithApple_OpenidConfiguration/run.csx), or in some other location. In the source code for this sample, there is a function app which exposes this metadata.
+You can also generate the token with the following small Ruby code:
 
-The metadata document is a JSON file with the following content:
-```json
-{
-    "issuer": "https://appleid.apple.com",
-    "authorization_endpoint": "https://appleid.apple.com/auth/authorize",
-    "token_endpoint": "https://appleid.apple.com/auth/token",
-    "jwks_uri": "https://appleid.apple.com/auth/keys"
+```ruby
+require 'jwt'
+key_file = 'AuthKey_XXXXXXXX.p8'
+ecdsa_key = OpenSSL::PKey::EC.new IO.read key_file
+headers = {
+  'kid' => 'URKEYID001'
 }
+claims = {
+	'iss' => 'TEAMID0001',
+	'iat' => Time.now.to_i,
+	'exp' => Time.now.to_i + 86400*180,
+	'aud' => 'https://appleid.apple.com',
+	'sub' => 'com.your-company.b2capp',
+}
+token = JWT.encode claims, ecdsa_key, 'ES256', headers
+puts token
 ```
 
-_Note: Ensure the URL to the metadata ends in exactly: `/.well-known/openid-configuration`_
+## The OIDC metadata endpoint
+_Update 2020-02-02:_ Apple exposes a OpenID Connect metadata endpoint that should be used when setting up the OpenId Identity Provider in Azure B2C. 
+https://appleid.apple.com/.well-known/openid-configuration 
 
 ## Using **Sign in with Apple** in a user flow (built-in policy)
 
 Now that you have created and collected the necessary configuration values which are necessary to configure **Sign in with Apple** as an identity provider, you can do so in the Azure AD B2C blade in the Azure Portal.
 
 Choose *OpenID Connect* as the identity provider type and use these configuration values:
-- **Metadata url:** URL to the metadata endpoint you created
+- **Metadata url:** 'https://appleid.apple.com/.well-known/openid-configuration'
 - **Client id:** The Apple Service ID (e.g. com.mycompany.app1)
 - **Client secret:** The signed JWT you created
 - **Scope:** `name` and/or `email` may be specified, however, please see the note below

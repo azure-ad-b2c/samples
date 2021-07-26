@@ -2,7 +2,8 @@ param (
     [Parameter(Mandatory=$False)][Alias('t')][string]$Tenant = "",
     [Parameter(Mandatory=$True)][Alias('f')][string]$Path = ".\users.csv",
     [Parameter(Mandatory=$False)][Alias('d')][string]$Delimiter = ";", # the delimiter used in file 
-    [Parameter(Mandatory=$False)][Alias('c')][string]$client_id = "" # the Client ID used to register the attribute
+    [Parameter(Mandatory=$False)][Alias('c')][string]$client_id = "", # the Client ID used to register the attribute
+    [Parameter(Mandatory=$false)][switch]$ImportPassword = $False
     )
 
 if ( $null -eq $env:OAUTH_access_token ) {
@@ -27,6 +28,20 @@ $requiresMigrationAttributeName = "extension_$($extId)_requiresMigration"
 $phoneNumberVerifiedAttributeName = "extension_$($extId)_phoneNumberVerified"
 
 function CreateUserInB2C( $usr ) {
+    $pwd = $tmpPwd
+    $requiresMigrationAttribute = "true"
+    $passwordPolicies = "`"passwordPolicies`": `"DisablePasswordExpiration`","
+    # if we DO have the password in the CSV file, we are good to go and need no further migration
+    if ( $True -eq $ImportPassword -and $usr.password.Length -gt 0 ) {
+        $pwd = $usr.password
+        $requiresMigrationAttribute = "false"
+        $passwordPolicies = "`"passwordPolicies`": `"DisablePasswordExpiration,DisableStrongPassword`","
+    }
+
+    $mobileLine = ""
+    if ( "" -ne $usr.mobile ) {
+        $mobileLine = "`"mobile`": `"$($usr.mobile)`","
+    }
     $enabled=$usr.accountEnabled.ToLower()
     $body = @"
         {
@@ -35,10 +50,10 @@ function CreateUserInB2C( $usr ) {
           "displayName": "$($usr.displayName)",
           "surname": "$($usr.surname)",
           "givenname": "$($usr.givenname)",
-          "mobile": "$($usr.mobile)",
-          "passwordPolicies": "DisablePasswordExpiration",
+          $mobileLine
+          $passwordPolicies
           "passwordProfile": {
-            "password": "$tmpPwd",
+            "password": "$pwd",
             "forceChangePasswordNextLogin": false
           },
           "signInNames": [
@@ -51,7 +66,7 @@ function CreateUserInB2C( $usr ) {
               "value": "$($usr.emailAddress)"
             }
           ],
-          "$requiresMigrationAttributeName": true,
+          "$requiresMigrationAttributeName": $requiresMigrationAttribute,
           "$phoneNumberVerifiedAttributeName": $($usr.phoneNumberVerified)
         }
 "@

@@ -21,6 +21,7 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
 
     string issuer = data?.appleTeamId;
     string subject = data?.appleServiceId;
+    string kid = data?.appleKeyId;
     string p8key = data?.p8key;
 
     IList<Claim> claims = new List<Claim> {
@@ -42,6 +43,8 @@ public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
         DateTime.Now.AddDays(180),
         signingCred
     );
+    token.Header.Add("kid", kid);
+    token.Header.Remove("typ");
 
     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
     

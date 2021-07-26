@@ -3,7 +3,7 @@ Terms of service (TOS) cover the use of your company for consumer products, webs
 
 <a href="https://youtu.be/Hog7ADL4L-s"><img src="https://media.giphy.com/media/TGudF8XbUsV81s9mR0/giphy.gif" alt="TOSyouTube"
 	title="SUSI with Terms of Service" /></a>
-
+## Deprecated, use: [dynamic TOU sample](https://github.com/azure-ad-b2c/samples/blob/master/policies/sign-in-sign-up-versioned-tou).
 
 ## Solution flow
 The sample policy includes following user journey:

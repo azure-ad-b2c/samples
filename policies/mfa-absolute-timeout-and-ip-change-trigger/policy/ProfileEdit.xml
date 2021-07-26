@@ -5,7 +5,7 @@
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_MFA_IP_TrustFrameworkExtensions</PolicyId>
+    <PolicyId>B2C_1A_MFA_IP_Timeout_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
   <RelyingParty>

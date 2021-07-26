@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_RMTPROF_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_RMTPROF_TrustFrameworkExtensions">
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId> 
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <!-- op=operation. You pass GET or SAVE to REST API to either get or save a user object-->
+      <ClaimType Id="op">
+        <DisplayName>op</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>    
+      <!-- Geography. Passed to the REST API so it knows where to store the data -->
+      <!-- 
+        In this B2C Custom Policy you will see a lot of conditions on geo=EU. That is because 
+        user profile for geo=EU are stored in the B2C tenant. Other geos are stored in remote storage.
+        The idea is that this B2C tenant is deployed in EU datacenters and therefor it is ok to store
+        user data there. If you like another setup, just replace all the 'EU' with your prefered choice
+      -->
+      <ClaimType Id="geo">
+        <DisplayName>geo</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>User Geography (EU, US, MEA, APAC)</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>    
+      <!-- extension attribute for 'geo' to store on the user object -->
+      <ClaimType Id="extension_Geo">
+        <DisplayName>Geo for users remote profile</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <!-- just for demo purpose we add the storage account name in the token -->
+      <ClaimType Id="storageAccountName">
+        <DisplayName>Storage AccountName</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+
+        <!-- modified version for creating a user. 
+          DisplayName is set to email
+          extension_geo is set to which geography the user profile should be stored in
+        -->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail-RemoteProfile">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" />
+            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
+            <PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="displayName" />
+            <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration" />
+            <PersistedClaim ClaimTypeReferenceId="geo" PartnerClaimType="extension_Geo" /> 
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="newUser" PartnerClaimType="newClaimsPrincipalCreated" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <!-- add reading of extension_Geo attribute when we read a user object -->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="geo" PartnerClaimType="extension_Geo" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!-- Local account Sign-Up claims provider -->
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <!-- modified version with our different ValidationTechnicalProfiles -->
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail-RemoteProfile">
+          <DisplayName>Email signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+            <Item Key="language.button_continue">Create</Item>
+            <Item Key="EnforceEmailVerification">False</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+            <!-- Optional claims, to be collected from the user -->
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="geo" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <!-- If user profile is in B2C directory, then execute this VTP (geo=EU is stored in B2C tenant ) -->
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" >
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>geo</Value>
+                  <Value>EU</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- If user profile is stored remotely, then execute this VTP (geo=EU is stored in B2C tenant ) -->
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail-RemoteProfile" >
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>geo</Value>
+                  <Value>EU</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- If user profile is stored remotely, then execute this VTP (geo=EU is stored in B2C tenant ) -->
+            <ValidationTechnicalProfile ReferenceId="REST-SignUpOrEditProfile">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>geo</Value>
+                  <Value>EU</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+
+        <!-- When we do ProfileEdit, we need to either store data in B2C directory or send it to remote profile -->
+        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+        <InputClaims>
+            <InputClaim ClaimTypeReferenceId="displayName" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <!-- If user profile is in B2C directory, then execute this VTP (geo=EU is stored in B2C tenant ) -->
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteProfileUsingObjectId">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>geo</Value>
+                  <Value>EU</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- If user profile is stored remotely, then execute this VTP (geo=EU is stored in B2C tenant ) -->
+            <ValidationTechnicalProfile ReferenceId="REST-SignUpOrEditProfile">
+              <Preconditions>
+                <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                  <Value>geo</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>geo</Value>
+                  <Value>EU</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+	<ClaimsProvider>
+	  <DisplayName>REST APIs</DisplayName>
+	  <TechnicalProfiles>
+	
+	  <!-- Demo: Remote profile sign-up REST API -->
+	  <TechnicalProfile Id="REST-SignUpOrEditProfile">
+	    <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
+	    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+	    <Metadata>
+	      <Item Key="ServiceUrl">https://yourazfunc.azurewebsites.net/api/RemoteUserProfile?code=...</Item>
+	      <Item Key="AuthenticationType">None</Item>
+        <Item Key="AllowInsecureAuthInProduction">true</Item>
+	      <Item Key="SendClaimsIn">Body</Item>
+	    </Metadata>
+	    <InputClaims>
+	      <InputClaim ClaimTypeReferenceId="op" AlwaysUseDefaultValue="true" DefaultValue="save" />
+	      <InputClaim ClaimTypeReferenceId="geo" />
+	      <InputClaim ClaimTypeReferenceId="objectId" />
+	      <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="Email"/>
+	      <InputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="DisplayName" />
+	      <InputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="GivenName" />
+	      <InputClaim ClaimTypeReferenceId="surname" PartnerClaimType="SurName" />
+	    </InputClaims>
+	    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+	  </TechnicalProfile>
+
+	  <!-- Demo: Remote profile sign-in REST API -->
+	  <TechnicalProfile Id="REST-SignIn">
+	    <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
+	    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+	    <Metadata>
+	      <Item Key="ServiceUrl">https://yourazfunc.azurewebsites.net/api/RemoteUserProfile?code=...</Item>
+	      <Item Key="AuthenticationType">None</Item>
+        <Item Key="AllowInsecureAuthInProduction">true</Item>
+	      <Item Key="SendClaimsIn">Body</Item>
+	    </Metadata>
+	    <InputClaims>
+	      <InputClaim ClaimTypeReferenceId="op" AlwaysUseDefaultValue="true" DefaultValue="get" />
+	      <InputClaim ClaimTypeReferenceId="geo"  />
+	      <InputClaim ClaimTypeReferenceId="objectId" />
+	    </InputClaims>
+	    <OutputClaims>
+	      <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Email" />
+	      <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="DisplayName" />
+	      <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="GivenName" />
+	      <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="SurName" />
+	      <OutputClaim ClaimTypeReferenceId="storageAccountName" PartnerClaimType="StorageAccountName" />
+	    </OutputClaims>
+	    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+	  </TechnicalProfile>
+
+	  </TechnicalProfiles>
+	</ClaimsProvider>
+
+  </ClaimsProviders>
+
+  <UserJourneys>
+
+    <UserJourney Id="SignUpOrSignInR">
+      <OrchestrationSteps>
+      
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+           <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+           <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail-RemoteProfile" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- If user profile is stored remotely, then retrieve it with a REST API -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>geo</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>geo</Value>
+              <Value>EU</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RESTSignIn" TechnicalProfileReferenceId="REST-SignIn" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+    <UserJourney Id="ProfileEditR">
+      <OrchestrationSteps>
+      
+        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+ 
+        <!-- If user profile is stored remotely, then retrieve it with a REST API -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>geo</Value>
+              <Value>EU</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-SignIn" TechnicalProfileReferenceId="REST-SignIn" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+ 
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+  </UserJourneys>
+  
+</TrustFrameworkPolicy>

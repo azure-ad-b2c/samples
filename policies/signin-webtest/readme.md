@@ -9,11 +9,11 @@ If you need to run continuous tests to monitor the availability and responsivene
 If you need similar web tests for Sign-In’s using MFA (requiring access to phone based SMS and phone based authenticator app OTPs), or for Self-Service Password Resets or Sign-up’s (involving receipt of codes via email), then this sample will need to be modified with additional steps (to handle these secondary user inputs from Emails, Authenticator app etc).
 
 This sample web test solution uses the Multi-step web test capabilities of Azure Application Insights.
-https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability#multi-step-web-tests  
+https://docs.microsoft.com/en-us/azure/azure-monitor/app/availability-multistep
 
 1. Download the signIn.webtest sample from this repository
 
-2. Follow the instructions for creating a multi-step webtest using Visual Studio https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability#multi-step-web-tests 
+2. Follow the instructions for creating a multi-step webtest using Visual Studio https://docs.microsoft.com/en-us/azure/azure-monitor/app/availability-multistep 
 
 3. After your initial webtest solution is created in Visual Studio, right click on your project, and select Add – Existing Item, and select the signIn.Webtest file that you downloaded.
 
@@ -41,7 +41,7 @@ Under the Context Parameters,  enter your values:
  b. Replace each instance of “ENTER-YOUR-B2C-POLICY-NAME” with your policy e.g. B2C_1A_SUSI
 
 6. Save the changes to signIn.webtest, then run the Webtest from Visual Studio and validate test results.
-Additional test run details are at https://docs.microsoft.com/en-us/azure/azure-monitor/app/monitor-web-app-availability#multi-step-web-tests
+Additional test run details are at https://docs.microsoft.com/en-us/azure/azure-monitor/app/availability-multistep
 
 Additional Validation rules including Response Time Goal and Maximum Request Times can be configured for the test run.
 

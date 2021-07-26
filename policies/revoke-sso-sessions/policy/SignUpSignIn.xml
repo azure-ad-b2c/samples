@@ -1,0 +1,25 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_revoke_sessions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_revoke_sessions" DeploymentMode="Development" UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights" TenantObjectId="d6f33888-948c-4c1f-9b50-1590f171fc70">
+    <BasePolicy>
+        <TenantId>yourtenant.onmicrosoft.com</TenantId>
+        <PolicyId>B2C_1A_TrustFrameworkExtensions_revoke_sessions</PolicyId>
+    </BasePolicy>
+    <RelyingParty>
+        <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+        <TechnicalProfile Id="PolicyProfile">
+            <DisplayName>PolicyProfile</DisplayName>
+            <Protocol Name="OpenIdConnect" />
+            <OutputClaims>
+                <OutputClaim ClaimTypeReferenceId="givenName" />
+                <OutputClaim ClaimTypeReferenceId="surName" />
+                <OutputClaim ClaimTypeReferenceId="displayName" />
+                <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+                <OutputClaim ClaimTypeReferenceId="lastLogonTime" />
+                <OutputClaim ClaimTypeReferenceId="isSessionRevoked" />
+                <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" />
+            </OutputClaims>
+            <SubjectNamingInfo ClaimType="sub" />
+        </TechnicalProfile>
+    </RelyingParty>
+</TrustFrameworkPolicy>

@@ -190,7 +190,6 @@
 					</InputClaims>
 					<OutputClaims>
 						<OutputClaim ClaimTypeReferenceId="extension_IP" DefaultValue="noIP"/>
-						<OutputClaim ClaimTypeReferenceId="CurrentTime" />
 						<OutputClaim ClaimTypeReferenceId="extension_LastMFATime" DefaultValue="2018-10-01T15:00:00.0000000Z" />
 					</OutputClaims>
 					<OutputClaimsTransformations>

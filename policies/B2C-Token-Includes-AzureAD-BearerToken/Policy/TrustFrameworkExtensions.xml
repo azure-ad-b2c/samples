@@ -69,7 +69,7 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-<!-- Azure AD Technical Profile-->>
+<!-- Azure AD Technical Profile-->
   <ClaimsProvider>
       <Domain>Login.AzureAD.com</Domain>
       <DisplayName>AzureAD Account</DisplayName>

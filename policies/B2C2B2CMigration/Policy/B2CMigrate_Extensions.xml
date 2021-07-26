@@ -1,0 +1,142 @@
+﻿<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_B2CMigrate_Extensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <!-- The claim used to determine if the user has mirated already -->
+      <ClaimType Id="isLocalUser">
+        <DisplayName>isLocalUser</DisplayName>
+        <DataType>boolean</DataType>
+        <UserHelpText />
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <!-- Copy the SignInName claim to the Email Claim -->
+      <ClaimsTransformation Id="copyEmailFromSignin" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="email" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+  </ClaimsTransformations>
+  </BuildingBlocks>
+  <ClaimsProviders>
+      <ClaimsProvider>
+      <DisplayName>Remote Account</DisplayName>
+      <TechnicalProfiles>
+        <!-- REMOTE ROPC Call to Legacy B2C Instance -->
+        <TechnicalProfile Id="login-Remote">
+          <DisplayName>Remote Account SignIn</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <Item Key="METADATA">https://login.microsoftonline.com/remoteb2ctenant.onmicrosoft.com/.well-known/openid-configuration</Item>
+            <Item Key="authorization_endpoint">https://login.microsoftonline.com/remoteb2ctenant.onmicrosoft.com/oauth2/token</Item>
+            <Item Key="response_types">id_token</Item>
+            <Item Key="response_mode">query</Item>
+            <Item Key="scope">email openid</Item>
+            <!-- Policy Engine Clients -->
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="client_id">RemoteB2CProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">RemoteB2CIdentityExperienceFrameworkAppId</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" Required="true" />
+            <InputClaim ClaimTypeReferenceId="password" Required="true" />
+            <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="password" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="openid" />
+            <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="RemoteB2CProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="resource" DefaultValue="RemoteB2CIdentityExperienceFrameworkAppId" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+            <OutputClaim ClaimTypeReferenceId="isLocalUser" DefaultValue="false" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="Create-RemoteUserLocally">
+          <DisplayName>Create Remote Account Locally</DisplayName>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="copyEmailFromSignin" />
+          </InputClaimsTransformations>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="password" PartnerClaimType="password" />
+          </PersistedClaims>            
+          <IncludeTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <DisplayName>Local Account Signin</DisplayName>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isLocalUser" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserExists" ContinueOnError="true" ContinueOnSuccess="true" />
+            <!-- If 'isLocalUser' equals 'True' Login Locally -->
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive">
+              <Preconditions>
+                <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                  <Value>isLocalUser</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- If 'isLocalUser' equals 'False' Login Remotely (Migrate User) -->
+            <ValidationTechnicalProfile ReferenceId="login-Remote">
+              <Preconditions>
+                <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                  <Value>isLocalUser</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <!-- Set to Continue on success - false so as not rto try to re-apply login-Noninteractive from inhertance -->
+            <ValidationTechnicalProfile ReferenceId="Create-RemoteUserLocally" ContinueOnSuccess="false"> 
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>isLocalUser</Value>
+                  <Value>True</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <!-- Check if a user ecists using email address. Return isLocalUser claim if true -->
+        <TechnicalProfile Id="AAD-UserExists">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.emailAddress" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="isLocalUser" DefaultValue="true" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  
+</TrustFrameworkPolicy>

@@ -24,7 +24,16 @@
         <LoadUri>~/tenant/templates/AzureBlue/multifactor-1.0.0.cshtml</LoadUri>
         <!-- <LoadUri>https://yourstorageaccountname.blob.core.windows.net/templates/multifactor-1.0.0.cshtml</LoadUri> -->
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.0</DataUri>
+        <!--
+          NOTE! 
+          There is an issue with iOS14 and multifactor:1.2.0 where the page doesn't understand
+          that iOS14 autofilled the OTP. This is fixed in 1.2.2.
+          When using 1.2.1 it will autocomplete with a little help och javascript you'll find
+          in this sample.
+          <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.0</DataUri>
+        -->
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.1</DataUri>
+
         <LocalizedResourcesReferences MergeBehavior="ReplaceAll">
           <LocalizedResourcesReference Language="sv" LocalizedResourcesReferenceId="api.phonefactor.sv" />
           <LocalizedResourcesReference Language="nb" LocalizedResourcesReferenceId="api.phonefactor.nb" />

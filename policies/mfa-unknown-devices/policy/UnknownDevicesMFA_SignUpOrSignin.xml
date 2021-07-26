@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="{Settings:Tenant}"
+  TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_UnknownDevicesMFA_signup_signin"
-  PublicPolicyUri="http://{Settings:Tenant}/B2C_1A_UnknownDevicesMFA_signup_signin">
+  PublicPolicyUri="http://yourtenant/B2C_1A_UnknownDevicesMFA_signup_signin">
 
   <BasePolicy>
-    <TenantId>{Settings:Tenant}</TenantId>
+    <TenantId>yourtenant</TenantId>
     <PolicyId>B2C_1A_UnknownDevicesMFA_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 

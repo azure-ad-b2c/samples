@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+TenantId="yourtenant.onmicrosoft.com" 
+PolicyId="B2C_1A_ENC_TrustFrameworkExtensions" 
+PublicPolicyUri="http://cljunyourtenantgdemob2c.onmicrosoft.com/B2C_1A_ENC_TrustFrameworkExtensions">
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_ENC_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+
+    <ClaimsSchema>
+      <ClaimType Id="restApiOperation">
+        <DisplayName>restApiOperation</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="emailEncrypted">
+        <DisplayName>emailEncrypted</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="givenNameEncrypted">
+        <DisplayName>givenNameEncrypted</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="surnameEncrypted">
+        <DisplayName>surnameEncrypted</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+      <ClaimType Id="displayNameEncrypted">
+        <DisplayName>displayNameEncrypted</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ContentDefinitions>
+      <ContentDefinition Id="api.error">
+        <LoadUri>~/tenant/templates/AzureBlue/exception.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:globalexception:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.idpselections">
+        <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.idpselections.signup">
+        <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.signuporsignin">
+        <LoadUri>~/tenant/templates/AzureBlue/unified.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.selfasserted.profileupdate">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountsignup">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+      </ContentDefinition>
+    </ContentDefinitions>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <Metadata>
+            <Item Key="client_id">facebook_clientid</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
+            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
+            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
+            <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>          </Metadata>
+          <InputClaims>
+            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
+            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
+            <InputClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="username" Required="true" />
+          </InputClaims>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+
+        <!-- we override to persist the encrypted value -->
+        <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="signInNames.emailAddress" /> 
+          </PersistedClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="signInNames" Required="true" />
+          </InputClaims>
+        </TechnicalProfile>   
+
+        <TechnicalProfile Id="AAD-UserWriteEncryptedUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Write</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+            <!-- store the encrypted claims. userid replaces emailAddress as it is not in email format anymore
+                 attribute 'username' has a max length of 64 chars, while others, like 'userid' have 100 max length -->
+            <PersistedClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="signInNames.userid" /> 
+            <PersistedClaim ClaimTypeReferenceId="displayNameEncrypted" PartnerClaimType="displayName" />
+            <PersistedClaim ClaimTypeReferenceId="givenNameEncrypted" PartnerClaimType="givenName" />
+            <PersistedClaim ClaimTypeReferenceId="surnameEncrypted" PartnerClaimType="surname" />
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+
+        <!-- before validating the userid/password, encrypt what the user entered and use that -->
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <Metadata>
+            <Item Key="setting.operatingMode">username</Item>
+          </Metadata>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="REST-API-EncodeClaims" />
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>    
+
+    <ClaimsProvider>
+      <DisplayName>REST API</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-API-EncodeClaims">
+          <DisplayName>Describe the purpose of your REST API here</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncodeClaims</Item>
+            <!--<Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncryptClaims</Item>-->
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="restApiOperation" AlwaysUseDefaultValue="true" DefaultValue="encode" />
+            <InputClaim ClaimTypeReferenceId="signInName" />
+            <InputClaim ClaimTypeReferenceId="email" />
+            <InputClaim ClaimTypeReferenceId="displayName" />
+            <InputClaim ClaimTypeReferenceId="givenName" />
+            <InputClaim ClaimTypeReferenceId="surName" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="emailEncrypted" PartnerClaimType="emailEncrypted"/>
+            <OutputClaim ClaimTypeReferenceId="displayNameEncrypted" PartnerClaimType="displayNameEncrypted"/>
+            <OutputClaim ClaimTypeReferenceId="givenNameEncrypted" PartnerClaimType="givenNameEncrypted"/>
+            <OutputClaim ClaimTypeReferenceId="surNameEncrypted" PartnerClaimType="surNameEncrypted"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-API-DecodeClaims">
+          <DisplayName>Describe the purpose of your REST API here</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncodeClaims</Item>
+            <!--<Item Key="ServiceUrl">https://your-azfunc-api.azurewebsites.net/api/EncryptClaims</Item>-->
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="restApiOperation" AlwaysUseDefaultValue="true" DefaultValue="decode" />
+            <InputClaim ClaimTypeReferenceId="displayName" />
+            <InputClaim ClaimTypeReferenceId="givenName" />
+            <InputClaim ClaimTypeReferenceId="surName" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="displayNamePlainText"/>
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="givenNamePlainText"/>
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="surNamePlainText"/>
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignIn-Encrypted">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>        
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- next 2 steps are only executed during SignUp. It calls the REST API to encrypt and rewrites the persisted values -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newUser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-Encrypt" TechnicalProfileReferenceId="REST-API-EncodeClaims" />
+          </ClaimsExchanges>
+        </OrchestrationStep>        
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newUser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="Write-Encrypt" TechnicalProfileReferenceId="AAD-UserWriteEncryptedUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- the next step is only executed during Signin. It decrypts displayName, etc, so you can get them in clear text in the JWT -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>newUser</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="Decrypt-at-Signin" TechnicalProfileReferenceId="REST-API-DecodeClaims" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+	</UserJourneys>
+
+</TrustFrameworkPolicy>
