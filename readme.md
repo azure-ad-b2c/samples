@@ -65,6 +65,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Password reset without the ability to use the last password](policies/password-reset-not-last-password) - For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.
 
+- [Password reset without ability to use last X passwords](policies/password-history) - An example that uses Azure Key Vault to store hashes of past passwords so that a custom policy can preventa user from resetting their password using one of their last X passwords.
+
 - [Disable and lockout an account after a period of inactivity](policies/disable-inactive-account) - For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.
 
 - [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.
