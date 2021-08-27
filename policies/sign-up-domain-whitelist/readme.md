@@ -2,6 +2,8 @@
 
 This policy demonstrates how to validate the email address domain name against a list of allowed domains.
 
+![User flow](media/user-flow.png)
+
 ## Community Help and Support
 
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
