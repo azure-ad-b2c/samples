@@ -11,6 +11,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - See our Custom Policy Schema reference [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
 
 ## Prerequisites
+
 - You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup). Some policies can be deployed directly through this app via the **Experimental** menu.
 
 - You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
@@ -20,6 +21,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## Local account policy enhancements
+
 - [Revoke Azure AD B2C session cookies](policies/revoke-sso-sessions) - Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.
 
 - [Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone) - This demonstrates how to verify a user via Email or SMS on a single screen.
@@ -70,6 +72,8 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 - [Email delivered account redemption link](policies/sign-in-with-email) - This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.
 
 - [Sign-in with a magic link](policies/sign-in-with-magic-link) - This sample demonstrates how a user can sign in to your web application by sending them a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.
+
+- [Sign-up with with allowed domains](policies/sign-up-domain-whitelist) - This policy demonstrates how to validate the email address domain name against a list of allowed domains.
 
 - [Banned password list](policies/banned-password-list-no-API) - For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.
 
