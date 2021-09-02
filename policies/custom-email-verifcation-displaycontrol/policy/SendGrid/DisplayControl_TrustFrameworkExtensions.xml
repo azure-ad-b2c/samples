@@ -242,7 +242,7 @@
             <Item Key="ClaimUsedForRequestPayload">emailRequestBody</Item>
           </Metadata>
           <CryptographicKeys>
-            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridApiKey" />
+            <Key Id="BearerAuthenticationToken" StorageReferenceId="B2C_1A_SendGridSecret" />
           </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="GenerateEmailRequestBody" />
