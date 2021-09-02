@@ -72,6 +72,7 @@
           <Metadata>
             <Item Key="ServiceUrl">https://your-app.azurewebsites.net/api/login</Item>
             <Item Key="AuthenticationType">None</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
             <Item Key="SendClaimsIn">Body</Item>
           </Metadata>
           <InputClaims>
