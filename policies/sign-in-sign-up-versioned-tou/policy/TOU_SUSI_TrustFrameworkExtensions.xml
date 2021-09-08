@@ -3,10 +3,6 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TOU_SUSI" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TOU_SUSI">
 
-  <BasePolicy>
-    <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
-  </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="extension_termsOfUseConsentChoice">
@@ -48,7 +44,6 @@
           <OutputClaim ClaimTypeReferenceId="currentTime" TransformationClaimType="currentDateTime" />
         </OutputClaims>
       </ClaimsTransformation>
-
       <ClaimsTransformation Id="IsTermsOfUseConsentRequiredForDateTime" TransformationMethod="IsTermsOfUseConsentRequired">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" TransformationClaimType="termsOfUseConsentDateTime" />
@@ -60,17 +55,15 @@
           <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" TransformationClaimType="result" />
         </OutputClaims>
       </ClaimsTransformation>
-
       <ClaimsTransformation Id="GetNewUserAgreeToTermsOfUseConsentVersion" TransformationMethod="CreateStringClaim">
         <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="V1"/>
+          <InputParameter Id="value" DataType="string" Value="V1" />
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-
-    <!-- Not used here, but this OR IsTermsOfUseConsentRequiredForDateTime check can be used -->
+      <!-- Not used here, but this OR IsTermsOfUseConsentRequiredForDateTime check can be used -->
       <ClaimsTransformation Id="IsTermsOfUseConsentRequiredForVersion" TransformationMethod="CompareClaimToValue">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" TransformationClaimType="inputClaim1" />
@@ -86,10 +79,9 @@
       </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
-
   <ClaimsProviders>
     <ClaimsProvider>
-    <!-- Page that prompts for a new TOU on sign in if the users TOU is out of date-->
+      <!-- Page that prompts for a new TOU on sign in if the users TOU is out of date-->
       <DisplayName>Self Asserted</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="SelfAsserted-Input-ToU-SignIn">
@@ -107,20 +99,19 @@
             <InputClaim ClaimTypeReferenceId="extension_termsOfUseConsentChoice" DefaultValue="AgreeToTermsOfUseConsentNo" />
           </InputClaims>
           <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
             <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentChoice" Required="true" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="Update-TOU-Status" />
           </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
-
         <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
           <DisplayName>Local Account Signin</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -139,7 +130,7 @@
             <OutputClaim ClaimTypeReferenceId="password" Required="true" />
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
-            <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired"/>
+            <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
             <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
           </OutputClaims>
           <OutputClaimsTransformations>
@@ -169,7 +160,6 @@
           </OutputClaimsTransformations>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
-
         <!-- write the current time to the consent attribute if the user reconsents to TOU on sign in -->
         <TechnicalProfile Id="Update-TOU-Status">
           <Metadata>
@@ -184,9 +174,11 @@
             <PersistedClaim ClaimTypeReferenceId="objectId" />
             <PersistedClaim ClaimTypeReferenceId="currentTime" PartnerClaimType="extension_termsOfUseConsentDateTime" />
           </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" DefaultValue="false" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
-
         <!-- sign up page with TOU checkbox-->
         <TechnicalProfile Id="LocalAccountSignUpWithLogonEmailCustom">
           <DisplayName>Email signup</DisplayName>
@@ -212,7 +204,6 @@
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
-
             <!-- Optional claims, to be collected from the user -->
             <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="givenName" />
@@ -223,26 +214,31 @@
             <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
-
         <!-- During sign up, write the current time of consent, and version -->
         <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
           <PersistedClaims>
-            <PersistedClaim ClaimTypeReferenceId="currentTime" PartnerClaimType="extension_termsOfUseConsentDateTime"/>
+            <PersistedClaim ClaimTypeReferenceId="currentTime" PartnerClaimType="extension_termsOfUseConsentDateTime" />
             <PersistedClaim ClaimTypeReferenceId="extension_termsOfUseConsentChoice" />
             <PersistedClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" DefaultValue="V1" />
           </PersistedClaims>
         </TechnicalProfile>
-
+        <!--<TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+             Optional claims 
+            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsented" />
+            <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" />
+            <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile> -->
         <TechnicalProfile Id="SM-AAD">
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
           </PersistedClaims>
         </TechnicalProfile>
-
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
-
   <UserJourneys>
     <UserJourney Id="B2CSignUpOrSignInWithPasswordToU" NonInteractive="false">
       <OrchestrationSteps>
@@ -254,7 +250,6 @@
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -280,7 +275,6 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <!-- Display Terms of Use consent page for any SignIn scenario based on termsOfUseConsentRequired claim -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
@@ -304,7 +298,6 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
   </UserJourneys>
-
   <RelyingParty>
     <DefaultUserJourney ReferenceId="B2CSignUpOrSignInWithPasswordToU" />
     <TechnicalProfile Id="PolicyProfile">
@@ -313,17 +306,15 @@
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="givenName" />
         <OutputClaim ClaimTypeReferenceId="surName" />
-        <OutputClaim ClaimTypeReferenceId="displayName" />                
+        <OutputClaim ClaimTypeReferenceId="displayName" />
         <OutputClaim ClaimTypeReferenceId="newUser" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
         <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
         <OutputClaim ClaimTypeReferenceId="currentTime" />
         <OutputClaim ClaimTypeReferenceId="email" />
         <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
-        
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
   </RelyingParty>
-
 </TrustFrameworkPolicy>
