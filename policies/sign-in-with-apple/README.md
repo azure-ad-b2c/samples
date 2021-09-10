@@ -87,6 +87,7 @@ The [`SigninWithApple_ClientSecret` Azure Function](source-code/B2CSignInWithApp
 }
 ```
 - **appleTeamId**: Your Apple Developer Team ID
+- **appleKeyId**: The Key Id stored within the JWT (requried by apple JWT)
 - **appleServiceId**: The Apple Service ID (also the client ID)
 - **p8key**: The PEM format key - you can obtain this by opening the `.p8` file in a text editor, and copying everything between `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----` without line breaks
 
