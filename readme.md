@@ -87,7 +87,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - [Terms of Service with Sign-in or Sign-up](policies/terms-of-service) - Demonstrates how to implement Terms of Service within a SUSI experience. This policy writes a configurable policy version onto an attribute stored in the directory. If you update the version within the policy, it will prompt the user during the next login to force the user to accept the new terms of service agreement.
 
-- [sign-up or sign-in policy with a link to sign-up page](policies/susi-with-link-to-sign-up) - Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.
+- [sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link) - Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.
 
 - [sign-up or sign-in policy checks if client Id is allowed to call the policy](policies/allow-list-applications) - Checks if the application is allowed to call the b2c sign-in sign-up policy. Uses a claims resolver to get the client ID from the incoiming OIDC request, and uses a claims transformation to see if the client id is on an allow list of application ID's.  If the client Id is not on the allowed list, a customizable error message on a block page is shown to the user, blocking access to the policy.
 

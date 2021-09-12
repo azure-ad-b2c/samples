@@ -5,12 +5,12 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_signup_signin_with_link_to_sign_up"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with_link_to_sign_up">
+  PolicyId="B2C_1A_signup_signin_with-sign-up-deep-link"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with-sign-up-deep-link">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensions_with_link_to_sign_up</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions_with-sign-up-deep-link</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
@@ -31,6 +31,3 @@
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
-
-
-
