@@ -14,6 +14,15 @@ Some consent scopes will be mandatory for your service to integrate properly wit
 
 It is assumed that users already have accounts with the consuming downstream service, therefore in this example only Sign In is handled.
 
+## Prerequisites
+- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
+
+- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+
+- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+
+- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+
 ## How it works
 The partner application send the authentication request to Azure AD B2C, with a scope parameter for the API registered in the AAD B2C directory. A single scope can be used, such as `https://contoso.onmicrosoft.com/api/default`. This is used to make sure the `access token` returned has the accepted audience for your API.
 

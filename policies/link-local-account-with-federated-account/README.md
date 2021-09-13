@@ -11,6 +11,15 @@ This sample allows a user to be created up front, adding any extension attribute
 
 The user would only need to be sent a link to the B2C logon page, where they will be sent to their federated provider by use of the [domain_hint](https://docs.microsoft.com/en-us/azure/active-directory-b2c/direct-signin#redirect-sign-in-to-a-social-provider) parameter to automatically choose the IdP. Once the user authenticates at their federated IdP, B2C will use the claims to lookup the user in the B2C directory. If the user is found, the AlternativeSecuirtyId is written to the account and allows the user to logon with the pre-created account.
 
+## Prerequisites
+- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
+
+- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+
+- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+
+- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+
 ## How it works
 
 1.	Create the account using PowerShell (Graph API) with the required attributes and the extension attribute, requiresMigrationBool=true
