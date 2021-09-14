@@ -69,7 +69,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-      <UserJourney Id="PasswordReset">
+      <UserJourney Id="PasswordResetOnly">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
