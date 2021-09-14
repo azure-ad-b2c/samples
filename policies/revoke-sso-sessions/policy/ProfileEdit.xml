@@ -15,7 +15,6 @@
                 <OutputClaim ClaimTypeReferenceId="surName" />
                 <OutputClaim ClaimTypeReferenceId="displayName" />
                 <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
-                <OutputClaim ClaimTypeReferenceId="lastLogonTime" />
                 <OutputClaim ClaimTypeReferenceId="isSessionRevoked" />
                 <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" />
             </OutputClaims>
