@@ -23,24 +23,24 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Password management
 
-|Sample name   |Description   |
-|---|---|
-|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |This demonstrates how to verify a user via Email or SMS on a single screen.   |
-|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password. Or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |
-|[Force password reset first logon](policies/force-password-reset-first-logon)|Demonstrates how to force a user to reset their password on the first logon.   |
-|[Force password after 90 days](policies/force-password-reset-after-90-days)|Demonstrates how to force a user to reset their password after 90 days from the last time user set their password.|
-|[Password reset only](policies/password-reset-only)|This example policy prevents issuing an access token to the user after resetting their password.|
-|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|
-|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |An example policy to reset a users password using Phone Number (SMS or Phone Call).|
-|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.|
-|[Banned password list](policies/banned-password-list-no-API) |For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.|
-|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |This demonstrates how to verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)|
+|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password. Or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)|
+|[Force password reset first logon](policies/force-password-reset-first-logon)|Demonstrates how to force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)|
+|[Force password after 90 days](policies/force-password-reset-after-90-days)|Demonstrates how to force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)|
+|[Password reset only](policies/password-reset-only)|This example policy prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)|
+|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.||
+|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |An example policy to reset a users password using Phone Number (SMS or Phone Call).||
+|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)|
+|[Banned password list](policies/banned-password-list-no-API) |For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)|
+|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|
 
 ## General security
 
-|Sample name   |Description   |
-|---|---|
-|[Revoke Azure AD B2C session cookies](policies/revoke-sso-sessions) |Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.|
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[Revoke Azure AD B2C session cookies](policies/revoke-sso-sessions) |Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=revoke-sso-sessions)|
 |[Google Captcha on Sign In](policies/captcha-integration)|An example set of policies which integrate Google Captcha into the sign in journey.|
 |[Disable and lockout an account after a period of inactivity](policies/disable-inactive-account)|For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.|
 |[Restrict B2C Policy to specific App Registration](policies/allow-list-applications)| Only permits certain application registrations to call certain B2C policy Id's.|
