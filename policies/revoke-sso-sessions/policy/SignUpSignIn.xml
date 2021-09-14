@@ -6,7 +6,7 @@
         <PolicyId>B2C_1A_TrustFrameworkExtensions_revoke_sessions</PolicyId>
     </BasePolicy>
     <RelyingParty>
-        <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+        <DefaultUserJourney ReferenceId="SignUpOrSignInWithRevoke" />
         <TechnicalProfile Id="PolicyProfile">
             <DisplayName>PolicyProfile</DisplayName>
             <Protocol Name="OpenIdConnect" />
