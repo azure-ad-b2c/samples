@@ -10,7 +10,7 @@
   
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
   <BuildingBlocks>
@@ -66,48 +66,6 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-	
-    <!-- Local account Sign-In claims provider -->
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <Item Key="client_id">00000000-0000-0000-0000-000000000000</Item>
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <Item Key="IdTokenAudience">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-          <InputClaims>
-            <!--Demo action required: Change to your ProxyIdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" />
-
-            <!--Demo action required: Change to your IdentityExperienceFramework App Id-->
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="00000000-0000-0000-0000-000000000000" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-    <!-- Facebook claims provider -->
-	<ClaimsProvider>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <Metadata>
-            <!--Demo action required: Change to your Facebook App Id-->
-            <Item Key="client_id"></Item>
-            <Item Key="scope">email public_profile</Item>
-            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-          </Metadata>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-
-
   </ClaimsProviders>
 
   <UserJourneys>
