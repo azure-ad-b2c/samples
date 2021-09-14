@@ -109,16 +109,6 @@
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>  
-        <!--  Sample action required: Provide objectId and appId before using extension properties.
-          For more information: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom -->
-        <TechnicalProfile Id="AAD-Common">
-          <DisplayName>Azure Active Directory</DisplayName> 
-          <Metadata>
-            <Item Key="ApplicationObjectId">00000000-0000-0000-0000-000000000000</Item>
-            <Item Key="ClientId">00000000-0000-0000-0000-000000000000</Item>
-          </Metadata>
-        </TechnicalProfile>
-
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
             <!--Sample: Read the 'password reset on' extension attribute -->
@@ -162,7 +152,6 @@
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
@@ -179,43 +168,13 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>localAccountAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
-        This can only happen when authentication happened using a social IDP. If local account was created or authentication done
-        using ESTS in step 2, then an user account must exist in the directory by this time. -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-              <Value>objectId</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
         <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
         in the token. -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>authenticationSource</Value>
@@ -229,7 +188,7 @@
         </OrchestrationStep>
 
         <!--Demo: check if change password is required. If yes, ask the user to reset the password-->
-        <OrchestrationStep Order="6" Type="ClaimsExchange">
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>authenticationSource</Value>
@@ -247,22 +206,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
-        from the user. So, in that case, create the user in the directory if one does not already exist 
-        (verified using objectId which would be set from the last step if account was created in the directory. -->
-        <OrchestrationStep Order="7" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-              <Value>objectId</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-            </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
         </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
