@@ -1,143 +1,162 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions_pwd_not_last" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_pwd_not_last">
 
-	<BasePolicy>
-		<TenantId>yourtenant.onmicrosoft.com</TenantId>
-		<PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
-	</BasePolicy>
-	<BuildingBlocks>
-		<ClaimsSchema>
-			<ClaimType Id="SamePassword">
-				<DisplayName>samePassword</DisplayName>
-				<DataType>boolean</DataType>
-				<UserHelpText/>
-			</ClaimType>
-		</ClaimsSchema>
-		<!-- if the passwords are the same, this will output True. If the passwords are not the same
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="SamePassword">
+        <DisplayName>samePassword</DisplayName>
+        <DataType>boolean</DataType>
+        <UserHelpText />
+      </ClaimType>
+      <ClaimType Id="oldPassword">
+        <DisplayName>Old Password</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Enter password</UserHelpText>
+        <UserInputType>Password</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+    <!-- if the passwords are the same, this will output True. If the passwords are not the same
 				it will output False.-->
-		<ClaimsTransformations>
-			<ClaimsTransformation Id="CheckPasswordEquivalence" TransformationMethod="CompareClaims">
-				<InputClaims>
-					<InputClaim ClaimTypeReferenceId="oldPassword" TransformationClaimType="inputClaim1" />
-					<InputClaim ClaimTypeReferenceId="newPassword" TransformationClaimType="inputClaim2" />
-				</InputClaims>
-				<InputParameters>
-					<InputParameter Id="operator" DataType="string" Value="EQUAL" />
-					<InputParameter Id="ignoreCase" DataType="string" Value="true" />
-				</InputParameters>
-				<OutputClaims>
-					<OutputClaim ClaimTypeReferenceId="SamePassword" TransformationClaimType="outputClaim" />
-				</OutputClaims>
-			</ClaimsTransformation>
-			<!-- This will ensure the value of samePassword is FALSE (not the same), else throw an error -->
-			<ClaimsTransformation Id="AssertSamePasswordIsFalse" TransformationMethod="AssertBooleanClaimIsEqualToValue">
-				<InputClaims>
-					<InputClaim ClaimTypeReferenceId="SamePassword" TransformationClaimType="inputClaim" />
-				</InputClaims>
-				<InputParameters>
-					<InputParameter Id="valueToCompareTo" DataType="boolean" Value="false" />
-				</InputParameters>
-			</ClaimsTransformation>
-		</ClaimsTransformations>
-	</BuildingBlocks>
-
-	<ClaimsProviders>
-		<ClaimsProvider>
-			<DisplayName>Local Account SignIn</DisplayName>
-			<TechnicalProfiles>
-				<TechnicalProfile Id="login-NonInteractive">
-					<Metadata>
-						<Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
-						<!-- Native App -->
-						<Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
-						<!-- Web Api -->
-					</Metadata>
-					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
-						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
-					</InputClaims>
-				</TechnicalProfile>
-			</TechnicalProfiles>
-		</ClaimsProvider>
-
-
-		<ClaimsProvider>
-			<DisplayName>Password Reset without same password</DisplayName>
-			<TechnicalProfiles>
-
-				<!--Logic to check new password is not the same as old password
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CheckPasswordEquivalence" TransformationMethod="CompareClaims">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="oldPassword" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="newPassword" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="operator" DataType="string" Value="EQUAL" />
+          <InputParameter Id="ignoreCase" DataType="string" Value="true" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="SamePassword" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <!-- This will ensure the value of samePassword is FALSE (not the same), else throw an error -->
+      <ClaimsTransformation Id="AssertSamePasswordIsFalse" TransformationMethod="AssertBooleanClaimIsEqualToValue">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="SamePassword" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="valueToCompareTo" DataType="boolean" Value="false" />
+        </InputParameters>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Password Reset without same password</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive-PasswordChange">
+          <DisplayName>Local Account SignIn</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can't seem to find your account</Item>
+            <Item Key="UserMessageIfInvalidPassword">Your password is incorrect</Item>
+            <Item Key="UserMessageIfOldPasswordUsed">Looks like you used an old password</Item>
+            <Item Key="ProviderName">https://sts.windows.net/</Item>
+            <Item Key="METADATA">https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration</Item>
+            <Item Key="authorization_endpoint">https://login.microsoftonline.com/{tenant}/oauth2/token</Item>
+            <Item Key="response_types">id_token</Item>
+            <Item Key="response_mode">query</Item>
+            <Item Key="scope">email openid</Item>
+            <Item Key="grant_type">password</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="client_id">a620b2dd-f55f-44bf-b6de-50689224c47f</Item>
+            <!-- Native App -->
+            <Item Key="IdTokenAudience">58734a70-edde-477e-b758-8fa132745e12</Item>
+            <!-- Web Api -->
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" Required="true" />
+            <InputClaim ClaimTypeReferenceId="oldPassword" PartnerClaimType="password" Required="true" />
+            <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="password" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="openid" />
+            <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="a620b2dd-f55f-44bf-b6de-50689224c47f" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="58734a70-edde-477e-b758-8fa132745e12" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="oid" />
+            <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <!--Logic to check new password is not the same as old password
 						Validates old password before writing new password-->
-				<TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
-					<DisplayName>Reset password</DisplayName>
-					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-					<Metadata>
-						<Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
-						<Item Key="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">You must not use your old password.</Item>
-					</Metadata>
-					<CryptographicKeys>
-						<Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
-					</CryptographicKeys>
-					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="objectId" />
-					</InputClaims>
-					<OutputClaims>
-						<OutputClaim ClaimTypeReferenceId="oldPassword" Required="true" />
-						<OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
-						<OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
-					</OutputClaims>
-					<ValidationTechnicalProfiles>
-						<ValidationTechnicalProfile ReferenceId="login-NonInteractive-PasswordChange" />
-						<ValidationTechnicalProfile ReferenceId="ComparePasswords" />
-						<ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId">
-							<Preconditions>
-								<Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-									<Value>SamePassword</Value>
-									<Value>True</Value>
-									<Action>SkipThisValidationTechnicalProfile</Action>
-								</Precondition>
-							</Preconditions>
-						</ValidationTechnicalProfile>
-					</ValidationTechnicalProfiles>
-				</TechnicalProfile>
-
-				<!-- Runs claimsTransformations to make sure new and old passwords differ -->
-				<TechnicalProfile Id="ComparePasswords">
-					<DisplayName>Compare Email And Verify Email</DisplayName>
-					<Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-					<OutputClaims>
-						<OutputClaim ClaimTypeReferenceId="SamePassword" />
-					</OutputClaims>
-					<OutputClaimsTransformations>
-						<OutputClaimsTransformation ReferenceId="CheckPasswordEquivalence" />
-						<OutputClaimsTransformation ReferenceId="AssertSamePasswordIsFalse" />
-					</OutputClaimsTransformations>
-				</TechnicalProfile>
-			</TechnicalProfiles>
-		</ClaimsProvider>
-
-	</ClaimsProviders>
-
-	<UserJourneys>
-		<UserJourney Id="PasswordChangeNotLastPassword">
-			<OrchestrationSteps>
-				<OrchestrationStep Order="1" Type="ClaimsExchange">
-					<ClaimsExchanges>
-						<ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
-					</ClaimsExchanges>
-				</OrchestrationStep>
-
-				<OrchestrationStep Order="2" Type="ClaimsExchange">
-					<ClaimsExchanges>
-						<ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
-					</ClaimsExchanges>
-				</OrchestrationStep>
-
-				<OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-			</OrchestrationSteps>
-			<ClientDefinition ReferenceId="DefaultWeb" />
-		</UserJourney>
-
-	</UserJourneys>
-</TrustFrameworkPolicy> 
+        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <DisplayName>Reset password</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
+            <Item Key="UserMessageIfClaimsTransformationBooleanValueIsNotEqual">You must not use your old password.</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="oldPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive-PasswordChange" />
+            <ValidationTechnicalProfile ReferenceId="ComparePasswords" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>SamePassword</Value>
+                  <Value>True</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+        <!-- Runs claimsTransformations to make sure new and old passwords differ -->
+        <TechnicalProfile Id="ComparePasswords">
+          <DisplayName>Compare Email And Verify Email</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="SamePassword" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CheckPasswordEquivalence" />
+            <OutputClaimsTransformation ReferenceId="AssertSamePasswordIsFalse" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <UserJourneys>
+    <UserJourney Id="PasswordChangeNotLastPassword">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+</TrustFrameworkPolicy>
