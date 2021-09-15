@@ -371,7 +371,6 @@
           <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekräftelse krävs. Klicka på Skicka.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_sent">Verifieringskoden har skickats till:</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-post bekräftad. Du kan fortsätta.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postmeddelandet har bekräftats. Du kan nu fortsätta.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vänta medan vi bearbetar din information.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
         </LocalizedStrings>
@@ -456,7 +455,6 @@
           <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nodvendig. Klikk Send-knappen.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_sent">Verifieringskoden har skickats till:</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-post bekräftad. Du kan fortsätta.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postmeddelandet har bekräftats. Du kan nu fortsätta.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vänta medan vi bearbetar din information.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
         </LocalizedStrings>
@@ -533,7 +531,6 @@
           <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekräftelse krävs. Klicka på Skicka.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_sent">Verifieringskoden har skickats till:</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-post bekräftad. Du kan fortsätta.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postmeddelandet har bekräftats. Du kan nu fortsätta.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vänta medan vi bearbetar din information.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
 
@@ -848,7 +845,6 @@
           <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nødvendig. Klikk Send-knappen.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_sent">Bekreftelseskode har blitt sendt til:</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-postadresse bekreftet. Du kan fortsette.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postadressen er bekreftet. Du kan nå fortsette.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vent litt mens vi behandler informasjonen din.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
         </LocalizedStrings>
@@ -933,7 +929,6 @@
           <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nodvendig. Klikk Send-knappen.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_sent">Bekreftelseskode har blitt sendt til:</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-postadresse bekreftet. Du kan fortsette.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postadressen er bekreftet. Du kan nå fortsette.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vent litt mens vi behandler informasjonen din.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
         </LocalizedStrings>
@@ -1010,7 +1005,6 @@
           <LocalizedString ElementType="UxElement" StringId="ver_intro_msg">Bekreftelse er nødvendig. Klikk Send-knappen.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_sent">Bekreftelseskode har blitt sendt til:</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="ver_success_msg">E-postadresse bekreftet. Du kan fortsette.</LocalizedString>
-          <LocalizedString ElementType="UxElement" StringId="ver_success_screenreader_msg">E-postadressen er bekreftet. Du kan nå fortsette.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="verifying_blurb">Vent litt mens vi behandler informasjonen din.</LocalizedString>
           <LocalizedString ElementType="UxElement" StringId="year">År</LocalizedString>
 
