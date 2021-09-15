@@ -21,6 +21,21 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Sample scenarios
 
+Samples are available for the following categories
+- [Password Management](#password-management)
+- [General Security](#general-security)
+- [User Experience](#user-experience)
+- [Terms of Use / Consent](#terms-of-useconsent)
+- [Passwordless](#passwordless)
+- [Multi Factor](#multi-factor)
+- [Account Linking](#account-linking)
+- [Identity Providers](#identity-providers)
+- [User Interface](#user-interface)
+- [Data Residency](#data-residency)
+- [User Migration](#user-migration)
+- [Web Test](#web-test)
+- [CI / CD](#cicd)
+
 ## Password management
 
 |Sample name   |Description   |Quick deploy|
