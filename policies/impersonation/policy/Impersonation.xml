@@ -116,17 +116,6 @@
     <ClaimsProvider>
     <DisplayName>Azure Active Directory</DisplayName>
     <TechnicalProfiles>
-      <TechnicalProfile Id="AAD-Common">
-        <DisplayName>Azure Active Directory</DisplayName>
-        <!--  Sample action required: Provide objectId and appId to use extension properties.
-              For more information, see: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom -->
-        <Metadata>
-          <Item Key="ApplicationObjectId">00000000-0000-0000-0000-000000000000</Item>
-          <!--Sample: the name of the extension attribute will be:
-            extension_cleintId_can_impersonate, for example: extension_831374b3bd5041bfaa54263ec9e050fc_can_impersonate-->
-          <Item Key="ClientId">11111111-1111-1111-1111-111111111111</Item>
-        </Metadata>
-      </TechnicalProfile>	
       
       <!--Sample: read the extension_can_impersonate attribute-->
       <TechnicalProfile Id="AAD-UserReadUsingObjectId">
