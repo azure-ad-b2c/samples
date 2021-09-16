@@ -3,7 +3,7 @@ xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVer
  PolicyId="B2C_1A_TrustFrameworkExtensions_HostName" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_HostName" >
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkBase_HostName</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
@@ -78,21 +78,6 @@ xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVer
     </ContentDefinitions>
   </BuildingBlocks>
   <ClaimsProviders>
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
-            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
     <ClaimsProvider>
       <DisplayName>BlockPage</DisplayName>
       <TechnicalProfiles>
