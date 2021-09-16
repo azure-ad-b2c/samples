@@ -50,6 +50,8 @@ Samples are available for the following categories
 |[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)|
 |[Banned password list](policies/banned-password-list-no-API) |For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)|
 |[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|
+|[Password history](policies/password-history) |This policy enables the storing and checking of a user's previous set of passwords in order to prevent them from using a previous password during a Password Reset flow. |NA|
+
 
 ## General security
 
@@ -66,7 +68,7 @@ Samples are available for the following categories
 |[Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac)|Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.|NA|
 |[Sign-in with Conditional access](policies/conditional-access)|Azure Active Directory (Azure AD) Conditional Access is the tool used by Azure AD B2C to bring signals together, make decisions, and enforce organizational policies. Automating risk assessment with policy conditions means risky sign-ins are at once identified and remediated or blocked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=conditional-access)
 |[Allow/Deny based on Hostname](policies/conditional-access)|This sample provides an example of how to block access to particular B2C policy based on the [Hostname] of the request, e.g. allow requests made to the policy using login.contoso.com but block foo.b2clogin.com. Useful when using custom domain(s) with Azure AD B2C.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=check-host-name)
-
+|[Call center validation](policies/store-three-letters-of-the-password)|A call center uses Azure AD B2C to validate a customer phoning in. To do this, the call center takes three characters from the password and asks the customer calling in to provide the three characters plus some other known facts as part of the authentication process.|NA|
 
 ## User Experience
 
@@ -85,6 +87,7 @@ Samples are available for the following categories
 |[Delete my account](policies/delete-my-account)|Demonstrates how to delete a local or social account from the directory|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=delete-my-account)|
 |[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).|NA|
 |[sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link)|Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-deep-link)|
+|[Allow sign up from specific email domains](policies/sign-up-domain-whitelist)|This policy demonstrates how to validate the email address domain name against a list of allowed domains.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-domain-whitelist)|
 
 ## Terms of Use/Consent
 |Sample name   |Description   |Quick deploy|
@@ -130,12 +133,12 @@ Samples are available for the following categories
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Sign in with Apple as a Custom OpenID Connect identity provider](policies/sign-in-with-apple)|Demonstrates how to gather the correct configuration information to setup Sign in with Apple as an OpenID Connect identity provider.|NA|
+|[Sign in with Kakao](policies/sign-in-with-kakao)|This sample shows how to setup Kakao as an identity provider in Azure AD B2C. Kakao is a South Korean Internet company that provides a diverse set of services.|NA|
 |[Sign in with REST API identity provider](policies/rest-api-idp)|Demonstrates how allow users to sign-in with credentials stored in a legacy identity provider using REST API services.|NA|
 |[Sign in through Azure AD as the identity provider, and include original Idp token](policies/B2C-Token-Includes-AzureAD-BearerToken)|Demonstrates how to sign in through a federated identity provider, Azure AD, and include the original identity provider token (Azure AD Bearer Token) as part of the B2C issued token.|NA|
 |[Custom claims provider](policies/custom-claims-provider)|A custom OpenId connect claims provider that federates with Azure AD B2C over OIDC protocol.|NA|
 |[Obtain the Microsoft Graph access token for an Azure AD Federated logon](policies/B2C-Token-Includes-AzureAD-BearerToken)|For scenarios where we would like to obtain the Microsoft Graph API token for a Azure AD federated logon in the context of the logged in user. For example this could be used to read the users Exchange Online mailbox within an Azure AD B2C application.|NA|
 |[AAD Authentication with REST](policies/AAD-SignIn-with-REST)|Pass through authentication to Azure AD (no user created in B2C), then calls a REST API to obtain more claims.|NA|
-
 
 ## User interface
 |Sample name   |Description   |Quick deploy|
@@ -146,17 +149,23 @@ Samples are available for the following categories
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Remote profile](policies/remote-profile)|Demonstrates how to store and read user profiles from a remote database.|NA|
-
+|[Remote profile geo-based](policies/remote-profile-geo)|Demonstrates storing user profile either in B2C directory or in different Azure Table Storages based in user geography setting.|NA|
+|[Encrypted profile](policies/encrypted-profile)|Demonstrates how to store and read user profiles from Azure AD B2C using encrypted data.|NA|
 
 
 ## User migration
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Seamless account migration](/../../../user-migration/tree/master/seamless-account-migration) | Where accounts have been pre-migrated into Azure AD B2C and you want to update the password on the account on initial sign in. Azure AD B2C calls a REST API to validate the credentials for accounts marked as requiring migration (via attribute) against a legacy identity provider, returns a successful response to Azure AD B2C, and Azure AD B2C writes the password to the account in the directory.|NA|
+|[Seamless account migration from AWS](policies/signin-migration)|This is an end-to-end sample for migrating the users from AWS Cognito to Azure AD B2C.|NA|
 | [Just in time migration v1](/../../../user-migration/tree/master/jit-migration-v1) | In this sample Azure AD B2C calls a REST API that validates the credential, and migrate the account with a Graph API call.|NA|
 |[Just in time migration v2](/../../../user-migration/tree/master/jit-migration-v2) | In this sample Azure AD B2C calls a REST API to validate the credentials, return the user profile to B2C from an Azure Table, and B2C creates the account in the directory.|
 |[B2C to B2C Migration](policies/B2C2B2CMigration) | Migrate users from one B2C instance to another using just in time migration.|NA|
 
+## User info endpoint
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[UserInfo Endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
 
 ## Web Test
 
