@@ -21,11 +21,11 @@ namespace AADB2C.SignInWithEmail.Controllers
     {
         private static Lazy<X509SigningCredentials> SigningCredentials;
         private readonly AppSettingsModel AppSettings;
-        private readonly IHostingEnvironment HostingEnvironment;
+        private readonly IWebHostEnvironment HostingEnvironment;
 
         // Sample: Inject an instance of an AppSettingsModel class into the constructor of the consuming class, 
         // and let dependency injection handle the rest
-        public HomeController(IOptions<AppSettingsModel> appSettings, IHostingEnvironment hostingEnvironment)
+        public HomeController(IOptions<AppSettingsModel> appSettings, IWebHostEnvironment hostingEnvironment)
         {
             this.AppSettings = appSettings.Value;
             this.HostingEnvironment = hostingEnvironment;
@@ -49,8 +49,15 @@ namespace AADB2C.SignInWithEmail.Controllers
             });
         }
 
-
         [HttpGet]
+        public IActionResult Index()
+        {
+            ViewData["Message"] = String.Empty;
+            return View();
+        }
+
+
+        [HttpPost]
         public ActionResult Index(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -72,7 +79,11 @@ namespace AADB2C.SignInWithEmail.Controllers
                 mailMessage.To.Add(email);
                 mailMessage.From = new MailAddress(AppSettings.SMTPFromAddress);
                 mailMessage.Subject = AppSettings.SMTPSubject;
-                mailMessage.Body = string.Format(htmlTemplate, email, link);
+                // TODO - determine problem with String format change here
+                ////mailMessage.Body = string.Format(htmlTemplate, email, link);
+                htmlTemplate = htmlTemplate.Replace("{0}", email);
+                htmlTemplate = htmlTemplate.Replace("{1}", link);
+                mailMessage.Body = htmlTemplate;
                 mailMessage.IsBodyHtml = true;
                 SmtpClient smtpClient = new SmtpClient(AppSettings.SMTPServer, AppSettings.SMTPPort);
                 smtpClient.Credentials = new NetworkCredential(AppSettings.SMTPUsername, AppSettings.SMTPPassword);

@@ -17,11 +17,11 @@ namespace AADB2C.SignInWithEmail.Controllers
     {
         private static Lazy<X509SigningCredentials> SigningCredentials;
         private readonly AppSettingsModel AppSettings;
-        private readonly IHostingEnvironment HostingEnvironment;
+        private readonly IWebHostEnvironment HostingEnvironment;
 
         // Sample: Inject an instance of an AppSettingsModel class into the constructor of the consuming class, 
         // and let dependency injection handle the rest
-        public OidcController(IOptions<AppSettingsModel> appSettings, IHostingEnvironment hostingEnvironment)
+        public OidcController(IOptions<AppSettingsModel> appSettings, IWebHostEnvironment hostingEnvironment)
         {
             this.AppSettings = appSettings.Value;
             this.HostingEnvironment = hostingEnvironment;
