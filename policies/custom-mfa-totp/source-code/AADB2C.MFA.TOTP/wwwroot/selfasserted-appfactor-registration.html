@@ -1,4 +1,4 @@
-﻿
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -625,12 +625,12 @@
                             <div class="api_container normaltext">
                                 <p style="margin-top: 20px;">Ensure you're the only one who can access your account.</p>
                                 <p style="font-weight: bold; margin-top: 20px;">1. Install an authentication app</p>
- <a class="auth-app-link" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Download the Google Authenticator app from Play Store</a><br />
-                                                
+                                <a class="auth-app-link" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Download the Google Authenticator app from Play Store</a><br />
 
-<a href="https://itunes.apple.com/au/app/google-authenticator/id388497605">Download the Google Authenticator app from App Store</a><br />
 
-<a class="auth-app-link" href="https://www.microsoft.com/en-AU/store/apps/Authenticator/9WZDNCRFJ3RJ" target="_blank">Download the Authenticator app from Windows Store</a>
+                                <a href="https://itunes.apple.com/au/app/google-authenticator/id388497605">Download the Google Authenticator app from App Store</a><br />
+
+                                <a class="auth-app-link" href="https://www.microsoft.com/en-AU/store/apps/Authenticator/9WZDNCRFJ3RJ" target="_blank">Download the Authenticator app from Windows Store</a>
                                 <p style="font-weight: bold; margin-top: 20px;">2. Scan this barcode</p>
                                 <img id="strongAuthenticationAppQRCodeBitmapImage" src="">
 
@@ -644,7 +644,9 @@
             </tbody>
         </table>
     </div>
-    <script>"use strict"; $(document).ready(function () { if (navigator.userAgent.match(/IEMobile\/10\.0/)) { var t = document.createElement("style"); t.appendChild(document.createTextNode("@@-ms-viewport{width:auto!important}")), t.appendChild(document.createTextNode("@@-ms-viewport{height:auto!important}")), document.getElementsByTagName("head")[0].appendChild(t) } if (navigator.userAgent.match(/MSIE 10/i)) { var e = $("#footer_links_container"); $(e).css("padding-top", "100px") } var o, i = $("#background_background_image"), n = function () { document.body.style.overflow = "hidden", ($(window).width() - 500) / $(window).height() < o ? (i.height($(window).height()), i.width("auto")) : (i.width($(window).width() - 500), i.height("auto")), document.body.style.overflow = "" }; $("<img>").attr("src", i.attr("src")).load(function () { o = this.width / this.height, n() }), $(window).resize(function () { n() }), "undefined" != typeof $("#MicrosoftAccountExchange") && $("#MicrosoftAccountExchange").text("Microsoft"), $("*").removeAttr("placeholder") });</script>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.4.1.min.js"></script>-->
+    <script>"use strict"; $(document).ready(function () { if (navigator.userAgent.match(/IEMobile\/10\.0/)) { var t = document.createElement("style"); t.appendChild(document.createTextNode("@@-ms-viewport{width:auto!important}")), t.appendChild(document.createTextNode("@@-ms-viewport{height:auto!important}")), document.getElementsByTagName("head")[0].appendChild(t) } if (navigator.userAgent.match(/MSIE 10/i)) { var e = $("#footer_links_container"); $(e).css("padding-top", "100px") } var o, i = $("#background_background_image"), n = function () { document.body.style.overflow = "hidden", ($(window).width() - 500) / $(window).height() < o ? (i.height($(window).height()), i.width("auto")) : (i.width($(window).width() - 500), i.height("auto")), document.body.style.overflow = "" }; $("<img>").attr("src", i.attr("src")).on('load', function () { o = this.width / this.height, n() }), $(window).resize(function () { n() }), "undefined" != typeof $("#MicrosoftAccountExchange") && $("#MicrosoftAccountExchange").text("Microsoft"), $("*").removeAttr("placeholder") });</script>
     <script>
         $(function () {
             var $strongAuthenticationAppQRCodeBitmapImage = $('#strongAuthenticationAppQRCodeBitmapImage');
