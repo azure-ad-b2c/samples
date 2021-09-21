@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AADB2C.MagicLink.WebApi", "AADB2C.MagicLink.WebApi\AADB2C.MagicLink.WebApi.csproj", "{CDA4EA2B-2B96-41FC-A1B6-C603686D2225}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDA4EA2B-2B96-41FC-A1B6-C603686D2225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA4EA2B-2B96-41FC-A1B6-C603686D2225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA4EA2B-2B96-41FC-A1B6-C603686D2225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA4EA2B-2B96-41FC-A1B6-C603686D2225}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9DB0DE91-05D2-4ED8-8E4F-B54BEE7D3CEF}
+	EndGlobalSection
+EndGlobal
