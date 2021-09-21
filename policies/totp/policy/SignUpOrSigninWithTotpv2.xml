@@ -18,10 +18,10 @@
       <SingleSignOn Scope="Tenant" KeepAliveInDays="365" />
       <SessionExpiryType>Absolute</SessionExpiryType>
       <SessionExpiryInSeconds>604800</SessionExpiryInSeconds>
-      <JourneyInsights TelemetryEngine="ApplicationInsights"
-                       InstrumentationKey="yourInstrumentationKey" DeveloperMode="true"
+      <!--<JourneyInsights TelemetryEngine="ApplicationInsights"
+                       InstrumentationKey="yourinstrumentationKey" DeveloperMode="true"
     ClientEnabled="false" ServerEnabled="true"
-                       TelemetryVersion="1.0.0" />
+                       TelemetryVersion="1.0.0" />-->
     </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
