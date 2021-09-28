@@ -48,7 +48,7 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Utility
             string thumbprint = Base64UrlEncoder.Encode(certificate.GetCertHash());
 
             // JWK must have the modulus and exponent explicitly defined
-            var rsa = certificate.PublicKey.Key as RSACng;
+            RSA rsa = certificate.GetRSAPublicKey();
 
             if (rsa == null)
             {
