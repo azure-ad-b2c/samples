@@ -1,17 +1,17 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc;
 using AADB2C.SignInWithEmailUsingKeyVault.Utility;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AADB2C.SignInWithEmailUsingKeyVault.Controllers
 {
     [ApiController]
     public class OidcController : ControllerBase
     {
-        private readonly ITokenValidationConfigurationProvider _tokenValidationConfigurationProvider;
+        private readonly KeyVaultCertificateHelper _keyVaultCertificateHelper;
 
-        public OidcController(ITokenValidationConfigurationProvider tokenValidationConfigurationProvider)
+        public OidcController(KeyVaultCertificateHelper keyVaultCertificateHelper)
         {
-            _tokenValidationConfigurationProvider = tokenValidationConfigurationProvider ?? throw new ArgumentNullException(nameof(tokenValidationConfigurationProvider));
+            _keyVaultCertificateHelper = keyVaultCertificateHelper ?? throw new ArgumentNullException(nameof(keyVaultCertificateHelper));
         }
 
         [Route(".well-known/openid-configuration", Name = "OIDCMetadata")]
@@ -22,14 +22,14 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Controllers
             // Sample: Include the absolute URL to JWKs endpoint
             var jwksUri = Url.Link("JWKS", null);
 
-            var serializedResult = _tokenValidationConfigurationProvider.BuildSerializedOidcConfig(issuer, jwksUri);
+            var serializedResult = _keyVaultCertificateHelper.BuildSerializedOidcConfig(issuer, jwksUri);
             return Content(serializedResult, "application/json");
         }
 
         [Route(".well-known/keys", Name = "JWKS")]
         public ActionResult JwksDocument()
         {
-            var serializedResult = _tokenValidationConfigurationProvider.BuildSerializedJwks();
+            var serializedResult = _keyVaultCertificateHelper.BuildSerializedJwks();
             return Content(serializedResult, "application/json");
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Mail;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,15 +15,21 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Controllers
     {
         private readonly AppSettingsModel _appSettings;
         private readonly IWebHostEnvironment _hostingEnvironment;
-
-        private readonly ITokenProvider _tokenProvider;
+        private readonly KeyVaultCertificateHelper _keyVaultCertificateHelper;
+        private readonly IEmailSender _mailSender;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IOptions<AppSettingsModel> appSettings, IWebHostEnvironment hostingEnvironment, ITokenProvider tokenProvider, ILogger<HomeController> logger)
+        public HomeController(
+            IOptions<AppSettingsModel> appSettings, 
+            IWebHostEnvironment hostingEnvironment, 
+            KeyVaultCertificateHelper keyVaultCertificateHelper, 
+            IEmailSender mailSender, 
+            ILogger<HomeController> logger)
         {
             _appSettings = appSettings?.Value ?? throw new ArgumentNullException(nameof(appSettings));
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
-            _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
+            _keyVaultCertificateHelper = keyVaultCertificateHelper ?? throw new ArgumentNullException(nameof(keyVaultCertificateHelper));
+            _mailSender = mailSender ?? throw new ArgumentNullException(nameof(mailSender));
             _logger = logger;
         }
 
@@ -35,32 +41,30 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string email)
+        public async Task<IActionResult> Index(string email)
         {
             var issuer = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase.Value}/";
             var audience = _appSettings.B2CClientId;
             var tokenDuration = _appSettings.LinkExpiresAfterMinutes;
 
-            var token = _tokenProvider.BuildSerializedIdToken(issuer, audience, tokenDuration, email);
+            // Build/compute the token that is used as an assertion value as part of the OIDC request to the B2C endpoint
+            var token = await _keyVaultCertificateHelper
+                .BuildSerializedIdTokenAsync(issuer, audience, tokenDuration, email)
+                .ConfigureAwait(false);
             string link = BuildUrl(token);
 
-            var emailHtmlTemplate = System.IO.File.ReadAllText(Path.Combine(_hostingEnvironment.ContentRootPath, "Template.html"));
-
-            var mailMessage = new MailMessage();
-            mailMessage.To.Add(email);
-            mailMessage.From = new MailAddress(_appSettings.SMTPFromAddress);
-            mailMessage.Subject = _appSettings.SMTPSubject;
-            // TODO - determine problem with String format change here
-            ////mailMessage.Body = string.Format(emailHtmlTemplate, email, link);
+            // Read the HTML email template from the local file provided by and deployed with the project
+            // TODO - move the actual reading of the file to a singleton/DI
+            var emailHtmlTemplate = await System.IO.File
+                .ReadAllTextAsync(Path.Combine(_hostingEnvironment.ContentRootPath, "Template.html"))
+                .ConfigureAwait(false);
             emailHtmlTemplate = emailHtmlTemplate.Replace("{0}", email);
             emailHtmlTemplate = emailHtmlTemplate.Replace("{1}", link);
-            mailMessage.Body = emailHtmlTemplate;
-            mailMessage.IsBodyHtml = true;
-            SmtpClient smtpClient = new SmtpClient(_appSettings.SMTPServer, _appSettings.SMTPPort);
-            smtpClient.Credentials = new System.Net.NetworkCredential(_appSettings.SMTPUsername, _appSettings.SMTPPassword);
-            smtpClient.EnableSsl = _appSettings.SMTPUseSSL;
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.Send(mailMessage);
+
+            // Send the mail
+            await _mailSender
+                .SendEmailAsync(_appSettings.SMTPFromAddress, email, _appSettings.SMTPSubject, emailHtmlTemplate)
+                .ConfigureAwait(false);
 
             ViewData["Message"] = $"Email sent to {email}";
 

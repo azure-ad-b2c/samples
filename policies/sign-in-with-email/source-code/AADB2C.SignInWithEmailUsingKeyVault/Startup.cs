@@ -1,10 +1,9 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using AADB2C.SignInWithEmailUsingKeyVault.Models;
 using AADB2C.SignInWithEmailUsingKeyVault.Utility;
 using Azure.Identity;
@@ -27,26 +26,26 @@ namespace AADB2C.SignInWithEmailUsingKeyVault
 
             services.Configure<AppSettingsModel>(Configuration.GetSection("AppSettings"));
 
-            var azureCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            services.AddAzureClients(builder =>
             {
-                ////// This is only to accomodate local machine shennanigans
-                ////ExcludeManagedIdentityCredential = true,
+                // This is only used to accomodate my own local machine shennanigans
+                ////var azureCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions{ ExcludeManagedIdentityCredential = true });
+                var azureCredential = new DefaultAzureCredential();
+                builder.UseCredential(azureCredential);
+                builder.AddCertificateClient(Configuration.GetSection("KeyVault"));
+
+                // Use the CryptographyClientHelper to create instances of the CryptographyClient using the AzureCredential established here
+                // once the URI for the certificate key is known/available
+                services.AddSingleton<CryptographyClientFactory>(s =>
+                {
+                    return new CryptographyClientFactory(azureCredential);
+                });
             });
 
-            services.AddSingleton<ITokenValidationConfigurationProvider>(s =>
-            {
-                var settings = s.GetService<IOptions<AppSettingsModel>>();
-                var tokenValidationConfigurationProvider = new LocalCertFromKeyVaultTokenValidationConfigurationProvider(new Uri(settings.Value.VaultUrl), settings.Value.CertificateName, azureCredential);
-                return tokenValidationConfigurationProvider;
-            });
+            services.AddSingleton<KeyVaultCertificateHelper>();
 
-            services.AddSingleton<ITokenProvider>(s =>
-            {
-                var settings = s.GetService<IOptions<AppSettingsModel>>();
-                var tokenProvider = new RemoteCertFromKeyVaultTokenProvider(new Uri(settings.Value.VaultUrl), settings.Value.CertificateName, azureCredential);
-                ////var tokenProvider = new LocalCertFromKeyVaultTokenProvider(new Uri(settings.Value.VaultUrl), settings.Value.CertificateName, azureCredential);
-                return tokenProvider;
-            });
+            services.AddSingleton<IEmailSender, SendGridApiEmailSender>();
+            //services.AddSingleton<IEmailSender, SmtpClientMailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
