@@ -22,8 +22,7 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Models
         public string SMTPSubject { get; set; }
 
         public int LinkExpiresAfterMinutes { get; set; }
-        
-        public string VaultUrl { get; set; }
+
         public string CertificateName { get; set; }
     }
 }

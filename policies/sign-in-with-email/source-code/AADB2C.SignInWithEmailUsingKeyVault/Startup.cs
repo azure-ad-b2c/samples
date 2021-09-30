@@ -29,7 +29,7 @@ namespace AADB2C.SignInWithEmailUsingKeyVault
             services.AddAzureClients(builder =>
             {
                 // This is only used to accomodate my own local machine shennanigans
-                ////var azureCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions{ ExcludeManagedIdentityCredential = true });
+                ////var azureCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ExcludeManagedIdentityCredential = true });
                 var azureCredential = new DefaultAzureCredential();
                 builder.UseCredential(azureCredential);
                 builder.AddCertificateClient(Configuration.GetSection("KeyVault"));
@@ -42,10 +42,11 @@ namespace AADB2C.SignInWithEmailUsingKeyVault
                 });
             });
 
+            // Singleton to read the certificate once from KV and use/share it throughout the application lifetime.
             services.AddSingleton<KeyVaultCertificateHelper>();
 
-            services.AddSingleton<IEmailSender, SendGridApiEmailSender>();
-            //services.AddSingleton<IEmailSender, SmtpClientMailSender>();
+            services.AddScoped<IEmailSender, SendGridApiEmailSender>();
+            //services.AddScoped<IEmailSender, SmtpClientMailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using AADB2C.SignInWithEmailUsingKeyVault.Models;
 using Azure.Security.KeyVault.Certificates;
+using Azure.Security.KeyVault.Keys.Cryptography;
 using Newtonsoft.Json;
 
 namespace AADB2C.SignInWithEmailUsingKeyVault.Utility
@@ -104,8 +105,8 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Utility
             var unsignedTokenText = $"{header.Base64UrlEncode()}.{payload.Base64UrlEncode()}";
             var byteData = Encoding.UTF8.GetBytes(unsignedTokenText);
 
-            // Use KV to compute the signature
-            var cryptographyClient = _cryptographyClientFactory.CreateCryptographyClient(_vaultCryptoValues.Value.CertificateKeyId);
+            // Use KV Cryptography Client to compute the signature
+            var cryptographyClient = _vaultCryptoValues.Value.CryptographyClient;
             // SignData will create the digest and encode it (whereas Sign requires that the digest is computed here and to be sent in.)
             var signatureResult = await cryptographyClient
                 .SignDataAsync(_vaultCryptoValues.Value.SigningCredentials.Algorithm, byteData)
@@ -132,24 +133,26 @@ namespace AADB2C.SignInWithEmailUsingKeyVault.Utility
             var getCertificateResult = _certificateClient.GetCertificate(certificateName);
 
             var keyId = getCertificateResult.Value.KeyId;
+            var cryptographyClient = _cryptographyClientFactory.CreateCryptographyClient(keyId);
 
             var cert = new X509Certificate2(getCertificateResult.Value.Cer);
             var signingCreds = new X509SigningCredentials(cert);
 
-            var result = new VaultCryptoValues(keyId, signingCreds);
+            var result = new VaultCryptoValues(cryptographyClient, signingCreds);
+
             return result;
         }
 
-        // Helper class to hold useful values obtained by reading the certificate from KV
+        // Helper class to hold useful values that are computed after the certificate has been read from KV
         private class VaultCryptoValues
         {
-            public VaultCryptoValues(Uri certificateKeyId, X509SigningCredentials signingCredentials)
+            public VaultCryptoValues(CryptographyClient cryptographyClient, X509SigningCredentials signingCredentials)
             {
-                CertificateKeyId = certificateKeyId ?? throw new ArgumentNullException(nameof(certificateKeyId));
+                CryptographyClient = cryptographyClient ?? throw new ArgumentNullException(nameof(cryptographyClient));
                 SigningCredentials = signingCredentials ?? throw new ArgumentNullException(nameof(signingCredentials));
             }
 
-            public Uri CertificateKeyId { get; }
+            public CryptographyClient CryptographyClient { get; }
             public X509SigningCredentials SigningCredentials { get; }
         }
     }
