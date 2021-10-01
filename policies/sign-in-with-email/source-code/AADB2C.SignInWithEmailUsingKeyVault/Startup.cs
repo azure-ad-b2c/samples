@@ -28,8 +28,6 @@ namespace AADB2C.SignInWithEmailUsingKeyVault
 
             services.AddAzureClients(builder =>
             {
-                // This is only used to accomodate my own local machine shennanigans
-                ////var azureCredential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ExcludeManagedIdentityCredential = true });
                 var azureCredential = new DefaultAzureCredential();
                 builder.UseCredential(azureCredential);
                 builder.AddCertificateClient(Configuration.GetSection("KeyVault"));
