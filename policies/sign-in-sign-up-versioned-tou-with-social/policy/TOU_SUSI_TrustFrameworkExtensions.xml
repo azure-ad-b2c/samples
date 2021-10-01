@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TOU_SUSI_Social" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TOU_SUSI_Social">
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions_TOU_SUSI_Social" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_TOU_SUSI_Social">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -110,7 +111,6 @@
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="Update-TOU-Status" />
           </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -135,12 +135,9 @@
             <OutputClaim ClaimTypeReferenceId="password" Required="true" />
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
-            <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
-            <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
-            <ValidationTechnicalProfile ReferenceId="Check-TOU-Status" />
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
@@ -155,6 +152,10 @@
             <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
           </InputClaims>
           <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
             <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" DefaultValue="2017-10-01T15:00:00.0000000Z" />
           </OutputClaims>
           <OutputClaimsTransformations>
@@ -259,12 +260,12 @@
             <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
           </OutputClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
-        </TechnicalProfile> -->
+        </TechnicalProfile> 
         <TechnicalProfile Id="SM-AAD">
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
           </PersistedClaims>
-        </TechnicalProfile>
+        </TechnicalProfile>-->
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -359,13 +360,6 @@
         </OrchestrationStep>
 
         <OrchestrationStep Order="8" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>localAccountAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="Check-TOU-Status" TechnicalProfileReferenceId="Check-TOU-Status" />
           </ClaimsExchanges>
@@ -394,24 +388,52 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
+
+    <UserJourney Id="PasswordRestTOUSocial">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="Get-Current-Time" TechnicalProfileReferenceId="Get-Current-Time" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="Check-TOU-Status" TechnicalProfileReferenceId="Check-TOU-Status" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Display Terms of Use consent page for any SignIn scenario based on termsOfUseConsentRequired claim -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>termsOfUseConsentRequired</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ShowToUConsentPageForNewUser" TechnicalProfileReferenceId="SelfAsserted-Input-ToU-SignIn" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+
   </UserJourneys>
-  <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpSignInTOUSocial" />
-    <TechnicalProfile Id="PolicyProfile">
-      <DisplayName>PolicyProfile</DisplayName>
-      <Protocol Name="OpenIdConnect" />
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="givenName" />
-        <OutputClaim ClaimTypeReferenceId="surName" />
-        <OutputClaim ClaimTypeReferenceId="displayName" />
-        <OutputClaim ClaimTypeReferenceId="newUser" />
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
-        <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
-        <OutputClaim ClaimTypeReferenceId="currentTime" />
-        <OutputClaim ClaimTypeReferenceId="email" />
-        <OutputClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
-      </OutputClaims>
-      <SubjectNamingInfo ClaimType="sub" />
-    </TechnicalProfile>
-  </RelyingParty>
 </TrustFrameworkPolicy>
