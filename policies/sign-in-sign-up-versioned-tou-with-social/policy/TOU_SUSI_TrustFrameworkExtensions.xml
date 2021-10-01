@@ -265,45 +265,6 @@
             <PersistedClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
           </PersistedClaims>
         </TechnicalProfile>
-
-        <TechnicalProfile Id="Google-OAUTH">
-          <DisplayName>Google</DisplayName>
-          <Protocol Name="OAuth2" />
-          <Metadata>
-            <Item Key="ProviderName">google</Item>
-            <Item Key="authorization_endpoint">https://accounts.google.com/o/oauth2/v2/auth</Item>
-            <Item Key="AccessTokenEndpoint">https://oauth2.googleapis.com/token</Item>
-            <Item Key="ClaimsEndpoint">https://www.googleapis.com/oauth2/v1/userinfo</Item>
-            <Item Key="scope">email profile https://www.googleapis.com/auth/drive.metadata.readonly</Item>
-            <Item Key="HttpBinding">POST</Item>
-            <Item Key="UsePolicyInRedirectUri">0</Item>
-            <Item Key="client_id">835075501086-brcgj84n78ukp5ob2mnoa220q9p9rlns.apps.googleusercontent.com</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_GoogleSecret" />
-          </CryptographicKeys>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="access_type" PartnerClaimType="access_type" DefaultValue="offline" />
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="id" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
-            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="google.com" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
-            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-
-
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
