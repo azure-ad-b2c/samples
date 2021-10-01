@@ -252,20 +252,13 @@
             <PersistedClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" DefaultValue="V1" />
           </PersistedClaims>
         </TechnicalProfile>
-        <!--<TechnicalProfile Id="AAD-UserReadUsingObjectId">
-          <OutputClaims>
-             Optional claims 
-            <OutputClaim ClaimTypeReferenceId="extension_TermsOfUseConsented" />
-            <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentVersion" />
-            <OutputClaim ClaimTypeReferenceId="extension_termsOfUseConsentDateTime" />
-          </OutputClaims>
-          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
-        </TechnicalProfile> 
-        <TechnicalProfile Id="SM-AAD">
-          <PersistedClaims>
-            <PersistedClaim ClaimTypeReferenceId="termsOfUseConsentRequired" />
-          </PersistedClaims>
-        </TechnicalProfile>-->
+
+        <!-- NOTE - Will allow SSO from Forgot password flow to Sign In flow, but will also allow SSO to 'change 
+        password' page without email verification for Forgot password flow after sign in or sign up -->
+       <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
