@@ -6,7 +6,7 @@
   PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
   PolicyId="B2C_1A_TrustFrameworkExtensions_secondaryMFA" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_secondaryMFA">
   
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
