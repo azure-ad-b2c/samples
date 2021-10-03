@@ -6,10 +6,10 @@
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
   PolicyId="B2C_1A_UnknownDevicesMFA_signup_signin"
-  PublicPolicyUri="http://yourtenant/B2C_1A_UnknownDevicesMFA_signup_signin">
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_UnknownDevicesMFA_signup_signin">
 
   <BasePolicy>
-    <TenantId>yourtenant</TenantId>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_UnknownDevicesMFA_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
