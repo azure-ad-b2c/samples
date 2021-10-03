@@ -125,7 +125,7 @@
 
     <ContentDefinitions>
        <ContentDefinition Id="api.deviceinformation.collect">
-        <LoadUri>{Settings:DeviceInformationCollectContentDefinitionUri}</LoadUri>
+        <LoadUri>https://Settings.DeviceInformationCollectContentDefinitionUri</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
         <Metadata>
@@ -133,7 +133,7 @@
         </Metadata>
       </ContentDefinition>
       <ContentDefinition Id="api.deviceinformation.register">
-        <LoadUri>{Settings:DeviceInformationRegisterContentDefinitionUri}</LoadUri>
+        <LoadUri>https://Settings.DeviceInformationRegisterContentDefinitionUri</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
         <Metadata>
