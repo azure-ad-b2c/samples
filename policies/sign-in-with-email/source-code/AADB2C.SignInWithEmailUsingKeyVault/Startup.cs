@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AADB2C.SignInWithEmail.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using AADB2C.SignInWithEmailUsingKeyVault.Models;
+using AADB2C.SignInWithEmailUsingKeyVault.Utility;
+using Azure.Identity;
 
-namespace AADB2C.SignInWithEmail
+namespace AADB2C.SignInWithEmailUsingKeyVault
 {
     public class Startup
     {
@@ -26,18 +22,29 @@ namespace AADB2C.SignInWithEmail
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-
             services.AddControllersWithViews();
 
-            // Sample: Load the app settings section and bind to AppSettingsModel object graph
             services.Configure<AppSettingsModel>(Configuration.GetSection("AppSettings"));
+
+            services.AddAzureClients(builder =>
+            {
+                var azureCredential = new DefaultAzureCredential();
+                builder.UseCredential(azureCredential);
+                builder.AddCertificateClient(Configuration.GetSection("KeyVault"));
+
+                // Use the CryptographyClientHelper to create instances of the CryptographyClient using the AzureCredential established here
+                // once the URI for the certificate key is known/available
+                services.AddSingleton<CryptographyClientFactory>(s =>
+                {
+                    return new CryptographyClientFactory(azureCredential);
+                });
+            });
+
+            // Singleton to read the certificate once from KV and use/share it throughout the application lifetime.
+            services.AddSingleton<KeyVaultCertificateHelper>();
+
+            services.AddScoped<IEmailSender, SendGridApiEmailSender>();
+            //services.AddScoped<IEmailSender, SmtpClientMailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,12 +60,13 @@ namespace AADB2C.SignInWithEmail
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
             app.UseRouting();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

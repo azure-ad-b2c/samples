@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>68e85c01-f2ea-457a-9c33-78ea41b1a223</UserSecretsId>
+    <UserSecretsId>778e287c-bf74-4b96-9bc6-25941faab27d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,12 +14,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-	
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.4.1" />
+    <PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.2.0" />
+    <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.1.1" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.12.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SendGrid" Version="9.24.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.12.2" />
   </ItemGroup>
-	
+
 </Project>
