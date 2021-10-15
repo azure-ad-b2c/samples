@@ -58,7 +58,7 @@ The name of the extension attribute is “extension” _ “the application ID�
 Follow the demo comments in the extension policy. To merge the policy with yours, you need:
 1.	Add the **extension_mustResetPassword** claim type and set the display name
 2.	Add the **AAD-UserReadUsingObjectId**, **AAD-UserRemoveMustResetPasswordUsingObjectId**, **AAD-UserWriteUsingLogonEmail**, **AAD-Common** technical profiles
-3.	Add the extra orchestration steps 7 and 8 before the last orchestration step
+3.	Add the extra orchestration steps 4 and 5 before the last orchestration step
 
 ## Test the policy by using Run Now
 1. Create an account using Graph API, and set the value of **extension_YOURAPPIDGUIDWITHOUTDASHES_mustResetPassword** extension attribute to **true**
