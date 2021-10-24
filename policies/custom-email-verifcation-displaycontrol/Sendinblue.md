@@ -258,7 +258,7 @@ Add the following technical profiles to the `<ClaimsProviders>` element.
         <Item Key="CodeLength">6</Item>
         <Item Key="CharacterSet">0-9</Item>
         <Item Key="ReuseSameCode">true</Item>
-        <Item Key="MaxNumAttempts">5</Item>
+        <Item Key="NumRetryAttempts">5</Item>
       </Metadata>
       <InputClaims>
         <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="identifier" />
