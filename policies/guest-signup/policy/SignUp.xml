@@ -5,9 +5,7 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
   PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_signup" 
-  DeploymentMode="Development" 
-  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights" 
+  PolicyId="B2C_1A_signup"
   PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup">
 
   <BasePolicy>
@@ -58,10 +56,6 @@
 
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpWithHintOrSignIn" />
-    <!-- Add your AppInsights InstrumentationKey here -->
-    <UserJourneyBehaviors>
-      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="00000000-0000-0000-0000-000000000000" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
-    </UserJourneyBehaviors>
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
