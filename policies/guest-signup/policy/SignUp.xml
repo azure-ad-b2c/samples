@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com"
+  PolicyId="B2C_1A_signup" 
+  DeploymentMode="Development" 
+  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+
+    <ClaimsSchema>
+      <!-- User Identifier claim -->
+      <ClaimType Id="UserIdentifier">
+        <DisplayName>User Identifier</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>User Identification</AdminHelpText>
+      </ClaimType>
+
+      <!-- Stores the error message for unsolicited request (a request without id_token_hint) -->
+      <ClaimType Id="ErrorMessage">
+        <DisplayName>Error</DisplayName>
+        <DataType>string</DataType>
+       <UserHelpText>Add help text here</UserHelpText>
+        <UserInputType>Paragraph</UserInputType>
+     </ClaimType>  
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <!-- Initiates the ErrorMessage claims type with the error message-->
+      <ClaimsTransformation Id="CreateUnsolicitedErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You cannot sign-up without invitation" />
+        </InputParameters>
+        
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="ErrorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <!-- Copy the SignIn data claim to the claims -->
+      <ClaimsTransformation Id="CopyUserIdentifier" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="UserIdentifier" TransformationClaimType="inputClaim"/>
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="objectId" TransformationClaimType="outputClaim"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpWithHintOrSignIn" />
+    <!-- Add your AppInsights InstrumentationKey here -->
+    <UserJourneyBehaviors>
+      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="00000000-0000-0000-0000-000000000000" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="none" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
