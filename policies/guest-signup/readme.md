@@ -1,4 +1,6 @@
-# Granting "guest user" access over user's directory
+# Guest Signup or Signin
+
+We will grant a guest user access over an existing users directory.
 
 A guest user in an application will usually have the following attributes:
 * They are invited to the application.
