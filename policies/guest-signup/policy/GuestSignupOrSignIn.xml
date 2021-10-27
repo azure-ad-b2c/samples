@@ -55,7 +55,6 @@
   </BuildingBlocks>
   <!--Demo: This relaying party policy allows user insert custom data-->
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpWithHintOrSignIn" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
