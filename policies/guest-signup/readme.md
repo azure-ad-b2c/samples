@@ -15,9 +15,8 @@ For instance, an objectId by which we can declare that once they are signed in, 
 A cloud storage service for consumers who are mainly interested in easy, yet secure and audited, sharing of access to specific files in their private cloud storage 
 with just about anyone who has a phone or mail account.
 
-The flow required a ContosoCloud user which uses a standard sign-up policy. 
-That user will generate an invite link for a guest user to a ContosoCloud hosted document.
-Once the link is activated, the invited user will encounter this flow:
+ContosoCloud users sign-in to the directory with their known credentials.
+Guest users are invited with an invite link and follow through this flow:
 
 ![Invite flow](./media/invite_flow.png)
 
