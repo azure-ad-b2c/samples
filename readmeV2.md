@@ -102,7 +102,7 @@ Samples are available for the following categories
 |---|---|---|
 |[Password-less sign-in with email verification](policies/passwordless-email)|Password-less authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=passwordless-email)|
 |[Login with Phone Number](policies/signup-signin-with-phone-number)|An example set of policies for password-less login via Phone Number (SMS or Phone Call).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=signup-signin-with-phone-number)|
-
+|[Guest Sign-up or Sign-in](policies/guest-signup)|An example of granting a guest user access to the system without the need to register the user in  the users directory. | NA | 
 
 ## Multi factor
 |Sample name   |Description   |Quick deploy|
