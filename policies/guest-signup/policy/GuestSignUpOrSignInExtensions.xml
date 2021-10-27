@@ -106,11 +106,7 @@
 
         <UserJourney Id="SignUpWithHintOrSignIn">
             <OrchestrationSteps>
-
-                <OrchestrationStep Order="1" Type="GetClaims" CpimIssuerTechnicalProfileReferenceId="ErrorMIdTokenHintExtractClaimsessage">
-                </OrchestrationStep>
-
-
+                <OrchestrationStep Order="1" Type="GetClaims" CpimIssuerTechnicalProfileReferenceId="ErrorMIdTokenHintExtractClaimsessage"/>
                 <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
                     <Preconditions>
                         <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -143,7 +139,7 @@
                     </ClaimsExchanges>
                 </OrchestrationStep>
 
-
+                <!-- Let the user sign up with email address -->
                 <OrchestrationStep Order="4" Type="ClaimsExchange">
                     <Preconditions>
                         <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
