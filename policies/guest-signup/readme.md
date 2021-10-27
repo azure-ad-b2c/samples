@@ -1,6 +1,6 @@
 # Guest Signup or Signin
 
-We will grant a guest user access over an existing users directory.
+Grant a guest user access over an existing user's directory using a unique identifier and without registering the user in the directory.
 
 A guest user in an application will usually have the following attributes:
 * They are invited to the application.
