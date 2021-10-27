@@ -1,4 +1,4 @@
-# Granting "guest user" access over existing user's directory
+# Granting "guest user" access over user's directory
 
 A guest user in an application will usually have the following attributes:
 * They are invited to the application.
