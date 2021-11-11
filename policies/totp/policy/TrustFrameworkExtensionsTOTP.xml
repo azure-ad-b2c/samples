@@ -1,4 +1,8 @@
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensionsTOTPv2" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsTOTPv2">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_TrustFrameworkExtensionsTOTP" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsTOTP">
+
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -79,7 +83,6 @@
         <DataType>string</DataType>
       </ClaimType>
 
-
       <ClaimType Id="UserId">
         <DisplayName>Username</DisplayName>
         <DataType>string</DataType>
@@ -115,12 +118,14 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Create a TOPT secret key-->
       <ClaimsTransformation Id="CreateSecret" TransformationMethod="CreateOtpSecret">
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="secretKey" TransformationClaimType="outputClaim" />
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Create the TOTP issuer name. The issuer name is your tenant name, such as "Contoso demo" -->
       <ClaimsTransformation Id="CreateIssuer" TransformationMethod="CreateStringClaim">
         <InputParameters>
           <InputParameter Id="value" DataType="string" Value="{AuthenticatorIssuer}" />
@@ -130,6 +135,8 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Create the TOTP URI label. The label is a combination of the totpIdentifier and the issuer name:
+           For example, Contoso demo:emily@fabrikam.com-->
       <ClaimsTransformation Id="CreateUriLabel" TransformationMethod="FormatStringMultipleClaims">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="issuer" TransformationClaimType="inputClaim1" />
@@ -143,6 +150,9 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Create the TOTP URI. The label is a combination of the CreateUriLabel and the secret key:
+      For example, otpauth://totp/Contoso%20demo:emily@fabrikam.com?secret=fay2lj7ynpntjgqa&issuer=Contoso+demo
+      This URI is later converted into a QR code that is presented to the user-->
       <ClaimsTransformation Id="CreateUriString" TransformationMethod="BuildUri">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="uriLabel" TransformationClaimType="path" />
@@ -158,6 +168,7 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Copy the signInName to the totpIdentifier -->
       <ClaimsTransformation Id="SignInNameToTotpIdentifier" TransformationMethod="CopyClaim">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputClaim" />
@@ -167,6 +178,7 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Copy the email to the totpIdentifier -->
       <ClaimsTransformation Id="EmailToTotpIdentifier" TransformationMethod="CopyClaim">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="inputClaim" />
@@ -176,6 +188,7 @@
         </OutputClaims>
       </ClaimsTransformation>
 
+      <!-- Copy the UserId to the totpIdentifier -->
       <ClaimsTransformation Id="UserIdToLogonIdentifier" TransformationMethod="CopyClaim">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="UserId" TransformationClaimType="inputClaim" />
@@ -195,14 +208,11 @@
       </OutputClaims>
     </ClaimsTransformation>-->
 
-
-      <!--end of TOTP Claims Transforms-->
+      <!-- end of TOTP Claims Transforms-->
 
     </ClaimsTransformations>
 
     <ContentDefinitions>
-
-
       <ContentDefinition Id="api.selfasserted.totp">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
@@ -214,11 +224,10 @@
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.selfasserted.totp.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
-
     </ContentDefinitions>
 
     <Localization>
-
+      <!-- TOTP localized strings (English) -->
       <LocalizedResources Id="api.selfasserted.totp.en">
         <LocalizedStrings>
           <LocalizedString ElementType="DisplayControl" ElementId="totpQrCodeControl" StringId="info_msg">You can download the Microsoft Authenticator app or use any other authenticator app of your choice.</LocalizedString>
@@ -228,8 +237,7 @@
 
 
     <DisplayControls>
-
-      <!--TOTP controls-->
+      <!-- Render the QR code. It takes the URI (qrCodeContent) input claim and renders it as a QR code-->
       <DisplayControl Id="totpQrCodeControl" UserInterfaceControlType="QrCodeControl">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="qrCodeContent" />
@@ -239,7 +247,7 @@
         </DisplayClaims>
       </DisplayControl>
 
-
+      <!-- Render the TOTP information. It takes the totpIdentifier and the secretKey input claims and renders as a plan text-->
       <DisplayControl Id="authenticatorInfoControl" UserInterfaceControlType="AuthenticatorInfoControl">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="totpIdentifier" />
@@ -251,9 +259,9 @@
         </DisplayClaims>
       </DisplayControl>
 
-      <DisplayControl Id="authenticatorAppIconControl" UserInterfaceControlType="AuthenticatorAppIconControl">
-      </DisplayControl>
-      
+      <!-- Render the authenticator apps icon. -->
+      <DisplayControl Id="authenticatorAppIconControl" UserInterfaceControlType="AuthenticatorAppIconControl" />
+
     </DisplayControls>
 
     <!--End of TOTP contols-->
@@ -262,8 +270,11 @@
   <ClaimsProviders>
     <!--Start TOTP-->
     <ClaimsProvider>
-      <DisplayName>TOTPTP</DisplayName>
+      <DisplayName>TOTP</DisplayName>
       <TechnicalProfiles>
+
+        <!-- Begin the TOTP verification process. 
+             This technical profile is called right before the AzureMfa-VerifyOTP technical profile-->
         <TechnicalProfile Id="AzureMfa-BeginVerifyOTP">
           <DisplayName>Create Device</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -277,7 +288,8 @@
           </InputClaims>
         </TechnicalProfile>
 
-
+        <!-- Verify the TOTP verification process. 
+             This technical profile is called immediately after the AzureMfa-BeginVerifyOTP technical profile-->
         <TechnicalProfile Id="AzureMfa-VerifyOTP">
           <DisplayName>Verify OTP</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -289,6 +301,8 @@
           </InputClaims>
         </TechnicalProfile>
 
+        <!-- Check the number of devices available for the user. 
+             If the number of available devices is zero it indicates the user hasn't enrolled yet -->
         <TechnicalProfile Id="AzureMfa-GetAvailableDevices">
           <DisplayName>Get Available Devices</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -303,8 +317,7 @@
           </OutputClaims>
         </TechnicalProfile>
 
-        
-
+        <!-- TOTP session manager-->
         <TechnicalProfile Id="SM-MFA-TOTP">
           <DisplayName>Session Mananagement Provider</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.DefaultSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -314,6 +327,11 @@
           </PersistedClaims>
         </TechnicalProfile>
 
+        <!-- Self-asserted technical profile that asks the user to enroll to the TOTP MFA. The technical profile:
+              1) Creates the TOTP secret
+              2) Sets the issuer name and the URI
+              3) Renders the QR code and the authentication URI
+             -->
         <TechnicalProfile Id="EnableOTPAuthentication">
           <DisplayName>Sign up with Authenticator app</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -347,7 +365,7 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-TOTP" />
         </TechnicalProfile>
 
-
+        <!-- Self-asserted technical profile that verifies the TOTP-->
         <TechnicalProfile Id="OTPVerification">
           <DisplayName>Sign in with Authenticator app</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -374,7 +392,7 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-TOTP" />
         </TechnicalProfile>
 
-
+        <!-- Set the number of devices to 0 (default value) -->
         <TechnicalProfile Id="SetTotpDefaultValue">
           <DisplayName>Set Totp Default Values</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -382,6 +400,8 @@
             <OutputClaim ClaimTypeReferenceId="numberOfAvailableDevices" DefaultValue="0" />
           </OutputClaims>
         </TechnicalProfile>
+
+        <!-- Copy the UserId to the totpIdentifier -->
         <TechnicalProfile Id="CreateTotpIdentifier-UserId">
           <DisplayName>Set Totp Default Values</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -393,6 +413,7 @@
           </OutputClaimsTransformations>
         </TechnicalProfile>
 
+        <!-- Copy the SignInName to the totpIdentifier -->
         <TechnicalProfile Id="CreateTotpIdentifier-SignInName">
           <DisplayName>Set Totp Default Values</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -404,6 +425,7 @@
           </OutputClaimsTransformations>
         </TechnicalProfile>
 
+        <!-- Copy the Email to the totpIdentifier -->
         <TechnicalProfile Id="CreateTotpIdentifier-Email">
           <DisplayName>Set Totp Default Values</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -425,6 +447,7 @@
             <OutputClaimsTransformation ReferenceId="GetEmailFromReadOnlyEmail" />
           </OutputClaimsTransformations>
         </TechnicalProfile>
+
         <TechnicalProfile Id="GetEmailAddress">
           <DisplayName>Get Email Address</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -439,7 +462,6 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
@@ -451,6 +473,7 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
+
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
@@ -470,6 +493,7 @@
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
+
   <UserJourneys>
     <UserJourney Id="PasswordResetWithTOTP">
       <OrchestrationSteps>
@@ -479,15 +503,15 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
+        <!-- Call the TOTP enrollment ub journey. If user already enrolled the sub journey will not ask the user to enroll -->
         <OrchestrationStep Order="2" Type="InvokeSubJourney">
-
           <JourneyList>
             <Candidate SubJourneyReferenceId="TotpFactor-Input" />
           </JourneyList>
         </OrchestrationStep>
 
+        <!-- Call the TOTP validation sub journey-->
         <OrchestrationStep Order="3" Type="InvokeSubJourney">
-
           <JourneyList>
             <Candidate SubJourneyReferenceId="TotpFactor-Verify" />
           </JourneyList>
@@ -504,7 +528,7 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
 
-    <UserJourney Id="SignUpOrSignInTOTP-V2">
+    <UserJourney Id="SignUpOrSignInTOTP">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
@@ -534,15 +558,15 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
+        <!-- Call the TOTP enrollment ub journey. If user already enrolled the sub journey will not ask the user to enroll -->
         <OrchestrationStep Order="4" Type="InvokeSubJourney">
-
           <JourneyList>
             <Candidate SubJourneyReferenceId="TotpFactor-Input" />
           </JourneyList>
         </OrchestrationStep>
 
+        <!-- Call the TOTP validation sub journey-->
         <OrchestrationStep Order="5" Type="InvokeSubJourney">
-
           <JourneyList>
             <Candidate SubJourneyReferenceId="TotpFactor-Verify" />
           </JourneyList>
@@ -556,9 +580,11 @@
   <SubJourneys>
 
     <!--TOTP subjourneys-->
-    <!-- Authenticator Subjourney -->
+    <!-- Set the required claims numberOfAvailableDevices and totpIdentifier-->
     <SubJourney Id="SetTotpInitialValue" Type="Call">
       <OrchestrationSteps>
+
+        <!-- If number of available device claim not exists, set the value to 0-->
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -570,6 +596,11 @@
             <ClaimsExchange Id="SetTotpDefaultValue" TechnicalProfileReferenceId="SetTotpDefaultValue" />
           </ClaimsExchanges>
         </OrchestrationStep>
+
+        <!-- The following orchestration steps try to get the user identifier for different 
+             type of authentication, such as local and social account.-->
+        
+             <!-- Try to get the identifier from UserId-->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -585,6 +616,8 @@
             <ClaimsExchange Id="SetTotpIdentifierAsUserId" TechnicalProfileReferenceId="CreateTotpIdentifier-UserId" />
           </ClaimsExchanges>
         </OrchestrationStep>
+
+        <!-- Get the identifier from email-->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -601,7 +634,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-
+        <!-- Get the identifier from the user's emails -->
         <OrchestrationStep Order="4" Type="InvokeSubJourney">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -617,7 +650,8 @@
             <Candidate SubJourneyReferenceId="ExtractEmailFromEmailsForTotpIdentifier" />
           </JourneyList>
         </OrchestrationStep>
-
+        
+        <!-- Get the identifier from local account sign-in name-->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -633,9 +667,10 @@
             <ClaimsExchange Id="SetTotpIdentifierAsSignInName" TechnicalProfileReferenceId="CreateTotpIdentifier-SignInName" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
       </OrchestrationSteps>
     </SubJourney>
+
+    <!-- Get the identifier from the user's emails -->
     <SubJourney Id="ExtractEmailFromEmailsForTotpIdentifier" Type="Call">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -671,7 +706,6 @@
             <ClaimsExchange Id="SetTotpIdentifierAsEmail" TechnicalProfileReferenceId="CreateTotpIdentifier-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
@@ -683,16 +717,22 @@
             <ClaimsExchange Id="SetTotpIdentifierAsSignInName" TechnicalProfileReferenceId="CreateTotpIdentifier-SignInName" />
           </ClaimsExchanges>
         </OrchestrationStep>
-
       </OrchestrationSteps>
     </SubJourney>
+
+    <!-- TOTP verification sub journey-->
     <SubJourney Id="TotpFactor-Verify" Type="Call">
       <OrchestrationSteps>
+        
+        <!-- Set the required claims numberOfAvailableDevices and totpIdentifier-->
         <OrchestrationStep Order="1" Type="InvokeSubJourney">
           <JourneyList>
             <Candidate SubJourneyReferenceId="SetTotpInitialValue" />
           </JourneyList>
         </OrchestrationStep>
+
+        <!-- If current user is not a new one (this is a sign-in flow, and not sign-up), 
+             check the number of available devices. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
@@ -705,6 +745,9 @@
             <ClaimsExchange Id="CheckAvailableDevices" TechnicalProfileReferenceId="AzureMfa-GetAvailableDevices" />
           </ClaimsExchanges>
         </OrchestrationStep>
+
+        <!-- If the number of available devices isn't zero (user has enrolled before), 
+             render the TOTP verification page -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
@@ -719,13 +762,20 @@
         </OrchestrationStep>
       </OrchestrationSteps>
     </SubJourney>
+
+    <!-- TOTP enrollment sub journey-->
     <SubJourney Id="TotpFactor-Input" Type="Call">
       <OrchestrationSteps>
+
+        <!-- Set the required claims numberOfAvailableDevices and totpIdentifier-->
         <OrchestrationStep Order="1" Type="InvokeSubJourney">
           <JourneyList>
             <Candidate SubJourneyReferenceId="SetTotpInitialValue" />
           </JourneyList>
         </OrchestrationStep>
+
+        <!-- If current user is not a new one (this is a sign-in flow, and not sign-up), 
+             check the number of available devices. -->
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
@@ -738,6 +788,9 @@
             <ClaimsExchange Id="CheckAvailableDevices" TechnicalProfileReferenceId="AzureMfa-GetAvailableDevices" />
           </ClaimsExchanges>
         </OrchestrationStep>
+
+        <!-- If the number of available devices is zero (user hasn't enrolled before), 
+            render the TOTP enrollment page to scan the QR code that starts the enrollment process -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
@@ -750,6 +803,9 @@
             <ClaimsExchange Id="AuthenticatorForSignUp" TechnicalProfileReferenceId="EnableOTPAuthentication" />
           </ClaimsExchanges>
         </OrchestrationStep>
+
+        <!-- If the number of available devices is zero (user hasn't enrolled before), 
+             render the TOTP verification page.  -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
@@ -764,8 +820,5 @@
         </OrchestrationStep>
       </OrchestrationSteps>
     </SubJourney>
-
   </SubJourneys>
-
-
 </TrustFrameworkPolicy>
