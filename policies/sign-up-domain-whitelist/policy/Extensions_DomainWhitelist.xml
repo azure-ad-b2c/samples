@@ -9,7 +9,7 @@
     <ClaimsSchema>
       <ClaimType Id="email">
         <Restriction>
-          <Pattern RegularExpression="^[a-zA-Z0-9.!#$%&amp;'^_`{}~-]+@(test[.]com|contoso[.]com|fabrikam[.]com)" HelpText="Please enter a email address from one of the following domains: test.com, contoso.com, or fabrikam.com." />
+          <Pattern RegularExpression="^[a-zA-Z0-9.!#$%&amp;'^_`{}~\-]+@(test[.]com|contoso[.]com|fabrikam[.]com)" HelpText="Please enter a email address from one of the following domains: test.com, contoso.com, or fabrikam.com." />
         </Restriction>
       </ClaimType>
     </ClaimsSchema>
