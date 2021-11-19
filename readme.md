@@ -122,6 +122,7 @@ Samples are available for the following categories
 ## Account linking
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
+|[Auto account linking](policies/auto-account-linking)|This policy sample demonstrates how to link an account when a user arrives with the same email as an existing account. When the email is detected as being the same, the user is prompted to sign in with one of the methods already registered on the existing account. Once complete, the account is linked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=auto-account-linking)|
 |[Account linkage](policies/account-linkage-unified)|(new version, one policy for both link and unlink) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity. Unified policy for link and unlink.|NA|
 |[Account linkage](policies/account-linkage)|(a policy for link and another policy for unlink.) - With Azure AD B2C an account can have multiple identities, local (username and password) or social/enterprise identity (such as Facebook or AAD). This Azure AD B2C sample demonstrates how to link and unlink existing Azure AD B2C account to a social identity.|NA|
 |[Link a local account to federated account](policies/link-local-account-with-federated-account)|Demonstrates how to link a user who logged in via a federated provider to a pre-created AAD B2C Local Account.|NA|
