@@ -1,10 +1,13 @@
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_with_ca_whatif" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with_ca_whatif">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_signup_signin_with_ca_whatif" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with_ca_whatif">
+  
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensionsCA</PolicyId>
   </BasePolicy>
+  
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignInWithCA-WhatIf" />
     <TechnicalProfile Id="PolicyProfile">
@@ -15,6 +18,7 @@
         <OutputClaim ClaimTypeReferenceId="signInName" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
         <OutputClaim ClaimTypeReferenceId="IP-Address" DefaultValue="{Context:IPAddress}" AlwaysUseDefaultValue="true" />
+        <OutputClaim ClaimTypeReferenceId="estsRequestId" DefaultValue="" />
         <OutputClaim ClaimTypeReferenceId="CAChallengeIsMfa" />
         <OutputClaim ClaimTypeReferenceId="CAChallengeIsChgPwd" />
 
