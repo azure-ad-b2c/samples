@@ -34,9 +34,16 @@ This policy sample demonstrates how to link an account when a user arrives with 
 
 - User has signed up with Facebook (bob@contoso.com), and linked their account with Google
 - User logs in with Twitter, and Twitter returns the email claim - bob@contoso.com
-- User is presented with a screen to login with their Facebook Account, Local Account or Google Account
-- User logs in with the Facebook/Google/Local Account (check is performed to make sure email returned matches)
+- User is presented with a screen to login with their Facebook Account or Google Account
+- User logs in with the Facebook/Google (check is performed to make sure email returned matches)
 - Twitter account is merged with the Account
+
+### Scenario 4
+- User has signed up with Facebook (bob@contoso.com)
+- User tries to sign up for a Local Account with bob@contoso.com 
+- User is presented with error, stating the account exists
+- User must perform forgot password flow
+- Local account is already merged with Facebook Account - All social sign ups result in Local Account with random password. This is due to not being able to add a Local Account to a Federated-only account.
 
 ## How it works
 
