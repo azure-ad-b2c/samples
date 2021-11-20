@@ -325,8 +325,12 @@
         <!-- Calling MFA sub-journey -->
         <OrchestrationStep Order="4" Type="InvokeSubJourney">
           <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>CAChallengeIsMfa</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>needToPerformMfa</Value>
+              <Value>CAChallengeIsMfa</Value>
               <Value>False</Value>
               <Action>SkipThisOrchestrationStep</Action>
             </Precondition>
