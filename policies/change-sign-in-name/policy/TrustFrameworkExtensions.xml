@@ -17,39 +17,6 @@
 	</BuildingBlocks>
 
 	<ClaimsProviders>
-
-		<!-- Local account Sign-In claims provider -->
-		<ClaimsProvider>
-			<DisplayName>Local Account SignIn</DisplayName>
-			<TechnicalProfiles>
-				<TechnicalProfile Id="login-NonInteractive">
-					<Metadata>
-						<Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
-						<Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
-					</Metadata>
-					<InputClaims>
-						<InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppID" />
-						<InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppID" />
-					</InputClaims>
-				</TechnicalProfile>
-			</TechnicalProfiles>
-		</ClaimsProvider>
-
-
-		<!-- Facebook claims provider -->
-		<ClaimsProvider>
-			<DisplayName>Facebook</DisplayName>
-			<TechnicalProfiles>
-				<TechnicalProfile Id="Facebook-OAUTH">
-					<Metadata>
-						<Item Key="client_id">facebook_clientid</Item>
-						<Item Key="scope">email public_profile</Item>
-						<Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
-					</Metadata>
-				</TechnicalProfile>
-			</TechnicalProfiles>
-		</ClaimsProvider>
-
 		<ClaimsProvider>
 			<DisplayName>Azure Active Directory</DisplayName>
 			<TechnicalProfiles>
