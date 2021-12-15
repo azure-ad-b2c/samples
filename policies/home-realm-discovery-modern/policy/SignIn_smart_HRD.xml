@@ -150,7 +150,7 @@
                         <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="login_hint" />
                     </InputClaims>
                     <OutputClaims>
-                        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="oid" />
+                        <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="oid" />
                         <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
                         <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
                         <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
@@ -199,7 +199,7 @@
                     <OutputClaims>
                         <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="live.com" />
                         <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" />
-                        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="sub" />
+                        <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
                         <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
                         <OutputClaim ClaimTypeReferenceId="email" />
                     </OutputClaims>
