@@ -12,16 +12,19 @@ End users can download the Microsoft Authenticator app or any other authenticato
 
 See the latest documentation for this here: 
 
+### Display Contorls
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-control-time-based-one-time-password
 
-https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow
 
 ### Userflows
 
 - All V3 userflows (Recommended) wil have a new option for TOTP enabled under the "Type of Method" MFA section in the properties blade. [Userflow](media/userflow.png)
 - You can customize the TOTP screens by providing the branded HTML files like you do for other pages by going to the "Page Layouts" blade of the userflows. [PageLayout](media/userflows-pagelayout.png)
+https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow
 
 ### Custom Policies
+https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-custom-policy
+
 -  For custom policies see details below and the sample in the 'Policy' folder. 
 
 ### Using the Authenticator App 
