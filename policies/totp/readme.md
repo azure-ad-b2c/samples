@@ -1,19 +1,20 @@
-# Limited Preview: Azure AD B2C MFA with TOTP using any Authenticator app
+# Public Preview: Azure AD B2C MFA with TOTP using any Authenticator app
 
 To provide an higher assurance multi-factor option we are enabling "time based one time passcode" using Authenticator as an MFA choice for B2C customers. This option will allow customers  to save on the telephony charges associated with every step-up and still provide higher security than ever before for their end users accessing critical applications.
 
 End users can download the Microsoft Authenticator app or any other authenticator app of their liking that supports the TOTP protocol. 
 
 
-## Disclaimer
 
-This is a limited preview feature and the tenants need to be allowlisted in order to use this feature. Until the feature is in public preview we recommend that you only use this feture in your non-prod tenants. 
-
-
-The "Delete" device technical profiles are exposed here but the flows for those will be added in the next few months. 
 
 
 ## Usage
+
+See the latest documentation for this here: 
+
+https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-control-time-based-one-time-password
+
+https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow
 
 ### Userflows
 
