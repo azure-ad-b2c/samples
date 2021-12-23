@@ -133,7 +133,7 @@
                         <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_AadSamlIdPPFX"/>
                     </CryptographicKeys>
                     <OutputClaims>
-                        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier"/>
+                        <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="http://schemas.microsoft.com/identity/claims/objectidentifier"/>
                         <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tenantid"/>
                         <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" />
                         <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname" />
@@ -174,7 +174,7 @@
                         <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="login_hint" />
                     </InputClaims>
                     <OutputClaims>
-                        <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="oid" />
+                        <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="oid" />
                         <OutputClaim ClaimTypeReferenceId="tenantId" PartnerClaimType="tid" />
                         <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
                         <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="family_name" />
@@ -277,7 +277,7 @@
                 <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="surname"/>
                 <OutputClaim ClaimTypeReferenceId="identityProvider" />
                 <OutputClaim ClaimTypeReferenceId="email" />
-                <OutputClaim ClaimTypeReferenceId="socialIdpUserId" PartnerClaimType="sub"/>
+                <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub"/>
                 <OutputClaim ClaimTypeReferenceId="identityProviders"/>
             </OutputClaims>
             <SubjectNamingInfo ClaimType="sub" />
