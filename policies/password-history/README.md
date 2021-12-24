@@ -26,7 +26,7 @@ The policy makes a REST API call to an `Azure App Service`, passing a JSON paylo
 
 ## Quick Start
 
-  1. Review the README for the Azure App Service [here](..\source-code\passwordHashSvc\README.md). In this step, you'll create:
+  1. Review the README for the Azure App Service [here](https://github.com/azure-ad-b2c/samples/blob/master/policies/password-history/source-code/dotnet5/README.md). In this step, you'll create:
 
         a. Azure App Service
         
