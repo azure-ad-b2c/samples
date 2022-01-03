@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_B2CMigrateSSPR_Extensions" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_B2CMigrateSSPR_Extensions">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+ <BuildingBlocks>
+
+  <ClaimsSchema>
+    <!--Sample: Specifies whether user must reset the password-->
+  	<ClaimType Id="extension_mustResetPassword">
+	    <DisplayName>Must reset password</DisplayName>
+	    <DataType>boolean</DataType>
+	    <UserHelpText>Specifies whether user must reset the password</UserHelpText>
+	  </ClaimType>
+  </ClaimsSchema>
+
+    <!--Sample: Autopopulates the email address for Self-service Password Reset (SSPR) if user has not been migrated-->
+    <DisplayControls>
+      <DisplayControl Id="emailControl" UserInterfaceControlType="VerificationControl">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="email" />
+        </InputClaims>
+      </DisplayControl>
+    </DisplayControls>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+   <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>  
+        <!--Sample: Read the 'must reset password' extension attribute -->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <!--Sample: Reads directory if user must reset password-->
+		<ClaimsProvider>
+			<DisplayName>Local Account SignIn - Read migration status</DisplayName>
+			<TechnicalProfiles>
+				<TechnicalProfile Id="Get-requiresMigration-status-signin">
+					<Metadata>
+						<Item Key="Operation">Read</Item>
+						<Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+						<Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+					</Metadata>
+					<IncludeInSso>false</IncludeInSso>
+					<InputClaims>
+						<InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.emailAddress" Required="true" />
+					</InputClaims>
+					<OutputClaims>
+						<OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword"/>
+						<!-- Set a default value (false) in the case the account does not have this attribute defined -->
+						<!--<OutputClaim ClaimTypeReferenceId="requiresMigration" PartnerClaimType="extension_requiresMigration" DefaultValue="false" />-->
+					</OutputClaims>
+					<IncludeTechnicalProfile ReferenceId="AAD-Common" />
+				</TechnicalProfile>
+
+        <!--Sample: Deletes attribute from directory that defines must reset password-->
+        <TechnicalProfile Id="AAD-UserRemoveMustResetPasswordUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">DeleteClaims</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+            <PersistedClaim ClaimTypeReferenceId="extension_mustResetPassword" />           
+          </PersistedClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email-Migrate">
+          <DisplayName>Local Account Signin</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
+            <Item Key="setting.operatingMode">Email</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" />
+          </InputClaims>
+          <DisplayClaims>
+            <DisplayClaim ClaimTypeReferenceId="signInName" Required="true" />
+            <DisplayClaim ClaimTypeReferenceId="password" Required="true" />
+          </DisplayClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="password" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <!--Sample: Must include "extension_mustResetPassword" to prepopulate during SSPR flow-->
+            <OutputClaim ClaimTypeReferenceId="extension_mustResetPassword" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInName" />
+          </OutputClaims>
+
+          <ValidationTechnicalProfiles>
+            <!--Sample: Checks directory if must reset password is present-->
+            <ValidationTechnicalProfile ReferenceId="Get-requiresMigration-status-signin" />
+            <!--Sample: Skips login if user is forced to reset password/requires migration-->
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive" >
+              <Preconditions>
+                <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                  <Value>extension_mustResetPassword</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+			</TechnicalProfiles>
+		</ClaimsProvider>
+
+
+
+
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignInWithForcePasswordReset" DefaultCpimIssuerTechnicalProfileReferenceId ="JwtIssuer" >
+      <OrchestrationSteps>
+      
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+           <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email-Migrate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_mustResetPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+           <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Transfers to a Subjourney if user is required to reset password/migrate-->
+        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>extension_mustResetPassword</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="RequirePasswordResetMigration" />
+          </JourneyList>
+        </OrchestrationStep>
+
+
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+
+  <!--Sample: Subjourney that provides the standard SSPR experience taken from base policy. Only difference is in Step/Order='3' the attribute flag for SSPR is deleted from directory to prevent force SSPR on next login-->
+  <SubJourneys>
+  <SubJourney Id="RequirePasswordResetMigration" Type="Transfer">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+          <!--Sample: check if change password is required. If yes remove the value of the extension attribute. 
+              So, on the next time user dons' t need to update the password-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">      
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserRemoveMustResetPasswordUsingObjectId" TechnicalProfileReferenceId="AAD-UserRemoveMustResetPasswordUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </SubJourney>
+  </SubJourneys>
+
+
+</TrustFrameworkPolicy>
