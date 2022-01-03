@@ -1,6 +1,8 @@
 # Dynamically migrate users with forced SSPR
 
-This sample allows dynamically detecting whether a user has been migrated or not. While migrated users will automatically be logged in with valid credentials, required migrated users will be forced to perform a self-service password reset (SSPR). This allows a seemless migration while securely capturing passwords into Azure AD B2C; this is because you either do not have access to the passwords or you want to force users to reset the passwords during migration. The email provided during login is carried over and prepopulated for required migrated users to provide the best migration experience.
+This sample allows dynamically detecting whether a user has been migrated or not. While migrated users will automatically be logged in with valid credentials, required migrated users will be forced to perform a self-service password reset (SSPR). This allows a seemless migration while securely capturing passwords into Azure AD B2C; this scenario is required because you either do not have access to the passwords or you want to force users to reset the passwords during migration. The email provided during login is carried over and prepopulated for required migrated users to provide the best migration experience.
+
+Please note this is controlled by an attribute stored into the Azure AD B2C directory that can be written to called **extension_mustResetPassword**.
 
 ## Prerequisites
 
@@ -12,9 +14,22 @@ This sample allows dynamically detecting whether a user has been migrated or not
 
 - For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
+- Policy is based on the Display Controls SocialAndLocalAccount starter pack [here](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/Display%20Controls%20Starterpack/SocialAndLocalAccounts)
+
 ## Seamless migration flow during Sign In
 
-What happens during signin when the users are migrated to B2C is illustrated in the below diagram
+What happens during signin when the users are migrated to B2C is illustrated in the below diagram:
+
+<p align="center">
+  <img src="media/migration-force-password-reset-flow-diagram.png" alt="drawing" width="50%" />
+</p>
+
+## Walkthrough UX flow
+
+What happens when your user attempts to login but is forced to perform a self-service password reset (SSPR):
+<p align="center">
+  <img src="media/migration-force-password-reset-walkthrough.png" alt="drawing" width="75%"/>
+</p>
 
 ## Test Policy
 1. Write value into extension attribute using MS Explorer
@@ -27,7 +42,7 @@ What happens during signin when the users are migrated to B2C is illustrated in 
         "extension_<appID>_mustResetPassword": true
     }
   ```
-  Example:
+- Example
   ```
   PATCH https://graph.microsoft.com/beta/users/a5c9a04a-97aa-41ad-9700-729a579d1e4b
     {
@@ -38,9 +53,9 @@ What happens during signin when the users are migrated to B2C is illustrated in 
   ```
   GET https://graph.microsoft.com/beta/users/{user-id}
   ```
-Example:
+- Example:
   ```
-  GET https://graph.microsoft.com/beta/users/a5c9a04a-97aa-41ad-9700-729a579d1e4b
+   GET https://graph.microsoft.com/beta/users/a5c9a04a-97aa-41ad-9700-729a579d1e4b
   ```
 3. Run Policy and test flow
 
