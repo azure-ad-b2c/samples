@@ -20,9 +20,7 @@ Please note this is controlled by an attribute stored into the Azure AD B2C dire
 
 What happens during signin when the users are migrated to B2C is illustrated in the below diagram:
 
-<p align="center">
-  <img src="media/migration-force-password-reset-flow-diagram.png" alt="drawing" width="50%" />
-</p>
+![A flowchart describing a user authentication flows for this specific sample. The diagram provides a walkthrough visual with squares and words for each step within the boxes. There are arrows that indicates the next step of the user journey flow. Below image are the steps that describes the flow.](media/migration-force-password-reset-flow-diagram.png "A flowchart describing how user data flows from a publisher, to a proxy, and to a group of subscribers")
 
 ## Walkthrough UX flow
 
