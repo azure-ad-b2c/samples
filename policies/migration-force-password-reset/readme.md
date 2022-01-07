@@ -19,9 +19,9 @@ Please note this is controlled by an attribute stored into the Azure AD B2C dire
 ## Seamless migration flow during Sign In
 
 This demostrates the end-to-end business logic for this scenario:
-<a
-![A flowchart in which articulates the authentication flows for the sample. Below are the steps that are included in the flow.](media/migration-force-password-reset-flow-diagram.png "A flowchart in which articulates the authentication flows for the sample. Below are the steps that are included in the flow.")
 
+<img alt="A flowchart in which articulates the authentication flows for the sample. Below are the steps that are included in the flow." src="media/migration-force-password-reset-flow-diagram.png" width="75%">
+   
 1. Users are pre-migrated into the directory.
 2. User attempts to sign-in to Azure AD B2C.
 3. Azure AD B2C reads the user's object in the directory and determines whether user has been migrated or not.
@@ -33,7 +33,7 @@ This demostrates the end-to-end business logic for this scenario:
 
 This is the expected end user experience in which can be [customized by using Cross-Origin Resource Sharing (CORS)](https://docs.microsoft.com/en-us/azure/active-directory-b2c/customize-ui-with-html?pivots=b2c-custom-policy):
 
-<img alt="A diagram with screenshots of each step of the user experience (UX) work flow." src="media/migration-force-password-reset-walkthrough.png" width="75%">
+<img alt="A diagram with screenshots of each step of the user experience (UX) work flow." src="media/migration-force-password-reset-walkthrough.png" width="90%">
 
 
 ## Test Policy
