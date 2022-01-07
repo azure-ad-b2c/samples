@@ -8,26 +8,33 @@ Please note this is controlled by an attribute stored into the Azure AD B2C dire
 
 
 
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+- You will be required to [create an Azure AD B2C directory](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
 
-- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+- To use the sample policies in this repo, follow [the setup instructions for Custom Policies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
 
-- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+- Using Extension attributes requires expanding the schema by [defining custom attributes in the directory](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties). Please note that `AAD-Common` Technical profile will always need to be[ modified to use your `ApplicationId` and `ObjectId`](https://docs.microsoft.com/en-us/azure/active-directory-b2c/user-flow-custom-attributes?pivots=b2c-custom-policy#modify-your-custom-policy).
 
-- Policy is based on the Display Controls SocialAndLocalAccount starter pack [here](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/Display%20Controls%20Starterpack/SocialAndLocalAccounts)
+- This sample is based on the [Display Controls SocialAndLocalAccount starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/Display%20Controls%20Starterpack/SocialAndLocalAccounts).
 
 ## Seamless migration flow during Sign In
 
-What happens during signin when the users are migrated to B2C is illustrated in the below diagram:
+This demostrates the end-to-end business logic for this scenario:
+<a
+![A flowchart in which articulates the authentication flows for the sample. Below are the steps that are included in the flow.](media/migration-force-password-reset-flow-diagram.png "A flowchart in which articulates the authentication flows for the sample. Below are the steps that are included in the flow.")
 
-![A flowchart describing a user authentication flows for this specific sample. The diagram provides a walkthrough visual with squares and words for each step within the boxes. There are arrows that indicates the next step of the user journey.](media/migration-force-password-reset-flow-diagram.png "A flowchart describing a user authentication flows for this specific sample. The diagram provides a walkthrough visual with squares and words for each step within the boxes. There are arrows that indicates the next step of the user journey.")
+1. Users are pre-migrated into the directory.
+2. User attempts to sign-in to Azure AD B2C.
+3. Azure AD B2C reads the user's object in the directory and determines whether user has been migrated or not.
+4. If users has already been migrated, B2C will attempt to authenticate and if successful, issue a token to the application.
+5. If user requires migration, B2C will prompt user for a required self-service password reset (SSPR).
+6. Upon successful SSPR validation, the user will be redirected to the application with a valid token.
 
 ## Walkthrough UX flow
 
-What happens when your user attempts to login but is forced to perform a self-service password reset (SSPR):
-<p align="center">
-  <img src="media/migration-force-password-reset-walkthrough.png" alt="drawing" width="75%"/>
-</p>
+This is the expected end user experience in which can be [customized by using Cross-Origin Resource Sharing (CORS)](https://docs.microsoft.com/en-us/azure/active-directory-b2c/customize-ui-with-html?pivots=b2c-custom-policy):
+
+<img alt="A diagram with screenshots of each step of the user experience (UX) work flow." src="media/migration-force-password-reset-walkthrough.png" width="75%">
+
 
 ## Test Policy
 1. Write value into extension attribute using MS Explorer
