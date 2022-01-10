@@ -4,16 +4,16 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Getting started
 
-- See our Custom Policy overview [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-overview).
+- See our [Custom Policy overview](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-overview).
 
-- See our [Azure AD B2C Wiki articles](https://azure-ad-b2c.github.io/azureadb2ccommunity.io/docs/custom-policy-concepts/) here to help walkthrough the custom policy components.
+- See our [Azure AD B2C Wiki articles](https://azure-ad-b2c.github.io/azureadb2ccommunity.io/docs/custom-policy-concepts/) to help walkthrough the custom policy components.
 
-- See our Custom Policy Schema reference [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
+- See our [Custom Policy Schema reference](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
 
 ## Prerequisites
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
 
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant.
+- You can automate the prerequisites (where applicable) by using our using automated tool called [Deploy AAD B2C Custom Policies](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant.
 
 ## Sample scenarios
 
@@ -37,17 +37,17 @@ Samples are available for the following categories
 
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
-|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |This demonstrates how to verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)|
-|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password. Or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)|
-|[Force password reset first logon](policies/force-password-reset-first-logon)|Demonstrates how to force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)|
-|[Force password after 90 days](policies/force-password-reset-after-90-days)|Demonstrates how to force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)|
-|[Password reset only](policies/password-reset-only)|This example policy prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)|
-|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=embedded-password-reset)|
-|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |An example policy to reset a users password using Phone Number (SMS or Phone Call).|NEED POLICY FIX|
-|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)|
-|[Banned password list](policies/banned-password-list-no-API) |For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)|
-|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|
-|[Password history](policies/password-history) |This policy enables the storing and checking of a user's previous set of passwords in order to prevent them from using a previous password during a Password Reset flow. |NA|
+|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |Verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)|
+|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)|
+|[Force password reset first logon](policies/force-password-reset-first-logon)|Force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)|
+|[Force password after 90 days](policies/force-password-reset-after-90-days)|Force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)|
+|[Password reset only](policies/password-reset-only)|Prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)|
+|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|Embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=embedded-password-reset)|
+|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |Reset a users password using Phone Number (SMS or Phone Call).|NEED POLICY FIX|
+|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|Force password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)|
+|[Banned password list](policies/banned-password-list-no-API) |Banned password list prevention during Sign up and password reset/change flow. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)|
+|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |DisplayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|
+|[Password history](policies/password-history) |Prevent the previous Nth password to be set during password reset/change. Requires using external storage and web servies. |NA|
 
 
 ## General security
