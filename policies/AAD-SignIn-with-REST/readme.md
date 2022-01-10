@@ -10,13 +10,13 @@ This policy utilises passthrough authentication to B2C. The user wil *NOT* be st
 This policy is based on the [Azure AD Single tenant implementation](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/identity-provider-azure-ad-single-tenant-custom?tabs=app-reg-ga) as well as the ["Integrate REST API claims"](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-rest-api-intro) documentation.
 
 ## Implementation
-To implement this use case follow the following steps;
+To implement this use case follow the following steps:
 1. Ensure you have followed the ["Get Started with custom policies"](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-get-started) steps within the Microsoft documentation site. 
-1. Change the refernces in the [Policy](policy/B2C_1A_SignUpOrSignin_AADRest.xml) from "yourtenant.onmicrosoft.com" to the name of your B2C Tenant.
+1. Change the references in the [B2C_1A_SignUpOrSignin_AADRest.xml policy](policy/B2C_1A_SignUpOrSignin_AADRest.xml) from "yourtenant.onmicrosoft.com" to the name of your B2C Tenant.
 1. Update the OIDC-Contoso technical profile to reflect your azureAd tenant details as per the [Microsoft dcumentation](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/identity-provider-azure-ad-single-tenant-custom?tabs=app-reg-ga#add-a-claims-provider).
 1. Update the REST-GetCRMData technical profile to represent your API as per the [Microsoft docmentation](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-rest-api-intro).
-1. [Uplaod](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-get-started#upload-the-policies) and run your policy.
+1. [Upload](https://docs.microsoft.com/en-gb/azure/active-directory-b2c/custom-policy-get-started#upload-the-policies) and run your policy.
 
 
 ## Notes
-This sample policy is based on [SocialAndLocalAccountsWithMFA starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa) However any of the starter pack policies should work for this. All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 
+This sample policy is based on [SocialAndLocalAccountsWithMFA starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa). However, any of the starter pack policies should work for this. All changes are marked with '**Sample:**' comment inside the policy XML files. Make the necessary changes in the '**Sample action required**' sections. 
