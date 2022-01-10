@@ -168,12 +168,15 @@ Samples are available for the following categories
 |[UserInfo Endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
 
 ## Web Test
-
-- [SignIn Web test](policies/signin-webtest) - This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[SignIn Web Test using Azure App Insights](policies/user-info-endpoint) | This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.| NA|
 
 ## CI/CD
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[Azure DevOps pipeline for Azure AD B2C](policies/devops-pipeline) | Uploads policies regardless of naming convention Azure DevOps automated pipeline.| NA|
 
-- [Azure Devops](policies/devops-pipeline) - An example AzureDevOps pipeline that uploads policies regardless of naming convention.
 
 ## Community Help and Support
 
