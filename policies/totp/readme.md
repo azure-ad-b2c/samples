@@ -33,6 +33,7 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authent
 - You can have your end users also use any other app of your choosing. You can add the download links to this app on the QR Code page. 
 
 - When end users are adding/scanning the QR code to add the new account to the Microsoft Authenticator app, choose "Other (Google, Facebook, etc.)" option to add your B2C account.
+
 ![Microsoft Authenticator screen](media/AuthApp.jpg)
 
 ## Custom Policy Overview
