@@ -44,15 +44,15 @@ The claim  `totpIdentifier` is used to copy the differnet type of signIn options
 
 ```XML
 <TechnicalProfile Id="CreateTotpIdentifier-UserId">
-          <DisplayName>Set Totp Default Values</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="totpIdentifier" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="UserIdToLogonIdentifier" />
-          </OutputClaimsTransformations>
-        </TechnicalProfile>
+    <DisplayName>Set Totp Default Values</DisplayName>
+    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="totpIdentifier" />
+    </OutputClaims>
+    <OutputClaimsTransformations>
+        <OutputClaimsTransformation ReferenceId="UserIdToLogonIdentifier" />
+    </OutputClaimsTransformations>
+</TechnicalProfile>
 ```
 
 ## Just In Time TOTP Migration
