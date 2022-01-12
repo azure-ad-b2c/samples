@@ -57,9 +57,9 @@ The claim  `totpIdentifier` is used to copy the differnet type of signIn options
 
 ## Just In Time TOTP Migration
 
-If you were previously using the [TOTP multi-factor authentication](/../custom-mfa-totp) policy sample to implement TOTP then your users Secrets will be stored in the 'extension_StrongAuthenticationAppSecretKey' extension attribute.
+If you were previously using the [TOTP multi-factor authentication](../custom-mfa-totp) policy sample to implement TOTP then your users Secrets will be stored in the 'extension_StrongAuthenticationAppSecretKey' extension attribute.
 
-To migrate these to the new method you can implement the [TOTP Migration Extension](policy/TrustFrameworkExtensionsTOTP_JIT.xml#L9) policy as the parent policy for either [SignUpOrSigninWithTOTP](policy/SignUpOrSigninWithTOTP.xml#L9) or [PaswordResetWithTOTP.xml](policy/PaswordResetWithTOTP.xml#L9) 
+To migrate these to the new method you can implement the [TOTP Migration Extension](policy/TrustFrameworkExtensionsTOTP_JIT.xml) policy as the parent policy for either [SignUpOrSigninWithTOTP](policy/SignUpOrSigninWithTOTP.xml#L9) or [PaswordResetWithTOTP.xml](policy/PaswordResetWithTOTP.xml#L9) 
 
 The below diagram depicts how the Just In Time TOTP migration works:
 ![Just In Time Flow Diagram](media/TOTPJITFlow.png)
