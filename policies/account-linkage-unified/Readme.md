@@ -43,8 +43,7 @@ With the link and unlink policy, we append and remove federated identities to th
 
 The following diagram illustrates the linking flow:
 
-![Link flow](media/link-flow.png)
-
+<img alt="An image of sign-in flow between four different stages." src="media/link-flow.png" >
 
 ## Technical profiles
 
