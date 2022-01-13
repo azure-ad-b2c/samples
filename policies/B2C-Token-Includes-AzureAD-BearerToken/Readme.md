@@ -1,10 +1,5 @@
 # Include an Azure AD access token through a B2C token, as part of a B2C Sign In
 
-## Community Help and Support
-Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
-If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
-To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
-
 ## Scenario
 This sample solution demonstrates how to sign in through a B2C policy to a federated identity provider, Azure AD in this case, and include the original identity provider token, an Azure AD bearer token, as a claim in the B2C token.  It also shows how to call the Graph API of the users’ home Azure AD tenant using the issued Azure AD Bearer token.  For reference, similar capability can be achieved to receive the original identity provider’s id token [using the built-in B2C user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow).
 
@@ -16,7 +11,7 @@ This sample solution demonstrates how to sign in through a B2C policy to a feder
 
 - We also recommend using [Visual Studio Code](https://code.visualstudio.com/) and installing the [Azure AD B2C extension for editing Custom policies](https://marketplace.visualstudio.com/items?itemName=AzureADB2CTools.aadb2c), as there are many functions in this extension that are designed to enhance the configuration experience.
 
-## Overview
+## Flow Diagram
 The following diagram overviews this sample solution:
 
 <img alt="A diagram in which articulates the token flow between the application, the B2C tenant, and Azure AD." src="media/IssueAADTokenThroughB2C.jpg" >
@@ -62,7 +57,7 @@ Please note that other delegated permissions could have been selected however, s
 
 A client Secret associated with this application, must be created – select either 1 or 2 year expiration (select Never for testing purposes only).  
 
-![CLientSecret](media/ClientSecret.jpg)
+<img alt="An image of adding a client secret in the Azure AD B2C admin portal." src="media/ClientSecret.jpg" >
  
 Copy the client secret – in the next steps, we will need to store the value in a B2C policy key location, and reference the key location from within the Azure AD technical profile in the B2C policy file.  
 
@@ -70,7 +65,7 @@ Copy the client secret – in the next steps, we will need to store the value in
 
 Create a B2C policy key (under the Identity Experience Framework blade).  Select Manual for the Option, create a name (we will reference this policyKeyName in the next step) and enter the client secret value from the previous step.
 
-![CreateKeyt](media/CreateKey.jpg)
+<img alt="An image of the Create a key blade." src="media/CreateKey.jpg" >
 
 ### Step 4: Update the AzureADProfile_issueAADToken technical profile in the B2C policy file
 
@@ -79,56 +74,51 @@ The application (client ID) and the permissions must be updated in the AzureAD t
 Update the Scope value to equal the permissions that you configured for your.  This should be openid and user.read.   Note: for mutliple scopes, each scope value should be separated by a space.  
       <Item Key="scope">openid user.read</Item>
 
-
-![AADTP](media/AAD-TP.jpg)  
-
+<img alt="An image of the B2C XMAL policy with Metadata scope and client_secret highlighted." src="media/AAD-TP.jpg" >
 
 ### Step 5: First Sign In experience for users
 
-During the first-time user logon from an Azure AD tenant, users will be able to consent to Microsoft Graph permissions if the requested permissions do not require administrator consent.
+- During the first-time user logon from an Azure AD tenant, users will be able to consent to Microsoft Graph permissions if the requested permissions do not require administrator consent.
 
+<img alt="An image of permission requested screen." src="media/Consent1.jpg" >
 
-![consent1](media/Consent1.jpg)   
+- Administrators can consent on behalf of all users in their organization – after this consent, users will not see request for consent.
 
-Administrators can consent on behalf of all users in their organization – after this consent, users will not see request for consent.
+<img alt="An image of permission requested screen with Consent on behalf of organization selected." src="media/Consent2.jpg" > 
 
-![consent2](media/Consent2.jpg)   
- 
+- Some permissions require the company administrator’s consent; therefore users are not authorized to consent individually.  In this case, users will be blocked from sign in until the company administrator logons to the app and consents on behalf of all users in their organization.
 
-Some permissions require the company administrator’s consent; therefore users are not authorized to consent individually.  In this case, users will be blocked from sign in until the company administrator logons to the app and consents on behalf of all users in their organization.
-
-![consent3](media/Consent3.jpg) 
+<img alt="An image of consent screen with error Need admin approval." src="media/Consent3.jpg" >
          
-Figure 1 User cannot logon nor consent to an app requesting privileged permissions
+*Figure 1: User cannot logon nor consent to an app requesting privileged permissions*
 
-![consent4](media/Consent4.jpg) 
+<img alt="An image of consent screen with box greyed out, preventing user from selection consent for organization." src="media/Consent4.jpg" >
               
-Figure 2 Admin Can consent for the organization
 
 ### Step 6: Call the Graph API using the access token
 
 Upon successful user sign on, the original Azure AD idp access token will  be part of the B2C token.  This idp access token can be used to access the users’ home Azure AD tenant’s Graph API (with the scope of Directory.Read)   For example:
 
-
-![token1](media/token1.jpg) 
+<img alt="An image of a decoded token.  " src="media/token1.jpg" >
  
 
 The idp access_token, is base64 encoded and can be viewed:
 
-![token2](media/token2.jpg) 
+<img alt="An image of a based 64 decoded access token with the directory.read value contained.  " src="media/token2.jpg" >
  
 
 Calls to the Microsoft Graph Call can now be made, using this idp access token in the authorization header.  
 Example:
 
+<code>
 https://graph.microsoft.com/beta/users/chad@deployit.info
 
 Authorization:  eyJ0eXAiOiJKV1Qi……. DUxWmJUbktFZFc1
+</code>
 
 Microsoft Graph Call Result:
 
-
-![graph1](media/Graph1.jpg) 
+<img alt="An image of a list of claims." src="media/Graph1.jpg" >
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

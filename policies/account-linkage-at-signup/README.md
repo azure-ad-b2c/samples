@@ -1,9 +1,10 @@
 # Azure AD B2C account linkage
 
-In Azure AD B2C you can havce a Local Account of alicecontoso@gmail.com at the same time, if you federate with Google's IDP, you can have another account authenticating as alicecontoso@gmail.com with Google. There is no correlation between the two account. You can view this two ways; either that the user choosed to have it this way or that it happened by mistake and the user doesn't want it this way. The sample on [account linkage](https://github.com/azure-ad-b2c/samples/tree/master/policies/account-linkage-unified) shows you how the user can correct the problem by joining the two accounts, but that is active action by the user. This sample shows you a different approach - avoiding that it happens in the first place.
+## Scenario
+In Azure AD B2C you can have a Local Account of `alicecontoso@gmail.com` at the same time, if you federate with Google's IDP, you can have another account authenticating as `alicecontoso@gmail.com` with Google. There is no correlation between the two account. You can view this two ways; either that the user choosed to have it this way or that it happened by mistake and the user doesn't want it this way. The sample on [account linkage](https://github.com/azure-ad-b2c/samples/tree/master/policies/account-linkage-unified) shows you how the user can correct the problem by joining the two accounts, but that is active action by the user. This sample shows you a different approach - avoiding that it happens in the first place.
 
 ## Scenario 1 - signup via federated Social IDP
-When you sign up with a social account, like alicecontoso@gmail.com, as long as the IDP returns the email to B2C, we can add that to the user profile and set it up as Local Account too. Technically, there is no local password and the user can login that way, but we have effectively blocked ever creating a local account with that email address. And if Alice Contoso ever wanted to login as a local account, all she has to do is invoke the PasswordReset flow and set a new password.
+When you sign up with a social account, like `alicecontoso@gmail.com`, as long as the IDP returns the email to B2C, we can add that to the user profile and set it up as Local Account too. Technically, there is no local password and the user can login that way, but we have effectively blocked ever creating a local account with that email address. And if Alice Contoso ever wanted to login as a local account, all she has to do is invoke the PasswordReset flow and set a new password.
 
 Look at the `identities` collection below from the user profile. During normal signup from a social IDP, the types `federated` and `userPrincipalName` are created. If we add the `emailAddress` at the same time we have linked the email to this local account and no one else can create another user account with it.
  
@@ -32,9 +33,7 @@ This scenario is not as easy as the one above, because when a user signs up with
 
 However, given what we implement in scenario 1, if there already is a local account `alicecontoso@gmail.com`, scenario 1 will give the user an error during signup saying "A user with the specified ID already exists. Please choose a different one." 
 
-![ID already exists](media/account-linkage-at-signup-01.png)
-
-
+<img alt="Image of error message stating the specific ID already exists. The UX allows to change e-mail." src="media/account-linkage-at-signup-01.png" >
 
 ## Technical profiles
 To achieve this solution, there is relative little changes to the standard B2C policies we have to do. It is actually just the below - we extend the Technical Profile `AAD-UserWriteUsingAlternativeSecurityId` to persist the email. This Technical Profile is used to write the user profile during Social Account signup, so what we add here isexactly what was described in scenario 1. The reason we create a random password is we need to prepare the account for the possibility that the user initiates the PasswordReset user journey. Without setting a random password, B2C will create the account in a way where password reset doesn't work.
@@ -81,9 +80,9 @@ This sample policy is based on [SocialAndLocalAccounts starter pack](https://git
 
 You then need to add your selected social providers that you want to federate with.
 
-[Microsoft Accounts](https://docs.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-microsoft-account-custom)
+- [Setup Microsoft Accounts as an Identity Provider](https://docs.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-microsoft-account-custom)
 
-[Google]https://docs.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-google-custom
+- [Setup Google as an Identity Provider](https://docs.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-google-custom)
 
 ## Community Help and Support
 
