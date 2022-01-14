@@ -7,7 +7,7 @@ Custom SMS integration requires the use of a third-party SMS provider such as Tw
 ## Create a Twilio account
 When you're ready to get a Twilio account, sign up at [Try Twilio](https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account#sign-up-for-your-free-twilio-trial). You can start with a free account, and upgrade your account later.
 
-When you sign up for a Twilio account, you'll receive an account ID and an authentication token. Both will be needed to make Twilio API calls. To prevent unauthorized access to your account, keep your authentication token secure. Your account ID and authentication token are viewable at the [Twilio account page][https://www.twilio.com/console], in the fields labeled **ACCOUNT SID** and **AUTH TOKEN**, respectively. These will be referenced later in this article.
+When you sign up for a Twilio account, you'll receive an account ID and an authentication token. Both will be needed to make Twilio API calls. To prevent unauthorized access to your account, keep your authentication token secure. Your account ID and authentication token are viewable at the [Twilio account page](https://www.twilio.com/console), in the fields labeled **ACCOUNT SID** and **AUTH TOKEN**, respectively. These will be referenced later in this article.
 
 ## Create Azure AD B2C policy key
 
@@ -35,7 +35,7 @@ Next, store the Twilio AUTH TOKEN in an Azure AD B2C policy key for your policie
 1. Select **Create**.
 
 ## Register a Phone Number in Twilio
-Follow the [steps](https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account#get-your-first-twilio-phone-number) at Twilio to obtain a phone number from which SMS' will be sent from.
+Follow the steps at Twilio [to obtain a phone number from which SMS](https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account#get-your-first-twilio-phone-number) will be sent from.
 
 ## Add Azure AD B2C claim types
 

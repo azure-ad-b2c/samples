@@ -7,16 +7,16 @@ The custom claims provider, decrypt the request Id, checks that the request id e
 
 By calling the Azure Table, the custom claims provider has the user object Id. With the user object Id, the claims provider is able to update the user profile. After user complete the profile editing the custom claims provider removed the entity from Azure Blob storage.
 
-![Flow](flow.png)
+![A Flow diagram chart visually representing the steps below.](flow.png)
 1. User clicks on sign-in and redirect to Azure AD B2C
-1. User sign-in or sign-up (with local or social account)
-1. Azure AD B2C reads the user profile
-1. Azure AD B2C makes a call to the REST API. Sending the user profile claims, correlation ID, user IP address and application Id. The REST API returns back indicator if additional step is required. If yes, the response contains the encrypted request Id.
-1. Azure AD B2C checks the indicator
-1. If necessary, user is redirected to the custom claims provider
-1. Azure AD B2C reads the updated profile
-1. Azure AD B2C issues the access token
-1. User is redirected back to the relying party application 
+2. User sign-in or sign-up (with local or social account)
+3. Azure AD B2C reads the user profile
+4. Azure AD B2C makes a call to the REST API. Sending the user profile claims, correlation ID, user IP address and application Id. The REST API returns back indicator if additional step is required. If yes, the response contains the encrypted request Id.
+5. Azure AD B2C checks the indicator
+6. If necessary, user is redirected to the custom claims provider
+7. Azure AD B2C reads the updated profile
+8. Azure AD B2C issues the access token
+9. User is redirected back to the relying party application 
 
 ## Register your application in your tenant
 In this demo, the custom claims provider update the user provide using Graph API. To communicate with the Graph API, you first need to have service account with administrative privileges. In Azure AD, you can do this by registering an application and authenticating to Azure AD. The application credentials are: **Application ID** and **Application Secret**. The application acts as itself, not as a user, to call the Graph API.
@@ -45,8 +45,8 @@ Select **Properties**, copy the **Application ID**, and save it for later.
 Project name: AADB2C.ClaimsProvider.API
 
 ### App settings
-- **BlobStorageConnectionString** the connection string to Azure Blob Storage
-- **EncryptionKey** Encryption key. The REST API uses this key to encrypt the request Id Azure AD B2C sends to the custom claims provider
+- **BlobStorageConnectionString** the connection string to Azure Blob Storage.
+- **EncryptionKey** Encryption key. The REST API uses this key to encrypt the request Id Azure AD B2C sends to the custom claims provider.
 
 ## Claims provider
 Project name: AADB2C.ClaimsProvider.UI

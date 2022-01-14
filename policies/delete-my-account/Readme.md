@@ -2,7 +2,7 @@
 
 This sample policy shows how to delete a local or social account from the directory. To delete an account, user needs to sign-in. The policy checks whether the account exists in the directory (specially for social account that user can sign-in first time). If account exists, the policy presents a warning page and let the user choose to continue. On continue, the policy invokes an Azure AD technical profile that deletes the account and present the account has been deleted message. 
 
-![User flow](media/user-flow.png)
+![A diagram of screenshots walking through the user flow.](media/user-flow.png)
 
 
 ## Community Help and Support
