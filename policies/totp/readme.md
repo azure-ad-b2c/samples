@@ -18,8 +18,8 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-control-time
 
 ### Userflows
 
-- All V3 userflows (Recommended) wil have a new option for TOTP enabled under the "Type of Method" MFA section in the properties blade. [Userflow](media/userflow.png)
-- You can customize the TOTP screens by providing the branded HTML files like you do for other pages by going to the "Page Layouts" blade of the userflows. [PageLayout](media/userflows-pagelayout.png)
+- All V3 userflows (Recommended) wil have a new option for TOTP enabled under the "Type of Method" MFA section in the properties blade. ![B2C Userflow Screen](media/userflow.png)
+- You can customize the TOTP screens by providing the branded HTML files like you do for other pages by going to the "Page Layouts" blade of the userflows. ![B2C User Flows Page Layout screen](media/userflows-pagelayout.png)
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow
 
 ### Custom Policies
@@ -32,11 +32,13 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authent
 
 - You can have your end users also use any other app of your choosing. You can add the download links to this app on the QR Code page. 
 
-- When end users are adding/scanning the QR code to add the new account to the Microsoft Authenticator app, choose "Other (Google, Facebook, etc.)" option to add your B2C account. [AuthApp](media/AuthApp.jpg)
+- When end users are adding/scanning the QR code to add the new account to the Microsoft Authenticator app, choose "Other (Google, Facebook, etc.)" option to add your B2C account.
+
+![Microsoft Authenticator screen](media/AuthApp.jpg)
 
 ## Custom Policy Overview
 
-The `SignUpOrSignInTOTP-V2` policy uses the starterpack [B2C_1A_TrustFrameworkExtensions](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/master/SocialAndLocalAccounts/TrustFrameworkExtensions.xml) as a base policy. 
+The `SignUpOrSignInWithTOTP` policy uses the starterpack [B2C_1A_TrustFrameworkExtensions](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/master/SocialAndLocalAccounts/TrustFrameworkExtensions.xml) as a base policy. 
 
 ## Important notes
 
@@ -44,13 +46,22 @@ The claim  `totpIdentifier` is used to copy the differnet type of signIn options
 
 ```XML
 <TechnicalProfile Id="CreateTotpIdentifier-UserId">
-          <DisplayName>Set Totp Default Values</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="totpIdentifier" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="UserIdToLogonIdentifier" />
-          </OutputClaimsTransformations>
-        </TechnicalProfile>
+    <DisplayName>Set Totp Default Values</DisplayName>
+    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="totpIdentifier" />
+    </OutputClaims>
+    <OutputClaimsTransformations>
+        <OutputClaimsTransformation ReferenceId="UserIdToLogonIdentifier" />
+    </OutputClaimsTransformations>
+</TechnicalProfile>
 ```
+
+## Just In Time TOTP Migration
+
+If you were previously using the [TOTP multi-factor authentication](../custom-mfa-totp) policy sample to implement TOTP then your users Secrets will be stored in the 'extension_StrongAuthenticationAppSecretKey' extension attribute.
+
+To migrate these to the new method you can implement the [TOTP Migration Extension](policy/TrustFrameworkExtensionsTOTP_JIT.xml) policy as the parent policy for either [SignUpOrSigninWithTOTP](policy/SignUpOrSigninWithTOTP.xml#L9) or [PaswordResetWithTOTP.xml](policy/PaswordResetWithTOTP.xml#L9) 
+
+The below diagram depicts how the Just In Time TOTP migration works:
+![Just In Time Flow Diagram](media/TOTPJITFlow.png)
