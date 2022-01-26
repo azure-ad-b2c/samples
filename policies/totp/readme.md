@@ -7,21 +7,20 @@ End users can download the Microsoft Authenticator app or any other authenticato
 
 ## Configure TOTP with user flows
 
-- All V3 user flows (Recommended) wil have a new option for TOTP enabled under the "Type of Method" MFA section in the properties blade. ![B2C Userflow Screen](media/userflow.png)
+- All V3 user flows (Recommended) wil have a new option for TOTP enabled under the "Type of Method" MFA section in the properties blade. ![Azure AD B2C user flow screen](media/userflow.png)
 - You can customize the TOTP screens by providing the branded HTML files like you do for other pages by going to the "Page Layouts" blade of the user flows. ![B2C User Flows Page Layout screen](media/userflows-pagelayout.png)
 
-For more information, see [Enable multifactor authentication in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow).
+For more information, see [Enable multifactor authentication in Azure AD B2C](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow).
 
 ## Configure TOTP with custom Policies
 
 For custom policies see:
 
 - Details below and the sample in the [Policy](policy) folder. The `SignUpOrSignInWithTOTP` policy uses the starter-pack [B2C_1A_TrustFrameworkExtensions](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/master/SocialAndLocalAccounts/TrustFrameworkExtensions.xml) as a base policy.
-- Read the [Enable multifactor authentication in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-custom-policy) article.
+- Read the [Enable multifactor authentication in Azure AD B2C](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-custom-policy) article.
 - Lear how to use [Display controls](https://docs.microsoft.com/azure/active-directory-b2c/display-controls) and [TOTP display control](https://docs.microsoft.com/azure/active-directory-b2c/display-control-time-based-one-time-password).
 
-
-## Using the Authenticator App 
+## Using the Authenticator App
 
 - Microsoft Authenticator app can be downloaded from here:  <https://www.microsoft.com/en-us/account/authenticator>. Subsequent release of this feature will have download links on the QR scan page for end users to download the app. 
 
