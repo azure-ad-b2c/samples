@@ -2,9 +2,9 @@
 This sample demonstrates storing user profile either in B2C directory or in different Azure Table Storages based in user geography setting. 
 
 ## Scenario
-In some applications data residency is important and where consumer profiles are store must follow local laws and regulations. The solution in this B2C policy configuration is to store the user profile in the B2C directory if the user's geography matches where the B2C tenant is deployed. The policy is configured to treat `EU` as geography where it is ok to store the profile in the B2C directory. If the user's geo value is not `EU`, then the profile is stored remotely via calling a REST API. The geo value is passed to the REST API and it stores the user profiles in different Azure Table Storage around the world according to your configuration based on the geo value. So if you allow 
+In some applications data residency is important and where consumer profiles are store must follow local laws and regulations. The solution in this B2C policy configuration is to store the user profile in the B2C directory if the user's geography matches where the B2C tenant is deployed. The policy is configured to treat `EU` as geography where it is ok to store the profile in the B2C directory. If the user's geo value is not `EU`, then the profile is stored remotely via calling a REST API. The geo value is passed to the REST API and it stores the user profiles in different Azure Table Storage around the world according to your configuration based on the geo value.
 
-![Remote Profile](media/world-map.png)
+![A world map with databases located in United States, Europe, UAE North and Southest Asia while the Azure AD B2C tenant lives in Europe.](media/world-map.png)
 
 ## Geo-based Storage
 
@@ -41,7 +41,7 @@ Your `Configuration` for your Azure Function should then contain something like 
 
 During signup, the sample policy asks the user for geo value. There is no error checking here and you must enter an existing value for your configuration, like `EU`, `US`, `APAC` or `MEA`. 
 
-![Remote Profile](media/signup-geo-mea.png)
+![A Remote Profile sign-up screen with an option to capture a location which defines the database.](media/signup-geo-mea.png)
 
 During **signup**, a modified TechnicalProfile called `LocalAccountSignUpWithLogonEmail-RemoteProfile` handles the creation of the user. The `ValidationTechnicalProfiles` for this TechnicalProfile has these three steps. The first `AAD-UserWriteUsingLogonEmail` is executed if the user's geo is `EU`, which means we can store the profile data in the B2C directory. The second two, `AAD-UserWriteUsingLogonEmail-RemoteProfile` and `REST-SignUpOrEditProfile`, are for when the user needs to be stored remotely. In that case we first write limited data to the B2C tenant and then call the REST API to store the rest in Azure Table Storage. 
 
@@ -82,11 +82,11 @@ During **signup**, a modified TechnicalProfile called `LocalAccountSignUpWithLog
 
 For a non `EU` user, you only see the user's email as a value stored in the B2C directory. 
 
-![Profile stored in B2C](media/user-profile-in-b2c.png)
+![The Azure Admin Portal of a user object stored in B2C with only email available to view.](media/user-profile-in-b2c.png)
 
 For a non `EU` user, you see the rest of the user's profile in table storage.
 
-![Profile stored remote](media/user-profile-in-table.png)
+![A profile stored remote of a user data in a database located in EU.](media/user-profile-in-table.png)
 
 ### Signin 
 During **signin**, the policy reads the extension attribute `extension_geo` to determind where the user profile is stored. If it is `EU`, we have loaded profile and are done. 
@@ -124,14 +124,14 @@ If geo isn't `EU`, then we need to retrieve the user's profile from remote stora
 ```
 The sample id_token contains the `geo` value as well as the name of the `storageAccountName` so you can see where it was retrieved from.
 
-![id_token](media/id-token-geo-mea.png)
+![An id_token print out that contains claim "geo" with value of 'MEA".](media/id-token-geo-mea.png)
 
 ### Edit before deploying policies
 
 - change all ***yourtenant***.onmicrosoft.com to your B2C tenant name.
 - Edit the TrustFrameworkExtensions-RemoteProfile.xml file so that the `ServiceUrl` points to your new Azure Function. 
 
-The `TrustFrameworkExtensions-RemoteProfile.xml` file is designed to inherit from an already existing `TrustFrameworkExtensions.xml` to avoid having to update AppIDs for IdentityExperienceFramework and ProxyIdentityExperienceFramework apps. Make sure that file has configuration set for handling extension attributes. It should look like below 
+The `TrustFrameworkExtensions-RemoteProfile.xml` file is designed to inherit from an already existing `TrustFrameworkExtensions.xml` to avoid having to update AppIDs for IdentityExperienceFramework and ProxyIdentityExperienceFramework apps. Make sure that file has configuration set for handling extension attributes. It should look like below:
 
 ```xml
 <ClaimsProvider>
@@ -150,9 +150,9 @@ The `TrustFrameworkExtensions-RemoteProfile.xml` file is designed to inherit fro
 ```
 
 ## Live version
-Test a live version [here](https://login.fawltytowers2.com/cljungdemob2c.onmicrosoft.com/B2C_1A_RMTPROF_signup_signin/oauth2/v2.0/authorize?client_id=d636beb4-e0c5-4c5e-9bb0-d2fd4e1f9525&nonce=1350a302-9fa6-4e88-9b77-534fa899fd5d&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&disable_cache=true). There is no email verification during signup, so you can enter whatever email address you prefer. You must select a geo value from this list [ `EU`, `US`, `APAC`, `MEA` ].
+It is available to [test a live version](https://login.fawltytowers2.com/cljungdemob2c.onmicrosoft.com/B2C_1A_RMTPROF_signup_signin/oauth2/v2.0/authorize?client_id=d636beb4-e0c5-4c5e-9bb0-d2fd4e1f9525&nonce=1350a302-9fa6-4e88-9b77-534fa899fd5d&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&disable_cache=true). There is no email verification during signup, so you can enter whatever email address you prefer. You must select a geo value from this list [ `EU`, `US`, `APAC`, `MEA` ].
 
-If you have tested the live version and want to delete your account in the live test tenant, click [here](https://login.fawltytowers2.com/cljungdemob2c.onmicrosoft.com/B2C_1A_delete_my_account/oauth2/v2.0/authorize?client_id=d636beb4-e0c5-4c5e-9bb0-d2fd4e1f9525&nonce=defaultNounce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&disable_cache=true).
+If you have tested the live version and want to remove your account, we have provide [the ability to delete your account.](https://login.fawltytowers2.com/cljungdemob2c.onmicrosoft.com/B2C_1A_delete_my_account/oauth2/v2.0/authorize?client_id=d636beb4-e0c5-4c5e-9bb0-d2fd4e1f9525&nonce=defaultNounce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login&disable_cache=true).
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

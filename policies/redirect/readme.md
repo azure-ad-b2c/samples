@@ -2,7 +2,7 @@
 
 Demonstrate how to redirect the user to a particular web address, using OpenID connect protocol.
 
-![redirect](media/redirect.png)
+![The sign-in or sign-up screen. User clicks button "bing.com" and is redirect to Bing.](media/redirect.png)
 
 ## Note
 

@@ -7,17 +7,17 @@ Note: You should add an HTML link to the self-asserted technical porifle's conte
 It’s important that the self-asserted technical profile SelfAsserted-PasswordResetUserMessage contains at least one output claim. if you try to remove the claim from the technical profile, Azure AD B2C will NOT display the self asserted page. Follow the Demo comments inside the extension policy. 
 
 To merge the policy into your policy, you need:
-1.	Add the **userMessage** claim type and set the display name
-2.	Add the **GetPasswordResetUserMessage** claims transformation and set the value
-3.	Add the **SelfAsserted-PasswordResetUserMessage** technical profile
-4.	Add the extra orchestration step **SelfAssertedPasswordResetUserMessage** before the last orchestration step
+1.	Add the **userMessage** claim type and set the display name.
+2.	Add the **GetPasswordResetUserMessage** claims transformation and set the value.
+3.	Add the **SelfAsserted-PasswordResetUserMessage** technical profile.
+4.	Add the extra orchestration step **SelfAssertedPasswordResetUserMessage** before the last orchestration step.
 
 ## Test the policy by using Run Now
 1. From Azure Portal select **Azure AD B2C Settings**, and then select **Identity Experience Framework**.
 1. Open **B2C_1A_PasswordReset_Only**, the relying party (RP) custom policy that you uploaded, and then select **Run now**.
-1. Verify your email address
-1. Reset your password
-1. Make sure Azure AD B2C renders the password reset message and not issuing an access token
+1. Verify your email address.
+1. Reset your password.
+1. Make sure Azure AD B2C renders the password reset message and not issuing an access token.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

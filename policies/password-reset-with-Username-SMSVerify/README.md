@@ -9,21 +9,21 @@ To provide product feedback, visit the Azure Active Directory B2C [Feedback page
 For scenarios where the login Id is a username and then password reset requires a SMS Verification code.
 
 ## Screen Shots
-**Enter Username**
+1. **Enter Username**
 
-![Enter Username](media/Screen1.png)
+![A prompt for user to input their Username only.](media/Screen1.png)
 
-**Verify SMS - SendCode**
+1. **Verify SMS - SendCode**
 
-![Verify SMS - SendCode](media/Screen2_a.PNG)
+![A user is provided with two options. Send Code or Call Me.](media/Screen2_a.PNG)
 
-**Verify SMS - Enter Code**
+1. **Verify SMS - Enter Code**
 
-![Verify SMS - Enter Code](media/Screen2_b.PNG)
+![A prompt is provided to input SMS code while providing an empty box is provided.](media/Screen2_b.PNG)
 
-**New Password**
+3. **New Password**
 
-![New Password](media/Screen3.PNG)
+![Two fields are provided to input a New Password in twice.](media/Screen3.PNG)
 
 ## Notes
 > Note:  This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the necessary changes in the **Demo action required** sections.

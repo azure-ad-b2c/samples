@@ -2,7 +2,7 @@
 
 Demonstrate how to redirect the user to a particular web address, using OpenID connect protocol.
 
-![redirect](media/redirect.png)
+![](media/redirect.png)
 
 ## Note
 
