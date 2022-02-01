@@ -6,7 +6,7 @@ If you find a bug in the sample, please raise the issue on [GitHub Issues](https
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
-A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies can be revoked. This prevents a user on another device to be able to obtain a new set of tokens using the Azure AD B2C [web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
+A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies can be revoked. This prevents a user on another device to be able to obtain a new set of tokens using the [Azure AD B2C web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
 
 Common scenarios include when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to re-authenticate. The user on the device which made the operation, will also lose their web session SSO cookies. To allow the active device to maintain a session, you can bootstrap a new authentication journey using an [id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint).
 
@@ -29,13 +29,13 @@ To revoke the users Azure AD B2C web sessions, a custom policy which compares th
 The users initial login time can be stored inside the Azure AD B2C web session cookie, and will be evaluated in all user journeys to ensure the session is still valid in respect to the `refreshTokensValidFromDateTime` attribute.
 
 ### Prerequisites
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
+- You can automate the pre requisites by visiting the [setup tool](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
 
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
-- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+- To use the sample policies in this repo, follow the instructions here to [setup your AAD B2C environment for Custom Policies](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
 
-- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+- For any custom policy sample which makes use of Extension attributes, follow the guidance on [storing the extension properties](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [adding the application objectID](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## How it works
 
@@ -127,9 +127,9 @@ You must include this logic to protect all user journeys that you offer. See how
 
 ## Testing
 To test the policy:
-1. Use the **SignUpOrSignIn** policy to sign in or sign up
-1. Wait 10 seconds, then using powershell revoke the users refresh token: `Revoke-AzureADUserAllRefreshToken -ObjectId <GUID>`
-1. Launch the SignUpOrSignIn policy or the ProfileEdit policy (remove the prompt query parameter)
+1. Use the **SignUpOrSignIn** policy to sign in or sign up.
+1. Wait 10 seconds, then using powershell revoke the users refresh token: `Revoke-AzureADUserAllRefreshToken -ObjectId <GUID>`.
+1. Launch the SignUpOrSignIn policy or the ProfileEdit policy (remove the prompt query parameter).
 1. You should be presented with an error from Azure AD B2C: `AAD_Custom_Error_SessionRevoked: Session has been revoked due to refresh token revocation.`
  
 ## Notes

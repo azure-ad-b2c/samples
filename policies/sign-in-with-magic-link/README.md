@@ -4,11 +4,11 @@ This sample demonstrates how to sign-in to a web application by sending a sign-i
 ## User flow
 To sign-in, from Azure AD B2C sign-up or sign-in page, user select to sign-in with **Magic link**. Then user types an **email address** and click **Continue**. Azure AD B2C sends a sign-in link (with a id_token_hint) and present a message *A link to sign-in has been sent to your inbox.*. 
 
-![User flow](media/flow.png)
+![A User flow diagram of this sample.](media/flow.png)
 
 At this point user needs to open the email and click on the link, that takes to user to Azure AD B2C policy. Azure AD B2C validate the input id_token_hint, issues an access token, and redirect the user back to the application. 
 
-![User flow](media/flow2.png)
+![An email to app flow diagram.](media/flow2.png)
 
 ## Sending Application Data
 The key of sending data to Azure AD B2C custom policy is to package the data into a JWT token as claims (id_token_hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
@@ -57,9 +57,9 @@ To inspect the generated token, copy and paste it into a tool like [JWT.ms](httt
 
 ### Hosting the application in Azure App Service
 If you publish the application to Azure App Service, you'll need to configure a valid certificate with a private key in Azure App Service.
-1. First, export your certificate as a PFX file using the User Certificates management tool (or create a new one)
-2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service
-3. Follow [these instructions](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) to ensure App Service loads the certificate when the app runs
+1. Export your certificate as a PFX file using the User Certificates management tool (or create a new one).
+2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service.
+3. [Ensure App Service loads the certificate](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) when the app runs.
 
 ## Using this in your Production Application
 The authentication libraries create a `state` when the authentication flow begins from your application. This sample creates a raw link to the Azure AD B2C Policy, also referred to as a "Run Now" link. This type of link is not suitable for your production application instance and should only be used to test the sample.
@@ -68,8 +68,9 @@ For a Production scenario, the link containing the the `id_token_hint` should po
 
 The authentication library will then build the final authentication link, with the `id_token_hint` appended as part of a query parameter. This will now be a valid authentication request and your user will be redirected to the Azure AD B2C policy from your Application. Your application will be able to handle the response from Azure AD B2C properly.
 
-For Single Page Applications, see the documenation [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-spa-app-options#pass-id-token-hint).
-For .Net Applications, see the documenation [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-web-application-options#pass-id-token-hint).
+- For [Single Page Applications library guidance](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-spa-app-options#pass-id-token-hint).
+
+- For [.Net Applications library guidance](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-web-application-options#pass-id-token-hint).
 
 ## Notes
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 

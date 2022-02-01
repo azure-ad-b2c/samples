@@ -2,7 +2,7 @@
 
 This policy demonstrates how to validate the email address domain name against a list of allowed domains.
 
-![User flow](media/user-flow.png)
+![](media/user-flow.png)
 
 ## Community Help and Support
 
