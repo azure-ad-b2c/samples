@@ -26,18 +26,19 @@ The policy makes a REST API call to an `Azure App Service`, passing a JSON paylo
 
 ## Quick Start
 
-  1. Review the README for the Azure App Service [here](https://github.com/azure-ad-b2c/samples/blob/master/policies/password-history/source-code/dotnet5/README.md). In this step, you'll create:
-
-        a. Azure App Service
-        
-        b. Azure Key Vault
-
-        c. Managed Identity (either System Assigned or User Assigned)
+  1. Review the README for the Azure App Service [here](https://github.com/azure-ad-b2c/samples/blob/master/policies/password-history/source-code/dotnet5/README.md). In this step, you'll create:  
+        a. Azure App Service  
+        b. Azure Key Vault  
+        c. Managed Identity (either System Assigned or User Assigned)  
 
   2. Modify the policy by replacing all instances of yourtenant.onmicrosoft.com with your tenant name.
-
+  
   3. Modify the policy by replacing the `<!--Sample action here: -->` section in `REST-PasswordHistoryCheck` with the URL of your Azure App Service.
+  
+  4. Go to the Azure AD B2C blade in the Azure Portal.  
+      a. Go to the `Identity Experience Framework menu` -> `Policy Keys menu`
+      b. Create a new `Policy key`  
+      c. Give it the name `AccountTransformSecret`, choose `secret`, and `generate` options  
 
-  4. Upload the policy files into your tenant.
-
-  5. Enjoy!!
+  5. Upload the policy files into your tenant.
+  6. Enjoy!!

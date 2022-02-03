@@ -91,7 +91,7 @@
     </ContentDefinitions>
 
     <Localization Enabled="true">
-      <SupportedLanguages DefaultLanguage="en" MergeBehavior="Append">
+      <SupportedLanguages DefaultLanguage="en" MergeBehavior="ReplaceAll">
         <SupportedLanguage>en</SupportedLanguage>
         <SupportedLanguage>es</SupportedLanguage>
       </SupportedLanguages>

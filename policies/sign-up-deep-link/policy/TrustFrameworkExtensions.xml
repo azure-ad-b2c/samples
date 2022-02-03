@@ -25,7 +25,7 @@
           <InputClaim ClaimTypeReferenceId="option" TransformationClaimType="inputClaim" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="contains" DataType="string" Value="singup" />
+          <InputParameter Id="contains" DataType="string" Value="signup" />
           <InputParameter Id="ignoreCase" DataType="string" Value="true" />
         </InputParameters>
         <OutputClaims>
