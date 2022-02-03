@@ -10,10 +10,8 @@ End users can download the Microsoft Authenticator app or any other authenticato
 
 ## Usage
 
-See the latest documentation for this here: 
-
 ### Display Contorls
-https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-control-time-based-one-time-password
+- [Display Control time based one time password](https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-control-time-based-one-time-password). 
 
 
 ### Userflows
@@ -23,12 +21,12 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-control-time
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow
 
 ### Custom Policies
-https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-custom-policy
+- [Enable multifactor authentication in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-custom-policy)
 
 -  For custom policies see details below and the sample in the 'Policy' folder. 
 
 ### Using the Authenticator App 
-- Microsoft Authenticator app can be downloaded from here:  https://www.microsoft.com/en-us/account/authenticator. Susbequent release of this feautre will have download links on the QR scan page for end users to download the app. 
+- [Download Microsoft Authenticator](https://www.microsoft.com/en-us/account/authenticator). Susbequent release of this feautre will have download links on the QR scan page for end users to download the app. 
 
 - You can have your end users also use any other app of your choosing. You can add the download links to this app on the QR Code page. 
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This scenario demonstrates how to integrate TypingDNA as a [PSD2 SCA compliant](https://www.typingdna.com/use-cases/sca-strong-customer-authentication) authentication factor. Find more about TypingDNA [here](https://www.typingdna.com/).
+This scenario demonstrates how to [integrate TypingDNA](https://www.typingdna.com/) as a [PSD2 SCA compliant](https://www.typingdna.com/use-cases/sca-strong-customer-authentication) authentication factor.
 
 Azure AD B2C utilizes TypingDNA's technologies to capture the users typing characteristics and have them recorded and analysed for familiarity on each authentication. This can add a layer of protection pertaining to the risky-ness of an authentication. The risk level can be evaluated and Azure AD B2C can invoke other mechanisms to provide further confidence the user is who they claim to be. This can be by invoking Azure MFA, forcing email verification, or any other custom logic for your scenario.
 
@@ -10,13 +10,13 @@ Azure AD B2C utilizes TypingDNA's technologies to capture the users typing chara
 
 
 ## Prerequisites
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
+- You can automate the pre requisites by visiting the [setup tool](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
 
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
-- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+- To use the sample policies in this repo, follow the instructions here to [setup your AAD B2C environment for Custom Policies](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
 
-- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+- For any custom policy sample which makes use of Extension attributes, follow the guidance on [storing the extension properties](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [adding the application objectID](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## How it works
 
@@ -94,21 +94,22 @@ These thresholds should be adjusted on your use case.
 ```
 
 ## Quick setup instructions
-- Setup the Azure AD B2C starter pack as described [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications)
-- Sign up for TypingDNA [here](https://www.typingdna.com/)
+- Setup the [Azure AD B2C starter pack](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications).
+- [Sign up for TypingDNA](https://www.typingdna.com/).
 - Host the TypingDNA-API-Interface at your hosting provider of choice
-- Replace all instances of `apiKey` and `apiSecret` in TypingDNA-API-Interface solution with the credentials from your TypingDNA dashboard
-- Host the HTML files at your provider of choice following the CORS requirements [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#3-configure-cors)
+- Replace all instances of `apiKey` and `apiSecret` in TypingDNA-API-Interface solution with the credentials from your TypingDNA dashboard.
+- Host the HTML files at your provider of choice following the [CORS requirements](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-ui-customization#3-configure-cors).
 - Replace the LoadURI elements for the `api.selfasserted.tdnasignup` and `api.selfasserted.tdnasignin` content definitions in the `TrustFrameworkExtensions.xml` file to the URI of your hosted HTML files respectively.
 - Create a B2C Policy key under Identity Experience Framework in the Azure AD Blade at the [Azure Portal](https://portal.azure.com). Use the `Generate` option and name this key `tdnaHashedId`.
-- Replace the TenantId's in the policy files 
+- Replace the TenantId's in the policy files. 
 - Replace the ServiceURLs in all TypingDNA REST API Technical profiles (REST-TDNA-VerifyUser, REST-TDNA-SaveUser, REST-TDNA-CheckUser) with the endpoint for your TypingDNA-API-Interface API.
-- Upload policy files to your tenant
+- Upload policy files to your tenant.
 
 ## Live version
 - MFA has been disabled in this test version, but you can see the result on whether MFA would have been prompted by the claim `promptMFA` after authentication.
 
-- Sign up [here](https://b2cprod.b2clogin.com/b2cprod.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SU_TDNA&client_id=51d907f8-db14-4460-a1fd-27eaeb2a74da&nonce=defaultNonce&redirect_uri=https://jwt.ms/&scope=openid&response_type=id_token&prompt=login) and Sign in [here](https://b2cprod.b2clogin.com/b2cprod.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SI_TDNA&client_id=51d907f8-db14-4460-a1fd-27eaeb2a74da&nonce=defaultNonce&redirect_uri=https://jwt.ms/&scope=openid&response_type=id_token&prompt=login)
+- [Live demo Sign up of sample](https://b2cprod.b2clogin.com/b2cprod.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SU_TDNA&client_id=51d907f8-db14-4460-a1fd-27eaeb2a74da&nonce=defaultNonce&redirect_uri=https://jwt.ms/&scope=openid&response_type=id_token&prompt=login).
+-  [Live demo Sign in of sample](https://b2cprod.b2clogin.com/b2cprod.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SI_TDNA&client_id=51d907f8-db14-4460-a1fd-27eaeb2a74da&nonce=defaultNonce&redirect_uri=https://jwt.ms/&scope=openid&response_type=id_token&prompt=login).
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

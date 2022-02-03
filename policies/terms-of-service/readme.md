@@ -1,19 +1,19 @@
 # Azure AD B2C: Terms of Service with SignUp or SignIn
 Terms of service (TOS) cover the use of your company for consumer products, websites, and services listed as "Services". Providing this functionality allows users to "Accept" these terms using a click experience within the user login experience. 
 
-<a href="https://youtu.be/Hog7ADL4L-s"><img src="https://media.giphy.com/media/TGudF8XbUsV81s9mR0/giphy.gif" alt="TOSyouTube"
+<a href="https://youtu.be/Hog7ADL4L-s"><img src="https://media.giphy.com/media/TGudF8XbUsV81s9mR0/giphy.gif" alt="A screenshot walkthrough video of this sample policy."
 	title="SUSI with Terms of Service" /></a>
 ## Deprecated, use: [dynamic TOU sample](https://github.com/azure-ad-b2c/samples/blob/master/policies/sign-in-sign-up-versioned-tou).
 
 ## Solution flow
 The sample policy includes following user journey:
-* Sign-in with a local account with password
-    * Reads the Azure AD B2C directory for the user's previously accepted TOS
-    * Prompts user for a new TOS agreement if they are not current, then updates the new TOS to Azure AD B2C directory 
-    * Allows customizable errors if TOS not accepted
-* Sign-up with a local account
-    * Captures Terms of Service during Sign-Up
-    * Allows customizable errors if TOS not accepted
+* Sign-in with a local account with password.
+    * Reads the Azure AD B2C directory for the user's previously accepted TOS.
+    * Prompts user for a new TOS agreement if they are not current, then updates the new TOS to Azure AD B2C directory .
+    * Allows customizable errors if TOS not accepted.
+* Sign-up with a local account.
+    * Captures Terms of Service during Sign-Up.
+    * Allows customizable errors if TOS not accepted.
 
 ## Adding this functionality to your policy
 In your relying party policy:
@@ -33,7 +33,7 @@ In your relying party policy:
     1. **AAD-Common** (enables extensionAttributes)
 
 1. Add new TechnicalProfiles:
-    1. **AAD-ReadTOS** - Reads the directory and puts the user's current TOS in the claim bag
+    1. **AAD-ReadTOS** - Reads the directory and puts the user's current TOS in the claim bag.
     1. **SelfAsserted-RefreshTOS** - Prompts a screen to a user if TOS has changed during sign-in.
     1. **VerfiyTOSConsentedTo** - Validates the TOS button is selected and provides an error mechanism if not selected
     1. **AAD-UserWriteProfileUsingObjectIdUpdateTOU** - Writes the current TOS version to the directory in Azure AD B2C.
@@ -41,28 +41,28 @@ In your relying party policy:
 1. Add **UserJourney** TermsOfServiceSignUpOrSignIn
 1. Update "v16" to the *string* value of your TOS name. This can be any value. There are three locations within the XML file.
 
-<img src="media/TOSFlow.png" alt="TOSFlow"
+<img src="media/TOSFlow.png" alt="A diagram flow chart of this sample policy."
 	title="Terms of Service flow diagram" />
 
 
 ## Tests
 You should run at least following acceptance tests:
-- Create new local account and accept Terms of Service agreement
-    -  Verify the correct TOS version is written in Azure AD B2C via graph on the user object on the *extension_AgreedToTermsOfService* attribute (this can be done through [Azure AD Graph Explorer](https://graphexplorer.azurewebsites.net/))
-        ```HTP 
+- Create new local account and accept Terms of Service agreement.
+    -  Verify the correct TOS version is written in Azure AD B2C via graph on the user object on the *extension_AgreedToTermsOfService* attribute (this can be done through [Azure AD Graph Explorer](https://graphexplorer.azurewebsites.net/)).
+        ```HTTP 
         GET https://graph.windows.net/contosob2c.com/users/<user-object-id>?api-version=1.6
         ```
-- Create new local account and **do not** accept Terms of Service agreement (attempting to bypass the TOS box)
-    -  Verify the correct ERROR message occurs on the screen
-    -  Verify the TOS version is **not** writen on the user object via Graph for attribute *extension_AgreedToTermsOfService* (when calling graph,if the attribute is empty it will not return in the call)
--  Update your XML custom policy with a new VERSION# for both *AgreedToTermsOfService* and *policyTOSversion* default values THEN sign-in with a user that has the older TOS policy version on the user object
-    -   After successful authentication, a new screen will appear to prompt user to accept the *new* TOS agreement
-        -   Confirm TOS version is written and updated to the *extension_AgreedToTermsOfService* as defined in your policy
+- Create new local account and **do not** accept Terms of Service agreement (attempting to bypass the TOS box).
+    -  Verify the correct ERROR message occurs on the screen.
+    -  Verify the TOS version is **not** writen on the user object via Graph for attribute *extension_AgreedToTermsOfService* (when calling graph,if the attribute is empty it will not return in the call).
+-  Update your XML custom policy with a new VERSION# for both *AgreedToTermsOfService* and *policyTOSversion* default values THEN sign-in with a user that has the older TOS policy version on the user object.
+    -   After successful authentication, a new screen will appear to prompt user to accept the *new* TOS agreement.
+        -   Confirm TOS version is written and updated to the *extension_AgreedToTermsOfService* as defined in your policy.
 
 
 
-- **Sign-in with email** - try to sign-in with the account you create, using email verification
-- **Sign-in with email** - try to sign-in with an email address that dosn't exists in the directory. You should see an error message: _An account could not be found for the provided user ID._
+- **Sign-in with email** - try to sign-in with the account you create, using email verification.
+- **Sign-in with email** - try to sign-in with an email address that dosn't exists in the directory. You should see an error message: `An account could not be found for the provided user ID.`
 
 > Note:  This sample policy is based on [LocalAccounts starter pack](../../../SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. This can be modified to work with other starter packs.
 
