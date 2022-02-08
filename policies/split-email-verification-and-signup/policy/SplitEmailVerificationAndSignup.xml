@@ -30,21 +30,22 @@
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
-
     <ContentDefinitions>
-      <ContentDefinition Id="api.localaccount.emailVerification"</Item>
+      <ContentDefinition Id="api.localaccount.emailVerification">
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.8</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Collect information from user page</Item>
+        </Metadata>
         <LocalizedResourcesReferences MergeBehavior="Prepend">
           <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccount.emailVerification.en" />
         </LocalizedResourcesReferences>
       </ContentDefinition>
-    </ContentDefinitions>	
-	
+    </ContentDefinitions>
     <Localization Enabled="true">
       <SupportedLanguages DefaultLanguage="en" MergeBehavior="ReplaceAll">
         <SupportedLanguage>en</SupportedLanguage>
       </SupportedLanguages>
-
       <LocalizedResources Id="api.localaccount.emailVerification.en">
         <LocalizedStrings>
           <LocalizedString ElementType="UxElement" StringId="button_continue">Continue</LocalizedString>
@@ -52,16 +53,14 @@
       </LocalizedResources>
     </Localization>
   </BuildingBlocks>
-
   <ClaimsProviders>
     <ClaimsProvider>
       <DisplayName>Email Verification</DisplayName>
       <TechnicalProfiles>
-	  <!--Sample: Email verification only-->
+        <!--Sample: Email verification only-->
         <TechnicalProfile Id="EmailVerification">
           <DisplayName>Initiate Email Address Verification For Local Account</DisplayName>
-          <Protocol Name="Proprietary"
-                    Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.localaccount.emailVerification</Item>
             <Item Key="language.button_continue">Continue</Item>
@@ -79,15 +78,13 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-   
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
         <!--Sample: Sign-up self-asserted technical profile without Email verification-->
         <TechnicalProfile Id="LocalAccountSignUpWithReadOnlyEmail">
           <DisplayName>Email signup</DisplayName>
-          <Protocol Name="Proprietary"
-                    Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
             <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
@@ -111,7 +108,6 @@
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
-
             <!-- Optional claims, to be collected from the user -->
             <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="givenName" />
@@ -126,7 +122,6 @@
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
-
   <UserJourneys>
     <UserJourney Id="CustomSignUp">
       <OrchestrationSteps>
@@ -150,7 +145,6 @@
       </OrchestrationSteps>
     </UserJourney>
   </UserJourneys>
-  
   <RelyingParty>
     <DefaultUserJourney ReferenceId="CustomSignUp" />
     <TechnicalProfile Id="PolicyProfile">
