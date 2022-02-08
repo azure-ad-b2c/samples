@@ -32,6 +32,27 @@
     </ClaimsTransformations>
   </BuildingBlocks>
 
+    <ContentDefinitions>
+      <ContentDefinition Id="api.localaccount.emailVerification"</Item>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.8</DataUri>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccount.emailVerification.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>	
+	
+    <Localization Enabled="true">
+      <SupportedLanguages DefaultLanguage="en" MergeBehavior="ReplaceAll">
+        <SupportedLanguage>en</SupportedLanguage>
+      </SupportedLanguages>
+
+      <LocalizedResources Id="api.localaccount.emailVerification.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Continue</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+    </Localization>
+
   <ClaimsProviders>
     <ClaimsProvider>
       <DisplayName>Email Verification</DisplayName>
@@ -42,7 +63,7 @@
           <Protocol Name="Proprietary"
                     Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccount.emailVerification</Item>
             <Item Key="language.button_continue">Continue</Item>
           </Metadata>
           <CryptographicKeys>
