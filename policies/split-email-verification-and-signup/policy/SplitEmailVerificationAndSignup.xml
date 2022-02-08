@@ -32,6 +32,7 @@
     </ClaimsTransformations>
     <ContentDefinitions>
       <ContentDefinition Id="api.localaccount.emailVerification">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.8</DataUri>
         <Metadata>
