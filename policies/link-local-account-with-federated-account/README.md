@@ -25,28 +25,36 @@ The user would only need to be sent a link to the B2C logon page, where they wil
 1.	Create the account using PowerShell (Graph API) with the required attributes and the extension attribute, requiresMigrationBool=true
 
 ```powershell
-$body = @"
+$ClientID      = "2d6e17d4-aaaa-aaaa-aaaa-8626cead8bdb"                # Should be a ~35 character string insert your info here
+$ClientSecret  = ""     # Should be a ~35 character string insert your info here
+$loginURL      = "https://login.microsoftonline.com"
+$tenant = "contoso.onmicrosoft.com"      # For example, contoso.onmicrosoft.com
+$resource = "https://graph.microsoft.com"
+
+$user = @"
 {
-  "accountEnabled": true,
-  "creationType": "LocalAccount",
   "displayName": "Link Me",
-  "extension_74467a80b26148fcbaa42f7b7f335d4c_requiresMigrationBool": true,
   "passwordProfile": {
     "password": "Password!&*^806DSAdf060%£ASDFd0ad",
-    "forceChangePasswordNextLogin": false
+    "forceChangePasswordNextSignIn": false
   },
-  "signInNames": [
+  "passwordPolicies": "DisablePasswordExpiration",
+  "identities": [
     {
-      "type": "oidToLink",
-      "value": "90847c2a-e29d-4d2f-9f54-c5b4d3f26471"
+      "signInType": "oidToLink",
+      "issuer": "contoso.onmicrosoft.com",
+      "issuerAssignedId": "90847c2a-e29d-4d2f-9f54-c5b4d3f26471"
     }
   ]
 }
 "@
 
+$body       = @{grant_type="client_credentials";client_id=$ClientID;client_secret=$ClientSecret;resource=$resource}
+$oauth      = Invoke-RestMethod -Method Post -Uri $loginURL/$tenant/oauth2/token -Body $body
+
 $authHeader = @{"Authorization"= $oauth.access_token;"Content-Type"="application/json";"ContentLength"=$body.length }
-$url = "https://graph.windows.net/b2cprod.onmicrosoft.com/users?api-version=1.6"
-Invoke-WebRequest -Headers $authHeader -Uri $url -Method Post -Body $body
+$url = "$resource/beta/users"
+Invoke-WebRequest -Headers $authHeader -Uri $url -Method Post -Body $user
 ```
 
 The `signInNames.oidToLink` is the identifier you will use from the federated IdP to match to the pre-created B2C user account. In this case the `objectId` (oid) is written to the `signInNames` collection.
