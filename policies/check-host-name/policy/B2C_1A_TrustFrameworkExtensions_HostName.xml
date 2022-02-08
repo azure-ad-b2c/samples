@@ -58,7 +58,7 @@ xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVer
           <InputClaim ClaimTypeReferenceId="hostName" TransformationClaimType="inputClaim" />
         </InputClaims>
         <InputParameters>
-          <InputParameter Id="contains" DataType="string" Value="foo.b2clogin.com" />
+          <InputParameter Id="contains" DataType="string" Value="yourtenant.b2clogin.com" />
           <InputParameter Id="ignoreCase" DataType="string" Value="true" />
         </InputParameters>
         <OutputClaims>
