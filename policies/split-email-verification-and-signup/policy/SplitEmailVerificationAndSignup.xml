@@ -30,7 +30,6 @@
         </OutputClaims>
       </ClaimsTransformation>
     </ClaimsTransformations>
-  </BuildingBlocks>
 
     <ContentDefinitions>
       <ContentDefinition Id="api.localaccount.emailVerification"</Item>
@@ -52,6 +51,7 @@
         </LocalizedStrings>
       </LocalizedResources>
     </Localization>
+  </BuildingBlocks>
 
   <ClaimsProviders>
     <ClaimsProvider>
