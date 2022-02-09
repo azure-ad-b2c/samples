@@ -4,8 +4,8 @@
 This sample solution demonstrates how to sign in through a B2C policy to a federated identity provider, Azure AD in this case, and include the original identity provider token, an Azure AD bearer token, as a claim in the B2C token.  It also shows how to call the Graph API of the users’ home Azure AD tenant using the issued Azure AD Bearer token.  For reference, similar capability can be achieved to receive the original identity provider’s id token [using the built-in B2C user flows](https://docs.microsoft.com/en-us/azure/active-directory-b2c/idp-pass-through-user-flow).
 
 ## Prerequisites
-- To configure this solution, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  [Review the getting started with custom B2C applications](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom?tabs=applications).
 
+- To configure this solution, you will need to use Azure AD B2C Custom policies that use the Azure AD B2C Identity Experience Framework.  [Review the getting started with custom B2C applications](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-get-started-custom?tabs=applications).
 
 - In the getting started documentation, it references the B2C starter pack of advanced policies – a set of edited versions of the starter pack base, extension and signUpsignIn policy files, are included in this sample, that includes the updates that enable the issuance of the Azure AD identity provider access token.  
 

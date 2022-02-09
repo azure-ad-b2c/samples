@@ -8,7 +8,7 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 - See our [Azure AD B2C Wiki articles](https://azure-ad-b2c.github.io/azureadb2ccommunity.io/docs/custom-policy-concepts/) to help walkthrough the custom policy components.
 
-- See our [Custom Policy Schema reference](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
+- See our [Custom Policy Schema reference](https://docs.microsoft.com/en-us/azure/active-directory-b2c/trustframeworkpolicy).
 
 ## Prerequisites
 - You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
