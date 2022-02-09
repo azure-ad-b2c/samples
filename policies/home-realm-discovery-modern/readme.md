@@ -15,13 +15,13 @@ Users who enter an email with the suffix `outlook.com`, they will be redirected 
 Where a user enters an unknown email suffix, they will be redirected directly to the default local account sign in page.
 
 ## Prerequisites
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
+- You can automate the pre requisites by visiting the [setup tool](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant Some policies can be deployed directly through this app via the **Experimental** menu.
 
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
-- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+- To use the sample policies in this repo, follow the instructions here to [setup your AAD B2C environment for Custom Policies](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
 
-- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+- For any custom policy sample which makes use of Extension attributes, follow the guidance on [storing the extension properties](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [adding the application objectID](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## How it works
 The first step of the user journey presents a page to collect the users email address. The page uses input validation such that a valid email is provided.
@@ -42,10 +42,10 @@ Steps 5 and 6 will initialize all the known identity providers (for known domain
     <Item Key="ClaimValueOnWhichToEnable">outlook.com</Item>
 ```
 This means, after the `ParseDomainHint` technical profile has run, we will fall into these cases:
-1. `isKnownCustomer = True`, then this step executes
-2. Based off of the `identityProviders` claim a single IdP will be enabled
-3. User is redirected to the single available IdP
-4. `isKnownCustomer = False`, then the entire step is skipped
+1. `isKnownCustomer = True`, then this step executes.
+2. Based off of the `identityProviders` claim a single IdP will be enabled.
+3. User is redirected to the single available IdP.
+4. `isKnownCustomer = False`, then the entire step is skipped.
 
 ## Unit Tests
 1. Setup at least 1 external identity provider, and initialize it in step 5 and 6.

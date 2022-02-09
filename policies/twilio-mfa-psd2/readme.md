@@ -7,46 +7,46 @@ This sample uses the Twilio [Verify API](https://www.twilio.com/verify) to achie
 ## Live Sample
 You can see a live version of PSD2 SCA in action by following below:
 
-1. Visit this [link](https://psd2demo.azurewebsites.net/)
+1. Visit this [Sample Live Version Website](https://psd2demo.azurewebsites.net/).
 2. Click **Sign up / Sign in**
-3. Complete your sign up
-4. Click **Send Money**
-5. Enter a Payee Name, Account Number, and Amount, click **Continue**
-6. You are sent to the B2C logon page where your authentication is *stepped up* with **Twilio Verify API**
+3. Complete your sign up.
+4. Click **Send Money**.
+5. Enter a Payee Name, Account Number, and Amount, click **Continue**.
+6. You are sent to the B2C logon page where your authentication is *stepped up* with **Twilio Verify API**.
 7. Once completed, and arrived back to the application, click **Confirm** to complete the transaction.
 
 ## Pre requisites
-1. Complete the [Azure AD B2C Get Started with Custom Policies](https://aka.ms/ief)
-1. Be familiar with the `id_token_hint` usage, which is demonstrated in this [sample](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite)
-1. Be familiar with the `display controls` usage, which is demonstrated in this [sample](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email) and documented [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-controls)
-1. Obtain a [trial](https://www.twilio.com/try-twilio) account at Twilio
-1. Purchase a Phone number at Twilio using this [article](https://support.twilio.com/hc/en-us/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console)
-1. Navigate to [Verify API](https://www.twilio.com/console/verify/services) at the Twilio console, create a service and enable the PSD2 option
+1. Complete the [Azure AD B2C Get Started with Custom Policies](https://aka.ms/ief).
+1. Be familiar with the `id_token_hint` usage, which is demonstrated in this [id_token_hint sample](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite).
+2. Be familiar with the [display controls](https://docs.microsoft.com/en-us/azure/active-directory-b2c/display-controls) usage, which is demonstrated in this [display controls sample](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email).
+3. Obtain a [Twilio trial account](https://www.twilio.com/try-twilio).
+4. [ Purchase a Phone number at Twilio](https://support.twilio.com/hc/en-us/articles/223135247-How-to-Search-for-and-Buy-a-Twilio-Phone-Number-from-Console).
+5. Navigate to [Verify API](https://www.twilio.com/console/verify/services) at the Twilio console, create a service and enable the PSD2 option.
 
 For the step up authentication policy to work, the Azure AD B2C user must already exist in the directory with a Phone Number registered. For the purposes of this demo, this can be achieved by signing up a user through a [User Flow](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows) with [MFA enabled](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-multi-factor-authentication).
 
 You can pre-enrol users into the directory with **known verified** Phone Numbers by using the [Microsoft Graph API](https://docs.microsoft.com/en-us/azure/active-directory-b2c/manage-user-accounts-graph-api).
 
 ## Prerequisites
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
+- You can automate the pre requisites by visiting the [setup tool](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant. Some policies can be deployed directly through this app via the **Experimental** menu.
 
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
-- To use the sample policies in this repo, follow the instructions here to setup your AAD B2C environment for Custom Policies [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+- To use the sample policies in this repo, follow the instructions here to [setup your AAD B2C environment for Custom Policies](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
 
-- For any custom policy sample which makes use of Extension attributes, follow the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
+- For any custom policy sample which makes use of Extension attributes, follow the guidance on [storing the extension properties](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [adding the application objectID](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The `AAD-Common` Technical profile will always need to be modified to use your `ApplicationId` and `ObjectId`.
 
 ## How it works (Step Up Policy)
-1. You only require the Step Up policy file to initialize a Step Up authentication
-1. The id token hint must be sent with the authentication request containing the `amount` and `payee`. This is parsed in the `IdTokenHint_ExtractClaims` technical profile
+1. You only require the Step Up policy file to initialize a Step Up authentication.
+1. The id token hint must be sent with the authentication request containing the `amount` and `payee`. This is parsed in the `IdTokenHint_ExtractClaims` technical profile.
 1. The policy relies on a existing logon session to access the current authenticated users phone number. This claim name must be persistent across the policy files, and the session management technical profiles.
-1. The Single Sign On state will skip all step until **Orchestration Step 5**, where the Twilio Verify API is invoked
-1. At this step, the `Custom-SMS-Verify` self asserted technical profile is executed
-1. The `inputClaimsTransformation` takes the Phone Number from the session claim and converts it to a read only state
-1. The Display Control `phoneVerificationControl-ReadOnly` calls the Twilio Verify API to initiate and verify the OTP requests
-1. The REST API technical profile `TwilioRestAPI-Verify-Step1` models the Twilio Verify API REST API request to generate and send a PSD2 compliant SMS, (see [Send a Verification Token](https://www.twilio.com/docs/verify/api?code-sample=code-step-2-send-a-verification-token&code-language=curl&code-sdk-version=json))
-1. The REST API technical profile `TwilioRestAPI-Verify-Step2` models the Twilio Verify API REST API request to verify the entered OTP, (see [Check the Verification Token](https://www.twilio.com/docs/verify/api?code-sample=code-step-2-send-a-verification-token&code-language=curl&code-sdk-version=json))
-1. Since the Twilio API returns a HTTP 200 with a status of the OTP verification in the JSON Body, Azure AD B2C needs to check the JSON payload for the `valid` OTP status. To do this, the REST API Technical Profile invokes an `outputClaimsTransform` to assert that the value of `status` is "approved"
+1. The Single Sign On state will skip all step until **Orchestration Step 5**, where the Twilio Verify API is invoked.
+1. At this step, the `Custom-SMS-Verify` self asserted technical profile is executed.
+1. The `inputClaimsTransformation` takes the Phone Number from the session claim and converts it to a read only state.
+1. The Display Control `phoneVerificationControl-ReadOnly` calls the Twilio Verify API to initiate and verify the OTP requests.
+1. The REST API technical profile `TwilioRestAPI-Verify-Step1` models the Twilio Verify API REST API request to generate and send a PSD2 compliant SMS, (see [Send a Verification Token](https://www.twilio.com/docs/verify/api?code-sample=code-step-2-send-a-verification-token&code-language=curl&code-sdk-version=json)).
+1. The REST API technical profile `TwilioRestAPI-Verify-Step2` models the Twilio Verify API REST API request to verify the entered OTP, (see [Check the Verification Token](https://www.twilio.com/docs/verify/api?code-sample=code-step-2-send-a-verification-token&code-language=curl&code-sdk-version=json)).
+1. Since the Twilio API returns a HTTP 200 with a status of the OTP verification in the JSON Body, Azure AD B2C needs to check the JSON payload for the `valid` OTP status. To do this, the REST API Technical Profile invokes an `outputClaimsTransform` to assert that the value of `status` is "approved".
 ```xml
 <!-- Capture the "status" value from the JSON response. Set a comparison 
 claim with a static value (dummyStatus) for the known good value-->
@@ -108,17 +108,17 @@ The claim name (`phoneNumberString`) needs to be consistent across all policies.
     <add key="ida:SigningCertThumbprint" value="4F39D6014818082CBB763E5BA5F230E545212E89" />
     <add key="ida:SigningCertAlgorithm" value="RS256" /> <!-- leave as-is-->
 ```
-3. Upload the demo application to your hosting provider of choice - Guidance for Azure App Services is [here](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite#hosting-the-application-in-azure-app-service) to also upload your certificate
-1. Update your Azure AD B2C application registration by adding a Reply URL equivalent to the URL at which the application is hosted at
-1. Open the policy files and replace all instances of `yourtenant` with your tenant name. For a tenant such as "contoso.onmicrosoft.com", replace all instances of `yourtenant` with `contoso`
-1. Find the Twilio REST API technical profile `Custom-SMS-Enrol` and update the `ServiceURL` with your **Twilio AccountSID** and the `From` number to your purchased phone number
-1. Find the Twilio REST API technical profiles, `TwilioRestAPI-Verify-Step1` and `TwilioRestAPI-Verify-Step2`, and update the `ServiceURL` with your **Twilio AccountSID**
-1. Go to the Azure AD B2C Blade at the [Azure Portal](https://portal.azure.com) and click **Identity Experience Framework**. Click **Policy Keys**
-1. Add a new Key, name it `B2cRestTwilioClientId`. Select `manual`, and provide the value of the **Twilio Account SID**
-1. Add a new Key, name it `B2cRestTwilioClientSecret`. Select `manual`, and provide the value of the **Twilio AUTH TOKEN**
-1. Upload all the policy files to your tenant
-1. Customize the string in the `GenerateOTPMessageEnrol` claims transform for your Sign Up SMS text.
-1. Browse to your application and test the **Sign In/Up** and **Send Money** action.
+1. Upload the demo application to your hosting provider of choice - Guidance for Azure App Services to [upload your certificate](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite#hosting-the-application-in-azure-app-service).
+2. Update your Azure AD B2C application registration by adding a Reply URL equivalent to the URL at which the application is hosted at.
+3. Open the policy files and replace all instances of `yourtenant` with your tenant name. For a tenant such as "contoso.onmicrosoft.com", replace all instances of `yourtenant` with `contoso`.
+4. Find the Twilio REST API technical profile `Custom-SMS-Enrol` and update the `ServiceURL` with your **Twilio AccountSID** and the `From` number to your purchased phone number.
+5. Find the Twilio REST API technical profiles, `TwilioRestAPI-Verify-Step1` and `TwilioRestAPI-Verify-Step2`, and update the `ServiceURL` with your **Twilio AccountSID**.
+6. Go to the Azure AD B2C Blade at the [Azure Portal](https://portal.azure.com) and click **Identity Experience Framework**. Click **Policy Keys**.
+7. Add a new Key, name it `B2cRestTwilioClientId`. Select `manual`, and provide the value of the **Twilio Account SID**.
+8. Add a new Key, name it `B2cRestTwilioClientSecret`. Select `manual`, and provide the value of the **Twilio AUTH TOKEN**.
+9. Upload all the policy files to your tenant.
+10. Customize the string in the `GenerateOTPMessageEnrol` claims transform for your Sign Up SMS text.
+11. Browse to your application and test the **Sign In/Up** and **Send Money** action.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

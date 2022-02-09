@@ -33,7 +33,7 @@ The web app has following endpoints:
 > **_NOTE:_**  When developing and testing locally, you may need to use a reverse proxy, such as ngrok, to let Azure AD B2C to access the above endpoints. Otherwise the flow wont work.
 
 ## Use Azure Key Vault for token signing
-The sample implementation for signing the ID tokens leverages the [Azure Key Vault](https://docs.microsoft.com/azure/key-vault/general/) service to both manage the certificate and to actually sign the ID Token data, which aligns better to [best practices for the management of sensitive information like certificates](https://docs.microsoft.com/azure/architecture/framework/security/design-storage-keys#key-storage).
+The sample implementation for signing the ID tokens leverages the [Azure Key Vault](https://docs.microsoft.com/azure/key-vault/general/) service to both manage the certificate and to actually sign the ID Token data, which aligns better to [best practices for the management of sensitive information](https://docs.microsoft.com/azure/architecture/framework/security/design-storage-keys#key-storage)  such as certificates.
 
 
 The Azure Key Vault service provides secure storage and access control for tokens, passwords, certificates, API keys, and other secrets. The service includes support for the provisioning, management, and deployment of both public and private certificates that can be used for resources that run both inside of and external to an Azure subscription. In this sample, Azure Key Vault is used to:
@@ -49,7 +49,7 @@ The sample application uses a named certificate in Azure Key Vault to sign the I
 
 1. Create an instance of the Azure Key Vault service in your Azure subscription. Navigate to the Azure Key Vault instance in the Azure portal.
 1. Select **Certificates** from the **Settings** menu.
-1. Click **Generate/Import**
+1. Click **Generate/Import**.
 1. Complete the *Create a certificate* form as follows, then click *Create*:
 
     * Method of Certificate Creation: Select **Generate**

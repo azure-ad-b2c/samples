@@ -4,7 +4,7 @@ This sample demonstrates how to sign-in to a web application by sending a sign-i
 ## User flow
 To sign-in, from the application, type the user's **email address** and click **Send sign-in email**. The application sends a sign-in link (with a id_token_hint). User clicks on the link, that takes to user to Azure AD B2C policy. Azure AD B2C validate the input id_token_hint, issues an access token, and redirect the user back to the application. 
 
-![User flow](media/flow.png)
+![A User flow diagram of this sample.](media/flow.png)
 
 ## Sending Application Data
 The key of sending data to Azure AD B2C custom policy is to package the data into a JWT token as claims (id_token_hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
@@ -52,16 +52,16 @@ Update the *appSettings* values in **appsettings.json** with the information for
 
 ### Hosting the application in Azure App Service
 If you publish the application to Azure App Service, you'll need to configure a valid certificate with a private key in Azure App Service.
-1. First, export your certificate as a PFX file using the User Certificates management tool (or create a new one)
-2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service
-3. Follow [these instructions](https://docs.microsoft.com/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) to ensure App Service loads the certificate when the app runs
+1. First, export your certificate as a PFX file using the User Certificates management tool (or create a new one).
+2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service.
+3. Follow [these instructions](https://docs.microsoft.com/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) to ensure App Service loads the certificate when the app runs.
 
 ## Option 2: Use Azure Key Vault for token signing
 
 The Azure Key Vault service provides secure storage and access control for tokens, passwords, certificates, API keys, and other secrets. The service includes support for the provisioning, management, and deployment of both public and private certificates that can be used for resources that run both inside of and external to an Azure subscription. In this sample, Azure Key Vault is used to:
-* generate the certificate used to sign the Identity Token that will be included as part of the sign-in link that will be sent to the user
-* read the certificate public data that is provided via the `.well-known/keys` OpenID Connect endpoint that the Azure AD B2C policy will use to validate the incoming Identity Token assertion
-* sign the Identity Token that will be sent to the user without having to load the private certificate information into the application
+* Generate the certificate used to sign the Identity Token that will be included as part of the sign-in link that will be sent to the user.
+* Read the certificate public data that is provided via the `.well-known/keys` OpenID Connect endpoint that the Azure AD B2C policy will use to validate the incoming Identity Token assertion.
+* Sign the Identity Token that will be sent to the user without having to load the private certificate information into the application.
 
 The sample code that uses Azure Key Vault can be found in the `AADB2C.SignInWithEmailUsingKeyVault` project in the code that accompanies this sample.
 
@@ -73,7 +73,7 @@ The sample application uses a named certificate in Azure Key Vault to sign the I
 
 1. Create an instance of the Azure Key Vault service in your Azure subscription. Navigate to the Azure Key Vault instance in the Azure portal.
 1. Select **Certificates** from the **Settings** menu.
-1. Click **Generate/Import**
+1. Click **Generate/Import**.
 1. Complete the *Create a certificate* form as follows, then click *Create*:
 
     * Method of Certificate Creation: Select **Generate**

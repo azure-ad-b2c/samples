@@ -4,13 +4,16 @@ With Azure AD B2C you can detect unknown devices which might be required to prom
 Custom policy is using such information as User Agent and IP Address to uniquely calcualte a Device ID for particular Device User ID. Information is stored in user's browser Web Storage and used in subsequent verificaitons to detect unknown device and prompt MFA.
 
 Custom policy logic is primarily defined in following orchestration steps:
-- [Collect Device Information](#Collect-Device-Information)
-- [MFA Prompt for Unknown Devices](#MFA-Prompt-for-Unknown-Devices)
-- [Register Device Information](#Register-Device-Information)
+- [Unknown Devices MFA](#unknown-devices-mfa)
+  - [Prerequisites](#prerequisites)
+  - [Collect Device Information](#collect-device-information)
+  - [MFA Prompt for Unknown Devices](#mfa-prompt-for-unknown-devices)
+  - [Register Device Information](#register-device-information)
+  - [Community Help and Support](#community-help-and-support)
 
 The diagram below depicts the user flow and how different components interact together.
 
-![Unknown Devices MFA flow](media/flow.png)  
+![A diagram of the Unknown Devices MFA flow.](media/flow.png)  
    
 ## Prerequisites
  > **Note:** This sample is based on [SocialAndLocalAccountsWithMfa starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccountsWithMfa) and [page layout contract](https://docs.microsoft.com/en-us/azure/active-directory-b2c/contentdefinitions#select-a-page-layout). All changes are marked with **Sample** comment inside the policy XML files and source code. Make the necessary changes in the **Sample action required** sections.
@@ -28,7 +31,7 @@ JavaScript is used to collect User Agent and Verified Device ID. CSS is used to 
 
 Device ID is calculated based on User Agent, IP Address, and Device User ID. Orchestration step validates Device ID against previosly recorded Verified Device ID and produces isVerifiedDevice claim.
 
-![Collect Device Information](media/collectDeviceInformation.png)
+![A diagram walkthrough for Collect Device Information policy sample.](media/collectDeviceInformation.png)
 
 CSS
 ```css
@@ -51,7 +54,7 @@ $(document).ready(function() {
 ## MFA Prompt for Unknown Devices
 Orchestration step prompts MFA for unknown devices using precondition with previously produced isVerifiedDevice claim.  
 
-![MFA Prompt for Unknown Devices](media/promptMFA.png)
+![A screenshot of MFA Prompt for Unknown Devices with two options to choose, Send Code or Call Me.](media/promptMFA.png)
 
 Precondition
 ```xml
@@ -67,7 +70,7 @@ Such information as Device User ID and Device ID is produced in this orchestrati
 
 JavaScript is used to collect that information and register for subsequent verificaitons. CSS is used to hide inputs.
 
-![Register Device Information](media/registerDeviceInformation.png)
+![A user UX prompt showcasing before and after device ID being hidden for Register Device Information.](media/registerDeviceInformation.png)
 
 CSS
 ```css

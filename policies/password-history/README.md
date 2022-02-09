@@ -26,10 +26,11 @@ The policy makes a REST API call to an `Azure App Service`, passing a JSON paylo
 
 ## Quick Start
 
-  1. Review the README for the Azure App Service [here](https://github.com/azure-ad-b2c/samples/blob/master/policies/password-history/source-code/dotnet5/README.md). In this step, you'll create:  
-        a. Azure App Service  
-        b. Azure Key Vault  
-        c. Managed Identity (either System Assigned or User Assigned)  
+
+  1. Review the [README for the Azure App Service](https://github.com/azure-ad-b2c/samples/blob/master/policies/password-history/source-code/dotnet5/README.md). In this step, you'll create:
+        a. Azure App Service
+        b. Azure Key Vault
+        c. Managed Identity (either System Assigned or User Assigned)
 
   2. Modify the policy by replacing all instances of yourtenant.onmicrosoft.com with your tenant name.
   

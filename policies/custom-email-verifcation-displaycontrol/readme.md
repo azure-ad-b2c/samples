@@ -12,10 +12,13 @@ This set of policies demonstrates how to use a Custom email verification solutio
 
 This sample is detailed on the Microsoft B2C documentation site:
 
- - [Mailjet](policy/Mailjet) - Custom email verification with Mailjet, [document](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-mailet)
- - [SendGrid](policy/SendGrid) - Custom email verification with SendGrid, [document](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-sendgrid)
- - [SSPR](policy/SSPR) - Azure AD B2C email verification with SSPR technical profile, [document](https://docs.microsoft.com/azure/active-directory-b2c/aad-sspr-technical-profile)
- - [sendinblue](policy/Sendinblue) - Custom email verification with Sendinblue, [document](Sendinblue.md)
+| Policy                                 | Documentation                                                                                                                                   |
+|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Mailjet policy](policy/Mailjet)       | [Custom email verification with Mailjet](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-mailet)                             |
+| [SendGrid policy](policy/SendGrid)     | [Custom email verification with SendGrid](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-sendgrid)                          |
+| [SSPR policy](policy/SSPR)             | [Azure AD B2C email verification with SSPR technical profile](https://docs.microsoft.com/azure/active-directory-b2c/aad-sspr-technical-profile) |
+| [Sendinblue policy](policy/Sendinblue) | [Custom email verification with Sendinblue](Sendinblue.md)        
+
 
 
 ## Notes

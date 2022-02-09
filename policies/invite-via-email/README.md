@@ -2,20 +2,21 @@
 This sample demonstrates an email based invite to signup to a B2C Local Account. It uses a signed B2C JWT token as a magic link in the email.
 
 ## User flow
-![User flow](media/invite-via-email-flow.png)
+![A diagram User flow starting with the REST API ending with the redirect to signup.](media/invite-via-email-flow.png)
 
-This sample uses a [powershell script](test/send-invite.ps1) for testing the flow. This functionality should be integrated with your app and that it is powershell here is just a simple way test drive the sample. The below picture illustrates how the sample works.
+This sample uses a [powershell script for testing the flow](test/send-invite.ps1). This functionality should be integrated with your app and that it is powershell here is just a simple way test drive the sample. The below picture illustrates how the sample works.
 
 1. A powershell script calls a Azure Function REST API, passing `email` and `displayName` as parameters, to generate a link that can be embedded in an email.
-![Powershell](media/ps-send-invite.png)
+![](media/ps-send-invite.png)
 1. The Azure Function constructs an Auth Code flow url and makes a HTTP GET request to Azure AD B2C for PolicyId `B2C_1A_genlink`. It passes the email as `login_hint` and the displayName as an extra query string parameter that B2C can pick up as a [Claims Resolver](https://docs.microsoft.com/en-us/azure/active-directory-b2c/claim-resolver-overview#oauth2-key-value-parameters). B2C uses a UserJourney consisting of just one step, which is to generate a JWT token. There is no UX involved here and the Azure Function picks up the generated `id_token` from the HTTP Location Header on the 302 redirect response from B2C.
-1. The powershell script formats the email message and uses SendGrid's REST API to send the email invite. 
-1. The user receives the message in the inbox and clicks on the link which makes a new HTTP GET call to the same Azure Function asking to redeem the invite. It passes the signed JWT token from step 2, which contains the `email` and the `displayName` claims.
-![Powershell](media/email-inbox.png)
+2. The powershell script formats the email message and uses SendGrid's REST API to send the email invite. 
+3. The user receives the message in the inbox and clicks on the link which makes a new HTTP GET call to the same Azure Function asking to redeem the invite. It passes the signed JWT token from step 2, which contains the `email` and the `displayName` claims.
+![An email example of the hyperlink with contained claims.](media/email-inbox.png)
 
 1. The Azure Function constructs yet another Auth Code flow url, this time with PolicyId `B2C_1A_redeem`, and returns a HTTP 302 Redirect to the user. The url contains the query string parameter `id_token_hint` with the signed token passed from the email link.
 1. The user is redirected to B2C's policy `B2C_1A_redeem`, which is designed to accept an `id_token_hint` issued by the B2C tenant itself (step 2). It extracts the `email` and `displayName` claims and prepopulates those values before showing the signup UX to the user, asking the user to create a password and signup.
-![Powershell](media/signup-form.png)
+
+![A sign-up screen with email autopopualted and display name.](media/signup-form.png)
 
 ## B2C_1A_genlink
 The B2C policy that generates the link that is sent in the email has a very short UserJourney that only consists of one step - to generate the JWT Token. 
@@ -85,9 +86,9 @@ Before you upload these policies to your tenant, you need to change `yourtenant`
 The rest of the UserJourney is about making sure the email isn't already registered, displaying an error in that case, and asking the user to select a password.
 
 ## The Azure Function
-The Azure Function code in [run.csx](source-code/run.csx) serves two purposes. First, if you pass a query string parameter with the name of `email`, it will generate the invite link, and second, if you pass in a query string parameter with the name of `t` it will redirect to policy `B2C_1A_redeem`. You could eliminate step two and have the emal link point directly to B2C, but that means you expose you B2C deployment in an email, and it is for this reason the email link points back to the Azure Function. In a real world app, you might consider adding this functionality as part of your webapp and not using an Azure Function as it would make the link in the email more trustworthy if it pointed to your real app.
+The [Azure Function code in run.csx](source-code/run.csx) serves two purposes. First, if you pass a query string parameter with the name of `email`, it will generate the invite link, and second, if you pass in a query string parameter with the name of `t` it will redirect to policy `B2C_1A_redeem`. You could eliminate step two and have the emal link point directly to B2C, but that means you expose you B2C deployment in an email, and it is for this reason the email link points back to the Azure Function. In a real world app, you might consider adding this functionality as part of your webapp and not using an Azure Function as it would make the link in the email more trustworthy if it pointed to your real app.
 
-To deploy this Azure Function, create an Azure Function App and then create a function called `invite` that is a `HttpTrigger` with access level `anonymous`. Then paste over the code with [run.csx](source-code/run.csx), make the changes required and save the file. If you decide to call your Azure Function anything else, you need to change the name in the code as it references the Azure Function when it generates the link (see `/api/invite` in code below).
+To deploy this Azure Function, create an Azure Function App and then create a function called `invite` that is a `HttpTrigger` with access level `anonymous`. Then paste over [the code with run.csx](source-code/run.csx), make the changes required and save the file. If you decide to call your Azure Function anything else, you need to change the name in the code as it references the Azure Function when it generates the link (see `/api/invite` in code below).
 
 ### Common changes
 Change `yourtenant` in the hostname and the tenant name to your B2C tenant name.
@@ -98,7 +99,7 @@ string tenantName = "yourtenant.onmicrosoft.com";
 ```
 
 ### Generate link code
-The generate link code first starts with building the url which we will call B2C with. The `client_id` in this request should be an App that you have registered in the B2C tenant just for this purpose as it must allow a `redirectUri` that is `https://jwt.ms`. In dev/test, you can just add https://jwt.ms to as a valid redirectUri to your existing test app.
+The generate link code first starts with building the url which we will call B2C with. The `client_id` in this request should be an App that you have registered in the B2C tenant just for this purpose as it must allow a `redirectUri` that is `https://jwt.ms` . In dev/test, you can just add `https://jwt.ms` to as a valid redirectUri to your existing test app.
 
 ```csharp
     // if we got an email, this is the generate link request. Call B2C and build the link to send in th e email
@@ -142,7 +143,7 @@ The second part of the code invokes the B2C policy and captures the `id_token` t
 ```
 
 ### Redeem code
-The redeem code part is much simpler and just creates the redirect url. Here you should use the `client_id` of your real webapp and the `redirectUri` should be where you want to land in your webapp after signup is completed. For a AspNet core app, this would be `signin-oidc` as that is the path that process a signin request for the OIDC protocol. If you're using a different technology stack, this may vary. For debugging purposes, you can use https://jwt.ms here to see that you deployment is working.
+The redeem code part is much simpler and just creates the redirect url. Here you should use the `client_id` of your real webapp and the `redirectUri` should be where you want to land in your webapp after signup is completed. For a AspNet core app, this would be `signin-oidc` as that is the path that process a signin request for the OIDC protocol. If you're using a different technology stack, this may vary. For debugging purposes, you can use `https://jwt.ms` here to see that you deployment is working.
  
 ```csharp
     // if we got a token, this is the redeem call. Build a B2C url and redirect

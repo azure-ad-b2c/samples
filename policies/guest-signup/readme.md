@@ -18,6 +18,6 @@ with just about anyone who has a phone or mail account.
 ContosoCloud users sign-in to the directory with their known credentials.
 Guest users are invited with an invite link and follow through this flow:
 
-![Invite flow](./media/invite_flow.png)
+![A diagram of the Contoso Cloud guest user sign-in flow using the invite model.](./media/invite_flow.png)
 
-[See this post if you want to read more about 'Guest Access using Azure Active Directory B2C custom policies']()
+See this post if you want to read more about [ 'Guest Access using Azure Active Directory B2C custom policies'](https://medium.com/microsoftazure/guest-access-using-azure-active-directory-b2c-custom-policies-1c9ed904477?source=rss----8bec1183ada9--azure)

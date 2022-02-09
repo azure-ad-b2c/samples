@@ -9,7 +9,7 @@
 
 ## Welcome to Angular
 
-We use [Angular CLI tool](https://cli.angular.io/) to create the application a simple application. But you can use any existing or new application. To install and use the command-line interface as well as run the Angular application server, you'll need the [Node.js](https://nodejs.org/) JavaScript runtime and [npm](https://www.npmjs.com/) (the Node.js package manager) installed. npm is included with Node.js, which you can install from [here](https://nodejs.org/en/download/).
+We use [Angular CLI tool](https://cli.angular.io/) to create the application a simple application. But you can use any existing or new application. To install and use the command-line interface as well as run the Angular application server, you'll need the [Node.js](https://nodejs.org/) JavaScript runtime and [npm](https://www.npmjs.com/) (the Node.js package manager) installed. npm is included with the [installation of Node.js](https://nodejs.org/en/download/).
 
 >**Tip**: To test that you have Node.js and npm correctly installed on your machine, you can type `node --version` and `npm --version`.
 
@@ -36,7 +36,7 @@ ng serve --open
 
 You should see "Welcome to app!!" on [http://localhost:4200](http://localhost:4200) in your browser. 
 
-![Angular App](media/angular-app.png)
+<img alt="An image of localhost : 4200 app." src="media/angular-app.png" >
 
 We'll leave the web server running while we look at the application with VS Code. To open your Angular application in VS Code, open another terminal (or command prompt) and navigate to the `my-app` folder and type `code .`:
 
@@ -52,7 +52,7 @@ This sample uses three types of policies:
 - Password reset policy [TBD]
 - Profile editing policy [TBD]
 
-Create one policy of each type by following [the instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-reference-policies).  You may choose to include as many or as few identity providers as you wish. If you already have existing policies in your Azure AD B2C tenant, feel free to reuse those. No need to create new ones just for this sample.
+[Create one Azure AD B2C policy](https://azure.microsoft.com/documentation/articles/active-directory-b2c-reference-policies) of each type.  You may choose to include as many or as few identity providers as you wish. If you already have existing policies in your Azure AD B2C tenant, feel free to reuse those. No need to create new ones just for this sample.
 
 ## Step 2. Create your own application
 
@@ -63,9 +63,9 @@ A Web application needs to be registered in your Azure AD B2C tenant before they
 1. For **Include web app/ web API** and **Allow implicit flow**, select Yes.
 1. For **Reply URL**, enter an endpoint where Azure AD B2C should return any tokens that your application requests. In this tutorial, the Angular sample runs locally and listens at `http://localhost:4200`.
 1. For **App ID URI**, enter the identifier used for your web API. The full identifier URI including the domain is generated for you. For example, `https://yourtenant.onmicrosoft.com/angular-api`.
-    ![Create new app](media/create-app.png)
-1. Click **Create**.
-1. On the properties page, record the **Application ID** that you'll use when you configure the web application.
+    <img alt="A screenshot of admin portal for create a new application." src="media/create-app.png" >
+2. Click **Create**.
+3. On the properties page, record the **Application ID** that you'll use when you configure the web application.
 
 ### Step 2.1 Configure scopes
 Scopes provide a way to govern access to protected resources. Scopes are used by the web API to implement scope-based access control. For example, some users could have both read and write access, whereas other users might have read-only permissions. In this tutorial, you define read permissions for the web API.
@@ -73,7 +73,8 @@ Scopes provide a way to govern access to protected resources. Scopes are used by
 1. Select **Applications**, and then select `My Angular App`.
 1. Select **Published Scopes**.
 1. For **scope**, enter `Demo.Read`, and for **description**, enter `Read access`.
-    ![App Scopes](media/app-scopes.png)
+    
+    <img alt="A screenshot of admin portal for inputted Published Scopes." src="media/app-scopes.png" >
 1. Click **Save**.
 
 ### Step 2.2 Grant permissions
@@ -82,7 +83,8 @@ To call a protected web API from an application, you need to grant your applicat
 1. Select **API access**, and then select **Add**.
 1. In the **Select API** dropdown, select `My Angular App`.
 1. In the **Select Scopes** dropdown, select the `Demo.Read` scope that you previously defined.
-    ![Grant permissions](media/grant-permissions.png)
+    
+    <img alt="A screenshot of admin portal for selected Published Scopes." src="media/grant-permissions.png" >
 1. Click **OK**.
 
 ## Step 3. Add MSAL library

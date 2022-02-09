@@ -2,11 +2,11 @@
 
 This sample policy demonstrates how to dynamically filter the list of social identity providers render to the user based on a custom query string parameter `idps`. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Twitter. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The  claim value contains the list of identity provider to be rendered.
 
-![IDP Selection](media/IDPSelection.png)
+![](media/IDPSelection.png)
 
 By default Azure AD B2C displays every identity provider that appears in the `ClaimsProviderSelections` element of the first orchestration step of your user journey. To filter the list of identity providers dynamically, you send a custom query string parameter `idps`, in a comma delimiter format. The following URL illustrates how to display only Facebook and Google sign-in buttons:
 
-![Sign-in URL](media/sign-in-url.png)
+![A screenshot of the Sign-in URL highlighting to add the query parameter at the end of URL for with 'idps' equal google separated by a comma and then 'facebook'.](media/sign-in-url.png)
 
 ## Solution building blocks
 

@@ -6,25 +6,25 @@ In some applications data residency is an issue which requires a user's profile 
 
 This sample will encrypt a user's profile attributes, like displayName, givenName, etc, so that it is unreadable. A user would look like this in portal.azure.com.
 
-![User Profile](media/encrypted-profile-portal.png)
+![An Azure Admin screenshot of the User Profile blade.](media/encrypted-profile-portal.png)
 
 If you use [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) to query the user object created with this signup policy, the the `signInName` attribute will also be encrypted in order not to reveal the user's the email. 
 
-![User Profile SigninName](media/encrypted-profile-userobj.png)
+![A printout in Microsoft Graph of the User Profile SigninName.](media/encrypted-profile-userobj.png)
   
 
 ## Encrypting the attributes
-The encryption in this sample is done in an Azure Function that is called with B2C's RESTful Provider. In this sample, there are two versions of the Azure Function, where the [run.csx](source-code/run.csx) file contains the implementation just doing base64 encode/decode and where the [run_encrypted.csx](source-code/run_encrypted.csx) file contains the implementation that hashes the `email` with a salt and does symmetric encryption of attributes. The purpose of the simple base64 encode/decode function is to keep it simple and get you going without too much setup. The purpose of the function with encryption is to show how real encryption could be done. If you plan to use the Azure Function with encryption, please see instructions at the bottom for deploying the Azure Function together with Azure Key Valut.
+The encryption in this sample is done in an Azure Function that is called with B2C's RESTful Provider. In this sample, there are two versions of the Azure Function, where the [run.csx](source-code/run.csx) file contains the implementation just doing base64 encode/decode and where the [run_encrypted.csx file](source-code/run_encrypted.csx) contains the implementation that hashes the `email` with a salt and does symmetric encryption of attributes. The purpose of the simple base64 encode/decode function is to keep it simple and get you going without too much setup. The purpose of the function with encryption is to show how real encryption could be done. If you plan to use the Azure Function with encryption, please see instructions at the bottom for deploying the Azure Function together with Azure Key Valut.
 
 During **signup**, the B2C policy calls it as an REST API to encrypt attrributes like `email, displayName, givenName and surname`. The encrypted values are then persisted to the user object. The `email` value is persisted as a `userid` and not as an `emailAddress`, since the encrypted result does not follow the email syntax anymore. 
 
 What happens during **signin** is that the user enters the email in clear text in the user interface, since that is what he/she knows. The B2C policy then calls the Azure Function to encrypt the email before validating the userid/password.
 
-![Signin](media/encrypted-profile-signin.png)
+![A screenshot of a standard login screen.](media/encrypted-profile-signin.png)
 
 To decrypt the additional attributes so they can appear in clear text in the JWT token, the Azure Function is called again at the end of the signin user journey to decrypt attributes like displayName, etc. 
 
-![Signin-JWT](media/encrypted-profile-signin-jwt.png)
+![A JSON print out of a Signin-JWT.](media/encrypted-profile-signin-jwt.png)
 
 ## B2C Custom Policy explained
 
@@ -109,18 +109,18 @@ At the end of the signin UserJourney, there is a orchestration step that decrypt
 ## Azure Function with encryption - how it works
 The Azure Function [run_encrypted.csx](source-code/run_encrypted.csx) does the following
 
-1. Gets the parameters signInName, email, displayName, givenName and surName
-1. Looks for the hash salt and AES Key + IV as Environment Variables
+1. Gets the parameters signInName, email, displayName, givenName and surName.
+1. Looks for the hash salt and AES Key + IV as Environment Variables.
 1. If there are no environment variables, calls Azure Key Vault to obtain the secrets and sets them as Environment Variables. This serves as some basic way of caching as we don't need to obtain them again until the service is restarted.
-1. If operation is encoding, hash the signInName/email with the salt obtained from Azure Key Vault and encrypt the other attributes
-1. If operation is decoding, do nothing with the signInName/email and decrypt the other attributes
+1. If operation is encoding, hash the signInName/email with the salt obtained from Azure Key Vault and encrypt the other attributes.
+1. If operation is decoding, do nothing with the signInName/email and decrypt the other attributes.
 
 ## Azure Function and Azure Key Vault configuration
 In order to use the Azure Function [run_encrypted.csx](source-code/run_encrypted.csx) that implements real encryption, you need to do the following steps.
 
 ### Azure Function - part 1
 1. Deploy and Azure Function with OS=Windows and Runtime=.Net Core 3.1 with type=HttpTrigger and give it a name like `EncryptClaims`. Set the Authorization level to `Anonymous`.
-1. Copy the code in [run_encrypted.csx](source-code/run_encrypted.csx) and paste it over the code in `run.csx`
+1. Copy the code in [run_encrypted.csx](source-code/run_encrypted.csx) and paste it over the code in `run.csx`.
 1. Do a `Test/Run` of the function passing a Body of `{ "restApiOperation": "generate" }` and copy the response output to somewhere since we will add these values as Azure Key Vault secrets. This step helps you to generate the hash salt and AES Key and IV.
 
 ### Azure AD Service Principal for accessing Azure Key Vault
@@ -128,16 +128,16 @@ The hast salt and AES Key and IV (Initialization Vector) are stored in Azure Key
 
 ### Azure Key Vault
 
-1. [Deploy an Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal) in an Azure subscription if you don't have one
+1. [Deploy an Azure Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal) in an Azure subscription if you don't have one.
 1. Under `Access policies`, select `+Add Access Policy`.
     1. Key permissions = you don't need to select anything
     1. Secret permissions = select `Get, List`
     1. Select principal = Search for you service principal via your `AppID` guid
-1. Under `Secrets`, select `+Generate/Import`
+1. Under `Secrets`, select `+Generate/Import`.
     1. Upload options = Manual
     1. Name = `B2CEncryptionSalt` 
     1. Value = the value for B2CEncryptionSalt you saved in above step (Azure Function - part 1). This should be a base64 string
-1. Under `Secrets`, select `+Generate/Import`
+1. Under `Secrets`, select `+Generate/Import`.
     1. Upload options = Manual
     1. Name = `B2CAesKeyIV` 
     1. Value = the value for B2CAesKeyIV you saved in above step (Azure Function - part 1). This should be two base64 strings separated by a "."

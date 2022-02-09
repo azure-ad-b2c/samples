@@ -3,7 +3,7 @@ This sample console app (.Net core) demonstrates how to send sign-up email invit
 
 ## User flow
 To invite a user, from the application, type the user's **email address** and click **Send invintation**. The application sends a sign-in link (with a id_token_hint). User clicks on the link, that takes to user to Azure AD B2C policy. Azure AD B2C validate the input id_token_hint, asks the user to provide the password and user data (the email is read only). User clicks continue, Azure AD B2C creates the account, issues an access token, and redirect the user back to the application.  
-![User flow](media/flow.png)
+![A diagram flow of the user authentication starting from the invitation to sign-up.](media/flow.png)
 
 ## Sending Application Data
 The key to sending data to Azure AD B2C custom policy is to package the data into a [JWT token as claims using id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint). In this case, we send the user's email address to Azure B2C. Sending JWT token requires to host the necessary metadata endpoints required to use the "id_token_hint" parameter in Azure AD B2C.
@@ -17,7 +17,7 @@ The web app has following endpoints:
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
 If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
-To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
+To provide product feedback, visit the [Azure Active Directory B2C Feedback](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596) page.
 
 ### Creating a signing certificate
 The sample application uses a self-signed certificate to sign the ID tokens. You can generate a valid self-signed certificate for this purpose and get the thumbprint using PowerShell *(note: Run as Administrator)*:
@@ -25,7 +25,7 @@ The sample application uses a self-signed certificate to sign the ID tokens. You
 $cert = New-SelfSignedCertificate -Type Custom -Subject "CN=MySelfSignedCertificate" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3") -KeyUsage DigitalSignature -KeyAlgorithm RSA -KeyLength 2048 -NotAfter (Get-Date).AddYears(2) -CertStoreLocation "Cert:\CurrentUser\My"
 $cert.Thumbprint
 ```
-#### If you have issues with the cert you created you can also try creating a cert using another way. See steps here: https://github.com/azure-ad-b2c/saml-sp#11-preparing-self-signed-certificate
+#### If you have issues with the cert you created you can also try [creating a cert using another way](https://github.com/azure-ad-b2c/saml-sp#11-preparing-self-signed-certificate).
 
 ### Configuring the application
 Update the *appSettings* values in **appsettings.json** with the information for your Azure AD B2C tenant and the signing certificate you just created.
@@ -53,9 +53,9 @@ To inspect the generated token, copy and paste it into a tool like [JWT.ms](httt
 
 ### Hosting the application in Azure App Service
 If you publish the application to Azure App Service, you'll need to configure a valid certificate with a private key in Azure App Service.
-1. First, export your certificate as a PFX file using the User Certificates management tool (or create a new one)
-2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service
-3. Follow [these instructions](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) to ensure App Service loads the certificate when the app runs
+1. First, export your certificate as a PFX file using the User Certificates management tool (or create a new one).
+2. Upload your certificate in the **Private Certificates** tab of the **SSL Settings** blade of your Azure App Service.
+3. Follow these [instructions to ensure App Service loads the certificate](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-ssl-cert-load#load-your-certificates) when the app runs.
 
 ### Using B2C to generate the metadata endpoints
 
@@ -67,9 +67,9 @@ You can have B2C genreate the below mentioned metadata endpoints if you dont wis
 In order for B2C to manage this metadata for us we will need to upload the certificate we generated to sign our id_token_hint to B2C. We can either upload the pfx + password or just the cer file to the B2C key container. We will then reference this certificate as the signing key in one of the custom policy set we would create. 
 1. In the "Policy Keys" blade, Click Add to create a new key and select Upload in the options. 
 2. Give it a name, something like Id_Token_Hint_Cert and select key type to be RSA and usage to be Signature. You can optionally set the expiration to the epxiration of the cert. Save the name of new generated key.  
-3. Create a dummy set of new base, extension and relying party files. You can do so by downloading it from the starter pack here https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack. To keep things simple we will use https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/LocalAccounts but any starter pack can be used. 
-4. If you have not setup custom policies from a starter pack before then follow the instructions here 
-https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom
+3. Create a dummy set of new base, extension and relying party files. You can do so by [downloading it from the starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack). To keep things simple we will use [LocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/LocalAccounts) but any starter pack can be used. 
+4. If you have not setup custom policies from a starter pack before then follow the [custom policy setup instructions](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
+
 
 5. Once you have successfully setup the new starter pack policies open the base file of this set and update the TechnicalProfile 
    Id="JwtIssuer"
@@ -92,8 +92,9 @@ For a Production scenario, the link containing the the `id_token_hint` should po
 
 The authentication library will then build the final authentication link, with the `id_token_hint` appended as part of a query parameter. This will now be a valid authentication request and your user will be redirected to the Azure AD B2C policy from your Application. Your application will be able to handle the response from Azure AD B2C properly.
 
-For Single Page Applications, see the documenation [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-spa-app-options#pass-id-token-hint).
-For .Net Applications, see the documenation [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-web-application-options#pass-id-token-hint).
+- Review the [Single Page Applications guidance](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-spa-app-options#pass-id-token-hint) for additional instructions.
+
+- Review the [.Net Applications guidance](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-web-application-options#pass-id-token-hint) for additional instructions.
 
 ## Notes
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Demo:** comment inside the policy XML files. Make the necessary changes in the **Demo action required** sections. 

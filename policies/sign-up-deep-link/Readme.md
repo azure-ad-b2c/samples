@@ -58,7 +58,7 @@ To add the direct link to the sign-up page:
 
 To direct the user to the sign-up page, in the authorization request add the `option=signup` query string parameter. 
 
-The following example takes the user to the landing page (sign-up or sign-in)
+The following example takes the user to the landing page (sign-up or sign-in):
 
 ```http
 https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_signup_signin_with_link_to_sign_up&client_id=63ba0d17-c4ba-47fd-89e9-31b3c2734339&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token
