@@ -182,12 +182,17 @@
           </Metadata>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="isFederated" DefaultValue="false" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="estsRequestId" />
+            <OutputClaim ClaimTypeReferenceId="estsRequestId" DefaultValue="00000000-0000-0000-0000-000000000000" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CreatePasswordAuthenticationMethodClaim" />
             <OutputClaimsTransformation ReferenceId="AddToAuthenticationMethodsUsed" />
           </OutputClaimsTransformations>
+        </TechnicalProfile>
+        <TechnicalProfile Id="login-NonInteractive">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="estsRequestId" DefaultValue="00000000-0000-0000-0000-000000000000" />
+          </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
