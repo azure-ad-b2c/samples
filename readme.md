@@ -4,20 +4,22 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Getting started
 
-- See our [Custom Policy overview](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-overview).
+- See our [Custom Policy overview](https://docs.microsoft.com/azure/active-directory-b2c/custom-policy-overview).
 
 - See our [Azure AD B2C Wiki articles](https://azure-ad-b2c.github.io/azureadb2ccommunity.io/docs/custom-policy-concepts/) to help walkthrough the custom policy components.
 
-- See our [Custom Policy Schema reference](https://docs.microsoft.com/en-us/azure/active-directory-b2c/trustframeworkpolicy).
+- See our [Custom Policy Schema reference](https://docs.microsoft.com/azure/active-directory-b2c/trustframeworkpolicy).
 
 ## Prerequisites
-- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
+
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
 - You can automate the prerequisites (where applicable) by using our using automated tool called [Deploy AAD B2C Custom Policies](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant.
 
 ## Sample scenarios
 
 Samples are available for the following categories
+
 - [Password Management](#password-management)
 - [General Security](#general-security)
 - [User Experience](#user-experience)
@@ -35,19 +37,19 @@ Samples are available for the following categories
 
 ## Password management
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |Verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)|
-|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)|
-|[Force password reset first logon](policies/force-password-reset-first-logon)|Force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)|
-|[Force password after 90 days](policies/force-password-reset-after-90-days)|Force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)|
-|[Password reset only](policies/password-reset-only)|Prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)|
-|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|Embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=embedded-password-reset)|
-|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |Reset a users password using Phone Number (SMS or Phone Call).|NEED POLICY FIX|
-|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|Force password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)|
-|[Banned password list](policies/banned-password-list-no-API) |Banned password list prevention during Sign up and password reset/change flow. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)|
-|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |DisplayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|
-|[Password history](policies/password-history) |Prevent the previous Nth password to be set during password reset/change. Requires using external storage and web servies. |NA|
+|Sample name   |Description   |Quick deploy| Demo|
+|---|---|---|---|
+|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |Verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)| |
+|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)| |
+|[Force password reset first logon](policies/force-password-reset-first-logon)|Force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)| |
+|[Force password after 90 days](policies/force-password-reset-after-90-days)|Force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)| |
+|[Password reset only](policies/password-reset-only)|Prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)| |
+|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|Embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=embedded-password-reset)| [Live demo](policies/embedded-password-reset#live-demo) |
+|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |Reset a users password using Phone Number (SMS or Phone Call).|NEED POLICY FIX| |
+|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|Force password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)| |
+|[Banned password list](policies/banned-password-list-no-API) |Banned password list prevention during Sign up and password reset/change flow. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)| |
+|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |DisplayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)| |
+|[Password history](policies/password-history) |Prevent the previous Nth password to be set during password reset/change. Requires using external storage and web servies. |NA| |
 
 
 ## General security
@@ -83,7 +85,7 @@ Samples are available for the following categories
 |[Dynamic identity provider selection](policies/idps-filter)|Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on the requests application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.|NA|
 |[Home Realm Discovery page](policies/home-realm-discovery-modern)|Demonstrates how to create a home realm discovery page. On the sign-in page, the user provides their sign-in email address and clicks continue. B2C checks the domain portion of the sign-in email address. If the domain name is `contoso.com` the user is redirected to Contoso.com Azure AD to complete the sign-in. Otherwise the user continues the sign-in with username and password. In both cases (AAD B2C local account and AAD account), the user does not need to retype the user name.|NA|
 |[Delete my account](policies/delete-my-account)|Demonstrates how to delete a local or social account from the directory|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=delete-my-account)|
-|[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).|NA|
+|[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile).|NA|
 |[sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link)|Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-deep-link)|
 |[Allow sign up from specific email domains](policies/sign-up-domain-whitelist)|This policy demonstrates how to validate the email address domain name against a list of allowed domains.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-domain-whitelist)|
 
@@ -104,8 +106,8 @@ Samples are available for the following categories
 ## Multi factor
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
-|[Microsoft Authenticator TOTP](policies/totp) |Integrate native Microsoft Authenticator TOTP flow - [Enroll a user in TOTP with an authenticator app](https://docs.microsoft.com/en-us/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow#enroll-a-user-in-totp-with-an-authenticator-app-for-end-users)|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=totp)|
-|[Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) |Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample reference on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email)|NA|
+|[Microsoft Authenticator TOTP](policies/totp) |Integrate native Microsoft Authenticator TOTP flow - [Enroll a user in TOTP with an authenticator app](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow#enroll-a-user-in-totp-with-an-authenticator-app-for-end-users)|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=totp)|
+|[Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) |Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample reference on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/custom-email)|NA|
 |[Custom SMS provider - DisplayControls](policies/custom-sms-displaycontrol)| Integrate a custom SMS provider in Azure Active Directory B2C (Azure AD B2C) to customized SMS' to users that perform multi factor authentication to your application. By using DisplayControls (currently in preview) and a third-party SMS provider, you can use your own contextualised SMS message, custom Phone Number, as well as support localization and custom one-time password (OTP) settings.|NA|
 |[Email Verification at Sign In](policies/signin-email-verification)|For scenarios where you would like users to validate their email via OTP on every sign in.|
 |[Sign-in with FIDO](policies/fido2)|Demonstrates how to sign-in with a FIDO authenticator (as a first factor authentication). This policy use the WebAuthn standard to register new credential and sign-in with FIDO credential.|NA|
