@@ -1,0 +1,18 @@
+on: push
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 'Upload TrustFrameworkBase Policy'
+      uses: azure-ad-b2c/deploy-trustframework-policy@v5.1
+      with:
+        folder: "./"
+        files: "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml,policies/embedded-password-reset/policy/SignUpOrSigninCustom_SSPR.xml"
+        tenant: ${{ secrets.tenant }}
+        clientId: ${{ secrets.clientId }}
+        clientSecret: ${{ secrets.clientSecret }}
+        renumberSteps: true
+        addStep: true
