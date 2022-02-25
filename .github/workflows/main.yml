@@ -7,7 +7,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: 'Upload TrustFrameworkBase Policy'
-      uses: azure-ad-b2c/deploy-trustframework-policy@v5.2fix1
+      uses: azure-ad-b2c/deploy-trustframework-policy@v5.2
       with:
         folder: "./"
         files: "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml,policies/embedded-password-reset/policy/SignUpOrSigninCustom_SSPR.xml"
