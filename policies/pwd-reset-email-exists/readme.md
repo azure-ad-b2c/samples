@@ -9,7 +9,7 @@ To test the policy, follow these steps:
 1. If you don't have an account, [create a local account](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_signup_signin/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) with your email address.
 1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_PasswordReset_AccountExists/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_PasswordReset_AccountExists* policy to reset the password.
 1. Perform the following test:
-    1. In the *Email Address* provide an email address that is not registered in that directory. For example, `emily@contoso.com`, or `bob@fabrikam.com`, and select *Send verification code*. You should get an error message that the email address is not registered in the system.
+    1. In the *Email Address* provide an email address that is not registered in that directory. For example, `bob@fabrikam.com`, and select *Send verification code*. You should get an error message that the email address is not registered in the system.
     1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_PasswordReset_AccountExists/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_PasswordReset_AccountExists* policy again. This time type the email address your register in the first step. Complete the password reset process. 
 
 ## Prerequisites
