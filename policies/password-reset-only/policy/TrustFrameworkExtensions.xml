@@ -35,7 +35,7 @@
             <Item Key="setting.showCancelButton">false</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userMessage" DefaultValue="Your password has been successfully updated. To continue select on the sign-in link below." />
+            <InputClaim ClaimTypeReferenceId="userMessage" DefaultValue="Your password has been successfully updated." />
           </InputClaims>
           <OutputClaims>
             <!-- Show the paragraph claim with the message to the user -->
