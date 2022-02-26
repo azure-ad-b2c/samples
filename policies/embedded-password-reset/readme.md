@@ -8,8 +8,8 @@ This policy demonstrates how to embed the password reset flow a part of the sign
 
 The live demo demonstrates the self-service password reset experience. To test the policy, follow these steps:
 
-1. [Create an account](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) with your email address.
-1. Run the [policy](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) again and select the **Forgot your password?** link. The link will take you to the password rest page.
+1. [Create an account](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) using the *B2C_1A_Demo_signup_signin_SSPR* policy with your email address.
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_signup_signin_SSPR* policy again and select the **Forgot your password?** link. The link will take you to the password rest page.
 1. Complete the password reset process.
 
 ## How it works
