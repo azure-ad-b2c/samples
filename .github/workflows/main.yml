@@ -10,7 +10,7 @@ jobs:
       uses: azure-ad-b2c/deploy-trustframework-policy@v5.2
       with:
         folder: "./"
-        files: "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml,policies/embedded-password-reset/policy/SignUpOrSigninCustom_SSPR.xml,policies/embedded-password-reset/policy/TrustFrameworkExtensions.xml,policies/embedded-password-reset/policy/PasswordReset.xml"
+        files: "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml,policies/embedded-password-reset/policy/SignUpOrSigninCustom_SSPR.xml,policies/password-reset-only/policy/TrustFrameworkExtensions.xml,policies/password-reset-only/policy/PasswordReset.xml"
         tenant: ${{ secrets.tenant }}
         clientId: ${{ secrets.clientId }}
         clientSecret: ${{ secrets.clientSecret }}
