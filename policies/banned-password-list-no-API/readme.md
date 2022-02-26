@@ -10,7 +10,7 @@ To test the policy, follow these steps:
     1. Provide one of the passwords on the banned list (within *passwordToMatchBanList* claims transformation). For example, `Password!`, or `P@ssw0rd!`. Select *Continue*, and you should see an error message that the password is too weak.
     1. Type another password that is not on the banned list. This time you should be able to complete the process successfully.
 
-1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_PasswordReset_BannedPasswordList* policy to reset the password. Complete the password reset process and perform the same tests as you run during the sign-up.
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_PasswordReset_BannedPasswordList/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_PasswordReset_BannedPasswordList* policy to reset the password. Complete the password reset process and perform the same tests as you run during the sign-up.
 
 
 ## Prerequisites
