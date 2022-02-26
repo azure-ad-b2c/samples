@@ -21,8 +21,6 @@ To test the policy, follow these steps:
 
 - To use the sample policies in this repo, follow the instructions here to [setup your AAD B2C environment for Custom Policies](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-get-started-custom).
 
-- For any custom policy sample, which makes use of Extension attributes, follow the guidance on [storing the extension properties](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#create-a-new-application-to-store-the-extension-properties) and [adding the application objectID](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-create-custom-attributes-profile-edit-custom#modify-your-custom-policy-to-add-the-applicationobjectid). The *AAD-Common* Technical profile will always need to be modified to use your *ApplicationId* and *ObjectId*.
-
 ## How it works
 
 When the user signs up, the *LocalAccountSignUpWithLogonEmail_Custom* technical profile uses the *CheckPassword* validation technical profile to validate that the new password is not on the banned list. The *CheckPassword* technical profile uses multiple claims transformations to determine if the new password exists on the banned password list and throws an error if it does.

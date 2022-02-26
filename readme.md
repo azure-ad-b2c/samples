@@ -48,8 +48,8 @@ Samples are available for the following categories
 |[Password Reset with Phone Number](policies/password-reset-with-phone-number) |Reset a users password using Phone Number (SMS or Phone Call).|NEED POLICY FIX| |
 |[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|Force password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)| [Live demo](policies/password-reset-not-last-password#live-demo) |
 |[Banned password list](policies/banned-password-list-no-API) |Banned password list prevention during Sign up and password reset/change flow. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)| [Live demo](policies/banned-password-list-no-API#live-demo)|
-|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |DisplayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)| |
-|[Password history](policies/password-history) |Prevent the previous Nth password to be set during password reset/change. Requires using external storage and web servies. |NA| |
+|[Password Reset sends verification code only if the email is registered](policies/pwd-reset-email-exists) | Display control to send verification code to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|  [Live demo](policies/pwd-reset-email-exists#live-demo) |
+|[Password history](policies/password-history) |Prevent the previous Nth password to be set during password reset/change. Requires using external storage and web services. |NA| |
 
 
 ## General security
