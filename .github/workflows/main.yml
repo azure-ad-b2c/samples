@@ -7,10 +7,10 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: 'Upload TrustFrameworkBase Policy'
-      uses: azure-ad-b2c/deploy-trustframework-policy@v5.3Dev
+      uses: azure-ad-b2c/deploy-trustframework-policy@v5.3
       with:
         folder: "./"
-        files: "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml,policies/embedded-password-reset/policy/SignUpOrSigninCustom_SSPR.xml,policies/password-reset-only/policy/TrustFrameworkExtensions.xml,policies/password-reset-only/policy/PasswordReset.xml,policies/password-reset-not-last-password/policy/TrustFrameworkExtensions.xml,policies/password-reset-not-last-password/policy/PasswordReset.xml,policies/banned-password-list-no-API/policy/TrustFrameworkExtensions.xml,policies/banned-password-list-no-API/policy/PasswordReset.xml,policies/banned-password-list-no-API/policy/SignUpOrSignin.xml,policies/pwd-reset-email-exists/policy/TrustFrameworkExtensions_PasswordResetAccountExists.xml,policies/pwd-reset-email-exists/policy/PasswordReset_AccountExists.xml"
+        files: "deployment.json"
         tenant: ${{ secrets.tenant }}
         clientId: ${{ secrets.clientId }}
         clientSecret: ${{ secrets.clientSecret }}

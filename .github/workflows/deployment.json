@@ -1,0 +1,38 @@
+{
+    "version": "1.0",
+    "files": [
+        {
+            "path": "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml"
+        },
+        {
+            "path": "policies/embedded-password-reset/policy/SignUpOrSigninCustom_SSPR.xml"
+        },
+        {
+            "path": "policies/password-reset-only/policy/TrustFrameworkExtensions.xml"
+        },
+        {
+            "path": "policies/password-reset-only/policy/PasswordReset.xml"
+        },
+        {
+            "path": "policies/password-reset-not-last-password/policy/TrustFrameworkExtensions.xml"
+        },
+        {
+            "path": "policies/password-reset-not-last-password/policy/PasswordReset.xml"
+        },
+        {
+            "path": "policies/banned-password-list-no-API/policy/TrustFrameworkExtensions.xml"
+        },
+        {
+            "path": "policies/banned-password-list-no-API/policy/PasswordReset.xml"
+        },
+        {
+            "path": "policies/banned-password-list-no-API/policy/SignUpOrSignin.xml"
+        },
+        {
+            "path": "policies/pwd-reset-email-exists/policy/TrustFrameworkExtensions_PasswordResetAccountExists.xml"
+        },
+        {
+            "path": "policies/pwd-reset-email-exists/policy/PasswordReset_AccountExists.xml"
+        }
+    ]
+}
