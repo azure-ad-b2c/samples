@@ -48,6 +48,9 @@
         },
         {
             "path": "policies/pwd-reset-via-email-or-phone/policy/PasswordReset_EmailOrPhone.xml"
+        },
+        {
+            "path": "policies/dynamic-sign-up-sign-in/policy/SignUpOrSignIn_Dynamic.xml"
         }
     ]
 }

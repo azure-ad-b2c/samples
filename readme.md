@@ -71,25 +71,26 @@ Samples are available for the following categories
 
 ## User Experience
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Dynamic sign up or sign in](policies/dynamic-sign-up-sign-in)|allows dynamically detecting whether a user can sign in or sign up. The user enters their email and is asked to verify their password if the account exists. If the account does not exist, the user goes through a sign up flow.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=dynamic-sign-up-sign-in)|
-|[Split Sign-up into separate steps for email verification and account creation](policies/split-email-verification-and-signup)|When you don't want to use the default Sign-up page which shows both email verification and user registration controls on the same page at once. This sample splits the default sign-up behavior into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=split-email-verification-and-signup)|
-|[Sign In and Sign Up with Username or Email](policies/username-or-email)|This sample combines the UX of both the Email and Username based journeys.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-or-email)|
-|[Local account change sign-in name email address](policies/change-sign-in-name)|During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=change-sign-in-name)|
-|[Username discovery](policies/username-discovery)|This example shows how to discover a username by email address. It's useful when a user has forgotten their username and remembers only their email address.|NA|
-|[Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery)|Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.|NA|
-|[Email delivered account redemption link](policies/sign-in-with-email)|This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.|NA|
-|[Sign-in with a magic link](policies/sign-in-with-magic-link)|This sample demonstrates how a user can sign in to your web application by sending them a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.|NA|
-|[Username based journey](policies/username-signup-or-signin) | For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-signup-or-signin)|
-|[Dynamic identity provider selection](policies/idps-filter)|Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on the requests application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.|NA|
-|[Home Realm Discovery page](policies/home-realm-discovery-modern)|Demonstrates how to create a home realm discovery page. On the sign-in page, the user provides their sign-in email address and clicks continue. B2C checks the domain portion of the sign-in email address. If the domain name is `contoso.com` the user is redirected to Contoso.com Azure AD to complete the sign-in. Otherwise the user continues the sign-in with username and password. In both cases (AAD B2C local account and AAD account), the user does not need to retype the user name.|NA|
-|[Delete my account](policies/delete-my-account)|Demonstrates how to delete a local or social account from the directory|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=delete-my-account)|
-|[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile).|NA|
-|[sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link)|Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-deep-link)|
-|[Allow sign up from specific email domains](policies/sign-up-domain-whitelist)|This policy demonstrates how to validate the email address domain name against a list of allowed domains.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-domain-whitelist)|
+|Sample name   |Description   |Quick deploy|Demo|
+|---|---|---|---|
+|[Dynamic sign up or sign in](policies/dynamic-sign-up-sign-in)|allows dynamically detecting whether a user can sign in or sign up. The user enters their email and is asked to verify their password if the account exists. If the account does not exist, the user goes through a sign up flow.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=dynamic-sign-up-sign-in)| [Live demo](policies/dynamic-sign-up-sign-in#live-demo)|
+|[Split Sign-up into separate steps for email verification and account creation](policies/split-email-verification-and-signup)|When you don't want to use the default Sign-up page which shows both email verification and user registration controls on the same page at once. This sample splits the default sign-up behavior into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=split-email-verification-and-signup)||
+|[Sign In and Sign Up with Username or Email](policies/username-or-email)|This sample combines the UX of both the Email and Username based journeys.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-or-email)||
+|[Local account change sign-in name email address](policies/change-sign-in-name)|During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=change-sign-in-name)||
+|[Username discovery](policies/username-discovery)|This example shows how to discover a username by email address. It's useful when a user has forgotten their username and remembers only their email address.|NA||
+|[Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery)|Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.|NA||
+|[Email delivered account redemption link](policies/sign-in-with-email)|This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.|NA||
+|[Sign-in with a magic link](policies/sign-in-with-magic-link)|This sample demonstrates how a user can sign in to your web application by sending them a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.|NA||
+|[Username based journey](policies/username-signup-or-signin) | For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-signup-or-signin)||
+|[Dynamic identity provider selection](policies/idps-filter)|Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on the requests application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.|NA||
+|[Home Realm Discovery page](policies/home-realm-discovery-modern)|Demonstrates how to create a home realm discovery page. On the sign-in page, the user provides their sign-in email address and clicks continue. B2C checks the domain portion of the sign-in email address. If the domain name is `contoso.com` the user is redirected to Contoso.com Azure AD to complete the sign-in. Otherwise the user continues the sign-in with username and password. In both cases (AAD B2C local account and AAD account), the user does not need to retype the user name.|NA||
+|[Delete my account](policies/delete-my-account)|Demonstrates how to delete a local or social account from the directory|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=delete-my-account)||
+|[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile).|NA||
+|[sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link)|Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-deep-link)||
+|[Allow sign up from specific email domains](policies/sign-up-domain-whitelist)|This policy demonstrates how to validate the email address domain name against a list of allowed domains.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-domain-whitelist)||
 
 ## Terms of Use/Consent
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)|
@@ -97,6 +98,7 @@ Samples are available for the following categories
 |[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA|
 
 ## Passwordless
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Password-less sign-in with email verification](policies/passwordless-email)|Password-less authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=passwordless-email)|
@@ -123,6 +125,7 @@ Samples are available for the following categories
 
 
 ## Account linking
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Auto account linking](policies/auto-account-linking)|This policy sample demonstrates how to link an account when a user arrives with the same email as an existing account. When the email is detected as being the same, the user is prompted to sign in with one of the methods already registered on the existing account. Once complete, the account is linked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=auto-account-linking)|
@@ -132,6 +135,7 @@ Samples are available for the following categories
 |[Sign-up with social and local account](policies/sign-up-with-social-and-local-account)|Demonstrate how to create a policy that allows a user to sign-up with a social account linked to local account|NA|
 
 ## Identity providers
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Sign in with Apple as a Custom OpenID Connect identity provider](policies/sign-in-with-apple)|Demonstrates how to gather the correct configuration information to setup Sign in with Apple as an OpenID Connect identity provider.|NA|
@@ -143,11 +147,13 @@ Samples are available for the following categories
 |[AAD Authentication with REST](policies/AAD-SignIn-with-REST)|Pass through authentication to Azure AD (no user created in B2C), then calls a REST API to obtain more claims.|NA|
 
 ## User interface
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Render dynamic dropdown box](policies/selectemail)|For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.|NA|
 
 ## Data residency
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Remote profile](policies/remote-profile)|Demonstrates how to store and read user profiles from a remote database.|NA|
@@ -156,6 +162,7 @@ Samples are available for the following categories
 
 
 ## User migration
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Seamless account migration](/../../../user-migration/tree/master/seamless-account-migration) | Where accounts have been pre-migrated into Azure AD B2C and you want to update the password on the account on initial sign in. Azure AD B2C calls a REST API to validate the credentials for accounts marked as requiring migration (via attribute) against a legacy identity provider, returns a successful response to Azure AD B2C, and Azure AD B2C writes the password to the account in the directory.|NA|
@@ -165,16 +172,19 @@ Samples are available for the following categories
 |[B2C to B2C Migration](policies/B2C2B2CMigration) | Migrate users from one B2C instance to another using just in time migration.|NA|
 
 ## UserInfo endpoint
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[UserInfo Endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
 
 ## Web Test
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[SignIn Web Test using Azure App Insights](policies/user-info-endpoint) | This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.| NA|
 
 ## CI/CD
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Azure DevOps pipeline for Azure AD B2C](policies/devops-pipeline) | Uploads policies regardless of naming convention Azure DevOps automated pipeline.| NA|
