@@ -33,6 +33,21 @@
         },
         {
             "path": "policies/pwd-reset-email-exists/policy/PasswordReset_AccountExists.xml"
+        },
+        {
+            "path": "policies/pwd-reset-via-email-or-phone/policy/TrustFrameworkExtensions_EmailOrPhone.xml"
+        },
+        {
+            "path": "policies/pwd-reset-via-email-or-phone/policy/SignUpOrSignin_EmailOrPhone.xml",
+            "replacements": [
+                {
+                    "find": "\"SignUpOrSignIn\"",
+                    "replace": "\"SignUpOrSignInWithMfa\""
+                }
+            ]
+        },
+        {
+            "path": "policies/pwd-reset-via-email-or-phone/policy/PasswordReset_EmailOrPhone.xml"
         }
     ]
 }
