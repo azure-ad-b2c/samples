@@ -1,5 +1,5 @@
 on: push
- 
+  
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -16,3 +16,4 @@ jobs:
         clientSecret: ${{ secrets.clientSecret }}
         renumberSteps: true
         addAppInsightsStep: true
+
