@@ -75,6 +75,18 @@
         },
         {
             "path": "policies/change-sign-in-name/policy/ChangeSignInName.xml"
+        },
+        {
+            "path": "policies/change-sign-in-name/policy/TrustFrameworkExtensions_Username.xml"
+        },
+        {
+            "path": "policies/change-sign-in-name/policy/SignUpOrSignin_Username.xml"
+        },
+        {
+            "path": "policies/change-sign-in-name/policy/ProfileEdit_Username.xml"
+        },
+        {
+            "path": "policies/change-sign-in-name/policy/PasswordReset_Username.xml"
         }
     ]
 }
