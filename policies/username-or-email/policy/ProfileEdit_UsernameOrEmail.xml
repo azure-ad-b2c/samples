@@ -1,23 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_usernameOrEmail_ProfileEdit"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_usernameOrEmail_ProfileEdit"
-  DeploymentMode="Development" 
-  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights" 
->
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_ProfileEdit_UsernameOrEmail" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_ProfileEdit_UsernameOrEmail">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_UsernameOrEmail_TrustFrameworkExtensions</PolicyId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_UsernameOrEmail</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="ProfileEditUsernameOrEmail" />
+    <DefaultUserJourney ReferenceId="ProfileEdit_UsernameOrEmail" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
@@ -27,12 +20,10 @@
         <OutputClaim ClaimTypeReferenceId="givenName" />
         <OutputClaim ClaimTypeReferenceId="surname" />
         <OutputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" />
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
-
-

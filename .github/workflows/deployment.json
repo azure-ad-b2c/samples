@@ -54,6 +54,21 @@
         },
         {
             "path": "policies/split-email-verification-and-signup/policy/SignUpOrSignIn_SplitEmailVerificationAndSignUp.xml"
+        },
+        {
+            "path": "policies/username-or-email/policy/TrustFrameworkExtensions_UsernameOrEmail.xml"
+        },
+        {
+            "path": "policies/username-or-email/policy/PasswordReset_UsernameOrEmail.xml"
+        },
+        {
+            "path": "policies/username-or-email/policy/ProfileEdit_UsernameOrEmail.xml"
+        },
+        {
+            "path": "policies/username-or-email/policy/SignIn_UsernameOrEmail.xml"
+        },
+        {
+            "path": "policies/username-or-email/policy/SignUp_UsernameOrEmail.xml"
         }
     ]
 }

@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_UsernameOrEmail_TrustFrameworkExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_UsernameOrEmail_TrustFrameworkExtensions">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_UsernameOrEmail" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_UsernameOrEmail">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -109,7 +110,7 @@
           </OutputClaims>
           <ValidationTechnicalProfiles>
             <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
-            <ValidationTechnicalProfile ReferenceId="regexAnalysisUsername"/>
+            <ValidationTechnicalProfile ReferenceId="regexAnalysisUsername" />
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
@@ -152,7 +153,7 @@
             <OutputClaim ClaimTypeReferenceId="isEmailBoolean" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="regexAnalysisUsername"/>
+            <ValidationTechnicalProfile ReferenceId="regexAnalysisUsername" />
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
@@ -164,10 +165,10 @@
             <OutputClaim ClaimTypeReferenceId="objectId" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingIdentifier"/>
-            <ValidationTechnicalProfile ReferenceId="regexAnalysisUsername"/>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingIdentifier" />
+            <ValidationTechnicalProfile ReferenceId="regexAnalysisUsername" />
           </ValidationTechnicalProfiles>
-          <IncludeTechnicalProfile ReferenceId="SelfAsserted-LocalAccountLookup-Combined-SignUp"/>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-LocalAccountLookup-Combined-SignUp" />
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
 
@@ -196,7 +197,7 @@
             <InputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="readOnlyEmail"/>
+            <InputClaim ClaimTypeReferenceId="readOnlyEmail" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" />
@@ -230,9 +231,9 @@
           <PersistedClaims>
             <!-- Required claims -->
             <PersistedClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="signInNames.emailAddress" />
-            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"/>
+            <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
             <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
-            <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration" />
+            <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration, DisableStrongPassword" />
 
             <PersistedClaim ClaimTypeReferenceId="Verified.strongAuthenticationPhoneNumber" PartnerClaimType="strongAuthenticationPhoneNumber" />
 
@@ -270,13 +271,16 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" Required="true" />
             <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
             <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" />
             <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+
+            <!-- Optional claims-->
+            <OutputClaim ClaimTypeReferenceId="displayName" Required="true" />
             <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
             <OutputClaim ClaimTypeReferenceId="surname" Required="true" />
           </OutputClaims>
@@ -298,6 +302,7 @@
             <PersistedClaim ClaimTypeReferenceId="signInName" PartnerClaimType="signInNames.userName" />
             <PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="strongAuthenticationEmailAddress" />
             <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
+            <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration, DisableStrongPassword" />
             <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
             <!-- Optional claims. -->
             <PersistedClaim ClaimTypeReferenceId="givenName" />
@@ -379,7 +384,7 @@
             <InputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="readOnlyEmail"/>
+            <InputClaim ClaimTypeReferenceId="readOnlyEmail" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" />
@@ -412,7 +417,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignInUsernameOrEmail">
+    <UserJourney Id="SignIn_UsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -435,7 +440,7 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
 
-    <UserJourney Id="SignUpUsernameOrEmail">
+    <UserJourney Id="SignUp_UsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -483,8 +488,7 @@
     </UserJourney>
 
 
-
-    <UserJourney Id="PasswordResetUsernameOrEmail">
+    <UserJourney Id="PasswordReset_UsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
@@ -537,7 +541,7 @@
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
 
-    <UserJourney Id="ProfileEditUsernameOrEmail">
+    <UserJourney Id="ProfileEdit_UsernameOrEmail">
       <OrchestrationSteps>
 
         <OrchestrationStep Order="1" Type="ClaimsExchange">
