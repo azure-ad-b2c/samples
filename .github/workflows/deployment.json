@@ -51,6 +51,9 @@
         },
         {
             "path": "policies/dynamic-sign-up-sign-in/policy/SignUpOrSignIn_Dynamic.xml"
+        },
+        {
+            "path": "policies/split-email-verification-and-signup/policy/SignUpOrSignIn_SplitEmailVerificationAndSignUp.xml"
         }
     ]
 }
