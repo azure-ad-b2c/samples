@@ -69,6 +69,12 @@
         },
         {
             "path": "policies/username-or-email/policy/SignUp_UsernameOrEmail.xml"
+        },
+        {
+            "path": "policies/change-sign-in-name/policy/TrustFrameworkExtensions_ChangeSignInName.xml"
+        },
+        {
+            "path": "policies/change-sign-in-name/policy/ChangeSignInName.xml"
         }
     ]
 }
