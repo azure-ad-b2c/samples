@@ -90,6 +90,18 @@
         },
         {
             "path": "policies/delete-my-account/policy/DeleteMyAccount.xml"
+        },
+        {
+            "path": "policies/totp/policy/TrustFrameworkExtensions_TOTP.xml"
+        },
+        {
+            "path": "policies/totp/policy/TrustFrameworkExtensions_TOTPMigration.xml"
+        },
+        {
+            "path": "policies/totp/policy/SignUpOrSignIn_TOTP.xml"
+        },
+        {
+            "path": "policies/totp/policy/PasswordReset_TOTP.xml"
         }
         
     ]
