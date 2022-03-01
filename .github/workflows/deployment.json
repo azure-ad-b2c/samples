@@ -114,6 +114,9 @@
         },
         {
             "path": "policies/signin-email-verification/policy/SignUpOrSignIn_EmailMFA.xml"
+        },
+        {
+            "path": "policies/mfa-email-or-phone/policy/SignUpOrSignin_PhoneOrEmailMFA.xml"
         }
     ]
 }
