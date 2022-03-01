@@ -102,6 +102,12 @@
         },
         {
             "path": "policies/totp/policy/PasswordReset_TOTP.xml"
+        },
+        {
+            "path": "policies/edit-mfa-phone-number/policy/TrustFrameworkExtensions_EditPhoneNumber.xml"
+        },
+        {
+            "path": "policies/edit-mfa-phone-number/policy/ProfileEdit_PhoneNumber.xml"
         }
         
     ]

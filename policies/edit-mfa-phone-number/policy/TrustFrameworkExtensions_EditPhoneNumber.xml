@@ -1,20 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_Edit_MFA_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Edit_MFA_TrustFrameworkExtensions">
-  
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_EditPhoneNumber" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_EditPhoneNumber">
+
   <BasePolicy>
-    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <TenantId>iristflower.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
-  <BuildingBlocks>
-
-  </BuildingBlocks>
+  <BuildingBlocks></BuildingBlocks>
 
   <ClaimsProviders>
     <ClaimsProvider>
@@ -27,9 +21,6 @@
             <Item Key="ContentDefinitionReferenceId">api.phonefactor</Item>
             <Item Key="ManualPhoneNumberEntryAllowed">true</Item>
           </Metadata>
-          <CryptographicKeys>
-            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
-          </CryptographicKeys>
           <InputClaimsTransformations>
             <InputClaimsTransformation ReferenceId="CreateUserIdForMFA" />
           </InputClaimsTransformations>
@@ -49,19 +40,19 @@
   <UserJourneys>
     <UserJourney Id="EditMFAPhonenumber">
       <OrchestrationSteps>
-      
+
         <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
         </OrchestrationStep>
-        
+
         <OrchestrationStep Order="2" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        
+
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
@@ -74,27 +65,27 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-  
+
         <!-- If the user ever stepped up to use 2FA, profile update must verify this because the user will be able to change
           their sign in email address or strong authentication email here. This guards against scenarios where a user's 
           password is stolen, the attacker can change the email addresses leaving no way for the user to recover their account.
           By requiring 2FA, stolen passwords cannot be used to take over the account completely. -->
-          
-        <!--Demo: First verify existing one-->
+
+        <!-- First verify existing one-->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="ExistingPhoneFactor" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!--Demo: Update to the new one-->
+        <!-- Update to the new one-->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="NewPhoneFactor" TechnicalProfileReferenceId="PhoneFactor-EditAndVerify" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Demo: save MFA phone number -->
+        <!-- Save MFA phone number -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
@@ -106,6 +97,6 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-	</UserJourneys>
+  </UserJourneys>
 
 </TrustFrameworkPolicy>
