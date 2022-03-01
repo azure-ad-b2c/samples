@@ -8,7 +8,7 @@ To checkout the user experience of this policy, follow these steps:
 
 1. If you don't have an account, [create a local account](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_EmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) with your email address.
 
-1. [Sign-in](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_EmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) with the *B2C_1A_Demo_TrustFrameworkExtensions_EmailMFA* policy. Provide your credentials and select *Sign-in*. Azure AD B2C will ask you to verify your email (as the second factor authentication). 
+1. [Sign-in](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_signup_signin_EmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) with the *B2C_1A_signup_signin_EmailMFA* policy. Provide your credentials and select *Sign-in*. Azure AD B2C will ask you to verify your email (as the second factor authentication). 
 
 ## How it works
 
