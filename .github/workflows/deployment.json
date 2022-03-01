@@ -117,6 +117,12 @@
         },
         {
             "path": "policies/mfa-email-or-phone/policy/SignUpOrSignin_PhoneOrEmailMFA.xml"
+        },
+        {
+            "path": "policies/mfa-add-secondarymfa/policy/TrustFrameworkExtensions_SecondaryPhone.xml"
+        },
+        {
+            "path": "policies/mfa-add-secondarymfa/policy/SignUpOrSignIn_SecondaryPhone.xml"
         }
     ]
 }

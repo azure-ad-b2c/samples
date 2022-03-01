@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions_secondaryMFA" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_secondaryMFA">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_SecondaryPhone" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_SecondaryPhone">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -188,7 +189,7 @@
                  ValidationTechnicalProfile referenced below so it can be written to directory after being updateed by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
 
             <!-- Optional claims -->
-            <OutputClaim ClaimTypeReferenceId="shouldRegisterForAnotherMFA" DefaultValue="false"/>
+            <OutputClaim ClaimTypeReferenceId="shouldRegisterForAnotherMFA" DefaultValue="false" />
 
           </OutputClaims>
         </TechnicalProfile>
@@ -221,7 +222,7 @@
             <PersistedClaim ClaimTypeReferenceId="secondaryStrongAuthenticationPhoneNumber" />
           </PersistedClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -397,7 +398,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-    <UserJourney Id="SignUpOrSignInSelectMFA">
+    <UserJourney Id="SignUpOrSignIn_SecondaryPhone">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
