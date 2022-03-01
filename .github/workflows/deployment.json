@@ -108,7 +108,12 @@
         },
         {
             "path": "policies/edit-mfa-phone-number/policy/ProfileEdit_PhoneNumber.xml"
+        },
+        {
+            "path": "policies/signin-email-verification/policy/TrustFrameworkExtensions_EmailMFA.xml"
+        },
+        {
+            "path": "policies/signin-email-verification/policy/SignUpOrSignIn_EmailMFA.xml"
         }
-        
     ]
 }
