@@ -364,7 +364,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="CA_ChangePassword" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+            <ClaimsExchange Id="CA_ChangePassword" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId_CA" />
           </ClaimsExchanges>
         </OrchestrationStep>
           
