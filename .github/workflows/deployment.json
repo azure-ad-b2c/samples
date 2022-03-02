@@ -132,6 +132,9 @@
         },
         {
             "path": "policies/conditional-access/policy/SignUpOrSigninWith_ConditionalAccess_WhatIf.xml"
+        },
+        {
+            "path": "policies/allow-list-applications/policy/SignUpOrSignin_AppAllowList.xml"
         }
     ]
 }
