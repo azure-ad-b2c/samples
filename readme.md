@@ -91,11 +91,11 @@ Samples are available for the following categories
 
 ## Terms of Use/Consent
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)|
-|[Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou)|Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-in-sign-up-versioned-tou)|
-|[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA|
+|Sample name   |Description   |Quick deploy|Demo|
+|---|---|---|---|
+|[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)| [Live demo](policies/sign-in-sign-up-versioned-tou#live-demo)|
+|[Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou)|Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-in-sign-up-versioned-tou)||
+|[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA||
 
 ## Passwordless
 

@@ -141,6 +141,15 @@
         },
         {
             "path": "policies/social-idp-force-email/policy/SignUpOrSignin_FederationForceEmail.xml"
+        },
+        {
+            "path": "policies/sign-in-sign-up-versioned-tou/policy/TrustFrameworkExtensions_TOU.xml"
+        },
+        {
+            "path": "policies/sign-in-sign-up-versioned-tou/policy/SignUpSignIn_TOU.xml"
+        },
+        {
+            "path": "policies/sign-in-sign-up-versioned-tou/policy/PasswordReset_TOU.xml"
         }
     ]
 }
