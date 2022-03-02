@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
-  TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions_TOU_SUSI_Social" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_TOU_SUSI_Social">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_TOU" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_TOU">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
@@ -255,8 +255,8 @@
 
         <!-- NOTE - Will allow SSO from Forgot password flow to Sign In flow, but will also allow SSO to 'change 
         password' page without email verification for Forgot password flow after sign in or sign up -->
-       <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
-           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
 
       </TechnicalProfiles>
@@ -288,7 +288,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-           <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
             <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmailCustom" />
           </ClaimsExchanges>
         </OrchestrationStep>
@@ -401,7 +401,7 @@
             <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        
+
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="Check-TOU-Status" TechnicalProfileReferenceId="Check-TOU-Status" />

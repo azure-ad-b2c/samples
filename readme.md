@@ -91,11 +91,11 @@ Samples are available for the following categories
 
 ## Terms of Use/Consent
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)|
-|[Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou)|Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-in-sign-up-versioned-tou)|
-|[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA|
+|Sample name   |Description   |Quick deploy|Demo|
+|---|---|---|---|
+|[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)| [Live demo](policies/sign-in-sign-up-versioned-tou#live-demo)|
+|[Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou)|Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-in-sign-up-versioned-tou)||
+|[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA||
 
 ## Passwordless
 
@@ -104,8 +104,8 @@ Samples are available for the following categories
 |[Password-less sign-in with email verification](policies/passwordless-email)|Password-less authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=passwordless-email)|
 |[Login with Phone Number](policies/signup-signin-with-phone-number)|An example set of policies for password-less login via Phone Number (SMS or Phone Call).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=signup-signin-with-phone-number)|
 
-
 ## Multi factor
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Microsoft Authenticator TOTP](policies/totp) |Integrate native Microsoft Authenticator TOTP flow - [Enroll a user in TOTP with an authenticator app](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow#enroll-a-user-in-totp-with-an-authenticator-app-for-end-users)|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=totp)|
@@ -122,7 +122,6 @@ Samples are available for the following categories
 |[Add & Select 2 MFA phone numbers at SignIn/Signup](policies/mfa-add-secondarymfa)| Demonstrates how to store two phone numbers in a secure manner in B2C and choose between any two at signIn. The flow prompts the user to store a secondary phone if only one phone number is one file. Once the two numbers are stored as part of SignUp or SignIn the user is given a choice to select between the two phones for their MFA on subsequent signIns.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-add-secondarymfa)|
 |[MFA after timeout or IP change](policies/mfa-absolute-timeout-and-ip-change-trigger)| A policy which forces the user to do MFA on 3 conditions: The user has newly signed up, the user has not done MFA in the last X seconds, the user is logging in from a different IP than they last logged in from.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-absolute-timeout-and-ip-change-trigger)|
 |[Unknown Devices MFA - device fingerprinting](policies/mfa-unknown-devices)|Demonstrates how to detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-unknown-devices)|
-
 
 ## Account linking
 
@@ -160,7 +159,6 @@ Samples are available for the following categories
 |[Remote profile geo-based](policies/remote-profile-geo)|Demonstrates storing user profile either in B2C directory or in different Azure Table Storages based in user geography setting.|NA|
 |[Encrypted profile](policies/encrypted-profile)|Demonstrates how to store and read user profiles from Azure AD B2C using encrypted data.|NA|
 
-
 ## User migration
 
 |Sample name   |Description   |Quick deploy|
@@ -188,7 +186,6 @@ Samples are available for the following categories
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Azure DevOps pipeline for Azure AD B2C](policies/devops-pipeline) | Uploads policies regardless of naming convention Azure DevOps automated pipeline.| NA|
-
 
 ## Community Help and Support
 

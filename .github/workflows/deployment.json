@@ -77,16 +77,25 @@
             "path": "policies/change-sign-in-name/policy/ChangeSignInName.xml"
         },
         {
-            "path": "policies/change-sign-in-name/policy/TrustFrameworkExtensions_Username.xml"
+            "path": "policies/username-signup-or-signin/policy/TrustFrameworkExtensions_Username.xml"
         },
         {
-            "path": "policies/change-sign-in-name/policy/SignUpOrSignin_Username.xml"
+            "path": "policies/username-signup-or-signin/policy/SignUpOrSignin_Username.xml"
         },
         {
-            "path": "policies/change-sign-in-name/policy/ProfileEdit_Username.xml"
+            "path": "policies/username-signup-or-signin/policy/ProfileEdit_Username.xml"
         },
         {
-            "path": "policies/change-sign-in-name/policy/PasswordReset_Username.xml"
+            "path": "policies/username-signup-or-signin/policy/PasswordReset_Username.xml"
+        },
+        {
+            "path": "policies/sign-in-sign-up-versioned-tou/policy/TrustFrameworkExtensions_TOU.xml"
+        },
+        {
+            "path": "policies/sign-in-sign-up-versioned-tou/policy/SignUpSignIn_TOU.xml"
+        },
+        {
+            "path": "policies/sign-in-sign-up-versioned-tou/policy/PasswordReset_TOU.xml"
         }
     ]
 }
