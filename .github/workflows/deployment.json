@@ -135,6 +135,12 @@
         },
         {
             "path": "policies/allow-list-applications/policy/SignUpOrSignin_AppAllowList.xml"
+        },
+        {
+            "path": "policies/social-idp-force-email/policy/TrustFrameworkExtensions_FederationForceEmail.xml"
+        },
+        {
+            "path": "policies/social-idp-force-email/policy/SignUpOrSignin_FederationForceEmail.xml"
         }
     ]
 }
