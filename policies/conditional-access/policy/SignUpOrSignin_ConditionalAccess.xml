@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
     TenantId="yourtenant.onmicrosoft.com" 
-    PolicyId="B2C_1A_signup_signin_with_ca" 
-    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with_ca">
+    PolicyId="B2C_1A_Demo_SignUp_SignIn_ConditionalAccess" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_ConditionalAccess">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensionsCA</PolicyId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_ConditionalAccess</PolicyId>
   </BasePolicy>
 
   <RelyingParty>

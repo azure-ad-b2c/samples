@@ -123,6 +123,15 @@
         },
         {
             "path": "policies/mfa-add-secondarymfa/policy/SignUpOrSignIn_SecondaryPhone.xml"
+        },
+        {
+            "path": "policies/conditional-access/policy/TrustFrameworkExtensions_ConditionalAccess.xml"
+        },
+        {
+            "path": "policies/conditional-access/policy/SignUpOrSignin_ConditionalAccess.xml"
+        },
+        {
+            "path": "policies/conditional-access/policy/SignUpOrSigninWith_ConditionalAccess_WhatIf.xml"
         }
     ]
 }
