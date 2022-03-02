@@ -1,26 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_EmailOTPSUSI_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_EmailOTPSUSI_TrustFrameworkExtensions">
-  
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_EmailMFA" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_EmailMFA">
+
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
-  <ClaimsSchema>
+    <ClaimsSchema>
       <ClaimType Id="readOnlyEmail">
         <DisplayName>Email Address</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
-</ClaimsSchema>
+    </ClaimsSchema>
     <ClaimsTransformations>
       <ClaimsTransformation Id="CopySignInNameToReadOnly" TransformationMethod="FormatStringClaim">
         <InputClaims>
@@ -37,42 +33,7 @@
   </BuildingBlocks>
 
   <ClaimsProviders>
-
-
     <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <!-- This technical profile uses a validation technical profile to authenticate the user. -->
-        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
-          <DisplayName>Local Account Signin</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
-            <Item Key="setting.operatingMode">Email</Item>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-          </Metadata>
-          <IncludeInSso>false</IncludeInSso>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="signInName" />
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="password" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="objectId" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
-          </OutputClaims>
-					<OutputClaimsTransformations>
-						<OutputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
-					</OutputClaimsTransformations>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
-          </ValidationTechnicalProfiles>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-     <ClaimsProvider>
       <DisplayName>Validate Email on Sign In</DisplayName>
       <TechnicalProfiles>
         <TechnicalProfile Id="EmailVerifyOnSignIn">
@@ -81,22 +42,23 @@
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
+          </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="readOnlyEmail"/>
+            <InputClaim ClaimTypeReferenceId="readOnlyEmail" />
           </InputClaims>
           <OutputClaims>
-            <!-- Required claims -->
-            <OutputClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="Verified.Email"/>
+            <OutputClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="Verified.Email" Required="true" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
 
-    <UserJourneys>
-	    <UserJourney Id="SignUpOrSignInWithEmailVerificationOnSignIn">
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignInWithEmailVerificationOnSignIn">
       <OrchestrationSteps>
-   
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
@@ -138,12 +100,12 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
- 
+
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-    
+
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-	</UserJourneys>
+  </UserJourneys>
 
 </TrustFrameworkPolicy>

@@ -89,6 +89,60 @@
             "path": "policies/username-signup-or-signin/policy/PasswordReset_Username.xml"
         },
         {
+            "path": "policies/delete-my-account/policy/DeleteMyAccount.xml"
+        },
+        {
+            "path": "policies/totp/policy/TrustFrameworkExtensions_TOTP.xml"
+        },
+        {
+            "path": "policies/totp/policy/TrustFrameworkExtensions_TOTPMigration.xml"
+        },
+        {
+            "path": "policies/totp/policy/SignUpOrSignIn_TOTP.xml"
+        },
+        {
+            "path": "policies/totp/policy/PasswordReset_TOTP.xml"
+        },
+        {
+            "path": "policies/edit-mfa-phone-number/policy/TrustFrameworkExtensions_EditPhoneNumber.xml"
+        },
+        {
+            "path": "policies/edit-mfa-phone-number/policy/ProfileEdit_PhoneNumber.xml"
+        },
+        {
+            "path": "policies/signin-email-verification/policy/TrustFrameworkExtensions_EmailMFA.xml"
+        },
+        {
+            "path": "policies/signin-email-verification/policy/SignUpOrSignIn_EmailMFA.xml"
+        },
+        {
+            "path": "policies/mfa-email-or-phone/policy/SignUpOrSignin_PhoneOrEmailMFA.xml"
+        },
+        {
+            "path": "policies/mfa-add-secondarymfa/policy/TrustFrameworkExtensions_SecondaryPhone.xml"
+        },
+        {
+            "path": "policies/mfa-add-secondarymfa/policy/SignUpOrSignIn_SecondaryPhone.xml"
+        },
+        {
+            "path": "policies/conditional-access/policy/TrustFrameworkExtensions_ConditionalAccess.xml"
+        },
+        {
+            "path": "policies/conditional-access/policy/SignUpOrSignin_ConditionalAccess.xml"
+        },
+        {
+            "path": "policies/conditional-access/policy/SignUpOrSigninWith_ConditionalAccess_WhatIf.xml"
+        },
+        {
+            "path": "policies/allow-list-applications/policy/SignUpOrSignin_AppAllowList.xml"
+        },
+        {
+            "path": "policies/social-idp-force-email/policy/TrustFrameworkExtensions_FederationForceEmail.xml"
+        },
+        {
+            "path": "policies/social-idp-force-email/policy/SignUpOrSignin_FederationForceEmail.xml"
+        },
+        {
             "path": "policies/sign-in-sign-up-versioned-tou/policy/TrustFrameworkExtensions_TOU.xml"
         },
         {

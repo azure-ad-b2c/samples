@@ -1,19 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_SUSI_MFA_phone_or_email"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_SUSI_MFA_phone_or_email">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_signup_signin_PhoneOrEmailMFA" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_signup_signin_PhoneOrEmailMFA">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
- <BuildingBlocks>
+  <BuildingBlocks>
     <ClaimsSchema>
       <ClaimType Id="extension_mfaByPhoneOrEmail">
         <DisplayName>Please select your preferred MFA method</DisplayName>
@@ -27,7 +23,7 @@
       <ClaimType Id="readOnlyEmail">
         <DisplayName>Email Address</DisplayName>
         <DataType>string</DataType>
-        <UserHelpText/>
+        <UserHelpText />
         <UserInputType>Readonly</UserInputType>
       </ClaimType>
     </ClaimsSchema>
@@ -53,7 +49,7 @@
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="readOnlyEmail" TransformationClaimType="outputClaim" />
         </OutputClaims>
-      </ClaimsTransformation>      
+      </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
 
@@ -61,6 +57,7 @@
     <ClaimsProvider>
       <DisplayName>Self Asserted</DisplayName>
       <TechnicalProfiles>
+
         <TechnicalProfile Id="SelfAsserted-Select-MFA-Method">
           <DisplayName>Allow user to choose their MFA Method</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
@@ -68,7 +65,7 @@
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail" Required="true" />
           </OutputClaims>
         </TechnicalProfile>
 
@@ -83,15 +80,14 @@
           </InputClaims>
           <OutputClaims>
             <!-- Required claims -->
-            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true"/>
-            <OutputClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="Verified.Email"/>
+            <OutputClaim ClaimTypeReferenceId="isActiveMFASession" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="Verified.Email" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteMFAMethod">
-            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteMFAMethod"></ValidationTechnicalProfile>
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA" />
-        </TechnicalProfile>       
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
 
@@ -108,7 +104,7 @@
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
           </OutputClaimsTransformations>
-        </TechnicalProfile>       
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
 
@@ -145,16 +141,16 @@
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
             <!--Sample: Read the MFA preferred method-->
-            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail"/>
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail" />
           </OutputClaims>
-        </TechnicalProfile>  
+        </TechnicalProfile>
 
         <TechnicalProfile Id="AAD-UserReadUsingAlternativeSecurityId">
           <OutputClaims>
             <!--Sample: Read the MFA preferred method-->
-            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail"/>
+            <OutputClaim ClaimTypeReferenceId="extension_mfaByPhoneOrEmail" />
           </OutputClaims>
-        </TechnicalProfile>             
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -162,14 +158,14 @@
   <UserJourneys>
     <UserJourney Id="SignUpOrSignInMFAOption">
       <OrchestrationSteps>
-      
+
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <!-- <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/> -->
-            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -183,7 +179,7 @@
           </Preconditions>
           <ClaimsExchanges>
             <!-- <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/> -->
-            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -227,7 +223,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
@@ -244,7 +240,7 @@
             <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId"/>
           </ClaimsExchanges>
         </OrchestrationStep> -->
-  
+
         <!--Sample: If uses is enrolled for MFA, ask the user to select the preferred method-->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
@@ -274,7 +270,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify"/>
+            <ClaimsExchange Id="PhoneFactor-Verify" TechnicalProfileReferenceId="PhoneFactor-InputOrVerify" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -289,7 +285,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId"/>
+            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -307,10 +303,10 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb"/>
+      <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
   </UserJourneys>
   <RelyingParty>
@@ -323,7 +319,7 @@
         <OutputClaim ClaimTypeReferenceId="givenName" />
         <OutputClaim ClaimTypeReferenceId="surname" />
         <OutputClaim ClaimTypeReferenceId="email" />
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
         <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="Local" />
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
@@ -331,6 +327,3 @@
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
-
-
-
