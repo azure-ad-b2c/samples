@@ -6,7 +6,7 @@ The AD B2C Sign-up requires users to verify their email first before they can cr
 
 To check out the user experience of this policy, follow these steps:
 
-1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_SplitEmailVerificationAndSignUp/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_signup_signin_SplitEmailVerificationAndSignUp* policy.
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_SplitEmailVerificationAndSignUp/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_SignUp_SignIn_SplitEmailVerificationAndSignUp* policy.
 1. On the sign-up or sign-in page, select *Sign-up now*.
 1. Provide and verify your email address, then select *Continue*.
 1. To complete the sign-up process, fill out the sign-up form and select *Continue*.

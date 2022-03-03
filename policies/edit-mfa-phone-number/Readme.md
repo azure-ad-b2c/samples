@@ -6,9 +6,9 @@ This sample policy demonstrates how to allow user to provide and validate new MF
 
 To check out the user experience of the TOTP multi-factor authenticator, follow these steps:
 
-1. [Sign-up or sign-in with MFA](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_signup_signin_WithMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login). Note, this step is not part of this sample.
+1. [Sign-up or sign-in with MFA](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_SignUp_SignIn_WithMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login). Note, this step is not part of this sample.
 1. After you have an account that is registered with MFA, run the [B2C_1A_Demo_ProfileEdit_PhoneNumber](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_ProfileEdit_PhoneNumber/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) policy to edit the phone number you entered in the first step.
-1. After you changed the phone number for your account, [sign-in with MFA](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_signup_signin_WithMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login). This time you will be asked to verify the new phone number. Note, this step is not part of this sample.
+1. After you changed the phone number for your account, [sign-in with MFA](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_SignUp_SignIn_WithMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login). This time you will be asked to verify the new phone number. Note, this step is not part of this sample.
 
 ## How it works
 
