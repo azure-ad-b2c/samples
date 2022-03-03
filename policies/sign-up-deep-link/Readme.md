@@ -1,6 +1,14 @@
 # Sign-in and Sign-up policy with direct link to sign-up
 
-This sample adds a direct link to the sign-up page. A relying party application can include a query string parameter `option=signup` that takes the user directly  to the sign-up page.
+This sample adds a direct link to the sign-up page. A relying party application can include a query string parameter `option=signup` that takes the user directly  to the sign-up page
+
+## Live demo
+
+To checkout the user experience of this policy, follow these steps:
+
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SUSI_Username/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&option=signup) the *B2C_1A_Demo_SignUpSignin_DeepLink* policy, which takes you directly to the sign-up page.
+
+## Scenario
 
 To add the direct link to the sign-up page:
 
