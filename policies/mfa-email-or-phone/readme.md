@@ -6,9 +6,9 @@ For scenarios where you would like to give users the choice to use Email verific
 
 To test the MFA email or phone user experience, follow these steps:
 
-1. [Sign-up or sign-in](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_PhoneOrEmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) with the *B2C_1A_Demo_signup_signin_PhoneOrEmailMFA* policy.
+1. [Sign-up or sign-in](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_PhoneOrEmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) with the *B2C_1A_Demo_SignUp_SignIn_PhoneOrEmailMFA* policy.
 1. Choose the type of MFA (email or phone). Then complete the enrollment process.
-1. [Sign-in](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_signup_signin_PhoneOrEmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) again with the *B2C_1A_Demo_signup_signin_PhoneOrEmailMFA* policy. Complete the sign-in with your username and password. Then verify your email of phone (based on your previous choose)
+1. [Sign-in](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_PhoneOrEmailMFA/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&prompt=login) again with the *B2C_1A_Demo_SignUp_SignIn_PhoneOrEmailMFA* policy. Complete the sign-in with your username and password. Then verify your email of phone (based on your previous choose)
 
 ## Prerequisites
 

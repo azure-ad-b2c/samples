@@ -5,8 +5,8 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_signup_signin_with-sign-up-deep-link"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_signup_signin_with-sign-up-deep-link">
+  PolicyId="B2C_1A_SignUp_SignIn_with-sign-up-deep-link"
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_SignUp_SignIn_with-sign-up-deep-link">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>

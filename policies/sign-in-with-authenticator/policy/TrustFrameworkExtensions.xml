@@ -45,7 +45,7 @@ PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Authenticator_TrustFra
       </ClaimType>
       <!-- the text is presented in a <p></p> and javascript modifies the []() into an <a href link >, so if you change the PolicyId, change this too -->
       <ClaimType Id="pickYourAccountText">
-        <DisplayName>To signin with the Authenticator app, please enter your account. Need to setup the Authenticator? [Enroll here](B2C_1A_Authenticator_signup_signin_enroll)</DisplayName>
+        <DisplayName>To signin with the Authenticator app, please enter your account. Need to setup the Authenticator? [Enroll here](B2C_1A_Authenticator_SignUp_SignIn_enroll)</DisplayName>
         <DataType>string</DataType>
         <UserInputType>Paragraph</UserInputType>
       </ClaimType>
