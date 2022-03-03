@@ -150,6 +150,12 @@
         },
         {
             "path": "policies/sign-in-sign-up-versioned-tou/policy/PasswordReset_TOU.xml"
+        },
+        {
+            "path": "policies/sign-up-deep-link/policy/TrustFrameworkExtensions_DeepLink.xml"
+        },
+        {
+            "path": "policies/sign-up-deep-link/policy/SignUpOrSignIn_DeepLink.xml"
         }
     ]
 }
