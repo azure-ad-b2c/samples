@@ -1,7 +1,11 @@
-﻿<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_SignUp_SignIn_domain_whitelist" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_SignUp_SignIn_domain_whitelist">
+﻿<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_SignUpSignIn_DomainAllowlist" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_SignUpSignIn_DomainAllowlist">
+
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkExtensions_domain_whitelist</PolicyId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_DomainAllowList</PolicyId>
   </BasePolicy>
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
