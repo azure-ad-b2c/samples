@@ -4,20 +4,22 @@ In this repo, you will find samples for several enhanced Azure AD B2C Custom CIA
 
 ## Getting started
 
-- See our Custom Policy overview [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-overview).
+- See our [Custom Policy overview](https://docs.microsoft.com/azure/active-directory-b2c/custom-policy-overview).
 
-- See our [Azure AD B2C Wiki articles](https://azure-ad-b2c.github.io/azureadb2ccommunity.io/docs/custom-policy-concepts/) here to help walkthrough the custom policy components.
+- See our [Azure AD B2C Wiki articles](https://azure-ad-b2c.github.io/azureadb2ccommunity.io/docs/custom-policy-concepts/) to help walkthrough the custom policy components.
 
-- See our Custom Policy Schema reference [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-reference-trustframeworks-defined-ief-custom).
+- See our [Custom Policy Schema reference](https://docs.microsoft.com/azure/active-directory-b2c/trustframeworkpolicy).
 
 ## Prerequisites
-- You will require to create an Azure AD B2C directory, see the guidance [here](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
 
-- You can automate the pre requisites by visiting this [site](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant.
+- You will require to [create an Azure AD B2C directory](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
+
+- You can automate the prerequisites (where applicable) by using our using automated tool called [Deploy AAD B2C Custom Policies](https://aka.ms/iefsetup) if you already have an Azure AD B2C tenant.
 
 ## Sample scenarios
 
 Samples are available for the following categories
+
 - [Password Management](#password-management)
 - [General Security](#general-security)
 - [User Experience](#user-experience)
@@ -35,66 +37,68 @@ Samples are available for the following categories
 
 ## Password management
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Password reset via Email or Phone verification](policies/pwd-reset-via-email-or-phone)   |This demonstrates how to verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)|
-|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password. Or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)|
-|[Force password reset first logon](policies/force-password-reset-first-logon)|Demonstrates how to force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)|
-|[Force password after 90 days](policies/force-password-reset-after-90-days)|Demonstrates how to force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)|
-|[Password reset only](policies/password-reset-only)|This example policy prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)|
-|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=embedded-password-reset)|
-|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |An example policy to reset a users password using Phone Number (SMS or Phone Call).|NEED POLICY FIX|
-|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|For scenarios where you need to implement a password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)|
-|[Banned password list](policies/banned-password-list-no-API) |For scenarios where you need to implement a sign up and password reset/change flow where the user cannot use a new password that is part of a banned password list. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)|
-|[Password Reset OTP only sent if Email is registered](policies/pwd-reset-email-exists) |Demonstrate how to use a displayControl to send One-Time-Passcodes to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|
-|[Password history](policies/password-history) |This policy enables the storing and checking of a user's previous set of passwords in order to prevent them from using a previous password during a Password Reset flow. |NA|
+|Sample name   |Description   |Quick deploy| Demo|
+|---|---|---|---|
+|[Password reset via email or phone verification](policies/pwd-reset-via-email-or-phone)   |Verify a user via Email or SMS on a single screen.   | [Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-via-email-or-phone)|  [Live demo](policies/pwd-reset-via-email-or-phone#live-demo)|
+|[Force password reset](policies/force-password-reset)   |As an administrator, you can reset a user's password if the user forgets their password or you would like to force them to reset the password. In this policy sample, you'll learn how to force a password reset in these scenarios.   |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset)| [Live demo](policies/force-password-reset#live-demo)|
+|[Force password reset first logon](policies/force-password-reset-first-logon)|Force a user to reset their password on the first logon.  |[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-first-logon)| |
+|[Force password after 90 days](policies/force-password-reset-after-90-days)|Force a user to reset their password after 90 days from the last time user set their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=force-password-reset-after-90-days)| |
+|[Password reset only](policies/password-reset-only)|Prevents issuing an access token to the user after resetting their password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-only)| [Live demo](policies/password-reset-only#live-demo) |
+|[Sign-up and sign-in with embedded password reset](policies/embedded-password-reset)|Embed the password reset flow a part of the sign-up or sign-in policy without the AADB2C90118 error message.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=embedded-password-reset)| [Live demo](policies/embedded-password-reset#live-demo) |
+|[Password Reset with Phone Number](policies/password-reset-with-phone-number) |Reset a users password using Phone Number (SMS or Phone Call).| | |
+|[Password reset without the ability to use the last password](policies/password-reset-not-last-password)|Force password reset/change flow where the user cannot use their currently set password.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=password-reset-not-last-password)| [Live demo](policies/password-reset-not-last-password#live-demo) |
+|[Banned password list](policies/banned-password-list-no-API) |Banned password list prevention during Sign up and password reset/change flow. This sample does not use an API.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=banned-password-list-no-API)| [Live demo](policies/banned-password-list-no-API#live-demo)|
+|[Password Reset sends verification code only if the email is registered](policies/pwd-reset-email-exists) | Display control to send verification code to users only if the email is registered against a user in the directory.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=pwd-reset-email-exists)|  [Live demo](policies/pwd-reset-email-exists#live-demo) |
+|[Password history](policies/password-history) |Prevent the previous N<sup>th</sup> password to be set during password reset/change. Requires using external storage and web services. |NA| |
 
 
 ## General security
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Revoke Azure AD B2C session cookies](policies/revoke-sso-sessions) |Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=revoke-sso-sessions)|
-|[Google Captcha on Sign In](policies/captcha-integration)|An example set of policies which integrate Google Captcha into the sign in journey.|NA|
-|[Disable and lockout an account after a period of inactivity](policies/disable-inactive-account)|For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=disable-inactive-account)|
-|[Restrict B2C Policy to specific App Registration](policies/allow-list-applications)| Only permits certain application registrations to call certain B2C policy Id's.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=allow-list-applications)|
-|[Impersonation Flow](policies/impersonation)|For scenarios where you require one user to impersonate another user. This is common for support desk or delegated administration of a user in an application or service. It is recommended to always issue the token of the original authenticated user and append additional information about the targeted impersonated user as part of the auth flow|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=impersonation)|
-|[Social identity provider force email verification](policies/social-idp-force-email)|When a user signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.|NA|
-|[Sign-in with social identity provider and force email uniqueness](policies/force-unique-email-across-social-identities)|Demonstrates how to force a social account user to provide and validate their email address, and also checks that there is no other account with the same email address.|NA|
-|[Preventing logon for Social or External IdP Accounts when Disabled in AAD B2C](policies/disable-social-account-from-logon)|For scenarios where you would like to prevent logons via Social or External IdPs when the account has been disabled in Azure AD B2C.|NA|
-|[Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac)|Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.|NA|
-|[Sign-in with Conditional access](policies/conditional-access)|Azure Active Directory (Azure AD) Conditional Access is the tool used by Azure AD B2C to bring signals together, make decisions, and enforce organizational policies. Automating risk assessment with policy conditions means risky sign-ins are at once identified and remediated or blocked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=conditional-access)
-|[Allow/Deny based on Hostname](policies/check-host-name)|This sample provides an example of how to block access to particular B2C policy based on the [Hostname] of the request, e.g. allow requests made to the policy using login.contoso.com but block foo.b2clogin.com. Useful when using custom domain(s) with Azure AD B2C.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=check-host-name)
-|[Call center validation](policies/store-three-letters-of-the-password)|A call center uses Azure AD B2C to validate a customer phoning in. To do this, the call center takes three characters from the password and asks the customer calling in to provide the three characters plus some other known facts as part of the authentication process.|NA|
+|Sample name   |Description   |Quick deploy|Demo|
+|---|---|---|---|
+|[Revoke Azure AD B2C session cookies](policies/revoke-sso-sessions) |Demonstrates how to revoke the the single sign on cookies after a refresh token has been revoked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=revoke-sso-sessions)| |
+|[Google Captcha on Sign In](policies/captcha-integration)|An example set of policies which integrate Google Captcha into the sign in journey.|NA| |
+|[Disable and lockout an account after a period of inactivity](policies/disable-inactive-account)|For scenarios where you need to prevent users logging into the application after a set number of days. The account will also be disabled at the time of the users login attempt in the case the user logs in after the time period.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=disable-inactive-account)| |
+|[Restrict B2C Policy to specific App Registration](policies/allow-list-applications)| Only permits certain application registrations to call certain B2C policy Id's.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=allow-list-applications)| [Live demo](policies/allow-list-applications#live-demo) |
+|[Impersonation Flow](policies/impersonation)|For scenarios where you require one user to impersonate another user. This is common for support desk or delegated administration of a user in an application or service. It is recommended to always issue the token of the original authenticated user and append additional information about the targeted impersonated user as part of the auth flow|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=impersonation)| |
+|[Social identity provider force email verification](policies/social-idp-force-email)|When a user signs in with a social account, in some scenarios, the identity provider doesn't share the email address. This sample demonstrates how to force the user to provide and validate an email address.|NA| [Live demo](policies/social-idp-force-email#live-demo)|
+|[Sign-in with social identity provider and force email uniqueness](policies/force-unique-email-across-social-identities)|Demonstrates how to force a social account user to provide and validate their email address, and also checks that there is no other account with the same email address.|NA| |
+|[Preventing logon for Social or External IdP Accounts when Disabled in AAD B2C](policies/disable-social-account-from-logon)|For scenarios where you would like to prevent logons via Social or External IdPs when the account has been disabled in Azure AD B2C.|NA| |
+|[Relying party app Role-Based Access Control (RBAC)](policies/relying-party-rbac)|Enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's group membership, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.|NA| |
+|[Sign-in with Conditional access](policies/conditional-access)|Azure Active Directory (Azure AD) Conditional Access is the tool used by Azure AD B2C to bring signals together, make decisions, and enforce organizational policies. Automating risk assessment with policy conditions means risky sign-ins are at once identified and remediated or blocked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=conditional-access) | [Live demo](policies/conditional-access#live-demo)|
+|[Allow/Deny based on Hostname](policies/check-host-name)|This sample provides an example of how to block access to particular B2C policy based on the [Hostname] of the request, e.g. allow requests made to the policy using login.contoso.com but block foo.b2clogin.com. Useful when using custom domain(s) with Azure AD B2C.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=check-host-name) |
+|[Call center validation](policies/store-three-letters-of-the-password)|A call center uses Azure AD B2C to validate a customer phoning in. To do this, the call center takes three characters from the password and asks the customer calling in to provide the three characters plus some other known facts as part of the authentication process.|NA| |
 
 ## User Experience
 
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Dynamic sign up or sign in](policies/dynamic-sign-up-sign-in)|allows dynamically detecting whether a user can sign in or sign up. The user enters their email and is asked to verify their password if the account exists. If the account does not exist, the user goes through a sign up flow.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=dynamic-sign-up-sign-in)|
-|[Split Sign-up into separate steps for email verification and account creation](policies/split-email-verification-and-signup)|When you don't want to use the default Sign-up page which shows both email verification and user registration controls on the same page at once. This sample splits the default sign-up behavior into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=split-email-verification-and-signup)|
-|[Sign In and Sign Up with Username or Email](policies/username-or-email)|This sample combines the UX of both the Email and Username based journeys.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-or-email)|
-|[Local account change sign-in name email address](policies/change-sign-in-name)|During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=change-sign-in-name)|
-|[Username discovery](policies/username-discovery)|This example shows how to discover a username by email address. It's useful when a user has forgotten their username and remembers only their email address.|NA|
-|[Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery)|Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.|NA|
-|[Email delivered account redemption link](policies/sign-in-with-email)|This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.|NA|
-|[Sign-in with a magic link](policies/sign-in-with-magic-link)|This sample demonstrates how a user can sign in to your web application by sending them a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.|NA|
-|[Username based journey](policies/username-signup-or-signin) | For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-signup-or-signin)|
-|[Dynamic identity provider selection](policies/idps-filter)|Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on the requests application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.|NA|
-|[Home Realm Discovery page](policies/home-realm-discovery-modern)|Demonstrates how to create a home realm discovery page. On the sign-in page, the user provides their sign-in email address and clicks continue. B2C checks the domain portion of the sign-in email address. If the domain name is `contoso.com` the user is redirected to Contoso.com Azure AD to complete the sign-in. Otherwise the user continues the sign-in with username and password. In both cases (AAD B2C local account and AAD account), the user does not need to retype the user name.|NA|
-|[Delete my account](policies/delete-my-account)|Demonstrates how to delete a local or social account from the directory|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=delete-my-account)|
-|[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/en-us/azure/active-directory-b2c/validation-technical-profile).|NA|
-|[sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link)|Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-deep-link)|
-|[Allow sign up from specific email domains](policies/sign-up-domain-whitelist)|This policy demonstrates how to validate the email address domain name against a list of allowed domains.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-domain-whitelist)|
+|Sample name   |Description   |Quick deploy|Demo|
+|---|---|---|---|
+|[Dynamic sign up or sign in](policies/dynamic-sign-up-sign-in)|allows dynamically detecting whether a user can sign in or sign up. The user enters their email and is asked to verify their password if the account exists. If the account does not exist, the user goes through a sign up flow.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=dynamic-sign-up-sign-in)| [Live demo](policies/dynamic-sign-up-sign-in#live-demo)|
+|[Split Sign-up into separate steps for email verification and account creation](policies/split-email-verification-and-signup)|When you don't want to use the default Sign-up page which shows both email verification and user registration controls on the same page at once. This sample splits the default sign-up behavior into two separate steps. First step performs Email Verification only, avoiding all other default fields related to users registration. Second step (if email verification was successful) takes the users to a new screen where they can actually create their accounts. This uses Azure AD to send out emails, no separate email provider integrations needed.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=split-email-verification-and-signup)|  [Live demo](policies/split-email-verification-and-signup#live-demo) |
+|[Sign In and Sign Up with Username or Email](policies/username-or-email)|This sample combines the UX of both the Email and Username based journeys.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-or-email)|[Live demo](policies/username-or-email#live-demo)|
+|[Local account change sign-in name email address](policies/change-sign-in-name)|During sign-in with a local account, a user may want to change the sign-in name (email address). This sample policy demonstrates how to allow a user to provide and validate a new email address, and store the new email address to the Azure Active Directory user account. After the user changes their email address, subsequent logins require the use of the new email address.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=change-sign-in-name)|[Live demo](policies/change-sign-in-name#live-demo)|
+|[Username discovery](policies/username-discovery)|This example shows how to discover a username by email address. It's useful when a user has forgotten their username and remembers only their email address.|NA||
+|[Sign-in with Home Realm Discovery and Default IdP](policies/default-home-realm-discovery)|Demonstrates how to implement a sign in journey, where the user is automatically directed to their federated identity provider based off of their email domain. And for users who arrive with an unknown domain, they are redirected to a default identity provider.|NA||
+|[Email delivered account redemption link](policies/sign-in-with-email)|This sample demonstrates how to allow the user to sign up to a web application by providing their email which sends the user a magic link to complete their account creation to their email.|NA||
+|[Sign-in with a magic link](policies/sign-in-with-magic-link)|This sample demonstrates how a user can sign in to your web application by sending them a sign-in link. A magic link can be used to pre-populate user information, or accelerate the user through the user journey.|NA||
+|[Username based journey](policies/username-signup-or-signin) | For scenarios where you would like users to sign up and sign in with Usernames rather than Emails.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=username-signup-or-signin)| [Live demo](policies/username-signup-or-signin#live-demo)|
+|[Dynamic identity provider selection](policies/idps-filter)|Demonstrates how to dynamically filter the list of social identity providers rendered to the user based on the requests application ID. In the following screenshot user can select from the list of identity providers, such as Facebook, Google+ and Amazon. With Azure AD B2C custom policies, you can configure the technical profiles to be displayed based a claim's value. The claim value contains the list of identity providers to be rendered.|NA||
+|[Home Realm Discovery page](policies/home-realm-discovery-modern)|Demonstrates how to create a home realm discovery page. On the sign-in page, the user provides their sign-in email address and clicks continue. B2C checks the domain portion of the sign-in email address. If the domain name is `contoso.com` the user is redirected to Contoso.com Azure AD to complete the sign-in. Otherwise the user continues the sign-in with username and password. In both cases (AAD B2C local account and AAD account), the user does not need to retype the user name.|NA||
+|[Delete my account](policies/delete-my-account)|Demonstrates how to delete a local or social account from the directory|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=delete-my-account)| [Live demo](policies/delete-my-account#live-demo)|
+|[Integrate REST API claims exchanges and input validation](https://github.com/azure-ad-b2c/rest-api)|A sample .Net core web API, demonstrates the use of [Restful technical profile](https://docs.microsoft.com/azure/active-directory-b2c/restful-technical-profile) in user journey's orchestration step and as a [validation technical profile](https://docs.microsoft.com/azure/active-directory-b2c/validation-technical-profile).|NA||
+|[sign-up or sign-in policy with a deep link to sign-up page](policies/sign-up-deep-link)|Adds a direct link to the sign-up page. A relying party application can include a query string parameter that takes the user directly to the sign-up page.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-deep-link)|[Live demo](policies/sign-up-deep-link#live-demo)|
+|[Allow sign up from specific email domains](policies/sign-up-domain-whitelist)|This policy demonstrates how to validate the email address domain name against a list of allowed domains.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-up-domain-whitelist)|[Live demo](policies/sign-up-domain-allowlist#live-demo)|
 
 ## Terms of Use/Consent
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)|
-|[Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou)|Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-in-sign-up-versioned-tou)|
-|[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA|
+
+|Sample name   |Description   |Quick deploy|Demo|
+|---|---|---|---|
+|[Provide consent UI to API scopes](policies/service-consent)|For scenarios where you provide a plug and play service to other partners. When the user chooses to use your service through a partner application, the user must login with their account with your service, and consent to various scopes which allow your service to share information with the partner application.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=service-consent)| [Live demo](policies/sign-in-sign-up-versioned-tou#live-demo)|
+|[Sign Up and Sign In with dynamic 'Terms of Use' prompt](policies/sign-in-sign-up-versioned-tou)|Demonstrates how to incorporate a TOU or T&Cs into your user journey with the ability for users to be prompted to re-consent when the TOU/T&Cs change.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=sign-in-sign-up-versioned-tou)||
+|[Azure AD B2C Invitation](policies/invite)|This sample console app demonstrates how to send a sign-up email invitation. After you sent the invitation, the user clicks on the **Confirm account** link, which opens the sign-up page (without the need to validate the email again). Use this approach when you need to create the users account beforehand, while allowing the user to choose the password on initial sign in. This approach is better than creating an account via Graph API and sending the password to the user via some communication means.|NA||
 
 ## Passwordless
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Password-less sign-in with email verification](policies/passwordless-email)|Password-less authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=passwordless-email)|
@@ -102,24 +106,26 @@ Samples are available for the following categories
 
 
 ## Multi factor
-|Sample name   |Description   |Quick deploy|
-|---|---|---|
-|[Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) |Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample reference on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-email)|NA|
-|[Custom SMS provider - DisplayControls](policies/custom-sms-displaycontrol)| Integrate a custom SMS provider in Azure Active Directory B2C (Azure AD B2C) to customized SMS' to users that perform multi factor authentication to your application. By using DisplayControls (currently in preview) and a third-party SMS provider, you can use your own contextualised SMS message, custom Phone Number, as well as support localization and custom one-time password (OTP) settings.|NA|
-|[Email Verification at Sign In](policies/signin-email-verification)|For scenarios where you would like users to validate their email via OTP on every sign in.|
-|[Sign-in with FIDO](policies/fido2)|Demonstrates how to sign-in with a FIDO authenticator (as a first factor authentication). This policy use the WebAuthn standard to register new credential and sign-in with FIDO credential.|NA|
-|[Integrate Twilio Verify API for PSD2 SCA](policies/twilio-mfa-psd2) |The following sample guides you through integrating Azure AD B2C authentication with Twilio Verify API to enable your organization to meet PSD2 SCA requirements.|NA|
-|[Edit MFA phone number](policies/edit-mfa-phone-number) | Demonstrates how to allow user to provide and validate a new MFA phone number. After the user changes their MFA phone number, on the next login, the user needs to provide the new phone number instead of the old one.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=edit-mfa-phone-number)|
-|[TOTP multi-factor authentication](policies/custom-mfa-totp) |Custom MFA solution, based on TOTP code. Allowing users to sign-in with Microsoft or Google authenticator apps.|NA|
-|[Sign In With Authenticator](policies/sign-in-with-authenticator) |This is a sample to show how you can create a B2C Custom Policy to signin with Authenticator Apps to B2C. It is related to the custom-mfa-totp sample, which shows how to use the Authenticator app as MFA.|NA|
-|[Authy App multi-factor authentication](policies/custom-mfa-authy-app) |Custom MFA solution, based on Authy App (push notification). Allowing users to sign-in with Twilio Auth App (authenticator apps).|NA|
-|[MFA with either Phone (Call/SMS) or Email verification](policies/mfa-email-or-phone)| Allow the user to do MFA by either Phone (Call/SMS) or Email verification, with the ability to change this preference via Profile Edit.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-email-or-phone)|
-|[Add & Select 2 MFA phone numbers at SignIn/Signup](policies/mfa-add-secondarymfa)| Demonstrates how to store two phone numbers in a secure manner in B2C and choose between any two at signIn. The flow prompts the user to store a secondary phone if only one phone number is one file. Once the two numbers are stored as part of SignUp or SignIn the user is given a choice to select between the two phones for their MFA on subsequent signIns.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-add-secondarymfa)|
-|[MFA after timeout or IP change](policies/mfa-absolute-timeout-and-ip-change-trigger)| A policy which forces the user to do MFA on 3 conditions: The user has newly signed up, the user has not done MFA in the last X seconds, the user is logging in from a different IP than they last logged in from.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-absolute-timeout-and-ip-change-trigger)|
-|[Unknown Devices MFA - device fingerprinting](policies/mfa-unknown-devices)|Demonstrates how to detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-unknown-devices)|
+
+|Sample name   |Description   |Quick deploy|  Demo|
+|---|---|---|---|
+|[Microsoft Authenticator TOTP](policies/totp) |Integrate native Microsoft Authenticator TOTP flow - [Enroll a user in TOTP with an authenticator app](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-user-flow#enroll-a-user-in-totp-with-an-authenticator-app-for-end-users)|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=totp)| [Live demo](policies/totp#live-demo)|
+|[Custom email verification - DisplayControls](policies/custom-email-verifcation-displaycontrol) |Allows you to send your own custom email verification email during sign-up or password reset user journey's. The is a working example of the sample reference on the Microsoft B2C documentation site - [Custom email verification in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/custom-email)|NA| |
+|[Custom SMS provider - DisplayControls](policies/custom-sms-displaycontrol)| Integrate a custom SMS provider in Azure Active Directory B2C (Azure AD B2C) to customized SMS' to users that perform multi factor authentication to your application. By using DisplayControls (currently in preview) and a third-party SMS provider, you can use your own contextualized SMS message, custom Phone Number, as well as support localization and custom one-time password (OTP) settings.|NA| |
+|[Email second-factor](policies/signin-email-verification)|For scenarios where you would like users to validate their email via OTP on every sign in.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=signin-email-verification) | [Live demo](policies/signin-email-verification#live-demo)|
+|[Sign-in with FIDO](policies/fido2)|Demonstrates how to sign-in with a FIDO authenticator (as a first factor authentication). This policy use the WebAuthn standard to register new credential and sign-in with FIDO credential.|NA| |
+|[Integrate Twilio Verify API for PSD2 SCA](policies/twilio-mfa-psd2) |The following sample guides you through integrating Azure AD B2C authentication with Twilio Verify API to enable your organization to meet PSD2 SCA requirements.|NA| |
+|[Edit MFA phone number](policies/edit-mfa-phone-number) | Demonstrates how to allow user to provide and validate a new MFA phone number. After the user changes their MFA phone number, on the next login, the user needs to provide the new phone number instead of the old one.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=edit-mfa-phone-number)| [Live demo](policies/edit-mfa-phone-number#live-demo)|
+|[Sign In With Authenticator](policies/sign-in-with-authenticator) |This is a sample to show how you can create a B2C Custom Policy to signin with Authenticator Apps to B2C. It is related to the custom-mfa-totp sample, which shows how to use the Authenticator app as MFA.|NA| |
+|[Authy App multi-factor authentication](policies/custom-mfa-authy-app) |Custom MFA solution, based on Authy App (push notification). Allowing users to sign-in with Twilio Auth App (authenticator apps).|NA| |
+|[MFA with either Phone (Call/SMS) or Email verification](policies/mfa-email-or-phone)| Allow the user to do MFA by either Phone (Call/SMS) or Email verification, with the ability to change this preference via Profile Edit.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-email-or-phone)| [Live demo](policies/mfa-email-or-phone#live-demo)||
+|[Add & Select 2 MFA phone numbers at SignIn/SignUp](policies/mfa-add-secondarymfa)| Demonstrates how to store two phone numbers in a secure manner in B2C and choose between any two at signIn. The flow prompts the user to store a secondary phone if only one phone number is one file. Once the two numbers are stored as part of SignUp or SignIn the user is given a choice to select between the two phones for their MFA on subsequent signIns.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-add-secondarymfa)| [Live demo](policies/mfa-add-secondarymfa#live-demo)||
+|[MFA after timeout or IP change](policies/mfa-absolute-timeout-and-ip-change-trigger)| A policy which forces the user to do MFA on 3 conditions: The user has newly signed up, the user has not done MFA in the last X seconds, the user is logging in from a different IP than they last logged in from.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-absolute-timeout-and-ip-change-trigger)| |
+|[Unknown Devices MFA - device fingerprinting](policies/mfa-unknown-devices)|Demonstrates how to detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=mfa-unknown-devices)| |
 
 
 ## Account linking
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Auto account linking](policies/auto-account-linking)|This policy sample demonstrates how to link an account when a user arrives with the same email as an existing account. When the email is detected as being the same, the user is prompted to sign in with one of the methods already registered on the existing account. Once complete, the account is linked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=auto-account-linking)|
@@ -129,6 +135,7 @@ Samples are available for the following categories
 |[Sign-up with social and local account](policies/sign-up-with-social-and-local-account)|Demonstrate how to create a policy that allows a user to sign-up with a social account linked to local account|NA|
 
 ## Identity providers
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Sign in with Apple as a Custom OpenID Connect identity provider](policies/sign-in-with-apple)|Demonstrates how to gather the correct configuration information to setup Sign in with Apple as an OpenID Connect identity provider.|NA|
@@ -140,11 +147,13 @@ Samples are available for the following categories
 |[AAD Authentication with REST](policies/AAD-SignIn-with-REST)|Pass through authentication to Azure AD (no user created in B2C), then calls a REST API to obtain more claims.|NA|
 
 ## User interface
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Render dynamic dropdown box](policies/selectemail)|For scenarios where you would like to fetch information during the runtime of the authentication flow, and display this data as a dropdown box dynamically for the user to make a selection. In this example, a users identifier is sent to an API, which returns a set of emails for them to select. The selected email is returned in the token.|NA|
 
 ## Data residency
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Remote profile](policies/remote-profile)|Demonstrates how to store and read user profiles from a remote database.|NA|
@@ -153,6 +162,7 @@ Samples are available for the following categories
 
 
 ## User migration
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Seamless account migration](/../../../user-migration/tree/master/seamless-account-migration) | Where accounts have been pre-migrated into Azure AD B2C and you want to update the password on the account on initial sign in. Azure AD B2C calls a REST API to validate the credentials for accounts marked as requiring migration (via attribute) against a legacy identity provider, returns a successful response to Azure AD B2C, and Azure AD B2C writes the password to the account in the directory.|NA|
@@ -162,17 +172,23 @@ Samples are available for the following categories
 |[B2C to B2C Migration](policies/B2C2B2CMigration) | Migrate users from one B2C instance to another using just in time migration.|NA|
 
 ## UserInfo endpoint
+
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[UserInfo Endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
 
 ## Web Test
 
-- [SignIn Web test](policies/signin-webtest) - This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[SignIn Web Test using Azure App Insights](policies/user-info-endpoint) | This sample web test shows how to run tests and monitor results of B2C sign in's, using Azure Application Insights.| NA|
 
 ## CI/CD
 
-- [Azure Devops](policies/devops-pipeline) - An example AzureDevOps pipeline that uploads policies regardless of naming convention.
+|Sample name   |Description   |Quick deploy|
+|---|---|---|
+|[Azure DevOps pipeline for Azure AD B2C](policies/devops-pipeline) | Uploads policies regardless of naming convention Azure DevOps automated pipeline.| NA|
+
 
 ## Community Help and Support
 

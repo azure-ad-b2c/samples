@@ -76,7 +76,7 @@
             var n2 = url.substring(n).indexOf("/");
             policyId = url.substring(n,n+n2);
         }
-        var policyIdEnroll = "B2C_1A_Authenticator_signup_signin_enroll";
+        var policyIdEnroll = "B2C_1A_Authenticator_SignUp_SignIn_enroll";
         url = window.location.href.replace(policyId, policyIdEnroll);            
         socialDiv[0].innerHTML += "<p>Don't have Authenticator? <a id=\"enrollAuthenticator\" tabindex=\"2\" href=\"" + url + "\">Enroll now</a></p>"
         function getQueryStringByName(name, url) {

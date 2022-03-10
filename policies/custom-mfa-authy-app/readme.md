@@ -21,7 +21,7 @@ Following component are involved in the Azure AD B2C Authy App multi-factor auth
 ### Enroll new phone number
 Before you can secure a user with the Twilio Authy API, you need to create a user. The API requires you set an email, phone number, and country code for each user.
 
-When a user is first created, Authy API returns an **authyid** (AppCode) which you must then store with the user's profile in Azure AD B2C account. Do not lose this ID - you will use it every time you wish to authenticate a user. Read more [https://www.twilio.com/docs/authy/api/users](https://www.twilio.com/docs/authy/api/users)  
+When a user is first created, Authy API returns an **authyid** (AppCode) which you must then store with the user's profile in Azure AD B2C account. Do not lose this ID - you will use it every time you wish to authenticate a user. Make yourself familiar with [the Twilio users API](https://www.twilio.com/docs/authy/api/users) to understand the different capabilities.
 
 The .Net core solution **identity** controller **Register** POST endpoint runs some input validations and then calls the Authy API new user endpoint. After the user is enrolled (no approval required) the **Register** endpoint returns the  **authyid** (AppCode). 
 
@@ -29,7 +29,7 @@ As part of the registration process, Azure AD B2C custom policy also calls the *
 
 Orchestration step 8 asks the user to provide the phone number (with the country code).
 
-![Enroll](media/enroll.png)
+![An Enroll image to install Authy app for MFA.](media/enroll.png)
 
 When user clicks continue, the **SelfAsserted-AppFactor-Register** technical profile runs following validation technical profiles:
 - **AppFactor-RegisterWebHook**  - Register the user in Authy service 
@@ -40,7 +40,7 @@ When user clicks continue, the **SelfAsserted-AppFactor-Register** technical pro
 Both the registration and the sign-in flow run the verification flow. The **SelfAsserted-AppFactor-WaitForAuthyApproval** technical profile calls the **Identity** POST **WaitForAuthyApproval** endpoint. This endpoint runs some input validation and then makes two calls the Auth API
 - [Create an Approval Request](https://www.twilio.com/docs/authy/api/push-authentications#create-an-approval-request) This will create a new approval request for the given Authy ID and send it to the end user along with a push notification to the Authy Mobile app. At this point Authy sends push notification to the Auth mobile App. User has to approve or deny the request.
     
-    ![Authy app](media/auth-app.png)
+    ![An image of Authy app approval request.](media/auth-app.png)
     
 - [Check Approval Request Status](https://www.twilio.com/docs/authy/api/push-authentications#check-approval-request-status) repeatedly calls this endpoint until the user approves the request, or until the **Identity** endpoint reaches the timeout.
 

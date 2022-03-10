@@ -2,8 +2,19 @@
 
 By default when you create a sign-up or sign-in policy (with local accounts), you see a Forgot password? link on the first page of the experience. Clicking this link doesn't automatically trigger a password reset policy. Instead, the error code AADB2C90118 is returned to your app. Your app needs to handle this error code by invoking a specific password reset policy.
 
-This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy. So, Azure AD B2C will not return the AADB2C90118 error message. For more information, see [Set up a password reset flow in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/add-password-reset-policy).
+This policy demonstrates how to embed the password reset flow a part of the sign-up or sign-in policy. So, Azure AD B2C will not return the AADB2C90118 error message.
 
+## Live demo
+
+The live demo demonstrates the self-service password reset experience. To test the policy, follow these steps:
+
+1. [Create an account](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) using the *B2C_1A_Demo_SignUp_SignIn_SSPR* policy with your email address.
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_SSPR/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&prompt=login) the *B2C_1A_Demo_SignUp_SignIn_SSPR* policy again and select the **Forgot your password?** link. The link will take you to the password rest page.
+1. Complete the password reset process.
+
+## How it works
+
+For information about the policy check out the [Set up a password reset flow in Azure Active Directory B2C](https://docs.microsoft.com/azure/active-directory-b2c/add-password-reset-policy) article.
 
 ## Community Help and Support
 

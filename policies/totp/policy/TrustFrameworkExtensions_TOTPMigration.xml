@@ -1,0 +1,136 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_TrustFrameworkExtensionsTOTP_JIT" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkExtensionsTOTP">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_TOTP</PolicyId>
+  </BasePolicy>
+
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="extension_StrongAuthenticationAppSecretKey">
+        <DisplayName>Secret Key Extenstion</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Code secret Extension</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CopyLegacySecret" TransformationMethod="CopyClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="extension_StrongAuthenticationAppSecretKey" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="secretKey" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>TOTP</DisplayName>
+      <TechnicalProfiles>
+        <!-- Copies the legacy TOTP Claim value and passes it to secretKey for reistration.-->
+        <TechnicalProfile Id="OTPVerification-JIT">
+            <DisplayName>Sign in with Authenticator app - JIt</DisplayName>
+            <InputClaimsTransformations>
+              <InputClaimsTransformation ReferenceId="CopyLegacySecret" />
+            </InputClaimsTransformations>
+            <InputClaims>
+              <InputClaim ClaimTypeReferenceId="secretKey" />
+            </InputClaims>
+            <IncludeTechnicalProfile ReferenceId="OTPVerification" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+        <DisplayName>Azure Active Directory</DisplayName>
+        <TechnicalProfiles>
+          <TechnicalProfile Id="AAD-Common">
+            <DisplayName>Azure Active Directory</DisplayName>
+            <OutputClaims>
+              <OutputClaim ClaimTypeReferenceId="extension_StrongAuthenticationAppSecretKey" />
+            </OutputClaims>
+          </TechnicalProfile>
+          <!-- Delete the Legacy TOTP Claim when registered with the new method.-->
+          <TechnicalProfile Id="AAD-DeleteLegacyTOTPClaim">
+            <Metadata>
+              <Item Key="Operation">DeleteClaims</Item>
+            </Metadata>
+            <InputClaims>
+              <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+            </InputClaims>
+            <PersistedClaims>
+              <PersistedClaim ClaimTypeReferenceId="objectId" />                
+              <PersistedClaim ClaimTypeReferenceId="extension_StrongAuthenticationAppSecretKey" />
+            </PersistedClaims>
+            <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          </TechnicalProfile>
+        </TechnicalProfiles>
+      </ClaimsProvider>
+</ClaimsProviders>
+
+<UserJourneys>
+    <!-- Skip Enrollment of TOTP if a legacy TOTP secret is stored.-->
+    <UserJourney Id="SignUpOrSignInTOTP">
+        <OrchestrationSteps>
+            <OrchestrationStep Order="4" Type="InvokeSubJourney">
+                <Preconditions>
+                    <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                        <Value>extension_StrongAuthenticationAppSecretKey</Value>
+                        <Action>SkipThisOrchestrationStep</Action>
+                    </Precondition>
+                </Preconditions>
+            </OrchestrationStep>
+        </OrchestrationSteps>
+    </UserJourney>
+</UserJourneys>
+
+<SubJourneys>
+    <SubJourney Id="TotpFactor-Verify" Type="Call">
+        <OrchestrationSteps>
+            <!-- Additional step to call JIT TOTP Registration -->            
+            <OrchestrationStep Order="4" Type="ClaimsExchange">
+                <Preconditions>
+                  <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                    <Value>extension_StrongAuthenticationAppSecretKey</Value>
+                    <Action>SkipThisOrchestrationStep</Action>
+                  </Precondition>
+                  <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                    <Value>numberOfAvailableDevices</Value>
+                    <Value>0</Value>
+                    <Action>SkipThisOrchestrationStep</Action>
+                  </Precondition>
+                </Preconditions>
+                <ClaimsExchanges>
+                  <ClaimsExchange Id="OTPVerification-JIT" TechnicalProfileReferenceId="OTPVerification-JIT" />
+                </ClaimsExchanges>
+              </OrchestrationStep>
+              <!-- Additional Step to remove the lgacy TOTP Claim. -->
+              <!-- Comment out this  Orchestration Step if you would like to retain the old secrets.-->
+              <OrchestrationStep Order="5" Type="ClaimsExchange">
+                <Preconditions>
+                  <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                    <Value>extension_StrongAuthenticationAppSecretKey</Value>
+                    <Action>SkipThisOrchestrationStep</Action>
+                  </Precondition>
+                  <!-- Comment out the below pre-condition to Delete the Legacy claim when user is JIT Registered.-->
+                  <!-- Oterwise it will be removed on next login.  -->
+                  <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                    <Value>numberOfAvailableDevices</Value>
+                    <Value>0</Value>
+                    <Action>SkipThisOrchestrationStep</Action>
+                  </Precondition>
+                </Preconditions>
+                <ClaimsExchanges>
+                  <ClaimsExchange Id="AAD-DeleteLegacyTOTPClaim" TechnicalProfileReferenceId="AAD-DeleteLegacyTOTPClaim" />
+                </ClaimsExchanges>
+              </OrchestrationStep>
+        </OrchestrationSteps>
+    </SubJourney>
+</SubJourneys>
+
+</TrustFrameworkPolicy>

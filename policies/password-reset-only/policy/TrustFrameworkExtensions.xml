@@ -1,13 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
-  PolicySchemaVersion="0.3.0.0" 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
   TenantId="yourtenant.onmicrosoft.com" 
-  PolicyId="B2C_1A_PasswordReset_Only_TrustFrameworkExtensions" 
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_PasswordReset_Only_TrustFrameworkExtensions">
-  
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_PasswordResetOnly" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_PasswordResetOnly">
+
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
@@ -15,51 +11,34 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-      <!--Demo: this claim contains the message to be shown to the user -->
+      <!-- The message to be shown to the user -->
       <ClaimType Id="userMessage">
-		    <DisplayName>Password reset</DisplayName>
-		    <DataType>string</DataType>
-		    <UserInputType>Paragraph</UserInputType>
-	    </ClaimType>
+        <DisplayName></DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
     </ClaimsSchema>
-
-    <ClaimsTransformations>
-        <!--Demo: this claims transformation populates the userMessage with the text we 
-        want to show to the end user-->
-        <ClaimsTransformation Id="GetPasswordResetUserMessage" TransformationMethod="CreateStringClaim">
-            <InputParameters>
-                <InputParameter Id="value" DataType="string" Value="Your password has been successfully updated. To continue click on the sign-in link below." />
-            </InputParameters>
-            <OutputClaims>
-                <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
-            </OutputClaims>
-        </ClaimsTransformation>
-    </ClaimsTransformations>
-
   </BuildingBlocks>
 
   <ClaimsProviders>
     <ClaimsProvider>
       <DisplayName>Self Asserted</DisplayName>
       <TechnicalProfiles>
-        <!--Demo: this technical profile displays the message to the user-->
+        <!-- Renders the message to the user-->
         <TechnicalProfile Id="SelfAsserted-PasswordResetUserMessage">
           <DisplayName>Password reset</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
-            <!--Demo: hide the continue and cancel buttons -->
+            <!-- Hide the continue and cancel buttons -->
             <Item Key="setting.showContinueButton">false</Item>
             <Item Key="setting.showCancelButton">false</Item>
           </Metadata>
-          <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="GetPasswordResetUserMessage" />
-          </InputClaimsTransformations>
           <InputClaims>
-             <InputClaim ClaimTypeReferenceId="userMessage" />
+            <InputClaim ClaimTypeReferenceId="userMessage" DefaultValue="Your password has been successfully updated." />
           </InputClaims>
           <OutputClaims>
-            <!--Demo: Show the paragraph claim with the message to the user -->
+            <!-- Show the paragraph claim with the message to the user -->
             <OutputClaim ClaimTypeReferenceId="userMessage" />
           </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
@@ -69,7 +48,7 @@
   </ClaimsProviders>
 
   <UserJourneys>
-      <UserJourney Id="PasswordResetOnly">
+    <UserJourney Id="PasswordReset_Custom">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="ClaimsExchange">
           <ClaimsExchanges>
@@ -83,8 +62,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!--Demo: this orchestration step blocks the user from issuing the access token, by
-                calling the self asserted page without continue button-->
+        <!-- Blocks the user from issuing the access token, by calling the self asserted page without continue button-->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="BlockSendClaims" TechnicalProfileReferenceId="SelfAsserted-PasswordResetUserMessage" />

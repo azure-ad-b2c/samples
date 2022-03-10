@@ -9,18 +9,18 @@ In order to run this demo end-to-end you need an AWS Account and AWS cli install
 
 ## Seamless migration flow during Sign In
 
-What happens during signin when the users are migrated to B2C is illustrated in the below diagram
+What happens during signin when the users are migrated to B2C is illustrated in the below diagram:
 
-![auth-flow](media/auth-flow.png) 
+![An Authenication Flow diagram for this policy sample.](media/auth-flow.png) 
 
 During the sign in, the B2C Custom Policy will read the user object and check the attribute ``requiresMigration`` to see if the user is in a state where migration needs to be completed. If so, since B2C does not know the password of the user, we pass the userid/password to AWS Cognito and ask it to authenticate the user. If AWS Cognito successfully can authenticate the user, B2C writes the verified password to the B2C tenant and flips tha ``requiresMigration`` flag. Then, if we do have a migrated mobile phone number that AWS Cognito says is verified, we trust that and set that as the MFA phone number. 
 
 ## How to get started
 
-1. Follow the [AWS instruction](aws/README.md) for how to deploy a working AWS Cognito environment
-2. Follow the first part of the [website instructions](website/README.md) for how to verify your deployment with AWS Cognito
-3. Follow the [B2C instructions](b2c/README.md) for how to migrate the users and deploy the B2C Custom Policies, etc.
-4. Follow the second part of the [website instructions](website/README.md) for how to verify your deployment Azure AD B2C
+1. Follow the [AWS instruction](aws/README.md) for how to deploy a working AWS Cognito environment.
+2. Follow the first part of the [website instructions](website/README.md) for how to verify your deployment with AWS Cognito.
+3. Follow the [B2C instructions](b2c/README.md) for how to migrate the users and deploy the B2C Custom Policies, etc..
+4. Follow the second part of the [website instructions](website/README.md) for how to verify your deployment Azure AD B2C.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

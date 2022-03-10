@@ -6,7 +6,7 @@ This sample custom policy demonstrates how to create home realm discovery page. 
 1. B2C extracts the domain portion of the sign-in email address (also change to lower case). 
 1. Based on the domain name, user continues with:
     1. Redirect to an enterprise Azure AD tenant to complete the sign-in.
-    1. Sign-in as a local account (user name and password)
+    1. Sign-in as a local account (user name and password).
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

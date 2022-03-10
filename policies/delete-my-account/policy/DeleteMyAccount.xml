@@ -1,78 +1,74 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_delete_my_account"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_delete_my_account">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_delete_my_account" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_delete_my_account">
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
-  
+
   <BuildingBlocks>
     <ClaimsSchema>
       <!--Sample: Stores the message to dispaly to the user-->
       <ClaimType Id="userMessage">
-     	  <DisplayName/>
-     	  <DataType>string</DataType>
+        <DisplayName />
+        <DataType>string</DataType>
         <UserHelpText>Add help text here</UserHelpText>
-     	  <UserInputType>Paragraph</UserInputType>
+        <UserInputType>Paragraph</UserInputType>
       </ClaimType>
 
       <!--Sample: Stores the message to dispaly to the user-->
       <ClaimType Id="userMessageNote">
-     	  <DisplayName/>
-     	  <DataType>string</DataType>
+        <DisplayName />
+        <DataType>string</DataType>
         <UserHelpText>Add help text here</UserHelpText>
-     	  <UserInputType>Paragraph</UserInputType>
+        <UserInputType>Paragraph</UserInputType>
       </ClaimType>
 
       <!--Sample: Work around for a self-asserted page without claims -->
       <ClaimType Id="emptyClaim">
-     	  <DisplayName></DisplayName>
-     	  <DataType>string</DataType>
-     	  <UserInputType>Readonly</UserInputType>
-      </ClaimType>  
+        <DisplayName></DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
     </ClaimsSchema>
 
     <ClaimsTransformations>
       <ClaimsTransformation Id="CreateWelcomeMessage" TransformationMethod="CreateStringClaim">
         <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="To delete your account click continue."/>
+          <InputParameter Id="value" DataType="string" Value="To delete your account click continue." />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim"/>
+          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
 
       <ClaimsTransformation Id="CreateAccountDeletedMessage" TransformationMethod="CreateStringClaim">
         <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="Your request has been processed. The account will be deactivated in 5 minutes."/>
+          <InputParameter Id="value" DataType="string" Value="Your request has been processed. The account will be deactivated in 5 minutes." />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim"/>
+          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-      
+
       <ClaimsTransformation Id="CreateAccountDeletedMessageNote" TransformationMethod="CreateStringClaim">
         <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="Note: the account remains in a suspended state for 30 days. During that 30-day window, the user account can be restored by the administrator, along with all its properties. After that 30-day window passes, the user is automatically, and permanently, deleted."/>
+          <InputParameter Id="value" DataType="string" Value="Note: the account remains in a suspended state for 30 days. During that 30-day window, the user account can be restored by the administrator, along with all its properties. After that 30-day window passes, the user is automatically, and permanently, deleted." />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="userMessageNote" TransformationClaimType="createdClaim"/>
+          <OutputClaim ClaimTypeReferenceId="userMessageNote" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
-      
+
       <ClaimsTransformation Id="CreateAccountNotFoundMessage" TransformationMethod="CreateStringClaim">
         <InputParameters>
-          <InputParameter Id="value" DataType="string" Value="We connot find your account in the directory."/>
+          <InputParameter Id="value" DataType="string" Value="We connot find your account in the directory." />
         </InputParameters>
         <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim"/>
+          <OutputClaim ClaimTypeReferenceId="userMessage" TransformationClaimType="createdClaim" />
         </OutputClaims>
       </ClaimsTransformation>
 
@@ -96,7 +92,7 @@
         <!--Sampe: Hide the sign-up page-->
         <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
           <Metadata>
-            <Item Key="setting.showSignupLink">false</Item> 
+            <Item Key="setting.showSignupLink">false</Item>
           </Metadata>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -104,18 +100,18 @@
 
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
-        <TechnicalProfiles>
-          <!--Sample: Delete the account from the directory -->
-          <TechnicalProfile Id="AAD-DeleteUserUsingObjectId">
-            <Metadata>
-              <Item Key="Operation">DeleteClaimsPrincipal</Item>
-            </Metadata>
-            <InputClaims>
-              <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
-            </InputClaims>
-            <OutputClaims/>
-            <IncludeTechnicalProfile ReferenceId="AAD-Common" />
-          </TechnicalProfile>
+      <TechnicalProfiles>
+        <!--Sample: Delete the account from the directory -->
+        <TechnicalProfile Id="AAD-DeleteUserUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">DeleteClaimsPrincipal</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <OutputClaims />
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
 
@@ -125,68 +121,68 @@
         <!--Sample: Display the welcome page-->
         <TechnicalProfile Id="SelfAsserted-Welcome">
           <DisplayName>Welcome to FIDO enrollment</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
           <InputClaimsTransformations>
-             <InputClaimsTransformation ReferenceId="CreateWelcomeMessage"/>
-             <InputClaimsTransformation ReferenceId="CreateEmptyClaimValue"/>
+            <InputClaimsTransformation ReferenceId="CreateWelcomeMessage" />
+            <InputClaimsTransformation ReferenceId="CreateEmptyClaimValue" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userMessage"/>
-            <InputClaim ClaimTypeReferenceId="emptyClaim"/>
+            <InputClaim ClaimTypeReferenceId="userMessage" />
+            <InputClaim ClaimTypeReferenceId="emptyClaim" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="userMessage"/>
-            <OutputClaim ClaimTypeReferenceId="emptyClaim"/>
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
+            <OutputClaim ClaimTypeReferenceId="emptyClaim" />
           </OutputClaims>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
         <!--Sample: Display the your account has been deleted message-->
         <TechnicalProfile Id="SelfAsserted-AccountHasBeenDeleted">
           <DisplayName>Welcome to FIDO enrollment</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
             <Item Key="setting.showContinueButton">false</Item>
             <Item Key="setting.showCancelButton">false</Item>
           </Metadata>
           <InputClaimsTransformations>
-             <InputClaimsTransformation ReferenceId="CreateAccountDeletedMessage"/>
-             <InputClaimsTransformation ReferenceId="CreateAccountDeletedMessageNote"/>
+            <InputClaimsTransformation ReferenceId="CreateAccountDeletedMessage" />
+            <InputClaimsTransformation ReferenceId="CreateAccountDeletedMessageNote" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userMessage"/>
-            <InputClaim ClaimTypeReferenceId="userMessageNote"/>
+            <InputClaim ClaimTypeReferenceId="userMessage" />
+            <InputClaim ClaimTypeReferenceId="userMessageNote" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="userMessage"/>
-            <OutputClaim ClaimTypeReferenceId="userMessageNote"/>
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
+            <OutputClaim ClaimTypeReferenceId="userMessageNote" />
           </OutputClaims>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
-        
+
         <!--Sample: Display user not found error message message-->
         <TechnicalProfile Id="SelfAsserted-UserNotFound">
           <DisplayName>Welcome to FIDO enrollment</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
             <Item Key="setting.showContinueButton">false</Item>
             <Item Key="setting.showCancelButton">true</Item>
           </Metadata>
           <InputClaimsTransformations>
-             <InputClaimsTransformation ReferenceId="CreateAccountNotFoundMessage"/>
+            <InputClaimsTransformation ReferenceId="CreateAccountNotFoundMessage" />
           </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userMessage"/>
+            <InputClaim ClaimTypeReferenceId="userMessage" />
           </InputClaims>
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="userMessage"/>
+            <OutputClaim ClaimTypeReferenceId="userMessage" />
           </OutputClaims>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -194,14 +190,14 @@
   <UserJourneys>
     <UserJourney Id="DeleteAccount">
       <OrchestrationSteps>
-      
+
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange"/>
-            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
           <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email"/>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -214,8 +210,8 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH"/>
-            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail"/>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -229,7 +225,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError"/>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
@@ -242,35 +238,35 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-UserNotFound" TechnicalProfileReferenceId="SelfAsserted-UserNotFound"/>
+            <ClaimsExchange Id="SelfAsserted-UserNotFound" TechnicalProfileReferenceId="SelfAsserted-UserNotFound" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
         <!-- Sample: This step deletes the account from the directory -->
         <OrchestrationStep Order="5" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-Welcome" TechnicalProfileReferenceId="SelfAsserted-Welcome"/>
+            <ClaimsExchange Id="SelfAsserted-Welcome" TechnicalProfileReferenceId="SelfAsserted-Welcome" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
-       <!-- Sample: This step asks the user whether to delete the account -->
+        <!-- Sample: This step asks the user whether to delete the account -->
         <OrchestrationStep Order="6" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="AAD-DeleteUserUsingObjectId" TechnicalProfileReferenceId="AAD-DeleteUserUsingObjectId"/>
+            <ClaimsExchange Id="AAD-DeleteUserUsingObjectId" TechnicalProfileReferenceId="AAD-DeleteUserUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
 
         <!-- Sample: This step present the account has been deleted message -->
         <OrchestrationStep Order="7" Type="ClaimsExchange">
           <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-AccountHasBeenDeleted" TechnicalProfileReferenceId="SelfAsserted-AccountHasBeenDeleted"/>
+            <ClaimsExchange Id="SelfAsserted-AccountHasBeenDeleted" TechnicalProfileReferenceId="SelfAsserted-AccountHasBeenDeleted" />
           </ClaimsExchanges>
         </OrchestrationStep>
- 
-        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
- 
+
+        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
       </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb"/>
+      <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
   </UserJourneys>
   <RelyingParty>
@@ -283,7 +279,7 @@
         <OutputClaim ClaimTypeReferenceId="givenName" />
         <OutputClaim ClaimTypeReferenceId="surname" />
         <OutputClaim ClaimTypeReferenceId="email" />
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
         <OutputClaim ClaimTypeReferenceId="identityProvider" />
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
@@ -291,6 +287,3 @@
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
-
-
-

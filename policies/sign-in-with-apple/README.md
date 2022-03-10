@@ -5,35 +5,35 @@
 This sample shows how to enable **Sign in with Apple** as an identity provider in Azure AD B2C. **Sign in with Apple** uses an authentication protocol which is very close to OpenID Connect - close enough that we can use these features in Azure AD B2C to build the integration.
 
 These instructions will guide you to:
-- Create the application you will need in the Apple Developer portal
+- Create the application you will need in the Apple Developer portal.
 - Create the JWT client secret value which is required to initiate an OpenID Connect flow with Apple, including:
-  - Generating and downloading the private key
-  - Understand how to structure the client secret JWT
-  - Generate and cryptographically sign the client secret JWT
-- Host an OIDC metadata endpoint for the **Sign in with Apple** service
-- Use **Sign in with Apple** in a user flow (built-in policy)
+  - Generating and downloading the private key.
+  - Understand how to structure the client secret JWT.
+  - Generate and cryptographically sign the client secret JWT.
+- Host an OIDC metadata endpoint for the **Sign in with Apple** service.
+- Use **Sign in with Apple** in a user flow (built-in policy).
 
 ## Creating an application in the Apple Developer portal
 To setup **Sign in with Apple**, you will need to create an App ID and a service ID in the Apple Developer portal.
 
-1. If you do not already have an Apple Developer subscription, you will need to register and pay for one at https://developer.apple.com.
+1. If you do not already have an Apple Developer subscription, you will need to [register and pay for one](https://developer.apple.com).
 2. On the Apple Developer portal, go to **Certificates, Identifiers, & Profiles**.
 3. On the **Identifers** tab, click the **(+)** button.
-![Creating a new app identifier in the Apple Developer Portal](media/apple_newapp.jpg)
+![Creating a new app identifier in the Apple Developer Portal.](media/apple_newapp.jpg)
 4. On the **Register a New Identifer** page, choose **App IDs** and click **Continue**. (App IDs include one or more Service IDs.)
-![Registering a new app identifier in the Apple Developer Portal](media/apple_registerapp.jpg)
+![Registering a new app identifier in the Apple Developer Portal.](media/apple_registerapp.jpg)
 5. On the **Register an App ID** page, provide a description and a bundle ID, and select **Sign in with Apple** from the capabilities list. Then click **Continue** and . Take note of your **App ID Prefix (Team ID)** from this step, you will need it later.
-![Configuring a new app identifier in the Apple Developer Portal](media/apple_configureapp1.jpg)
-![Configuring a new app identifier in the Apple Developer Portal](media/apple_configureapp2.jpg)
+![Configuring a new app identifier in the Apple Developer Portal step 1.](media/apple_configureapp1.jpg)
+![Configuring a new app identifier in the Apple Developer Portal step 2.](media/apple_configureapp2.jpg)
 6. Review the app registration information and click **Register**.
 7. Again, on the **Identifers** tab, click the **(+)** button.
-![Creating a new service identifier in the Apple Developer Portal](media/apple_newapp.jpg) 
+![Creating a new service identifier in the Apple Developer Portal.](media/apple_newapp.jpg) 
 8. On the **Register a New Identifer** page, choose **Services IDs** and click **Continue**.
-![Registering a new service identifier in the Apple Developer Portal](media/apple_registerservice.jpg)
+![Registering a new service identifier in the Apple Developer Portal.](media/apple_registerservice.jpg)
 9. On the **Register a Services ID** page, provide a description and an identifier. The description is what will be show to the user on the consent screen, and the identifier will be your client ID for the OpenID Connect flow. Then click on **Configure**.
-![Registering a new service identifier in the Apple Developer Portal](media/apple_configureservice1.jpg)
+![Choosing new service identifier to Registering in the Apple Developer Portal.](media/apple_configureservice1.jpg)
 10. On the pop-up window, specify the App ID you just created as the Primary App ID. Specify your application's domain in the domain section (you do not need to verify it unless you intend to use the email relay service). For the return URL, use your B2C tenant's reply URL such as `https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/authresp`. Then click **Add** and **Save**.
-![Registering a new service identifier in the Apple Developer Portal](media/apple_configureservice2.jpg)
+![Registering a new service identifier and description in the Apple Developer Portal.](media/apple_configureservice2.jpg)
 11. Review the service registration information and click **Save**.
 
 ## Creating the client secret
@@ -42,14 +42,14 @@ Apple has taken the interesting and unusual approach of requiring app developers
 
 ### Creating and downloading the private key
 1. On the **Keys** tab in the Apple Developer portal, choose **Create a key** or click the **(+)** button.
-![Creating a new key in the Apple Developer Portal](media/apple_newkey.jpg)
+![Creating a new key in the Apple Developer Portal.](media/apple_newkey.jpg)
 2. On the **Register a New Key** page give the key a name, check the box next to **Sign in with Apple** and click **Configure**.
-![Registering a key in the Apple Developer Portal](media/apple_registerkey.jpg)
+![Registering a key in the Apple Developer Portal.](media/apple_registerkey.jpg)
 3. On the **Configure Key** page, link the key to the primary app ID you created previously and click **Save**.
-![Configuring a key in the Apple Developer Portal](media/apple_configurekey.jpg)
+![Configuring a key in the Apple Developer Portal.](media/apple_configurekey.jpg)
 4. Finish creating the key by confirming the information and clicking **Continue** and then reviewing the information and clicking **Register**.
 5. On the **Download Your Key** page, download the key. It will download as a `.p8` (PKCS#8) file - you'll use this to sign your client secret JWT. After finishing the process, you can come back later to revoke the key, in case you ever need to.
-![Downloading a key in the Apple Developer Portal](media/apple_downloadkey.jpg)
+![Downloading a key in the Apple Developer Portal.](media/apple_downloadkey.jpg)
 
 ### Structuring the client secret JWT
 Apple requires the JWT token which will be used as your client secret to have a payload structured like this example:
@@ -106,7 +106,7 @@ _Note: The sample Azure Function generates a JWT which is valid for 180 days. Yo
 
 _Note: Ensure the `WEBSITE_LOAD_USER_PROFILE` configuration setting is set to `1` in your Azure Functions app environment - this provides access to the cryptographic context which is required to load the private key._
 
-_Note-2:_ If you get this token wrong, you will be able to redirect to Apple's authorize endpoint, enter your credentials, but the call to the token endpoint will fail with error: invalid_client. A blog post for how to troubleshoot this error can be found [here](https://fluffy.es/how-to-solve-invalid_client-error-in-sign-in-with-apple/).
+_Note-2:_ If you get this token wrong, you will be able to redirect to Apple's authorize endpoint, enter your credentials, but the call to the token endpoint will fail with error: invalid_client. For more information on this error review the [how to troubleshoot this error](https://fluffy.es/how-to-solve-invalid_client-error-in-sign-in-with-apple/) guidance.
 
 You can also generate the token with the following small Ruby code:
 
@@ -129,20 +129,20 @@ puts token
 ```
 
 ## The OIDC metadata endpoint
-_Update 2020-02-02:_ Apple exposes a OpenID Connect metadata endpoint that should be used when setting up the OpenId Identity Provider in Azure B2C. 
-https://appleid.apple.com/.well-known/openid-configuration 
+_Update 2020-02-02:_ [Apple exposes a OpenID Connect metadata endpoint](https://appleid.apple.com/.well-known/openid-configuration) that should be used when setting up the OpenId Identity Provider in Azure B2C. 
+
 
 ## Using **Sign in with Apple** in a user flow (built-in policy)
 
 Now that you have created and collected the necessary configuration values which are necessary to configure **Sign in with Apple** as an identity provider, you can do so in the Azure AD B2C blade in the Azure Portal.
 
 Choose *OpenID Connect* as the identity provider type and use these configuration values:
-- **Metadata url:** 'https://appleid.apple.com/.well-known/openid-configuration'
-- **Client id:** The Apple Service ID (e.g. com.mycompany.app1)
+- **Metadata url:** `https://appleid.apple.com/.well-known/openid-configuration`
+- **Client id:** The Apple Service ID (e.g. `com.mycompany.app1`)
 - **Client secret:** The signed JWT you created
 - **Scope:** `name` and/or `email` may be specified, however, please see the note below
-- **Response type:** code
-- **Response mode:** form_post
+- **Response type:** `code`
+- **Response mode:** `form_post`
 
 Apple only provides a single useful claim in their ID tokens, the `sub` claim. You should map this to both the User ID and Display Name claims.
 ![Claims mapping in Azure AD B2C](media/b2c_claimsmapping.jpg)

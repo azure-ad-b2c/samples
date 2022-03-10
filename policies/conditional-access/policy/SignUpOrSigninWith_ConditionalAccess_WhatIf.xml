@@ -1,0 +1,34 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_Demo_SignUp_SignIn_ConditionalAccess_WhatIf" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_SignUp_SignIn_ConditionalAccess_WhatIf">
+  
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_ConditionalAccess</PolicyId>
+  </BasePolicy>
+  
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignInWithCA-WhatIf" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="signInName" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="IP-Address" DefaultValue="{Context:IPAddress}" AlwaysUseDefaultValue="true" />
+        <OutputClaim ClaimTypeReferenceId="estsRequestId" DefaultValue="" />
+        <OutputClaim ClaimTypeReferenceId="CAChallengeIsMfa" />
+        <OutputClaim ClaimTypeReferenceId="CAChallengeIsChgPwd" />
+
+        <OutputClaim ClaimTypeReferenceId="CAChallengeIsBlock" />
+        <OutputClaim ClaimTypeReferenceId="conditionalAccessClaimCollection" />
+        <OutputClaim ClaimTypeReferenceId="ConditionalAccessStatus" />
+        <OutputClaim ClaimTypeReferenceId="trustFrameworkPolicy" DefaultValue="{policy}" Required="true"/>
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

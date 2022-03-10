@@ -6,7 +6,7 @@ To create the extension attribute extension_mustResetPassword, you should upload
 
 After you create the first account, you can run following Graph query, to make sure the extension attribute is created:
 `https://graph.microsoft.com/v1.0/applications/<b2c-extensions-app_OBJECTID>/extensionProperties`.
-Replace the <b2c-extensions-app_OBJECTID> with your b2c-extensions-app registration's objectId. the result of this query should look like
+Replace the <b2c-extensions-app_OBJECTID> with your b2c-extensions-app registration's objectId. the result of this query should look like below.
 ```JSON
 "value": [
     {
@@ -25,7 +25,7 @@ Replace the <b2c-extensions-app_OBJECTID> with your b2c-extensions-app registrat
 ]
 ```
 After the extension attribute is configured, when you create the accounts using Graph API, just set the value of this extension attribute. 
-Replace `YOURAPPIDGUIDWITHOUTDASHES` with your application Id
+Replace `YOURAPPIDGUIDWITHOUTDASHES` with your application Id.
 ```JSON
 {
     "objectId": null,
@@ -56,20 +56,20 @@ Replace `YOURAPPIDGUIDWITHOUTDASHES` with your application Id
 The name of the extension attribute is “extension” _ “the application ID” _ the name you give the attribute. While in B2C custom policy you don’t need to specify the application ID.
 
 Follow the demo comments in the extension policy. To merge the policy with yours, you need:
-1.	Add the **extension_mustResetPassword** claim type and set the display name
-2.	Add the **AAD-UserReadUsingObjectId**, **AAD-UserRemoveMustResetPasswordUsingObjectId**, **AAD-UserWriteUsingLogonEmail**, **AAD-Common** technical profiles
-3.	Add the extra orchestration steps 4 and 5 before the last orchestration step
+1.	Add the **extension_mustResetPassword** claim type and set the display name.
+2.	Add the **AAD-UserReadUsingObjectId**, **AAD-UserRemoveMustResetPasswordUsingObjectId**, **AAD-UserWriteUsingLogonEmail**, **AAD-Common** technical profiles.
+3.	Add the extra orchestration steps 4 and 5 before the last orchestration step.
 
 ## Test the policy by using Run Now
-1. Create an account using Graph API, and set the value of **extension_YOURAPPIDGUIDWITHOUTDASHES_mustResetPassword** extension attribute to **true**
+1. Create an account using Graph API, and set the value of **extension_YOURAPPIDGUIDWITHOUTDASHES_mustResetPassword** extension attribute to **true**.
 1. From Azure Portal select **Azure AD B2C Settings**, and then select **Identity Experience Framework**.
 1. Open **B2C_1A_signup_signin**, the relying party (RP) custom policy that you uploaded, and then select **Run now**.
 1. Sign-in with the account you created. 
 1. Make sure Azure AD B2C asks you to reset the password. Type your password and your profile, and click **Continue**
-1. Sign-out form your application, or open new browser in private mode (incognito)
+1. Sign-out form your application, or open new browser in private mode (incognito).
 1. Open **B2C_1A_signup_signin** again, the relying party (RP) custom policy that you uploaded, and then select **Run now**.
-1. Sign-in with the local identity (email address) you specified
-1. You can also check the account you crated by using [Azure AD Graph Explorer](https://graphexplorer.azurewebsites.net/). And make sure the **extension_00000000000000000000000000000000_mustResetPassword** is removed from the user profile
+1. Sign-in with the local identity (email address) you specified.
+1. You can also check the account you crated by using [Azure AD Graph Explorer](https://graphexplorer.azurewebsites.net/). And make sure the **extension_00000000000000000000000000000000_mustResetPassword** is removed from the user profile.
 
 ## Community Help and Support
 Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].

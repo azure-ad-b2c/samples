@@ -1,6 +1,15 @@
 # Sign-in and Sign-up policy with direct link to sign-up
 
-This sample adds a direct link to the sign-up page. A relying party application can include a query string parameter `option=signup` that takes the user directly  to the sign-up page.
+This sample adds a direct link to the sign-up page. A relying party application can include a query string parameter `option=signup` that takes the user directly  to the sign-up page
+
+## Live demo
+
+To checkout the user experience of this policy, follow these steps:
+
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUpSignin_DeepLink/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&option=signup) the *B2C_1A_Demo_SignUpSignin_DeepLink* policy. This [authorization request](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUpSignin_DeepLink/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token&option=signup) specifies the `option=signup` query string parameter, which takes you directly to the **sign-up** page.
+1. [Run](https://b2clivedemo.b2clogin.com/b2clivedemo.onmicrosoft.com/B2C_1A_Demo_SignUpSignin_DeepLink/oauth2/v2.0/authorize?client_id=cfaf887b-a9db-4b44-ac47-5efff4e2902c&nonce=defaultNonce&redirect_uri=https://jwt.ms&scope=openid&response_type=id_token) the *B2C_1A_Demo_SignUpSignin_DeepLink* policy again. This time the authorization request is without the `option=signup` query string parameter, which takes you the the **sign-up or sign-in** page instead.
+
+## Scenario
 
 To add the direct link to the sign-up page:
 
@@ -52,29 +61,22 @@ To add the direct link to the sign-up page:
     </OrchestrationStep>
     ```
 
-
-
 ## Set the authorization request
 
 To direct the user to the sign-up page, in the authorization request add the `option=signup` query string parameter. 
 
-The following example takes the user to the landing page (sign-up or sign-in)
+The following example takes the user to the landing page (sign-up or sign-in):
 
 ```http
-https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_signup_signin_with_link_to_sign_up&client_id=63ba0d17-c4ba-47fd-89e9-31b3c2734339&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token
+https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SignUp_SignIn_with_link_to_sign_up&client_id=63ba0d17-c4ba-47fd-89e9-31b3c2734339&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token
 ```
 
 If you add the `option=signup` parameter, the user is taken directly to the sign-up page.
 
 ```http
-https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_signup_signin_with_link_to_sign_up&client_id=63ba0d17-c4ba-47fd-89e9-31b3c2734339&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&option=signup`
+https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_SignUp_SignIn_with_link_to_sign_up&client_id=63ba0d17-c4ba-47fd-89e9-31b3c2734339&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid&response_type=id_token&option=signup`
 ```
 
-## Community Help and Support
-
-Use [Stack Overflow](https://stackoverflow.com/questions/tagged/azure-ad-b2c) to get support from the community. Ask your questions on Stack Overflow first and browse existing issues to see if someone has asked your question before. Make sure that your questions or comments are tagged with [azure-ad-b2c].
-If you find a bug in the sample, please raise the issue on [GitHub Issues](https://github.com/azure-ad-b2c/samples/issues).
-To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
-
 ## Notes
+
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 
