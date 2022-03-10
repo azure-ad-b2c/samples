@@ -1,0 +1,132 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="<yourtenant>.onmicrosoft.com" PolicyId="B2C_1A_signup_signin" PublicPolicyUri="http://<yourtenant>.onmicrosoft.com/B2C_1A_signup_signin" TenantObjectId="<yourtenant.onmicrosoft.com>">
+  <BasePolicy>
+    <TenantId><yourtenant>.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_FederatedIdPs</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="regionFromURL">
+        <DisplayName>regionFromURL</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+      </ClaimType>
+      <ClaimType Id="sendToRegion">
+        <DisplayName>regionFromURL</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText />
+      </ClaimType>
+      <ClaimType Id="identityProviders">
+        <DisplayName>IdentityProviders</DisplayName>
+        <DataType>stringCollection</DataType>
+        <UserHelpText>User identity providers</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="ClientIdToRegion" TransformationMethod="LookupValue">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="regionFromURL" TransformationClaimType="inputParameterId" />
+        </InputClaims>
+        <InputParameters>
+		<!-- these AppIDs allow funnel to auto route to applications home tenant-->
+          <InputParameter Id="0dd7579e-fb90-4178-bc36-77a3fe658683" DataType="string" Value="APAC" />
+          <InputParameter Id="7e7f5403-b3d7-41cc-85fc-130ab6fd9361" DataType="string" Value="NOAM" />
+          <InputParameter Id="4ea5d578-9c51-4091-96d1-58e15e98e9b9" DataType="string" Value="EMEA" />
+          <InputParameter Id="errorOnFailedLookup" DataType="boolean" Value="false" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="sendToRegion" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CreateidentityProvidersCollection" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="sendToRegion" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="identityProviders" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="identityProviders" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Parse domain parameter</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="HRDLogic">
+          <DisplayName>ParseDomainHint</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="regionFromURL" DefaultValue="{OIDC:ClientId}" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="sendToRegion" />
+            <OutputClaim ClaimTypeReferenceId="identityProviders" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="ClientIdToRegion" />
+            <OutputClaimsTransformation ReferenceId="CreateidentityProvidersCollection" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignIn">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="ParseDomainHintLogic" TechnicalProfileReferenceId="HRDLogic" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+		<!-- Based on the HRD Logic step, only 1 IdP will be enabled, and the user is auto routed to that IdP -->
+        <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="AADB2CEMEA" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="AADB2CAPAC" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="AADB2CNOAM" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADB2CEMEA" TechnicalProfileReferenceId="AzureADB2CEMEA-OpenIdConnect-SUSI" />
+            <ClaimsExchange Id="AADB2CAPAC" TechnicalProfileReferenceId="AzureADB2CAPAC-OpenIdConnect-SUSI" />
+            <ClaimsExchange Id="AADB2CNOAM" TechnicalProfileReferenceId="AzureADB2CNOAM-OpenIdConnect-SUSI" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

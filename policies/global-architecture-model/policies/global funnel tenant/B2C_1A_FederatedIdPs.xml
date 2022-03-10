@@ -1,0 +1,247 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="<yourtenant>.onmicrosoft.com" PolicyId="B2C_1A_FederatedIdPs" PublicPolicyUri="http://<yourtenant>.onmicrosoft.com/" TenantObjectId="<yourtenant.onmicrosoft.com>">
+  <!--
+   Please modify policyId to save the policy. 
+   Please find the schema reference at https://docs.microsoft.com/en-us/azure/active-directory-b2c/trustframeworkpolicy.
+ -->
+  <BasePolicy>
+    <TenantId><yourtenant>.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <ClaimsProviders>
+    <!-- SUSI/Account Link/ForgotPwd journey forwarder -->
+    <ClaimsProvider>
+      <Domain>b2cemea.com</Domain>
+      <DisplayName>Federation with EMEA tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SM-SocialLogin">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="email" />
+          </PersistedClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="AzureADB2CEMEA-OpenIdConnect-SUSI">
+          <DisplayName>EMEA B2C</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">4e954886-6c77-4079-bca8-806f41f0e718</Item>
+            <!-- Update the metadata URL with the other Azure AD B2C tenant name and policy name -->
+            <Item Key="METADATA">https://b2cemea.b2clogin.com/b2cemea.onmicrosoft.com/B2C_1A_AccountLink_SUSI/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">EMEA</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_b2cEmeaAppSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <Domain>b2cnoam.com</Domain>
+      <DisplayName>Federation with NOAM tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AzureADB2CNOAM-OpenIdConnect-SUSI">
+          <DisplayName>NOAM B2C</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">7129b6e3-d952-443d-b57b-d1e673fc6a29</Item>
+            <!-- Update the metadata URL with the other Azure AD B2C tenant name and policy name -->
+            <Item Key="METADATA">https://b2cnoam.b2clogin.com/b2cnoam.onmicrosoft.com/B2C_1A_AccountLink_SUSI/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">NOAM</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_b2cNoamAppSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <Domain>b2capac.com</Domain>
+      <DisplayName>Federation with APAC tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AzureADB2CAPAC-OpenIdConnect-SUSI">
+          <DisplayName>APAC B2C</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">79ee9d36-0658-438f-8524-4779ba91e2c2</Item>
+            <!-- Update the metadata URL with the other Azure AD B2C tenant name and policy name -->
+            <Item Key="METADATA">https://b2capac.b2clogin.com/b2capac.onmicrosoft.com/B2C_1A_AccountLink_SUSI/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">APAC</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_b2cApacAppSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" PartnerClaimType="emails" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- Change email journey forwarder -->
+    <ClaimsProvider>
+      <Domain>b2cemea.com</Domain>
+      <DisplayName>Federation with EMEA tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AzureADB2CEMEA-OpenIdConnect-ChangeEmail">
+          <DisplayName>EMEA B2C</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">4e954886-6c77-4079-bca8-806f41f0e718</Item>
+            <!-- Update the metadata URL with the other Azure AD B2C tenant name and policy name -->
+            <Item Key="METADATA">https://b2cemea.b2clogin.com/b2cemea.onmicrosoft.com/B2C_1A_ChangeSignInName/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">EMEA</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_b2cEmeaAppSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <Domain>b2cnoam.com</Domain>
+      <DisplayName>Federation with NOAM tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AzureADB2CNOAM-OpenIdConnect-ChangeEmail">
+          <DisplayName>NOAM B2C</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">7129b6e3-d952-443d-b57b-d1e673fc6a29</Item>
+            <!-- Update the metadata URL with the other Azure AD B2C tenant name and policy name -->
+            <Item Key="METADATA">https://b2cnoam.b2clogin.com/b2cnoam.onmicrosoft.com/B2C_1A_ChangeSignInName/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">NOAM</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_b2cNoamAppSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <Domain>b2capac.com</Domain>
+      <DisplayName>Federation with APAC tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AzureADB2CAPAC-OpenIdConnect-ChangeEmail">
+          <DisplayName>APAC B2C</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <!-- Update the Client ID below to the Application ID -->
+            <Item Key="client_id">79ee9d36-0658-438f-8524-4779ba91e2c2</Item>
+            <!-- Update the metadata URL with the other Azure AD B2C tenant name and policy name -->
+            <Item Key="METADATA">https://b2capac.b2clogin.com/b2capac.onmicrosoft.com/B2C_1A_ChangeSignInName/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="ClaimTypeOnWhichToEnable">identityProviders</Item>
+            <Item Key="ClaimValueOnWhichToEnable">APAC</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_b2cApacAppSecret" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="given_name" />
+            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="family_name" />
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" PartnerClaimType="iss" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="email" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+</TrustFrameworkPolicy>

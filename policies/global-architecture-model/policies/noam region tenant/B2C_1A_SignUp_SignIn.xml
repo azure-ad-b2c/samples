@@ -1,0 +1,324 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="b2cemea.onmicrosoft.com" PolicyId="B2C_1A_signup_signin" PublicPolicyUri="http://b2cemea.onmicrosoft.com/B2C_1A_signup_signin" TenantObjectId="de0b2f67-0b00-470a-b3e9-1120911daf54">
+  <BasePolicy>
+    <TenantId>b2cnoam.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="userLookupRegion">
+        <DisplayName>userLookupRegion</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>userLookupRegion</AdminHelpText>
+        <UserHelpText>userLookupRegion</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="userExists">
+        <DisplayName>userExists</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>userExists</AdminHelpText>
+        <UserHelpText>userExists</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="apac_client_id">
+        <DisplayName>apac_client_id</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>apac_client_id</AdminHelpText>
+        <UserHelpText>apac_client_id</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="apac_scope">
+        <DisplayName>apac_scope</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>apac_scope</AdminHelpText>
+        <UserHelpText>apac_scope</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="noam_client_id">
+        <DisplayName>noam_client_id</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>noam_client_id</AdminHelpText>
+        <UserHelpText>noam_client_id</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="ropc_grant_type">
+        <DisplayName>ropc_grant_type</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>ropc_grant_type</AdminHelpText>
+        <UserHelpText>ropc_grant_type</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="noam_scope">
+        <DisplayName>noam_scope</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>noam_scope</AdminHelpText>
+        <UserHelpText>noam_scope</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="bearerToken">
+        <DisplayName>Bearer token</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Bearer</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="dummyFalse">
+        <DisplayName>dummyFalse</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>dummyFalse</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="UserIdToRegion" TransformationMethod="LookupValue">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="inputParameterId" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="bob@noam.com" DataType="string" Value="NOAM" />
+          <InputParameter Id="bob@noam1.com" DataType="string" Value="NOAM" />
+          <InputParameter Id="john@emea.com" DataType="string" Value="EMEA" />
+          <InputParameter Id="john@emea1.com" DataType="string" Value="EMEA" />
+          <InputParameter Id="alice@apac.com" DataType="string" Value="APAC" />
+          <InputParameter Id="alice@apac1.com" DataType="string" Value="APAC" />
+          <InputParameter Id="errorOnFailedLookup" DataType="boolean" Value="false" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userLookupRegion" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="UserLookup" TransformationMethod="LookupValue">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="email" TransformationClaimType="inputParameterId" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="bob@noam.com" DataType="string" Value="true" />
+          <InputParameter Id="bob@noam1.com" DataType="string" Value="true" />
+          <InputParameter Id="alice@apac.com" DataType="string" Value="true" />
+          <InputParameter Id="alice@apac1.com" DataType="string" Value="true" />
+          <InputParameter Id="john@emea.com" DataType="string" Value="false" />
+          <InputParameter Id="john@emea1.com" DataType="string" Value="false" />
+          <InputParameter Id="errorOnFailedLookup" DataType="boolean" Value="false" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userExists" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="Assert-UserLookup" TransformationMethod="AssertStringClaimsAreEqual">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="userExists" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="dummyFalse" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
+        </InputParameters>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Global architecture additions</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="password" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <!-- userLookupRegion should never be null -->
+            <OutputClaim ClaimTypeReferenceId="userLookupRegion" DefaultValue="null" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="CT-UserIdToRegion" />
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive">
+              <Preconditions>
+                <!-- if user is not in NOAM, skip this step -->
+                <!-- region specific change -->
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>userLookupRegion</Value>
+                  <Value>NOAM</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="REST-login-NonInteractive-EMEA">
+              <Preconditions>
+                <!-- if user is not in EMEA/NOAM, skip this step -->
+                <!-- region specific change -->
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>userLookupRegion</Value>
+                  <Value>NOAM</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>userLookupRegion</Value>
+                  <Value>APAC</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="REST-login-NonInteractive-APAC">
+              <Preconditions>
+                <!-- if user is not in EMEA/NOAM, skip this step -->
+                <!-- region specific change -->
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>userLookupRegion</Value>
+                  <Value>EMEA</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>userLookupRegion</Value>
+                  <Value>NOAM</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="AAD-Read-User-MSGraph">
+              <Preconditions>
+                <!-- if user is in NOAM, skip this step -->
+                <!-- region specific change -->
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>userLookupRegion</Value>
+                  <Value>NOAM</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+        <TechnicalProfile Id="CT-UserIdToRegion">
+          <DisplayName>Get users rgion</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userLookupRegion" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="UserIdToRegion" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="CT-UserLookup">
+          <DisplayName>Check if user exists globally</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userExists" />
+            <OutputClaim ClaimTypeReferenceId="dummyFalse" DefaultValue="false" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="userLookup" />
+            <OutputClaimsTransformation ReferenceId="Assert-userLookup" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="REST-login-NonInteractive-APAC">
+          <DisplayName>non interactive authetnication to APAC</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://login.microsoftonline.com/b2capac.onmicrosoft.com/oauth2/v2.0/token</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="apac_client_id" PartnerClaimType="client_id" DefaultValue="cf3f6898-9a79-426a-ba16-10e1a377c843" />
+            <InputClaim ClaimTypeReferenceId="ropc_grant_type" PartnerClaimType="grant_type" DefaultValue="password" />
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" />
+            <InputClaim ClaimTypeReferenceId="password" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="https://graph.microsoft.com/.default" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="bearerToken" PartnerClaimType="access_token" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="REST-login-NonInteractive-EMEA">
+          <DisplayName>non interactive authetnication to NOAM</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://login.microsoftonline.com/b2cemea.onmicrosoft.com/oauth2/v2.0/token</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="noam_client_id" PartnerClaimType="client_id" DefaultValue="d017504f-b9ca-4ada-a9ca-03578fe4310f" />
+            <InputClaim ClaimTypeReferenceId="ropc_grant_type" PartnerClaimType="grant_type" DefaultValue="password" />
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" />
+            <InputClaim ClaimTypeReferenceId="password" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="https://graph.microsoft.com/.default" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="bearerToken" PartnerClaimType="access_token" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-Read-User-MSGraph">
+          <DisplayName>revoke my refresh token</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://graph.microsoft.com/beta/me</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">bearerToken</Item>
+            <Item Key="SendClaimsIn">Url</Item>
+            <Item Key="DebugMode">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="bearerToken" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignIn" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <!-- if user is in NOAM, don't skip this step -->
+            <!-- region specific change -->
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>userLookupRegion</Value>
+              <Value>NOAM</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
