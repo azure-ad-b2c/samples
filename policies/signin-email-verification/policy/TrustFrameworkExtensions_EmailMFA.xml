@@ -36,21 +36,29 @@
     <ClaimsProvider>
       <DisplayName>Validate Email on Sign In</DisplayName>
       <TechnicalProfiles>
+        <TechnicalProfile Id="SM-AAD">
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="readOnlyEmail" />
+          </PersistedClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
         <TechnicalProfile Id="EmailVerifyOnSignIn">
           <DisplayName>EmailVerifyOnSignIn</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
           </Metadata>
-          <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="CopySignInNameToReadOnly" />
-          </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="readOnlyEmail" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="readOnlyEmail" PartnerClaimType="Verified.Email" Required="true" />
           </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
