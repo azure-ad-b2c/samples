@@ -162,6 +162,15 @@
         }, 
         {
             "path": "policies/sign-up-domain-allowlist/policy/SignUpOrSignin_DomainAllowlist.xml"
+        }, 
+        {
+            "path": "policies/force-password-reset/policy/TrustFrameworkExtensions_ForcePasswordReset.xml"
+        }, 
+        {
+            "path": "policies/force-password-reset/policy/SignUpOrSignin_ForcePasswordReset.xml"
+        }, 
+        {
+            "path": "policies/force-password-reset/policy/SignUpOrSignin_ForcePasswordReset_Helper.xml"
         }
     ]
 }
