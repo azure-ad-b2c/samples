@@ -91,9 +91,6 @@ xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVer
             <Item Key="setting.showContinueButton">false</Item>
             <Item Key="setting.showCancelButton">false</Item>
           </Metadata>
-          <CryptographicKeys>
-            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
-          </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="responseMsg" DefaultValue="You are not permitted access using this URL. Please use your customer domain to login." />
           </InputClaims>
