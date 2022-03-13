@@ -5,8 +5,28 @@
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_DomainAllowList</PolicyId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="email">
+        <Restriction>
+          <Pattern RegularExpression="^[a-zA-Z0-9.!#$%&amp;'^_`{}~\-]+@(outlook[.]com|live[.]com|gmail[.]com)" HelpText="Please enter a email address from one of the following domains: outlook.com, live.com." />
+        </Restriction>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <Localization>
+      <LocalizedResources Id="api.localaccountsignup.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="email" StringId="PatternHelpText">Please enter a email address from one of the following domains: outlook.com, live.com, or gmail.com.</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+    </Localization>
+
+  </BuildingBlocks>
+
   <RelyingParty>
     <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
     <TechnicalProfile Id="PolicyProfile">
