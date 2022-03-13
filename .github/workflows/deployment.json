@@ -158,9 +158,6 @@
             "path": "policies/sign-up-deep-link/policy/SignUpOrSignIn_DeepLink.xml"
         },
         {
-            "path": "policies/sign-up-domain-allowlist/policy/TrustFrameworkExtensions_DomainAllowlist.xml"
-        }, 
-        {
             "path": "policies/sign-up-domain-allowlist/policy/SignUpOrSignin_DomainAllowlist.xml"
         }, 
         {
