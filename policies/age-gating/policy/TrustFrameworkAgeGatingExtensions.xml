@@ -1,0 +1,1745 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkAgeGatingExtensions" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_TrustFrameworkAgeGatingExtensions">
+
+    <BasePolicy>
+        <TenantId>yourtenant.onmicrosoft.com</TenantId>
+        <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+    </BasePolicy>
+    <BuildingBlocks>
+        <ClaimsSchema>
+            <ClaimType Id="legalAgeGroupClassification">
+                <DisplayName>Legal Age Group Classification</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The legal age group that a user falls into based on their country and date of birth</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="consentProvidedForMinor">
+                <DisplayName>ConsentProvidedForMinor</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The consent provided for a minor user</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="ageGroup">
+                <DisplayName>AgeGroup</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The ageGroup value evaluated from user's date of birth and country of legal residence</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="ageGroup_current">
+                <DisplayName>Re-Evaluated AgeGroup</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The ageGroup value re-evaluated from user's date of birth and country of legal residence</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="consentProvidedForMinor_current">
+                <DisplayName>Re-Evaluated ConsentProvidedForMinor</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The consentProvidedForMinor value re-evaluated from user's date of birth and country of legal residence</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="dateOfBirth">
+                <DisplayName>Date of Birth</DisplayName>
+                <DataType>date</DataType>
+                <UserHelpText>Your date of birth.</UserHelpText>
+                <UserInputType>DateTimeDropdown</UserInputType>
+                <PredicateValidationReference Id="CustomDateRange" />
+            </ClaimType>
+            <ClaimType Id="legalCountry">
+                <DisplayName>Country of Residence</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The country in which you legally reside.</UserHelpText>
+                <UserInputType>DropdownSingleSelect</UserInputType>
+                <Restriction>
+                    <!-- The following is the approved ISO short-form Microsoft country list, taken from https://microsoft.sharepoint.com/teams/celaGlobalReadiness/Lists/CountryRegion/CountryRegionList.aspx -->
+                    <Enumeration Text="Afghanistan" Value="AF" />
+                    <Enumeration Text="Åland Islands" Value="AX" />
+                    <Enumeration Text="Albania" Value="AL" />
+                    <Enumeration Text="Algeria" Value="DZ" />
+                    <Enumeration Text="American Samoa" Value="AS" />
+                    <Enumeration Text="Andorra" Value="AD" />
+                    <Enumeration Text="Angola" Value="AO" />
+                    <Enumeration Text="Anguilla" Value="AI" />
+                    <Enumeration Text="Antarctica" Value="AQ" />
+                    <Enumeration Text="Antigua and Barbuda" Value="AG" />
+                    <Enumeration Text="Argentina" Value="AR" />
+                    <Enumeration Text="Armenia" Value="AM" />
+                    <Enumeration Text="Aruba" Value="AW" />
+                    <Enumeration Text="Australia" Value="AU" />
+                    <Enumeration Text="Austria" Value="AT" />
+                    <Enumeration Text="Azerbaijan" Value="AZ" />
+                    <Enumeration Text="Bahamas" Value="BS" />
+                    <Enumeration Text="Bahrain" Value="BH" />
+                    <Enumeration Text="Bangladesh" Value="BD" />
+                    <Enumeration Text="Barbados" Value="BB" />
+                    <Enumeration Text="Belarus" Value="BY" />
+                    <Enumeration Text="Belgium" Value="BE" />
+                    <Enumeration Text="Belize" Value="BZ" />
+                    <Enumeration Text="Benin" Value="BJ" />
+                    <Enumeration Text="Bermuda" Value="BM" />
+                    <Enumeration Text="Bhutan" Value="BT" />
+                    <Enumeration Text="Bolivia" Value="BO" />
+                    <Enumeration Text="Bonaire" Value="BQ" />
+                    <Enumeration Text="Bosnia and Herzegovina" Value="BA" />
+                    <Enumeration Text="Botswana" Value="BW" />
+                    <Enumeration Text="Bouvet Island" Value="BV" />
+                    <Enumeration Text="Brazil" Value="BR" />
+                    <Enumeration Text="British Indian Ocean Territory" Value="IO" />
+                    <Enumeration Text="British Virgin Islands" Value="VG" />
+                    <Enumeration Text="Brunei" Value="BN" />
+                    <Enumeration Text="Bulgaria" Value="BG" />
+                    <Enumeration Text="Burkina Faso" Value="BF" />
+                    <Enumeration Text="Burundi" Value="BI" />
+                    <Enumeration Text="Cabo Verde" Value="CV" />
+                    <Enumeration Text="Cambodia" Value="KH" />
+                    <Enumeration Text="Cameroon" Value="CM" />
+                    <Enumeration Text="Canada" Value="CA" />
+                    <Enumeration Text="Cayman Islands" Value="KY" />
+                    <Enumeration Text="Central African Republic" Value="CF" />
+                    <Enumeration Text="Chad" Value="TD" />
+                    <Enumeration Text="Chile" Value="CL" />
+                    <Enumeration Text="China" Value="CN" />
+                    <Enumeration Text="Christmas Island" Value="CX" />
+                    <Enumeration Text="Cocos (Keeling) Islands" Value="CC" />
+                    <Enumeration Text="Colombia" Value="CO" />
+                    <Enumeration Text="Comoros" Value="KM" />
+                    <Enumeration Text="Congo" Value="CG" />
+                    <Enumeration Text="Congo (DRC)" Value="CD" />
+                    <Enumeration Text="Cook Islands" Value="CK" />
+                    <Enumeration Text="Costa Rica" Value="CR" />
+                    <Enumeration Text="Côte d’Ivoire" Value="CI" />
+                    <Enumeration Text="Croatia" Value="HR" />
+                    <Enumeration Text="Cuba" Value="CU" />
+                    <Enumeration Text="Curaçao" Value="CW" />
+                    <Enumeration Text="Cyprus" Value="CY" />
+                    <Enumeration Text="Czech Republic" Value="CZ" />
+                    <Enumeration Text="Denmark" Value="DK" />
+                    <Enumeration Text="Djibouti" Value="DJ" />
+                    <Enumeration Text="Dominica" Value="DM" />
+                    <Enumeration Text="Dominican Republic" Value="DO" />
+                    <Enumeration Text="Ecuador" Value="EC" />
+                    <Enumeration Text="Egypt" Value="EG" />
+                    <Enumeration Text="El Salvador" Value="SV" />
+                    <Enumeration Text="Equatorial Guinea" Value="GQ" />
+                    <Enumeration Text="Eritrea" Value="ER" />
+                    <Enumeration Text="Estonia" Value="EE" />
+                    <Enumeration Text="Ethiopia" Value="ET" />
+                    <Enumeration Text="Falkland Islands" Value="FK" />
+                    <Enumeration Text="Faroe Islands" Value="FO" />
+                    <Enumeration Text="Fiji" Value="FJ" />
+                    <Enumeration Text="Finland" Value="FI" />
+                    <Enumeration Text="France" Value="FR" />
+                    <Enumeration Text="French Guiana" Value="GF" />
+                    <Enumeration Text="French Polynesia" Value="PF" />
+                    <Enumeration Text="French Southern Territories" Value="TF" />
+                    <Enumeration Text="Gabon" Value="GA" />
+                    <Enumeration Text="Gambia" Value="GM" />
+                    <Enumeration Text="Georgia" Value="GE" />
+                    <Enumeration Text="Germany" Value="DE" />
+                    <Enumeration Text="Ghana" Value="GH" />
+                    <Enumeration Text="Gibraltar" Value="GI" />
+                    <Enumeration Text="Greece" Value="GR" />
+                    <Enumeration Text="Greenland" Value="GL" />
+                    <Enumeration Text="Grenada" Value="GD" />
+                    <Enumeration Text="Guadeloupe" Value="GP" />
+                    <Enumeration Text="Guam" Value="GU" />
+                    <Enumeration Text="Guatemala" Value="GT" />
+                    <Enumeration Text="Guernsey" Value="GG" />
+                    <Enumeration Text="Guinea" Value="GN" />
+                    <Enumeration Text="Guinea-Bissau" Value="GW" />
+                    <Enumeration Text="Guyana" Value="GY" />
+                    <Enumeration Text="Haiti" Value="HT" />
+                    <Enumeration Text="Heard Island and McDonald Islands" Value="HM" />
+                    <Enumeration Text="Honduras" Value="HN" />
+                    <Enumeration Text="Hong Kong SAR" Value="HK" />
+                    <Enumeration Text="Hungary" Value="HU" />
+                    <Enumeration Text="Iceland" Value="IS" />
+                    <Enumeration Text="India" Value="IN" />
+                    <Enumeration Text="Indonesia" Value="ID" />
+                    <Enumeration Text="Iran" Value="IR" />
+                    <Enumeration Text="Iraq" Value="IQ" />
+                    <Enumeration Text="Ireland" Value="IE" />
+                    <Enumeration Text="Isle of Man" Value="IM" />
+                    <Enumeration Text="Israel" Value="IL" />
+                    <Enumeration Text="Italy" Value="IT" />
+                    <Enumeration Text="Jamaica" Value="JM" />
+                    <Enumeration Text="Jan Mayen" Value="XJ" />
+                    <Enumeration Text="Japan" Value="JP" />
+                    <Enumeration Text="Jersey" Value="JE" />
+                    <Enumeration Text="Jordan" Value="JO" />
+                    <Enumeration Text="Kazakhstan" Value="KZ" />
+                    <Enumeration Text="Kenya" Value="KE" />
+                    <Enumeration Text="Kiribati" Value="KI" />
+                    <Enumeration Text="Korea" Value="KR" />
+                    <Enumeration Text="Kosovo" Value="XK" />
+                    <Enumeration Text="Kuwait" Value="KW" />
+                    <Enumeration Text="Kyrgyzstan" Value="KG" />
+                    <Enumeration Text="Laos" Value="LA" />
+                    <Enumeration Text="Latvia" Value="LV" />
+                    <Enumeration Text="Lebanon" Value="LB" />
+                    <Enumeration Text="Lesotho" Value="LS" />
+                    <Enumeration Text="Liberia" Value="LR" />
+                    <Enumeration Text="Libya" Value="LY" />
+                    <Enumeration Text="Liechtenstein" Value="LI" />
+                    <Enumeration Text="Lithuania" Value="LT" />
+                    <Enumeration Text="Luxembourg" Value="LU" />
+                    <Enumeration Text="Macao SAR" Value="MO" />
+                    <Enumeration Text="Macedonia, FYRO" Value="MK" />
+                    <Enumeration Text="Madagascar" Value="MG" />
+                    <Enumeration Text="Malawi" Value="MW" />
+                    <Enumeration Text="Malaysia" Value="MY" />
+                    <Enumeration Text="Maldives" Value="MV" />
+                    <Enumeration Text="Mali" Value="ML" />
+                    <Enumeration Text="Malta" Value="MT" />
+                    <Enumeration Text="Marshall Islands" Value="MH" />
+                    <Enumeration Text="Martinique" Value="MQ" />
+                    <Enumeration Text="Mauritania" Value="MR" />
+                    <Enumeration Text="Mauritius" Value="MU" />
+                    <Enumeration Text="Mayotte" Value="YT" />
+                    <Enumeration Text="Mexico" Value="MX" />
+                    <Enumeration Text="Micronesia" Value="FM" />
+                    <Enumeration Text="Moldova" Value="MD" />
+                    <Enumeration Text="Monaco" Value="MC" />
+                    <Enumeration Text="Mongolia" Value="MN" />
+                    <Enumeration Text="Montenegro" Value="ME" />
+                    <Enumeration Text="Montserrat" Value="MS" />
+                    <Enumeration Text="Morocco" Value="MA" />
+                    <Enumeration Text="Mozambique" Value="MZ" />
+                    <Enumeration Text="Myanmar" Value="MM" />
+                    <Enumeration Text="Namibia" Value="NA" />
+                    <Enumeration Text="Nauru" Value="NR" />
+                    <Enumeration Text="Nepal" Value="NP" />
+                    <Enumeration Text="Netherlands" Value="NL" />
+                    <Enumeration Text="New Caledonia" Value="NC" />
+                    <Enumeration Text="New Zealand" Value="NZ" />
+                    <Enumeration Text="Nicaragua" Value="NI" />
+                    <Enumeration Text="Niger" Value="NE" />
+                    <Enumeration Text="Nigeria" Value="NG" />
+                    <Enumeration Text="Niue" Value="NU" />
+                    <Enumeration Text="Norfolk Island" Value="NF" />
+                    <Enumeration Text="North Korea" Value="KP" />
+                    <Enumeration Text="Northern Mariana Islands" Value="MP" />
+                    <Enumeration Text="Norway" Value="NO" />
+                    <Enumeration Text="Oman" Value="OM" />
+                    <Enumeration Text="Pakistan" Value="PK" />
+                    <Enumeration Text="Palau" Value="PW" />
+                    <Enumeration Text="Palestinian Authority" Value="PS" />
+                    <Enumeration Text="Panama" Value="PA" />
+                    <Enumeration Text="Papua New Guinea" Value="PG" />
+                    <Enumeration Text="Paraguay" Value="PY" />
+                    <Enumeration Text="Peru" Value="PE" />
+                    <Enumeration Text="Philippines" Value="PH" />
+                    <Enumeration Text="Pitcairn Islands" Value="PN" />
+                    <Enumeration Text="Poland" Value="PL" />
+                    <Enumeration Text="Portugal" Value="PT" />
+                    <Enumeration Text="Puerto Rico" Value="PR" />
+                    <Enumeration Text="Qatar" Value="QA" />
+                    <Enumeration Text="Réunion" Value="RE" />
+                    <Enumeration Text="Romania" Value="RO" />
+                    <Enumeration Text="Russia" Value="RU" />
+                    <Enumeration Text="Rwanda" Value="RW" />
+                    <Enumeration Text="Saba" Value="XS" />
+                    <Enumeration Text="Saint Barthélemy" Value="BL" />
+                    <Enumeration Text="Saint Kitts and Nevis" Value="KN" />
+                    <Enumeration Text="Saint Lucia" Value="LC" />
+                    <Enumeration Text="Saint Martin" Value="MF" />
+                    <Enumeration Text="Saint Pierre and Miquelon" Value="PM" />
+                    <Enumeration Text="Saint Vincent and the Grenadines" Value="VC" />
+                    <Enumeration Text="Samoa" Value="WS" />
+                    <Enumeration Text="San Marino" Value="SM" />
+                    <Enumeration Text="São Tomé and Príncipe" Value="ST" />
+                    <Enumeration Text="Saudi Arabia" Value="SA" />
+                    <Enumeration Text="Senegal" Value="SN" />
+                    <Enumeration Text="Serbia" Value="RS" />
+                    <Enumeration Text="Seychelles" Value="SC" />
+                    <Enumeration Text="Sierra Leone" Value="SL" />
+                    <Enumeration Text="Singapore" Value="SG" />
+                    <Enumeration Text="Sint Eustatius" Value="XE" />
+                    <Enumeration Text="Sint Maarten" Value="SX" />
+                    <Enumeration Text="Slovakia" Value="SK" />
+                    <Enumeration Text="Slovenia" Value="SI" />
+                    <Enumeration Text="Solomon Islands" Value="SB" />
+                    <Enumeration Text="Somalia" Value="SO" />
+                    <Enumeration Text="South Africa" Value="ZA" />
+                    <Enumeration Text="South Georgia and the South Sandwich Islands" Value="GS" />
+                    <Enumeration Text="South Sudan" Value="SS" />
+                    <Enumeration Text="Spain" Value="ES" />
+                    <Enumeration Text="Sri Lanka" Value="LK" />
+                    <Enumeration Text="St Helena, Ascension, Tristan da Cunha" Value="SH" />
+                    <Enumeration Text="Sudan" Value="SD" />
+                    <Enumeration Text="Suriname" Value="SR" />
+                    <Enumeration Text="Svalbard" Value="SJ" />
+                    <Enumeration Text="Swaziland" Value="SZ" />
+                    <Enumeration Text="Sweden" Value="SE" />
+                    <Enumeration Text="Switzerland" Value="CH" />
+                    <Enumeration Text="Syria" Value="SY" />
+                    <Enumeration Text="Taiwan" Value="TW" />
+                    <Enumeration Text="Tajikistan" Value="TJ" />
+                    <Enumeration Text="Tanzania" Value="TZ" />
+                    <Enumeration Text="Thailand" Value="TH" />
+                    <Enumeration Text="Timor-Leste" Value="TL" />
+                    <Enumeration Text="Togo" Value="TG" />
+                    <Enumeration Text="Tokelau" Value="TK" />
+                    <Enumeration Text="Tonga" Value="TO" />
+                    <Enumeration Text="Trinidad and Tobago" Value="TT" />
+                    <Enumeration Text="Tunisia" Value="TN" />
+                    <Enumeration Text="Turkey" Value="TR" />
+                    <Enumeration Text="Turkmenistan" Value="TM" />
+                    <Enumeration Text="Turks and Caicos Islands" Value="TC" />
+                    <Enumeration Text="Tuvalu" Value="TV" />
+                    <Enumeration Text="U.S. Outlying Islands" Value="UM" />
+                    <Enumeration Text="U.S. Virgin Islands" Value="VI" />
+                    <Enumeration Text="Uganda" Value="UG" />
+                    <Enumeration Text="Ukraine" Value="UA" />
+                    <Enumeration Text="United Arab Emirates" Value="AE" />
+                    <Enumeration Text="United Kingdom" Value="GB" />
+                    <Enumeration Text="United States" Value="US" />
+                    <Enumeration Text="Uruguay" Value="UY" />
+                    <Enumeration Text="Uzbekistan" Value="UZ" />
+                    <Enumeration Text="Vanuatu" Value="VU" />
+                    <Enumeration Text="Vatican City" Value="VA" />
+                    <Enumeration Text="Venezuela" Value="VE" />
+                    <Enumeration Text="Vietnam" Value="VN" />
+                    <Enumeration Text="Wallis and Futuna" Value="WF" />
+                    <Enumeration Text="Yemen" Value="YE" />
+                    <Enumeration Text="Zambia" Value="ZM" />
+                    <Enumeration Text="Zimbabwe" Value="ZW" />
+                </Restriction>
+            </ClaimType>
+            <ClaimType Id="blockMinorUser">
+                <DisplayName>blockMinorUser</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True, if the user is considered a minor by the laws and regulations of the user's country of legal residence and should be blocked</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isMinor">
+                <DisplayName>isMinor</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True, if the user is considered a minor by the laws and regulations of the user's country of legal residence</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="doRegulationsRequireParentalConsent">
+                <DisplayName>Requires Parental Consent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True, if regulations require parental consent for minors</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="regulation">
+                <DisplayName>Regulation</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>The regulation used by the user's country of legal residence</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="response">
+                <DisplayName>response</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>A claim responsible for holding response to send to the relying party</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="responseMsg">
+                <DisplayName></DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>A claim responsible for holding response messages to send to the relying party</UserHelpText>
+                <UserInputType>Paragraph</UserInputType>
+                <Restriction>
+                    <Enumeration Text="B2C_V1_90001" Value="Unfortunately, your sign on has been blocked. Privacy and online safety laws in your country prevent access to accounts belonging to children." />
+                </Restriction>
+            </ClaimType>
+            <ClaimType Id="responseCode">
+                <DisplayName>responsecode</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>A claim responsible for holding response codes to send to the relying party</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="islegalAgeGroupClassificationUndefined">
+                <DisplayName>islegalAgeGroupClassificationUndefined</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>islegalAgeGroupClassificationUndefined</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isLegalAgeGroupClassificationMinorWithoutConsent">
+                <DisplayName>isLegalAgeGroupClassificationMinorWithoutConsent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>isLegalAgeGroupClassificationMinorWithoutConsent</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isDoBPresent">
+                <DisplayName>isDoBPresent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>isLegalAgeGroupClassificationMinorWithoutConsent</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isLegalCountryPresent">
+                <DisplayName>isLegalCountryPresent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if legalCountry value is present in claimsBag</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="skipProgressiveProfilePage">
+                <DisplayName>skipProgressiveProfilePage</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if dateOfBirth and legalCountry are present in claimsBag so skip showing ProgressiveProfile page.</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="ageGroupValueChanged">
+                <DisplayName>ageGroupValueChanged</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if re-evaluating ageGroup gives different value then existing ageGroup value.</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="consentProvidedForMinorValueChanged">
+                <DisplayName>consentProvidedForMinorValueChanged</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if re-evaluating consentProvidedForMinor gives different value then existing consentProvidedForMinor value.</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="ageGatingValuesChanged">
+                <DisplayName>ageGatingValuesChanged</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if re-evaluating ageGroup/consentProvidedForMinor gives different value then existing ageGroup/consentProvidedForMinor value.</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="ignoreConsent">
+                <DisplayName>ignoreConsent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if parental consent provided for a minor should be ignored.</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isMinorAndIgnoreConsent">
+                <DisplayName>isMinorAndIgnoreConsent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True if a user is minor and consentProvidedForMinor is ignored.</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="isMinorAndRequiresParentalConsent">
+                <DisplayName>isMinorAndRequiresParentalConsent</DisplayName>
+                <DataType>boolean</DataType>
+                <UserHelpText>True, if the user is considered a minor by the laws and regulations of the user's country of legal residence and should be blocked</UserHelpText>
+            </ClaimType>
+        </ClaimsSchema>
+        <Predicates>
+            <Predicate Id="DateRange" Method="IsDateRange" HelpText="The date must be between 01-01-1905 and today.">
+                <Parameters>
+                    <Parameter Id="Minimum">1905-01-01</Parameter>
+                    <Parameter Id="Maximum">Today</Parameter>
+                </Parameters>
+            </Predicate>
+        </Predicates>
+
+        <PredicateValidations>
+            <PredicateValidation Id="CustomDateRange">
+                <PredicateGroups>
+                    <PredicateGroup Id="DateRangeGroup">
+                        <PredicateReferences>
+                            <PredicateReference Id="DateRange" />
+                        </PredicateReferences>
+                    </PredicateGroup>
+                </PredicateGroups>
+            </PredicateValidation>
+        </PredicateValidations>
+
+        <ClaimsTransformations>
+            <ClaimsTransformation Id="IsUserMinorAndRequireParentalConsent" TransformationMethod="AndClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="isMinor" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="doRegulationsRequireParentalConsent" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="isMinorAndRequiresParentalConsent" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="SetIsUserMinorAndIgnoreConsent" TransformationMethod="AndClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="isMinor" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="ignoreConsent" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="isMinorAndIgnoreConsent" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="SetIsMinorShouldBeBlocked" TransformationMethod="OrClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="isMinorAndRequiresParentalConsent" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="isMinorAndIgnoreConsent" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="blockMinorUser" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="CalculateAgeGroupAndConsent" TransformationMethod="GetAgeGroupConsentProvidedAndRequiresConsent">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="dateOfBirth" TransformationClaimType="dateOfBirth" />
+                    <InputClaim ClaimTypeReferenceId="legalCountry" TransformationClaimType="countryCode" />
+                    <InputClaim ClaimTypeReferenceId="consentProvidedForMinor" TransformationClaimType="consentProvidedForMinor" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="ageGroup" TransformationClaimType="ageGroup" />
+                    <OutputClaim ClaimTypeReferenceId="doRegulationsRequireParentalConsent" TransformationClaimType="requiresParentalConsent" />
+                    <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" TransformationClaimType="consentProvidedForMinor" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="ReEvaluateAgeGroupAndConsent" TransformationMethod="GetAgeGroupConsentProvidedAndRequiresConsent">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="dateOfBirth" TransformationClaimType="dateOfBirth" />
+                    <InputClaim ClaimTypeReferenceId="legalCountry" TransformationClaimType="countryCode" />
+                    <InputClaim ClaimTypeReferenceId="consentProvidedForMinor" TransformationClaimType="consentProvidedForMinor" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="ageGroup_current" TransformationClaimType="ageGroup" />
+                    <OutputClaim ClaimTypeReferenceId="doRegulationsRequireParentalConsent" TransformationClaimType="requiresParentalConsent" />
+                    <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor_current" TransformationClaimType="consentProvidedForMinor" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="SetIsMinor" TransformationMethod="SetClaimsIfStringsMatch">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="ageGroup" TransformationClaimType="claimToMatch" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="matchTo" DataType="string" Value="Minor" />
+                    <InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
+                    <InputParameter Id="outputClaimIfMatched" DataType="string" Value="B2C_V1_90001" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="responseCode" TransformationClaimType="outputClaim" />
+                    <OutputClaim ClaimTypeReferenceId="isMinor" TransformationClaimType="stringCompareResultClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="GetResponseMsgMappedToResponseCode" TransformationMethod="GetMappedValueFromLocalizedCollection">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="responseCode" TransformationClaimType="mapFromClaim" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="responseMsg" TransformationClaimType="restrictionValueClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="MergeResponseMsgAndCode" TransformationMethod="FormatStringMultipleClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="responseCode" TransformationClaimType="inputClaim1"/>
+                    <InputClaim ClaimTypeReferenceId="responseMsg" TransformationClaimType="inputClaim2"/>
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="stringFormat" DataType="string" Value="{0}%3A {1}" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="response" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="CalculateIsUserMinorAndRequireParentalConsent" TransformationMethod="OrClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="islegalAgeGroupClassificationUndefined" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="isLegalAgeGroupClassificationMinorWithoutConsent" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="isMinorAndRequiresParentalConsent" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="SetIsLegalAgeGroupClassificationUndefined" TransformationMethod="SetClaimsIfStringsMatch">
+                <InputClaims>
+                    <!-- legalAgeGroupClassification is readonly claim  and gets set only by AAD based on ageGroup value. 
+			So we are writing ageGroup value in AADWrite call. This internally sets legalAgeGroupClassification -->
+                    <InputClaim ClaimTypeReferenceId="legalAgeGroupClassification" TransformationClaimType="claimToMatch" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="matchTo" DataType="string" Value="undefined" />
+                    <InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
+                    <InputParameter Id="outputClaimIfMatched" DataType="string" Value="B2C_V1_90001" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="responseCode" TransformationClaimType="outputClaim" />
+                    <OutputClaim ClaimTypeReferenceId="islegalAgeGroupClassificationUndefined" TransformationClaimType="stringCompareResultClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="SetIsLegalAgeGroupClassificationMinorWithoutConsent" TransformationMethod="SetClaimsIfStringsMatch">
+                <InputClaims>
+                    <!-- legalAgeGroupClassification is readonly claim  and gets set only by AAD based on ageGroup value. 
+			So we are writing ageGroup value in AADWrite call. This internally sets legalAgeGroupClassification -->
+                    <InputClaim ClaimTypeReferenceId="legalAgeGroupClassification" TransformationClaimType="claimToMatch" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="matchTo" DataType="string" Value="minorWithoutParentalConsent" />
+                    <InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
+                    <InputParameter Id="outputClaimIfMatched" DataType="string" Value="B2C_V1_90001" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="responseCode" TransformationClaimType="outputClaim" />
+                    <OutputClaim ClaimTypeReferenceId="isLegalAgeGroupClassificationMinorWithoutConsent" TransformationClaimType="stringCompareResultClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="IsDateOfBirthPresent" TransformationMethod="DoesClaimExist">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="dateOfBirth" TransformationClaimType="inputClaim" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="isDoBPresent" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="IsLegalCountryPresent" TransformationMethod="DoesClaimExist">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="legalCountry" TransformationClaimType="inputClaim" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="isLegalCountryPresent" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="EvaluateSkipProgressiveProfilePage" TransformationMethod="AndClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="isDoBPresent" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="isLegalCountryPresent" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="skipProgressiveProfilePage" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="HasAgeGroupValueChanged" TransformationMethod="CompareClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="ageGroup" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="ageGroup_current" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="operator" DataType="string" Value="NOT EQUAL" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="ageGroupValueChanged" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="HasConsentProvidedForMinorValueChanged" TransformationMethod="CompareClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="consentProvidedForMinor" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="consentProvidedForMinor_current" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="operator" DataType="string" Value="NOT EQUAL" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="consentProvidedForMinorValueChanged" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="EvaluateAgeGatingValuesChanged" TransformationMethod="OrClaims">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="ageGroupValueChanged" TransformationClaimType="inputClaim1" />
+                    <InputClaim ClaimTypeReferenceId="consentProvidedForMinorValueChanged" TransformationClaimType="inputClaim2" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="ageGatingValuesChanged" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="UpdateAgeGroup" TransformationMethod="CopyClaim">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="ageGroup_current" TransformationClaimType="inputClaim" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="ageGroup" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+            <ClaimsTransformation Id="UpdateConsentProvidedForMinor" TransformationMethod="CopyClaim">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="consentProvidedForMinor_current" TransformationClaimType="inputClaim" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+
+        </ClaimsTransformations>
+        <ContentDefinitions>
+            <ContentDefinition Id="api.selfasserted.progressiveprofile">
+                <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+                <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:2.1.7</DataUri>
+                <Metadata>
+                    <Item Key="DisplayName">Collect information from user page</Item>
+                </Metadata>
+            </ContentDefinition>
+
+        </ContentDefinitions>
+
+    </BuildingBlocks>
+    <ClaimsProviders>
+        <ClaimsProvider>
+            <DisplayName>Azure Active Directory</DisplayName>
+            <TechnicalProfiles>
+
+                <TechnicalProfile Id="AAD-UserWriteUsingAlternativeSecurityId">
+                    <Metadata>
+                        <Item Key="Operation">Write</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
+                        <Item Key="UserMessageIfClaimsPrincipalAlreadyExists">You are already registered, please press the back button and sign in instead.</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaimsTransformations>
+                        <InputClaimsTransformation ReferenceId="CreateOtherMailsFromEmail" />
+                    </InputClaimsTransformations>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="AlternativeSecurityId" PartnerClaimType="alternativeSecurityId" Required="true" />
+                    </InputClaims>
+                    <PersistedClaims>
+                        <!-- Required claims -->
+                        <PersistedClaim ClaimTypeReferenceId="alternativeSecurityId" />
+                        <PersistedClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <PersistedClaim ClaimTypeReferenceId="mailNickName" DefaultValue="unknown" />
+                        <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
+
+                        <!-- AgeGating related claims -->
+                        <PersistedClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <PersistedClaim ClaimTypeReferenceId="legalCountry" />
+                        <PersistedClaim ClaimTypeReferenceId="ageGroup" />
+                        <PersistedClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+
+                        <!-- Optional claims -->
+                        <PersistedClaim ClaimTypeReferenceId="otherMails" />
+                        <PersistedClaim ClaimTypeReferenceId="givenName" />
+                        <PersistedClaim ClaimTypeReferenceId="surname" />
+                    </PersistedClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="newUser" PartnerClaimType="newClaimsPrincipalCreated" />
+                        <!-- The following other mails claim is needed for the case when a user is created, we get otherMails from directory. Self-asserted provider also has an
+                 OutputClaims, and if this is absent, Self-Asserted provider will prompt the user for otherMails. -->
+                        <OutputClaim ClaimTypeReferenceId="otherMails" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                    </OutputClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="AAD-UserReadUsingAlternativeSecurityId">
+                    <Metadata>
+                        <Item Key="Operation">Read</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+                        <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">User does not exist. Please sign up before you can sign in.</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="AlternativeSecurityId" PartnerClaimType="alternativeSecurityId" Required="true" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- Required claims -->
+
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+
+                        <!-- Optional claims -->
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="otherMails" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surname" />
+                    </OutputClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="AAD-UserWriteUsingLogonEmail">
+                    <Metadata>
+                        <Item Key="Operation">Write</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">true</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" Required="true" />
+                    </InputClaims>
+                    <PersistedClaims>
+                        <!-- Required claims -->
+                        <PersistedClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" />
+                        <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"/>
+                        <PersistedClaim ClaimTypeReferenceId="displayName" DefaultValue="unknown" />
+                        <PersistedClaim ClaimTypeReferenceId="passwordPolicies" DefaultValue="DisablePasswordExpiration" />
+
+                        <!-- AgeGating related claims -->
+                        <PersistedClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <PersistedClaim ClaimTypeReferenceId="legalCountry" />
+                        <PersistedClaim ClaimTypeReferenceId="ageGroup" />
+                        <PersistedClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+
+                        <!-- Optional claims. -->
+                        <PersistedClaim ClaimTypeReferenceId="givenName" />
+                        <PersistedClaim ClaimTypeReferenceId="surname" />
+                    </PersistedClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="newUser" PartnerClaimType="newClaimsPrincipalCreated" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" AlwaysUseDefaultValue="true" />
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                    </OutputClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
+                    <Metadata>
+                        <Item Key="Operation">Read</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+                        <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="signInNames.emailAddress" Required="true" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- Required claims -->
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" AlwaysUseDefaultValue="true" />
+
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+
+                        <!-- Optional claims -->
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="otherMails" />
+                        <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+                    </OutputClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
+                    <Metadata>
+                        <Item Key="Operation">Write</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+                    </InputClaims>
+                    <PersistedClaims>
+                        <!-- Required claims -->
+                        <PersistedClaim ClaimTypeReferenceId="objectId" />
+
+                        <!-- AgeGating related claims -->
+                        <!-- If dateOfBirth or legalCountry is updated uisng profile edit, it should appear in the session of "Optional claims" -->
+                        <PersistedClaim ClaimTypeReferenceId="ageGroup" />
+                        <PersistedClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+
+                        <!-- Optional claims -->
+                        <PersistedClaim ClaimTypeReferenceId="givenName" />
+                        <PersistedClaim ClaimTypeReferenceId="surname" />
+                    </PersistedClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                </TechnicalProfile>
+
+                <!-- The following technical profile is used to read data after user authenticates. -->
+                <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+                    <Metadata>
+                        <Item Key="Operation">Read</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+                    </InputClaims>
+                    <OutputClaims>
+
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+
+                        <!-- Optional claims -->
+                        <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="otherMails" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surname" />
+                    </OutputClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="AAD-UserWriteUsingObjectId">
+                    <Metadata>
+                        <Item Key="Operation">Write</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+                    </InputClaims>
+                    <PersistedClaims>
+                        <PersistedClaim ClaimTypeReferenceId="objectId" />
+                        <!-- AgeGating related claims -->
+                        <PersistedClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <PersistedClaim ClaimTypeReferenceId="legalCountry" />
+                        <PersistedClaim ClaimTypeReferenceId="ageGroup" />
+                        <PersistedClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                    </PersistedClaims>
+                    <OutputClaims>
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                    </OutputClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+        <ClaimsProvider>
+            <DisplayName>Self Asserted</DisplayName>
+            <TechnicalProfiles>
+
+                <TechnicalProfile Id="SelfAsserted-Social">
+                    <DisplayName>User ID signup</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ContentDefinitionReferenceId">api.socialccountsignup</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <InputClaims>
+                        <!-- These claims ensure that any values retrieved in the previous steps (e.g. from an external IDP) are prefilled. 
+                 Note that some of these claims may not have any value, for example, if the external IDP did not provide any of
+                 these values, or if the claim did not appear in the OutputClaims section of the IDP.
+                 In addition, if a claim is not in the InputClaims section, but it is in the OutputClaims section, then its
+                 value will not be prefilled, but the user will still be prompted for it (with an empty value). -->
+                        <InputClaim ClaimTypeReferenceId="displayName" />
+                        <InputClaim ClaimTypeReferenceId="givenName" />
+                        <InputClaim ClaimTypeReferenceId="surname" />
+
+                        <!-- AgeGating related claims -->
+                        <InputClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <InputClaim ClaimTypeReferenceId="legalCountry" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- These claims are not shown to the user because their value is obtained through the "ValidationTechnicalProfiles"
+                 referenced below, or a default value is assigned to the claim. A claim is only shown to the user to provide a 
+                 value if its value cannot be obtained through any other means. -->
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="newUser" />
+                        <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" Required="true"/>
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" Required="true"/>
+                        <OutputClaim ClaimTypeReferenceId="blockMinorUser" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                        <OutputClaim ClaimTypeReferenceId="responseCode" />
+                        <OutputClaim ClaimTypeReferenceId="responseMsg" />
+                        <OutputClaim ClaimTypeReferenceId="response" />
+
+                        <!-- Optional claims. These claims are collected from the user and can be modified. If a claim is to be persisted in the directory after having been 
+                 collected from the user, it needs to be added as a PersistedClaim in the ValidationTechnicalProfile referenced below, i.e. 
+                 in AAD-UserWriteUsingAlternativeSecurityId. -->
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surname" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="EvaluateBlockMinorUserProfile" />
+                        <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingAlternativeSecurityId">
+                            <Preconditions>
+                                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                                    <Value>blockMinorUser</Value>
+                                    <Value>True</Value>
+                                    <Action>SkipThisValidationTechnicalProfile</Action>
+                                </Precondition>
+                            </Preconditions>
+                        </ValidationTechnicalProfile>
+                    </ValidationTechnicalProfiles>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialSignup" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
+                    <DisplayName>User ID signup</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+
+                        <InputClaim ClaimTypeReferenceId="alternativeSecurityId" />
+
+                        <InputClaim ClaimTypeReferenceId="userPrincipalName" />
+
+                        <!-- Optional claims. These claims are collected from the user and can be modified. Any claim added here should be updated in the
+                 ValidationTechnicalProfile referenced below so it can be written to directory after being updateed by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
+                        <InputClaim ClaimTypeReferenceId="givenName" />
+                        <InputClaim ClaimTypeReferenceId="surname" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- Required claims -->
+                        <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="ageGatingValuesChanged" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+
+                        <!-- Optional claims. These claims are collected from the user and can be modified. Any claim added here should be updated in the
+                 ValidationTechnicalProfile referenced below so it can be written to directory after being updateed by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surname" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="EvaluateAgeGroupProfile" />
+                        <ValidationTechnicalProfile ReferenceId="AAD-UserWriteProfileUsingObjectId" />
+                    </ValidationTechnicalProfiles>
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="SelfAsserted-ProgressiveProfile">
+                    <DisplayName>Progressive Profiling for User SignIn</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ContentDefinitionReferenceId">api.selfasserted.progressiveprofile</Item>
+                        <Item Key="TokenLifeTimeInSeconds">3600</Item>
+                        <Item Key="AllowGenerationOfClaimsWithNullValues">true</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <InputClaim ClaimTypeReferenceId="legalCountry" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" Required="true"/>
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" Required="true"/>
+                        <OutputClaim ClaimTypeReferenceId="ageGatingValuesChanged" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                    </OutputClaims>
+                    <!-- The age gating logic here covers both the scenario of collecting DOB/legalCountry for the first time and the edge case where DOB/legalCountry is missing -->
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="EvaluateAgeGroupProfile" />
+                        <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingObjectId" />
+                    </ValidationTechnicalProfiles>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Local Account</DisplayName>
+            <TechnicalProfiles>
+
+                <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+                    <DisplayName>Email signup</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+                        <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+                        <Item Key="language.button_continue">Create</Item>
+                        <Item Key="EnforceEmailVerification">false</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="email" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication"/>
+                        <OutputClaim ClaimTypeReferenceId="newUser" />
+
+                        <!-- Age gating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" Required="true"/>
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" Required="true"/>
+                        <OutputClaim ClaimTypeReferenceId="blockMinorUser" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                        <OutputClaim ClaimTypeReferenceId="responseCode" />
+                        <OutputClaim ClaimTypeReferenceId="responseMsg" />
+                        <OutputClaim ClaimTypeReferenceId="response" />
+
+                        <!-- Optional claims, to be collected from the user -->
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surName" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="SetFeatureDefaultValue" />
+                        <ValidationTechnicalProfile ReferenceId="EvaluateBlockMinorUserProfile" />
+                        <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail">
+                            <Preconditions>
+                                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                                    <Value>blockMinorUser</Value>
+                                    <Value>True</Value>
+                                    <Action>SkipThisValidationTechnicalProfile</Action>
+                                </Precondition>
+                            </Preconditions>
+                        </ValidationTechnicalProfile>
+                    </ValidationTechnicalProfiles>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+                </TechnicalProfile>
+
+                <!-- This technical profile uses a validation technical profile to authenticate the user. -->
+                <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+                    <DisplayName>Local Account Signin</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
+                        <Item Key="setting.operatingMode">Email</Item>
+                        <Item Key="ContentDefinitionReferenceId">api.localaccountsignin</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="signInName" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="password" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="login-NonInteractive" />
+                    </ValidationTechnicalProfiles>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+                </TechnicalProfile>
+                <!-- This technical profile forces the user to verify the email address that they provide on the UI. Only after email is verified, the user account is
+        read from the directory. -->
+                <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+                    <DisplayName>Reset password using email address</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+                        <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <IncludeInSso>false</IncludeInSso>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+                        <!-- AgeGating related claims -->
+                        <OutputClaim ClaimTypeReferenceId="dateOfBirth" />
+                        <OutputClaim ClaimTypeReferenceId="legalCountry" />
+                        <OutputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress" />
+                    </ValidationTechnicalProfiles>
+                </TechnicalProfile>
+
+
+
+            </TechnicalProfiles>
+        </ClaimsProvider>
+        <ClaimsProvider>
+            <DisplayName>Token Issuer</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="JsonIssuer">
+                    <DisplayName>JSON Issuer</DisplayName>
+                    <Protocol Name="None" />
+                    <OutputTokenFormat>JSON</OutputTokenFormat>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="response" />
+                    </InputClaims>
+                    <OutputClaims />
+                </TechnicalProfile>
+
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+
+        <ClaimsProvider>
+            <DisplayName>Evaluate Block User For GDPR</DisplayName>
+            <TechnicalProfiles>
+                <!-- Evaluate age group and check whether the ageGroup value or consentProvidedForMinor changed -->
+                <TechnicalProfile Id="EvaluateAgeGroupProfile">
+                    <DisplayName>Evaluate age Group</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="ageGroup" DefaultValue="Undefined" />
+                        <OutputClaim ClaimTypeReferenceId="ageGatingValuesChanged" DefaultValue="false" />
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor" />
+                    </OutputClaims>
+                    <OutputClaimsTransformations>
+                        <OutputClaimsTransformation ReferenceId="ReEvaluateAgeGroupAndConsent" />
+                        <OutputClaimsTransformation ReferenceId="HasAgeGroupValueChanged" />
+                        <OutputClaimsTransformation ReferenceId="UpdateAgeGroup" />
+                        <OutputClaimsTransformation ReferenceId="HasConsentProvidedForMinorValueChanged" />
+                        <OutputClaimsTransformation ReferenceId="UpdateConsentProvidedForMinor" />
+                        <OutputClaimsTransformation ReferenceId="EvaluateAgeGatingValuesChanged" />
+                    </OutputClaimsTransformations>
+                </TechnicalProfile>
+                <TechnicalProfile Id="EvaluateBlockMinorUserProfile">
+                    <DisplayName>Evaluate Block User</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="responseMsg" DefaultValue=""/>
+                        <OutputClaim ClaimTypeReferenceId="responseCode" DefaultValue=""/>
+                        <OutputClaim ClaimTypeReferenceId="response" DefaultValue=""/>
+                        <OutputClaim ClaimTypeReferenceId="consentProvidedForMinor"/>
+                    </OutputClaims>
+                    <OutputClaimsTransformations>
+                        <OutputClaimsTransformation ReferenceId="CalculateAgeGroupAndConsent" />
+                        <OutputClaimsTransformation ReferenceId="SetIsMinor" />
+                        <OutputClaimsTransformation ReferenceId="IsUserMinorAndRequireParentalConsent" />
+                        <OutputClaimsTransformation ReferenceId="SetIsUserMinorAndIgnoreConsent" />
+                        <OutputClaimsTransformation ReferenceId="SetIsMinorShouldBeBlocked" />
+                        <OutputClaimsTransformation ReferenceId="GetResponseMsgMappedToResponseCode" />
+                        <OutputClaimsTransformation ReferenceId="MergeResponseMsgAndCode" />
+                    </OutputClaimsTransformations>
+                </TechnicalProfile>
+                <TechnicalProfile Id="EvaluateBlockMinorUserProfile_UsingLegalAgeGroupClassification">
+                    <DisplayName>Evaluate Block User Using LegalAgeGroupClassification claim</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <InputClaims>
+                        <!-- legalAgeGroupClassification is readonly claim  and gets set only by AAD based on ageGroup value. 
+				So we are writing ageGroup value in AADWrite call. This internally sets legalAgeGroupClassification -->
+                        <InputClaim ClaimTypeReferenceId="legalAgeGroupClassification" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="responseCode" DefaultValue=""/>
+                        <OutputClaim ClaimTypeReferenceId="responseMsg" DefaultValue=""/>
+                        <OutputClaim ClaimTypeReferenceId="blockMinorUser" Required="true" />
+                    </OutputClaims>
+                    <OutputClaimsTransformations>
+                        <OutputClaimsTransformation ReferenceId="SetIsLegalAgeGroupClassificationUndefined" />
+                        <OutputClaimsTransformation ReferenceId="SetIsLegalAgeGroupClassificationMinorWithoutConsent" />
+                        <OutputClaimsTransformation ReferenceId="CalculateIsUserMinorAndRequireParentalConsent" />
+                        <OutputClaimsTransformation ReferenceId="SetIsMinor" />
+                        <OutputClaimsTransformation ReferenceId="SetIsUserMinorAndIgnoreConsent" />
+                        <OutputClaimsTransformation ReferenceId="SetIsMinorShouldBeBlocked" />
+                        <OutputClaimsTransformation ReferenceId="GetResponseMsgMappedToResponseCode" />
+                        <OutputClaimsTransformation ReferenceId="MergeResponseMsgAndCode" />
+                    </OutputClaimsTransformations>
+                </TechnicalProfile>
+                <TechnicalProfile Id="SetFeatureDefaultValue">
+                    <DisplayName>Set Feature Default Values</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="blockMinorUser" DefaultValue="false" />
+                        <OutputClaim ClaimTypeReferenceId="ageGatingValuesChanged" DefaultValue="false"/>
+                        <OutputClaim ClaimTypeReferenceId="ignoreConsent" DefaultValue="false"/>
+                    </OutputClaims>
+                </TechnicalProfile>
+                <TechnicalProfile Id="CalculateFeatureDefaultValue">
+                    <DisplayName>Calculate Feature Default Values</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="skipProgressiveProfilePage" />
+                    </OutputClaims>
+                    <OutputClaimsTransformations>
+                        <OutputClaimsTransformation ReferenceId="IsDateOfBirthPresent" />
+                        <OutputClaimsTransformation ReferenceId="isLegalCountryPresent" />
+                        <OutputClaimsTransformation ReferenceId="EvaluateSkipProgressiveProfilePage" />
+                    </OutputClaimsTransformations>
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+    </ClaimsProviders>
+    <UserJourneys>
+
+        <UserJourney Id="SignUpOrSignInAgeGated" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+
+            <OrchestrationSteps>
+
+                <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+                    <ClaimsProviderSelections>
+                        <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+                        <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+                    </ClaimsProviderSelections>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- Check if the user has selected to sign in using one of the social providers -->
+                <OrchestrationStep Order="2" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+                        <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <OrchestrationStep Order="3" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SetFeatureDefaultValue" TechnicalProfileReferenceId="SetFeatureDefaultValue" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+                <OrchestrationStep Order="4" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>authenticationSource</Value>
+                            <Value>localAccountAuthentication</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId).
+		 This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+		 using technical profile "LocalAccountSignUpWithLogonEmail" in step 2, then an user account must exist in the directory by this time. -->
+                <!-- The object Id may not exist due to blockMinorUser==True for local sign-up. In this case, skip the step -->
+                <OrchestrationStep Order="5" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
+             from the user. So, in that case, create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory. -->
+                <OrchestrationStep Order="6" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- This step reads any user attributes that we may not have received when authenticating using technical profile "SelfAsserted-LocalAccountSignin-Email" so they can be sent 
+        in the token. -->
+                <OrchestrationStep Order="7" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- Calculate feature default value using existing claims (e.g., skipProgressiveProfilePage) -->
+                <OrchestrationStep Order="8" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="CalculateFeatureDefaultValue" TechnicalProfileReferenceId="CalculateFeatureDefaultValue" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- If all required claims for progressive profiling are showing up, then skip this step -->
+                <OrchestrationStep Order="9" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SelfAsserted-ProgressiveProfile" TechnicalProfileReferenceId="SelfAsserted-ProgressiveProfile" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- The steps 10-11 are executed when the SelfAsserted-ProgressiveProfile is skipped -->
+                <!-- AgeGroup needs to be calculated every time when a user tries to sign in, since the value can not be updated automatically in directory -->
+                <OrchestrationStep Order="10" Type="ClaimsExchange">
+                    <Preconditions>
+                        <!-- Skip this step if this is a sign-up (both local and social) -->
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>Executed-SelfAsserted-Input</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateAgeGroup" TechnicalProfileReferenceId="EvaluateAgeGroupProfile" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- Skip this step if this is a sign-up (both local and social) -->
+                <!-- We need to write ageGroup to directory if it has a different value-->
+                <OrchestrationStep Order="11" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>Executed-SelfAsserted-Input</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- Skip this step if this is a sign-up (both local and social) -->
+                <!-- This step is used to retrieve updated legalAgeGroupClassification based on instant-on -->
+                <OrchestrationStep Order="12" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>Executed-SelfAsserted-Input</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserRead" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- Skip this step if this is a sign-up (both local and social) -->
+                <OrchestrationStep Order="13" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>Executed-SelfAsserted-Input</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateBlockMinorUserClaims" TechnicalProfileReferenceId="EvaluateBlockMinorUserProfile_UsingLegalAgeGroupClassification" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- If a user is blocked, send back a json response instead of a jwt token -->
+                <OrchestrationStep Order="14" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JsonIssuer">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                </OrchestrationStep>
+
+                <!-- All good. Send claims to the RP :-) -->
+                <OrchestrationStep Order="15" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                </OrchestrationStep>
+
+            </OrchestrationSteps>
+            <ClientDefinition ReferenceId="DefaultWeb" />
+        </UserJourney>
+        <UserJourney Id="ProfileEditAgeGated" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+            <OrchestrationSteps>
+
+                <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+                    <ClaimsProviderSelections>
+                        <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+                        <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
+                    </ClaimsProviderSelections>
+                </OrchestrationStep>
+                <OrchestrationStep Order="2" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+                        <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="3" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SetFeatureDefaultValue" TechnicalProfileReferenceId="SetFeatureDefaultValue" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="4" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>authenticationSource</Value>
+                            <Value>localAccountAuthentication</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADUserRead" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="5" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>authenticationSource</Value>
+                            <Value>socialIdpAuthentication</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- Calculate feature default value using existing claims (e.g., skipProgressiveProfilePage) -->
+                <OrchestrationStep Order="6" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="CalculateFeatureDefaultValue" TechnicalProfileReferenceId="CalculateFeatureDefaultValue" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- The step should be skipped if progressive profile claims already exist in journey storage -->
+                <OrchestrationStep Order="7" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SelfAsserted-ProgressiveProfile" TechnicalProfileReferenceId="SelfAsserted-ProgressiveProfile" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- The following steps are executed when the SelfAsserted-ProgressiveProfile is skipped -->
+                <!-- AgeGroup needs to be calculated every time when a user tries to sign in, since the value can not be updated automatically in directory -->
+                <OrchestrationStep Order="8" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateAgeGroup" TechnicalProfileReferenceId="EvaluateAgeGroupProfile" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- We need to write ageGroup to directory if it has a different value-->
+                <OrchestrationStep Order="9" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- This step is used to retrieve updated legalAgeGroupClassification based on instant-on -->
+                <OrchestrationStep Order="10" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserReadForAgeGating" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="11" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateBlockMinorUserClaims" TechnicalProfileReferenceId="EvaluateBlockMinorUserProfile_UsingLegalAgeGroupClassification" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="12" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="13" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserReadAfterProfileEdit" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="14" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateBlockMinorUserClaimsAfterProfileEdit" TechnicalProfileReferenceId="EvaluateBlockMinorUserProfile_UsingLegalAgeGroupClassification" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="15" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JsonIssuer">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                </OrchestrationStep>
+                <OrchestrationStep Order="16" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                </OrchestrationStep>
+
+            </OrchestrationSteps>
+            <ClientDefinition ReferenceId="DefaultWeb" />
+        </UserJourney>
+
+        <UserJourney Id="PasswordResetAgeGated" DefaultCpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+            <OrchestrationSteps>
+                <OrchestrationStep Order="1" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="2" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SetFeatureDefaultValue" TechnicalProfileReferenceId="SetFeatureDefaultValue" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="3" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="CalculateFeatureDefaultValue" TechnicalProfileReferenceId="CalculateFeatureDefaultValue" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="4" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SelfAsserted-ProgressiveProfile" TechnicalProfileReferenceId="SelfAsserted-ProgressiveProfile" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- The following steps before sendClaims are executed when the SelfAsserted-ProgressiveProfile is skipped -->
+                <!-- AgeGroup needs to be calculated every time when a user tries to sign in, since the value can not be updated automatically in directory -->
+                <OrchestrationStep Order="5" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateAgeGroup" TechnicalProfileReferenceId="EvaluateAgeGroupProfile" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- We need to write ageGroup to directory if it has a different value-->
+                <OrchestrationStep Order="6" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>skipProgressiveProfilePage</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- This step is used to retrieve updated legalAgeGroupClassification based on instant-on -->
+                <OrchestrationStep Order="7" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>ageGatingValuesChanged</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AAD-UserRead" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="8" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="EvaluateBlockMinorUserClaims" TechnicalProfileReferenceId="EvaluateBlockMinorUserProfile_UsingLegalAgeGroupClassification" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="9" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JsonIssuer">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>False</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                </OrchestrationStep>
+                <OrchestrationStep Order="10" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="11" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>blockMinorUser</Value>
+                            <Value>True</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                </OrchestrationStep>
+            </OrchestrationSteps>
+            <ClientDefinition ReferenceId="DefaultWeb" />
+        </UserJourney>
+
+    </UserJourneys>
+</TrustFrameworkPolicy>
