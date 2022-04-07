@@ -168,6 +168,18 @@
         }, 
         {
             "path": "policies/force-password-reset/policy/SignUpOrSignin_ForcePasswordReset_Helper.xml"
+        }, 
+        {
+            "path": "policies/age-gating/policy/TrustFrameworkAgeGatingExtensions.xml"
+        }, 
+        {
+            "path": "policies/age-gating/policy/SignUpOrSignIn.xml"
+        }, 
+        {
+            "path": "policies/age-gating/policy/ProfileEdit.xml"
+        }, 
+        {
+            "path": "policies/age-gating/policy/PasswordReset.xml"
         }
     ]
 }
