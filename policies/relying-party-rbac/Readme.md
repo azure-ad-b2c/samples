@@ -1,5 +1,5 @@
 # Azure AD B2C: Role-Based Access Control
-Role-Based Access Control (RBAC) enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's groups, add the groups to JTW token and also prevent users from sign-in if they aren't members of one of predefined security groups.
+Role-Based Access Control (RBAC) enables fine-grained access management for your relying party applications. Using RBAC, you can grant only the amount of access that users need to perform their jobs in your application. This sample policy (along with the REST API service) demonstrates how to read user's groups, add the groups to JWT token and also prevent users from sign-in if they aren't members of one of predefined security groups.
 
 [![Role-Based Access Control video.](media/link-to-youtube.png)](https://youtu.be/UEWIPn55bkA)
 
