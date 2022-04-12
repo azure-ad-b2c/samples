@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+  TenantId="yourtenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_Groups" 
+  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_Groups">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="groups">
+        <DisplayName>Collection of group membership IDs</DisplayName>
+        <DataType>stringCollection</DataType>
+      </ClaimType>
+      <ClaimType Id="group_1">
+        <DisplayName>Group 1</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="group_2">
+        <DisplayName>Group 2</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="group_3">
+        <DisplayName>Group 3</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="isMemberOfAllowGroup">
+      	<DisplayName>isMemberOfAllowGroup</DisplayName>
+      	<DataType>boolean</DataType>
+      </ClaimType>
+      <ClaimType Id="grant_type">
+        <DisplayName>Grant type</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="scope">
+        <DisplayName>scope</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="bearerToken">
+        <DisplayName>Bearer token</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="responseMsg">
+      	<DisplayName>Error</DisplayName>
+      	<DataType>string</DataType>
+      	<UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="AddGroup_1" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="group_1" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="AddGroup_2" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="group_2" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="AddGroup_3" TransformationMethod="AddItemToStringCollection">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="group_3" TransformationClaimType="item" />
+          <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="groups" TransformationClaimType="collection" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CheckIfMemberOfAllowGroup" TransformationMethod="StringCollectionContains">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="groups" TransformationClaimType="inputClaim"/>
+        </InputClaims>
+        <InputParameters>
+          <InputParameter  Id="item" DataType="string" Value="admins"/>
+          <InputParameter  Id="ignoreCase" DataType="string" Value="true"/>
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="isMemberOfAllowGroup" TransformationClaimType="outputClaim"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Graph REST APIs</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="REST-AcquireAccessTokenForGraph">
+          <DisplayName>Acquire Token</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://login.microsoftonline.com/yourtenant.onmicrosoft.com/oauth2/v2.0/token</Item>
+            <Item Key="AuthenticationType">Basic</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_MSGraphClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_MSGraphClientSecret" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="client_credentials" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="https://graph.microsoft.com/.default" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="bearerToken" PartnerClaimType="access_token" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <!-- Call Microsoft Graph API to get group claims-->
+        <TechnicalProfile Id="REST-GetGroupMembership">
+          <DisplayName>Get user's groups using Graph API</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://graph.microsoft.com/v1.0/users/{objectId}/transitiveMemberOf?$select=id,displayName</Item>
+            <Item Key="SendClaimsIn">Url</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">bearerToken</Item>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+            <Item Key="ClaimResolverUrlFormatting">true</Item>
+            <Item Key="ResolveJsonPathsInJsonTokens">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" /> 
+            <InputClaim ClaimTypeReferenceId="bearerToken" /> 
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="group_1" PartnerClaimType="value[0].displayName" />
+            <OutputClaim ClaimTypeReferenceId="group_2" PartnerClaimType="value[1].displayName" />
+            <OutputClaim ClaimTypeReferenceId="group_3" PartnerClaimType="value[2].displayName" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="AddGroup_1" />
+            <OutputClaimsTransformation ReferenceId="AddGroup_2" />
+            <OutputClaimsTransformation ReferenceId="AddGroup_3" />
+            <!-- <OutputClaimsTransformation ReferenceId="CheckIfMemberOfAllowGroup" /> -->
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="ShowBlockPage">
+          <DisplayName>Show Block message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <Item Key="setting.showContinueButton">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="responseMsg" DefaultValue="You are not a member of a required security group." />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="responseMsg" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+</TrustFrameworkPolicy>
