@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="{Settings:Tenant}" PolicyId="B2C_1A_PasswordRules_Extensions" PublicPolicyUri="http://{Settings:Tenant}/B2C_1A_PasswordRules_Extensions">
+
+    <BasePolicy>
+        <TenantId>{Settings:Tenant}</TenantId>
+        <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+    </BasePolicy>
+
+    <BuildingBlocks>
+        <ClaimsSchema>
+            <ClaimType Id="pwdrules">
+                <DisplayName>password rules</DisplayName>
+                <DataType>string</DataType>
+                <UserInputType>Paragraph</UserInputType>
+            </ClaimType>
+        </ClaimsSchema>
+
+        <ContentDefinitions>
+            <ContentDefinition Id="api.localaccountsignup.rules">
+                <LoadUri>https://passwordrules.azurewebsites.net/rules</LoadUri>
+                <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.10</DataUri>
+                <Metadata>
+                    <Item Key="DisplayName">Local account sign up page</Item>
+                </Metadata>
+            </ContentDefinition>
+        </ContentDefinitions>
+    </BuildingBlocks>
+
+    <ClaimsProviders>
+        <ClaimsProvider>
+            <DisplayName>Set Rules</DisplayName>
+            <TechnicalProfiles>
+
+                <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="pwdrules" />
+                    </InputClaims>
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+                    <Metadata>
+                        <Item Key="ContentDefinitionReferenceId">api.localaccountsignup.rules</Item>
+                    </Metadata>
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="Get-Parameters">
+                    <DisplayName>Profile to populate calims with parameters</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+                    </Metadata>
+                    <OutputClaims>
+                        <!-- <OutputClaim ClaimTypeReferenceId="alternativeSecurityId" DefaultValue="" AlwaysUseDefaultValue="true" /> -->
+                        <OutputClaim ClaimTypeReferenceId="pwdrules" DefaultValue="minlength: 20; maxlength: 100; required: lower; required: upper; required: digit; required: [-];" AlwaysUseDefaultValue="true"/>
+                    </OutputClaims>
+                </TechnicalProfile>
+
+            </TechnicalProfiles>
+        </ClaimsProvider>
+    </ClaimsProviders>
+
+    <UserJourneys>
+
+        <UserJourney Id="PasswordRulesSignUpOrSignIn">
+            <OrchestrationSteps>
+
+                <OrchestrationStep Order="1" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="Get-QueryParameters" TechnicalProfileReferenceId="Get-Parameters" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <OrchestrationStep Order="2" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+                    <ClaimsProviderSelections>
+                        <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+                    </ClaimsProviderSelections>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- Check if the user has selected to sign in using one of the social providers -->
+                <OrchestrationStep Order="3" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="4" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                            <Value>authenticationSource</Value>
+                            <Value>socialIdpAuthentication</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+            </OrchestrationSteps>
+            <ClientDefinition ReferenceId="DefaultWeb" />
+        </UserJourney>
+    </UserJourneys>
+
+</TrustFrameworkPolicy>
