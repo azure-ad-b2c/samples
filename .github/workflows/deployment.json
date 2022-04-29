@@ -2,6 +2,18 @@
     "version": "1.0",
     "files": [
         {
+            "path": "policies/user-info-endpoint/policy/UserInfo_TrustFrameworkExtensions.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"issuer\">https://yourtenant.b2clogin.com/00000000-0000-0000-0000-000000000000/v2.0/</Item>",
+                    "replace": "<Item Key=\"issuer\">https://b2clivedemo.b2clogin.com/3a29c594-12be-476f-bb6f-0a787b348639/v2.0/</Item>"
+                }
+            ]
+        },
+        {
+            "path": "policies/user-info-endpoint/policy/UserInfo_SignUpOrSignin.xml"
+        },
+        {
             "path": "policies/embedded-password-reset/policy/TrustFrameworkExtensions_SSPR.xml"
         },
         {
