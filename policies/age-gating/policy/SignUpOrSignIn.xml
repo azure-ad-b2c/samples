@@ -10,7 +10,7 @@
 
   <BasePolicy>
     <TenantId>yourtenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkAgeGatingExtensions</PolicyId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkAgeGatingExtensions</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
