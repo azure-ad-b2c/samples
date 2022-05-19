@@ -1,7 +1,9 @@
 # Unknown Devices MFA
 With Azure AD B2C you can detect unknown devices which might be required to prompt MFA as illustrated in this particular sample or send email to the user signing in from unknown device.
 
-Custom policy is using such information as User Agent and IP Address to uniquely calcualte a Device ID for particular Device User ID. Information is stored in user's browser Web Storage and used in subsequent verificaitons to detect unknown device and prompt MFA.
+Custom policy is using such information as User Agent and IP Address to uniquely calcualte a Device ID for particular Device User ID. Information is stored in user's browser Web Storage and used in subsequent verifications to detect unknown device and prompt MFA.
+
+> **Note:** This sample uses client side JavaScript to collect basic device information to generate a fingerprint. A more robust mechanism is to use Microsoft Azure AD [Identity Protection](https://docs.microsoft.com/en-us/azure/active-directory-b2c/conditional-access-identity-protection-overview) to utilize more advanced fingerprinting techniques.
 
 Custom policy logic is primarily defined in following orchestration steps:
 - [Unknown Devices MFA](#unknown-devices-mfa)
