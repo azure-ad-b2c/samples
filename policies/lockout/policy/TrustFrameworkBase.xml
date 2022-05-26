@@ -501,7 +501,8 @@
             <Item Key="response_types">id_token</Item>
             <Item Key="response_mode">query</Item>
             <Item Key="scope">email openid</Item>
-            <Item Key="grant_type">password</Item>
+            <!-- Commnenting this allows a calling ValidationTechnical profile to continue on error -->
+            <!-- <Item Key="grant_type">password</Item> -->
 
             <!-- Policy Engine Clients -->
             <Item Key="UsePolicyInRedirectUri">false</Item>
