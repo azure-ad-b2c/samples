@@ -1,0 +1,17 @@
+name: 'deploy'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: judedaryl/ief-upload-policies@v1
+        with:
+          folder: policy
+          client-id: ${{ secrets.B2C_CLIENT_ID }}
+          client-secret: ${{ secrets.B2C_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.B2C_TENANT_ID }}
