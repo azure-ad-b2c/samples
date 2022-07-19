@@ -191,6 +191,7 @@ Samples are available for the following categories
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Azure DevOps pipeline for Azure AD B2C](policies/devops-pipeline) | Uploads policies regardless of naming convention Azure DevOps automated pipeline.| NA|
+|[Github Action for Azure AD B2C using ieftool](policies/ieftool-github-actions) | A fully featured github action that provides a way for you to inject variables into your b2c policies and upload them regardless of order.| NA|
 
 
 ## Community Help and Support
