@@ -1,8 +1,51 @@
 # IEFTOOL Github Actions
 
-This example shows how to create a CI/CD pipeline for IEF policies using Github Actions.
+This example shows how to create a CI/CD pipeline for IEF policies using Github Actions which covers two main scenarios. ``Configuration`` and ``Deployment``
 
-## Scenario
+## Scenario - Configuration
+
+Azure B2C IEF policies are mainly written in xml and acts like an instruction set for your user flows in Azure B2C. This presents quite a challenge though when you are maintaining multiple tenants representing multiple environments a ``non-prod`` and ``prod`` for example.
+
+The ieftool helps with this scenario by providing a way for you to inject variables into your xml policies using a ``yaml configuration file``
+
+
+``ieftool.config``
+```yaml
+tenantId: mynonprodtenant.onmicrosoft.com
+deploymentMode: Development
+```
+
+``src/BasePolicy.xml``
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy 
+    ...
+    TenantId="{{ tenantId }}"  
+    DeploymentMode="{{ deploymentMode }}">
+  ...
+</xml>
+```
+Run the build command
+
+```sh
+# ieftool build [source dir] [target dir] -c [config path]
+ieftool build src output -c ieftool.config
+```
+
+The policies are then compiled into
+
+``output/BasePolicy.xml``
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy 
+    ...
+    TenantId="mytenant.onmicrosoft.com"  
+    DeploymentMode="Development">
+  ...
+</xml>
+```
+
+## Scenario - Deployments
 
 The folder structure of the B2C policies normally doesn't follow a dependency tree and is mainly based on the name of the file. This makes it hard to create a simple bash or pwsh script to upload the policies in the correct order.
 

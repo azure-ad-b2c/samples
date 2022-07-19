@@ -4,22 +4,21 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="yourtenant.onmicrosoft.com"
-  PolicyId="B2C_1A_PasswordReset"
-  PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_PasswordReset">
+  TenantId="{{ tenantId }}"
+  PolicyId="B2C_1A_ProfileEdit"
+  PublicPolicyUri="http://{{ tenantId }}/B2C_1A_ProfileEdit">
 
   <BasePolicy>
-    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <TenantId>{{ tenantId }}</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="PasswordReset" />
+    <DefaultUserJourney ReferenceId="ProfileEdit" />
     <TechnicalProfile Id="PolicyProfile">
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
       <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="email" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>
@@ -27,5 +26,3 @@
     </TechnicalProfile>
   </RelyingParty>
 </TrustFrameworkPolicy>
-
-

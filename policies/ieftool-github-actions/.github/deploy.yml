@@ -9,9 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
-      - uses: judedaryl/ief-upload-policies@v1
+      - uses: actions/checkout@v3
+      - uses: judedaryl/ieftool-action/setup@v1
+      - uses: judedaryl/ieftool-action/build@v1
         with:
-          folder: policy
+          source: src
+          output: build
+          config: ieftool.config
+      - uses: judedaryl/ieftool-action/deploy@v1
+        with:
+          folder: build
           client-id: ${{ secrets.B2C_CLIENT_ID }}
           client-secret: ${{ secrets.B2C_CLIENT_SECRET }}
           tenant-id: ${{ secrets.B2C_TENANT_ID }}
