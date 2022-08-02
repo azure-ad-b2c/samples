@@ -15,7 +15,7 @@ To test the policy, follow these steps:
 
 1. Redeem the [authorization code to an access/ID token](https://docs.microsoft.com/azure/active-directory-b2c/authorization-code-flow#2-get-an-access-token). The following example demostrates how to redeem the authoriztion code to and access/ID token. 
 
-    ```http
+    ```
     POST https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/B2C_1A_Demo_signup_signin_RefreshTokenJourney/oauth2/v2.0/token
 
     grant_type:authorization_code
