@@ -31,7 +31,7 @@ Samples are available for the following categories
 - [User Interface](#user-interface)
 - [Data Residency](#data-residency)
 - [User Migration](#user-migration)
-- [UserInfo Endpoint](#userinfo-endpoint)
+- [Endpoints](#endpoints)
 - [Web Test](#web-test)
 - [CI / CD](#cicd)
 
@@ -174,11 +174,12 @@ Samples are available for the following categories
 |[Just in time migration v2](/../../../user-migration/tree/master/jit-migration-v2) | In this sample Azure AD B2C calls a REST API to validate the credentials, return the user profile to B2C from an Azure Table, and B2C creates the account in the directory.|
 |[B2C to B2C Migration](policies/B2C2B2CMigration) | Migrate users from one B2C instance to another using just in time migration.|NA|
 
-## UserInfo endpoint
+## Endpoints
 
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
-|[UserInfo Endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
+|[UserInfo endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
+|[Token endpoint](policies/refresh-token-journey/) | Demonstrate how to add a refresh token journey to your custom policy|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=refresh-token-journey)|
 
 ## Web Test
 

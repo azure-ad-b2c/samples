@@ -1,0 +1,111 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+    TenantId="yourtenant.onmicrosoft.com" 
+    PolicyId="B2C_1A_Demo_TrustFrameworkExtensions_RefreshTokenJourney" 
+    PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_TrustFrameworkExtensions_RefreshTokenJourney">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="refreshTokenIssuedOnDateTime">
+        <DisplayName>refreshTokenIssuedOnDateTime</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</AdminHelpText>
+        <UserHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="refreshTokensValidFromDateTime">
+        <DisplayName>refreshTokensValidFromDateTime</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</AdminHelpText>
+        <UserHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <!-- Asserts whether the refreshTokensValidFromDateTime claim (rightOperand) is greater than the refreshTokenIssuedOnDateTime clsim (leftOperand). 
+           If yes, the refresh token is not valid, and throws an error.-->
+      <ClaimsTransformation Id="AssertRefreshTokenIssuedLaterThanValidFromDate" TransformationMethod="AssertDateTimeIsGreaterThan">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="refreshTokenIssuedOnDateTime" TransformationClaimType="leftOperand" />
+          <InputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" TransformationClaimType="rightOperand" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="AssertIfEqualTo" DataType="boolean" Value="false" />
+          <InputParameter Id="AssertIfRightOperandIsNotPresent" DataType="boolean" Value="true" />
+          <InputParameter Id="TreatAsEqualIfWithinMillseconds" DataType="int" Value="300000" />
+        </InputParameters>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Refresh token journey</DisplayName>
+      <TechnicalProfiles>
+        <!-- This technical profile:
+             1. Reads the claims from the refresh token. The most important claims are: the user object ID 
+                that can be use later to read the user profile (see the AAD-UserReadUsingObjectId-CheckRefreshTokenDate technical profile)
+                and the time when the refresh token was issued that use to assert whether the refresh token is still valid.
+             2. The output claims return the claims that were included in the original access token. They may contain a stale data. 
+                To get updated claims, use the AAD-UserReadUsingObjectId-CheckRefreshTokenDate technical profile, or call a REST API.
+             3. You may want to add more output claims. Usually claims that are not persisted to the user profile.
+                For example, if your access token contained a customerId claim, and this claim can't be read from the user profile.
+                Add the customerId to the output claim. In the next orchestration step, you can pass that claim to a REST API to updated the claims.  -->
+        <TechnicalProfile Id="RefreshTokenReadAndSetup">
+          <DisplayName>Reads the claims from the refresh token</DisplayName>
+          <Protocol Name="None" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="refreshTokenIssuedOnDateTime" />
+            <!-- You can add any claim that was included in the original access token.  />-->
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <!-- Read the user profile from the directory using the AAD-UserReadUsingObjectId technical profile.
+             This technical profile adds the refreshTokensValidFromDateTime output claim and asserts
+             refresh token is issue (refreshTokenIssuedOnDateTime) later than the refreshTokensValidFromDateTime claim-->
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId-CheckRefreshTokenDate">
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="AssertRefreshTokenIssuedLaterThanValidFromDate" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="AAD-UserReadUsingObjectId" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <!-- The refresh token journey-->
+    <UserJourney Id="RedeemRefreshToken">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <!-- Read the claims from the refresh token -->
+            <ClaimsExchange Id="RefreshTokenSetupExchange" TechnicalProfileReferenceId="RefreshTokenReadAndSetup" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- You can add a step that fetch data from a REST API here-->
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <!-- Read the user profile from the directory and assert the refresh token date is valid.
+                 This steps prevents having a stale data in the return access token-->
+            <ClaimsExchange Id="CheckRefreshTokenDateFromAadExchange" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId-CheckRefreshTokenDate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- You can add a step that fetch data from a REST API here-->
+
+        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+</TrustFrameworkPolicy>
