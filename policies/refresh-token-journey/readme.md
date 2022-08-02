@@ -7,7 +7,7 @@ To test the policy, follow these steps:
 
 1. Run the following [OAuth 2.0 authorization code flow](https://docs.microsoft.com/azure/active-directory-b2c/authorization-code-flow). Replace your `tenantname` with your tenant name, and `client_id` with your client ID.
 
-    ```http
+    ```
     https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/B2C_1A_Demo_signup_signin_RefreshTokenJourney/oauth2/v2.0/authorize?client_id=00000000-0000-0000-0000-000000000000&nonce=defaultNonce&redirect_uri=https%3A%2F%2Fjwt.ms&scope=openid%20offline_access&response_type=code&prompt=login
     ```
 
@@ -29,7 +29,7 @@ To test the policy, follow these steps:
 1. Go to your Azure AD B2C tenant and change the user's display name
 1. Refresh the token using the following HTTP request
 
-    ```http
+    ```
     POST https://yourtenant.b2clogin.com/yourtenant.onmicrosoft.com/B2C_1A_Demo_signup_signin_RefreshTokenJourney/oauth2/v2.0/token
 
     grant_type:refresh_token
