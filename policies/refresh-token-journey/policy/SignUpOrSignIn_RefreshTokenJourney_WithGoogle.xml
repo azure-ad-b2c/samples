@@ -131,7 +131,7 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="RefreshTokenReadAndSetup">
           <OutputClaims>
-            <!-- Get the refresh token claim from the refresh token.
+            <!-- To get the Google refresh token claim from the Azure AD B2C refresh token, we added the oauth2Refresh_token output claim.
                  Check the extension policy for more details and the full technical profile implementation -->
             <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" />
           </OutputClaims>
