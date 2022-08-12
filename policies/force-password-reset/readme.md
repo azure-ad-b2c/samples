@@ -18,7 +18,7 @@ To checkout the user experience of this policy, follow these steps:
 
 - Claims:
   - *continueOnPasswordExpiration* - input claims of the login-NonInteractive technical profile. It instructs Azure AD B2C to continue upon password expiration.
-  - *forceChangePasswordNextLogin* - output claims of the login-NonInteractive technical profile. It indicates whether the user needs to reset the password.
+  - *forceChangePasswordNextLogin* - output claims of the login-NonInteractive technical profile. It indicates whether the user needs to reset the password. If the value of this claim is true, other claims aren't return by the login-NonInteractive technical profile.
 
 - Technical profiles:
   -*login-NonInteractive* - The technical profile that validates the credentials. It customizes the one in the [base policy](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/main/SocialAndLocalAccounts/TrustFrameworkBase.xml), adding the input and output claims.

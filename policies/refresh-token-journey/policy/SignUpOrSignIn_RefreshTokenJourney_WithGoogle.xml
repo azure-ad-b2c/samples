@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_Demo_signup_signin_RefreshTokenJourney_WithGoogle" PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_Demo_signup_signin_RefreshTokenJourney_WithGoogle">
+
+  <BasePolicy>
+    <TenantId>yourtenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_Demo_TrustFrameworkExtensions_RefreshTokenJourney</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="oauth2Access_token">
+        <DisplayName>Identity Provider Access Token</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Stores the access token of the identity provider.</AdminHelpText>
+      </ClaimType>
+      <ClaimType Id="oauth2Refresh_token">
+        <DisplayName>The refresh token from the JSON payload that returns by Google</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="oauth2Refresh_token_json">
+        <DisplayName>The JSON that return by Googl</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Readonly</UserInputType>
+      </ClaimType>
+      <ClaimType Id="access_type">
+        <DisplayName>access_type</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="prompt">
+        <DisplayName>prompt</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="version">
+        <DisplayName>version</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+
+
+      <!-- Refresh the token claims-->
+      <ClaimType Id="client_id">
+        <DisplayName>client_id</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="client_secret">
+        <DisplayName>client_secret</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="grant_type">
+        <DisplayName>grant_type</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <!-- Extracts the refresh token from the JSON payload return be Google -->
+      <ClaimsTransformation Id="GetRefreshTokenClaimFromJson" TransformationMethod="GetClaimFromJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="oauth2Refresh_token_json" TransformationClaimType="inputJson" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="claimToExtract" DataType="string" Value="r" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" TransformationClaimType="extractedClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Google</DisplayName>
+      <TechnicalProfiles>
+        <!-- This technical profile contains only the relevant pieces to get the Google refresh token.
+             Add the following elements to your Google identity provider technical profile. --> 
+        <TechnicalProfile Id="Google-OAuth2">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="access_type" PartnerClaimType="access_type" DefaultValue="offline" AlwaysUseDefaultValue="true" />
+
+            <!-- The refresh_token is return only on the first authorization for a given user. Subsequent authorization request doesn't return the refresh_token.
+                 To fix this issue we, add the prompt=consent query string parameter to the authorization request-->
+            <InputClaim ClaimTypeReferenceId="prompt" PartnerClaimType="prompt" DefaultValue="consent" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="oauth2Access_token" PartnerClaimType="{oauth2:access_token}" />
+            <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token_json" PartnerClaimType="{oauth2:refresh_token}" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+             <!-- Extract the refresh token from the JSON payload return be Google -->
+            <OutputClaimsTransformation ReferenceId="GetRefreshTokenClaimFromJson" />
+          </OutputClaimsTransformations>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Refresh Google token REST API call</DisplayName>
+      <TechnicalProfiles>
+        <!-- Call Google token endpoint to get a new access token, using the refresh token-->
+        <TechnicalProfile Id="REST-RefreshGoogleAccessToken">
+          <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://accounts.google.com/o/oauth2/token</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="Your google app ID" AlwaysUseDefaultValue="true" />
+
+            <!-- IMPORTANT: in this example we set the client secret as a fixed value in the policy. 
+                            You policy should NOT have any confidential data embedded in the policy.
+                            Instead, call another REST API to fetch the client secret and remove the default values from the policy. --> 
+            <InputClaim ClaimTypeReferenceId="client_secret" DefaultValue="Your google app secret" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="refresh_token" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="oauth2Refresh_token" PartnerClaimType="refresh_token"  />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="oauth2Access_token" PartnerClaimType="access_token" DefaultValue="33" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <DisplayName>Refresh token journey</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="RefreshTokenReadAndSetup">
+          <OutputClaims>
+            <!-- To get the Google refresh token claim from the Azure AD B2C refresh token, we added the oauth2Refresh_token output claim.
+                 Check the extension policy for more details and the full technical profile implementation -->
+            <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" />
+          </OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+
+    <UserJourney Id="RedeemRefreshTokenWithGoogleToken">
+      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <!-- Read the claims from the refresh token -->
+            <ClaimsExchange Id="RefreshTokenSetupExchange" TechnicalProfileReferenceId="RefreshTokenReadAndSetup" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- You can add a step that fetch data from a REST API here-->
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <!-- Read the user profile from the directory and assert the refresh token date is valid.
+                 This steps prevents having a stale data in the return access token-->
+            <ClaimsExchange Id="CheckRefreshTokenDateFromAadExchange" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId-CheckRefreshTokenDate" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Refresh the google token-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-RefreshGoogleAccessToken" TechnicalProfileReferenceId="REST-RefreshGoogleAccessToken" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- You can add a step that fetch data from a REST API here-->
+
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+    </UserJourney>
+
+    <UserJourney Id="SignUpOrSignIn_Custom">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
+            <ClaimsProviderSelection TargetClaimsExchangeId="GoogleExchange" />
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Check if the user has selected to sign in using one of the social providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
+            <ClaimsExchange Id="GoogleExchange" TechnicalProfileReferenceId="Google-OAuth2" />
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
+          using ESTS in step 2, then an user account must exist in the directory by this time. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>newPhoneNumberEntered</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWriteWithObjectId" TechnicalProfileReferenceId="AAD-UserWritePhoneNumberUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignIn_Custom" />
+    <Endpoints>
+      <!-- Reference to the refresh token user journey-->
+      <Endpoint Id="Token" UserJourneyReferenceId="RedeemRefreshTokenWithGoogleToken" />
+    </Endpoints>
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+        <OutputClaim ClaimTypeReferenceId="oauth2Access_token" />
+        <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" />
+        <!-- Policy version for debugging purposes-->
+        <OutputClaim ClaimTypeReferenceId="version" DefaultValue="3.1" AlwaysUseDefaultValue="true" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

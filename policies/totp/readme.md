@@ -1,4 +1,4 @@
-# Public Preview: Azure AD B2C MFA with TOTP using any Authenticator app
+# Azure AD B2C MFA with TOTP using any Authenticator app
 
 To provide an higher assurance multi-factor option we are enabling "time based one time pass-code" using Authenticator as an MFA choice for B2C customers. This option will allow customers  to save on the telephony charges associated with every step-up and still provide higher security than ever before for their end users accessing critical applications.
 
