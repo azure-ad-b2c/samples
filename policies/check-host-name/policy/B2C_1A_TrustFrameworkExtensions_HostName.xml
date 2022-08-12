@@ -41,6 +41,11 @@ xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVer
       </ClaimType>
     </ClaimsSchema>
     <ClaimsTransformations>
+      <ClaimsTransformation Id="NullHostName" TransformationMethod="NullClaim">
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="hostname" TransformationClaimType="claim_to_null" />
+        </OutputClaims>
+      </ClaimsTransformation>
 
       <ClaimsTransformation Id="AssertIsAccessAllowed_microsoftonline" TransformationMethod="AssertBooleanClaimIsEqualToValue">
         <InputClaims>
@@ -136,6 +141,9 @@ xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVer
           <Metadata>
             <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
           </Metadata>
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="NullHostName" />
+          </InputClaimsTransformations>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="hostName" DefaultValue="{Context:HostName}" AlwaysUseDefaultValue="true" />
             <!-- <InputClaim ClaimTypeReferenceId="allowedHostName" DefaultValue="https://login.consumerbiz.net" AlwaysUseDefaultValue="true" /> -->
