@@ -68,6 +68,7 @@ Samples are available for the following categories
 |[Sign-in with Conditional access](policies/conditional-access)|Azure Active Directory (Azure AD) Conditional Access is the tool used by Azure AD B2C to bring signals together, make decisions, and enforce organizational policies. Automating risk assessment with policy conditions means risky sign-ins are at once identified and remediated or blocked.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=conditional-access) | [Live demo](policies/conditional-access#live-demo)|
 |[Allow/Deny based on Hostname](policies/check-host-name)|This sample provides an example of how to block access to particular B2C policy based on the [Hostname] of the request, e.g. allow requests made to the policy using login.contoso.com but block foo.b2clogin.com. Useful when using custom domain(s) with Azure AD B2C.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=check-host-name) |
 |[Call center validation](policies/store-three-letters-of-the-password)|A call center uses Azure AD B2C to validate a customer phoning in. To do this, the call center takes three characters from the password and asks the customer calling in to provide the three characters plus some other known facts as part of the authentication process.|NA| |
+|[Measure the time of the user journey](policies/user-journey-timeout/)| Shows how to measure the time takes the user complete the sign-up or sign-in flow.|NA| |
 
 ## User Experience
 
