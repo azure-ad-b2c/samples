@@ -152,15 +152,8 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!--Sample: Read the user properties from the directory-->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingEmailAddress" TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress"/>
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
         <!-- Sample: Check whether the user not existed in the directory -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>objectId</Value>
@@ -169,6 +162,13 @@
           </Preconditions>
           <ClaimsExchanges>
             <ClaimsExchange Id="SelfAssertedUserNotFound" TechnicalProfileReferenceId="SelfAsserted-UserNotFound" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Sample: Read the user properties from the directory-->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingEmailAddress" TechnicalProfileReferenceId="AAD-UserReadUsingEmailAddress"/>
           </ClaimsExchanges>
         </OrchestrationStep>
 
