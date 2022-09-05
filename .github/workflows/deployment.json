@@ -14,6 +14,12 @@
             "path": "policies/user-info-endpoint/policy/UserInfo_SignUpOrSignin.xml"
         },
         {
+            "path": "policies/ab-testing/policy/TrustFrameworkExtensions_WithAbTesting.xml"
+        },
+        {
+            "path": "policies/ab-testing/policy/SignUpOrSigninWithAbTesting.xml"
+        },
+        {
             "path": "policies/restore-mfa-phone-number/policy/TrustFrameworkExtensions_RestorePhoneNumber.xml"
         },
         {

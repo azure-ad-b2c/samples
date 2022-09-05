@@ -181,6 +181,7 @@ Samples are available for the following categories
 |---|---|---|
 |[UserInfo endpoint](policies/user-info-endpoint) | The UserInfo endpoint is part of the OpenID Connect standard (OIDC) specification and is designed to return claims about the authenticated user. The UserInfo endpoint is defined in the relying party policy using the EndPoint element.|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=user-info-endpoint)|
 |[Token endpoint](policies/refresh-token-journey/) | Demonstrate how to add a refresh token journey to your custom policy|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=refresh-token-journey)|
+|[A/B testing](policies/ab-testing/) | Demonstrate how to add configure A/B testing|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=refresh-token-journey)|
 
 ## Web Test
 
