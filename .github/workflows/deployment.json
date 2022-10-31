@@ -11,6 +11,14 @@
             ]
         },
         {
+            "path": "policies/refresh-token-journey/policy/SignUpOrSignIn_RefreshTokenJourney_WithAADCommon.xml",
+            "replacements": [
+                {
+                    "find": "<Item Key=\"client_id\">00000000-0000-0000-0000-000000000000</Item>",
+                    "replace": "<Item Key=\"client_id\">1d1306cb-40c9-4579-a87d-bb773c1d1ffe</Item>"                }
+            ]
+        },
+        {
             "path": "policies/user-info-endpoint/policy/UserInfo_SignUpOrSignin.xml"
         },
         {
