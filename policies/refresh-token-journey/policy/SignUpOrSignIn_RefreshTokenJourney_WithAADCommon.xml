@@ -112,9 +112,7 @@
 
             <!-- The unit test's claims-->
             <OutputClaim ClaimTypeReferenceId="oauth2Access_token" PartnerClaimType="{oauth2:access_token}" />
-            <OutputClaim ClaimTypeReferenceId="oauth2Expires_in" PartnerClaimType="{oauth2:expires_in}" />
             <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" PartnerClaimType="{oauth2:refresh_token}" />
-            <OutputClaim ClaimTypeReferenceId="oauth2Token_type" PartnerClaimType="{oauth2:token_type}" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetAzureADTenantName" />
