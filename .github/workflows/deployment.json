@@ -11,7 +11,7 @@
             ]
         },
         {
-            "path": "policies/refresh-token-journey/policy/SignUpOrSignIn_RefreshTokenJourney_WithGoogle.xml"
+            "path": "policies/refresh-token-journey/policy/TrustFrameworkExtensions_RefreshTokenJourney.xml"
         },
         {
             "path": "policies/refresh-token-journey/policy/SignUpOrSignIn_RefreshTokenJourney_WithAADCommon.xml",
