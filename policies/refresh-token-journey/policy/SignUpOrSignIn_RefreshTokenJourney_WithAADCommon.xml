@@ -69,6 +69,19 @@
           <OutputClaim ClaimTypeReferenceId="identityProvider" TransformationClaimType="domain" />
         </OutputClaims>
       </ClaimsTransformation>
+
+      <!-- Extracts the refresh token from the JSON payload return be Azure AD -->
+      <ClaimsTransformation Id="GetRefreshTokenClaimFromJson" TransformationMethod="GetClaimFromJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="oauth2Refresh_token_json" TransformationClaimType="inputJson" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="claimToExtract" DataType="string" Value="r" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" TransformationClaimType="extractedClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
     </ClaimsTransformations>
   </BuildingBlocks>
 
@@ -112,7 +125,7 @@
 
             <!-- The unit test's claims-->
             <OutputClaim ClaimTypeReferenceId="oauth2Access_token" PartnerClaimType="{oauth2:access_token}" />
-            <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" PartnerClaimType="{oauth2:refresh_token}" />
+            <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token_json" PartnerClaimType="{oauth2:refresh_token}" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="GetAzureADTenantName" />
@@ -120,6 +133,7 @@
             <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
             <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
             <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="GetRefreshTokenClaimFromJson" />
           </OutputClaimsTransformations>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
         </TechnicalProfile>
@@ -139,9 +153,13 @@
             <Item Key="AllowInsecureAuthInProduction">true</Item>
             <Item Key="SendClaimsIn">Form</Item>
           </Metadata>
+          <CryptographicKeys>
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_AADAppId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_AADAppSecret" />
+          </CryptographicKeys>
           <InputClaims>
             <!-- Update the Client ID below to the Application ID -->
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="00000000-0000-0000-0000-000000000000" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="92615371-8a38-4860-9ecd-de63336a9529" AlwaysUseDefaultValue="true" />
             <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="refresh_token" AlwaysUseDefaultValue="true" />
             <InputClaim ClaimTypeReferenceId="oauth2Refresh_token" PartnerClaimType="refresh_token" />
           </InputClaims>
