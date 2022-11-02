@@ -38,6 +38,10 @@
         <DisplayName>version</DisplayName>
         <DataType>string</DataType>
       </ClaimType>
+      <ClaimType Id="IsAzureAd">
+        <DisplayName>Is Azure AD account</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
       <ClaimType Id="aad_userPrincipalName">
         <DisplayName>aad_userPrincipalName</DisplayName>
         <DataType>string</DataType>
@@ -121,8 +125,9 @@
             <OutputClaim ClaimTypeReferenceId="surName" PartnerClaimType="surname" />
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="displayName" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="IsAzureAd" DefaultValue="1" AlwaysUseDefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="aad_userPrincipalName" PartnerClaimType="userPrincipalName" />
-
+            
             <!-- The unit test's claims-->
             <OutputClaim ClaimTypeReferenceId="oauth2Access_token" PartnerClaimType="{oauth2:access_token}" />
             <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token_json" PartnerClaimType="{oauth2:refresh_token}" />
@@ -180,6 +185,7 @@
             <!-- To get the Azure AD refresh token claim from the Azure AD B2C refresh token, we added the oauth2Refresh_token output claim.
                  Check the extension policy for more details and the full technical profile implementation -->
             <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" />
+            <OutputClaim ClaimTypeReferenceId="IsAzureAd" />
           </OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -210,6 +216,12 @@
 
         <!-- Refresh the Azure AD token-->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <!-- <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>IsAzureAd</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions> -->
           <ClaimsExchanges>
             <ClaimsExchange Id="REST-RefreshAADAccessToken" TechnicalProfileReferenceId="REST-RefreshAADAccessToken" />
           </ClaimsExchanges>
@@ -323,8 +335,10 @@
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
         <OutputClaim ClaimTypeReferenceId="oauth2Access_token" DefaultValue="" />
         <OutputClaim ClaimTypeReferenceId="oauth2Refresh_token" DefaultValue="" />
+        <OutputClaim ClaimTypeReferenceId="IsAzureAd" DefaultValue="" />
+
         <!-- Policy version for debugging purposes-->
-        <OutputClaim ClaimTypeReferenceId="version" DefaultValue="3.2" AlwaysUseDefaultValue="true" />
+        <OutputClaim ClaimTypeReferenceId="version" DefaultValue="3.3" AlwaysUseDefaultValue="true" />
       </OutputClaims>
       <SubjectNamingInfo ClaimType="sub" />
     </TechnicalProfile>
