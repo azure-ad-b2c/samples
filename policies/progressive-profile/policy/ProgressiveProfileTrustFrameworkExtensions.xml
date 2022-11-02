@@ -25,12 +25,25 @@
 
   <ClaimsProviders>
     <ClaimsProvider>
-      <DisplayName>Self Asserted</DisplayName>
+      <DisplayName>Self Asserted Progressive Profiling</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="extension_LoyaltyNumber" Required="true"/>
+        <TechnicalProfile Id="SelfAsserted-ProgressiveProfile">
+          <DisplayName>User ID signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="extension_LoyaltyNumber" Required="true"/>
           </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteProfileUsingObjectId" />
+          </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -102,7 +115,7 @@
             </Precondition>
           </Preconditions>
           <ClaimsExchanges>
-            <ClaimsExchange Id="ProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
+            <ClaimsExchange Id="ProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProgressiveProfile" />
           </ClaimsExchanges>
         </OrchestrationStep>
         <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
