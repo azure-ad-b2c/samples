@@ -70,7 +70,7 @@ The authentication library will then build the final authentication link, with t
 
 - For [Single Page Applications library guidance](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-spa-app-options#pass-id-token-hint).
 
-- For [.Net Applications library guidance](https://docs.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-web-application-options#pass-id-token-hint).
+- For [.Net Applications library guidance](https://learn.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-web-application-options#pass-an-id-token-hint).
 
 ## Notes
 This sample policy is based on [SocialAndLocalAccounts starter pack](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/master/SocialAndLocalAccounts). All changes are marked with **Sample:** comment inside the policy XML files. Make the necessary changes in the **Sample action required** sections. 
