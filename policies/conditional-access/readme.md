@@ -40,7 +40,7 @@ Note, you can also [sign-up or sign-in](https://b2clivedemo.b2clogin.com/b2clive
 
 ## Important notes
 
-This sample policy uses the starter-pack [B2C_1A_TrustFrameworkExtensions](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/master/SocialAndLocalAccounts/TrustFrameworkExtensions.xml) as a base policy. 
+This sample policy uses the [Social And Local Accounts with MFA] starter-pack(https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/tree/main/SocialAndLocalAccountsWithMfa) as a base policy. 
 
 The claim used inside the *IsMfaRegisteredCT* claims transformation must not be empty to ensure *IsMfaRegistered* evaluates to *True*. If it evaluates to *False*, the evaluate always results in a *Block* grant type. Also, you can use any valid claim within *IsMfaRegisteredCT* which carries a MFA value (Email or Phone). 
 
