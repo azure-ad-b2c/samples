@@ -48,9 +48,9 @@ In your relying party policy:
 ## Tests
 You should run at least following acceptance tests:
 - Create new local account and accept Terms of Service agreement.
-    -  Verify the correct TOS version is written in Azure AD B2C via graph on the user object on the *extension_AgreedToTermsOfService* attribute (this can be done through [Azure AD Graph Explorer](https://graphexplorer.azurewebsites.net/)).
+    -  Verify the correct TOS version is written in Azure AD B2C via graph on the user object on the *extension_AgreedToTermsOfService* attribute (this can be done through [Microsoft Graph Explorer](https://aka.ms/ge)).
         ```HTTP 
-        GET https://graph.windows.net/contosob2c.com/users/<user-object-id>?api-version=1.6
+        GET https://graph.microsoft.com/beta/users/<user-object-id>
         ```
 - Create new local account and **do not** accept Terms of Service agreement (attempting to bypass the TOS box).
     -  Verify the correct ERROR message occurs on the screen.
