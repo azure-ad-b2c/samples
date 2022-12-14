@@ -1,0 +1,379 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="b2cemea.onmicrosoft.com" PolicyId="B2C_1A_signup_signin" PublicPolicyUri="http://b2cemea.onmicrosoft.com/B2C_1A_signup_signin" TenantObjectId="de0b2f67-0b00-470a-b3e9-1120911daf54">
+  <BasePolicy>
+    <TenantId>b2cemea.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="apac_client_id">
+        <DisplayName>apac_client_id</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>apac_client_id</AdminHelpText>
+        <UserHelpText>apac_client_id</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="apac_scope">
+        <DisplayName>apac_scope</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>apac_scope</AdminHelpText>
+        <UserHelpText>apac_scope</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="ropc_grant_type">
+        <DisplayName>ropc_grant_type</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>ropc_grant_type</AdminHelpText>
+        <UserHelpText>ropc_grant_type</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="ext_Api_bearerToken">
+        <DisplayName>Bearer token</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="graph_bearerToken">
+        <DisplayName>Bearer token</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="grant_type_aad">
+        <DisplayName>Grant type</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <ClaimType Id="scope_aad">
+        <DisplayName>scope</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>Global architecture additions</DisplayName>
+      <TechnicalProfiles>
+
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <DisplayName>Email signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+
+            <!-- Optional claims, to be collected from the user -->
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfiles>
+              <ValidationTechnicalProfile ReferenceId="REST-getTokenforExternalApiCalls" />
+              <ValidationTechnicalProfile ReferenceId="REST-doesUserExistInLookupTable" />
+              <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+              <ValidationTechnicalProfile ReferenceId="REST-writeUserToRegionMapping" />
+            </ValidationTechnicalProfiles>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-getTokenforExternalApiCalls">
+          <DisplayName></DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://login.microsoftonline.com/your-tenant-name.onmicrosoft.com/oauth2/v2.0/token</Item>
+            <Item Key="AuthenticationType">Basic</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_SecureRESTClientId" />
+            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_SecureRESTClientSecret" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="grant_type_aad" PartnerClaimType="grant_type" DefaultValue="client_credentials" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="scope_aad" PartnerClaimType="grant_type_aad" DefaultValue="https://graph.microsoft.com/.default" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="ext_Api_bearerToken" PartnerClaimType="access_token" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-doesUserExistInLookupTable ">
+          <DisplayName>User to Region lookup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://myApi.com/doesUserExistInLookupTable</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">ext_Api_bearerToken</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="ext_Api_bearerToken" />
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-writeUserToRegionMapping">
+          <DisplayName>User to Region lookup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://myApi.com/writeUserToRegionMapping</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">ext_Api_bearerToken</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="ext_Api_bearerToken" />
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+            <InputClaim ClaimTypeReferenceId="region" DefaultValue="EMEA" />
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-LocalAccountSignin-Email">
+          <DisplayName>Local Account Signin</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
+            <Item Key="setting.operatingMode">Email</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountsignin</Item>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName" DefaultValue="{OIDC:LoginHint}" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="password" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="REST-getTokenforExternalApiCalls" />
+            <ValidationTechnicalProfile ReferenceId="REST-regionLookup" />
+            <ValidationTechnicalProfile ReferenceId="login-NonInteractive">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>user_region</Value>
+                  <Value>EMEA</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="REST-login-NonInteractive-APAC">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>user_region</Value>
+                  <Value>APAC</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="REST-fetchUserProfile-APAC">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>user_region</Value>
+                  <Value>APAC</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-regionLookup">
+          <DisplayName>User to Region lookup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://myApi.com/userToRegionLookup</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">ext_Api_bearerToken</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="ext_Api_bearerToken" />
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="user_region" PartnerClaimType="region" />
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="objectId" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-login-NonInteractive-APAC">
+          <DisplayName>non interactive authentication to APAC</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://login.microsoftonline.com/yourAPACb2ctenant.onmicrosoft.com/oauth2/v2.0/token</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="apac_client_id" PartnerClaimType="client_id" DefaultValue="cf3f6898-9a79-426a-ba16-10e1a377c843" />
+            <InputClaim ClaimTypeReferenceId="ropc_grant_type" PartnerClaimType="grant_type" DefaultValue="password" />
+            <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" />
+            <InputClaim ClaimTypeReferenceId="password" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="https://graph.microsoft.com/.default" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="graph_bearerToken" PartnerClaimType="access_token" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-fetchUserProfile-APAC">
+          <DisplayName>fetch user profile cross tenant</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://graph.microsoft.com/beta/me</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">graph_bearerToken</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="graph_bearerToken" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="id" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
+          <DisplayName>Reset password using email address</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <IncludeInSso>false</IncludeInSso>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="ext_Api_bearerToken" DefaultValue="EMEA"/>
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="REST-getTokenforExternalApiCalls">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+                  <Value>user_region</Value>
+                  <Value>EMEA</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="REST-regionLookup" />
+            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress" />
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+          <DisplayName>Change password (username)</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>user_region</Value>
+                  <Value>EMEA</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+            <ValidationTechnicalProfile ReferenceId="REST-UserWritePasswordUsingObjectId-APAC">
+              <Preconditions>
+                <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                  <Value>user_region</Value>
+                  <Value>APAC</Value>
+                  <Action>SkipThisValidationTechnicalProfile</Action>
+                </Precondition>
+              </Preconditions>
+            </ValidationTechnicalProfile>
+          </ValidationTechnicalProfiles>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-UserWritePasswordUsingObjectId-APAC">
+          <DisplayName>Write password to APAC tenant</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://myApi.com/writePasswordCrossTenant</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">ext_Api_bearerToken</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="DebugMode">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="ext_Api_bearerToken" />
+            <InputClaim ClaimTypeReferenceId="objectId" />
+            <InputClaim ClaimTypeReferenceId="newPassword" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="displayName" />
+        <OutputClaim ClaimTypeReferenceId="givenName" />
+        <OutputClaim ClaimTypeReferenceId="surname" />
+        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
