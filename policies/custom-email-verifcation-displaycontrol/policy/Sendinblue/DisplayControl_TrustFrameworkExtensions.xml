@@ -58,8 +58,8 @@
           <InputClaim ClaimTypeReferenceId="signature" TransformationClaimType="params.signature" />
         </InputClaims>
         <InputParameters>
-          <!-- TBD <InputParameter Id="template_id" DataType="int" Value="your-sendinblue-templateid"/> -->
-          <InputParameter Id="template_id" DataType="int" Value="1" />
+          <!-- TBD <InputParameter Id="templateId" DataType="int" Value="your-sendinblue-templateid"/> -->
+          <InputParameter Id="templateId" DataType="int" Value="1" />
         </InputParameters>
         <OutputClaims>
           <OutputClaim ClaimTypeReferenceId="emailRequestBody" TransformationClaimType="outputClaim" />
