@@ -112,7 +112,7 @@
           <Action Id="SendCode">
             <ValidationClaimsExchange>
               <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="GenerateOtp-ReadOnly" />
-              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="TwilioRestAPI-Verify" />
+              <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="TwilioRestAPI-Send" />
             </ValidationClaimsExchange>
           </Action>
           <Action Id="VerifyCode">
@@ -169,7 +169,7 @@
     <ClaimsProvider>
       <DisplayName>Custom REST API</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="TwilioRestAPI-Verify">
+        <TechnicalProfile Id="TwilioRestAPI-Send">
           <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
