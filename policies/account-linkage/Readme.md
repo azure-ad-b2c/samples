@@ -56,8 +56,8 @@ With the link and unlink policies, we append and remove soical identiites to the
 
 
 ## Unlink flow
-1. To unlink a local or social account to another social identity, user fist sign-in (with a local or social account).
-1. The policy reads the account form the directory, and checks the value of the `userIdentities` attribute. The policy extracts the names of the issuer to a string collection. Based on this string collection, the policy show/hide the technical profile. For example, if the collection has `facebook.com`, user will see the only Facebook option. But, if user linked Facebook and Twitter identities. The policy will show both Facebook and Twitter.
+1. To unlink a local or social account to another social identity, user first sign-in (with a local or social account).
+1. The policy reads the account from the directory, and checks the value of the `userIdentities` attribute. The policy extracts the names of the issuer to a string collection. Based on this string collection, the policy show/hide the technical profile. For example, if the collection has `facebook.com`, user will see the only Facebook option. But, if user linked Facebook and Twitter identities. The policy will show both Facebook and Twitter.
 1. User clicks on one of the social identity buttons, which takes the user to the social identity provider to complete the sign-in.
 1. After user complete the sign-in with the selected identity provider, the policy removed that issuer from the  `userIdenitites` collection and update the account.
 1. Azure AD B2C issues an access token.
