@@ -14,7 +14,7 @@ This sample is detailed on the Microsoft B2C documentation site:
 
 | Policy                                 | Documentation                                                                                                                                   |
 |----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Mailjet policy](policy/Mailjet)       | [Custom email verification with Mailjet](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-mailet)                             |
+| [Mailjet policy](policy/Mailjet)       | [Custom email verification with Mailjet](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-mailjet)                             |
 | [SendGrid policy](policy/SendGrid)     | [Custom email verification with SendGrid](https://docs.microsoft.com/azure/active-directory-b2c/custom-email-sendgrid)                          |
 | [SSPR policy](policy/SSPR)             | [Azure AD B2C email verification with SSPR technical profile](https://docs.microsoft.com/azure/active-directory-b2c/aad-sspr-technical-profile) |
 | [Sendinblue policy](policy/Sendinblue) | [Custom email verification with Sendinblue](Sendinblue.md)        
