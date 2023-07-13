@@ -69,7 +69,7 @@ The below diagram depicts how the Just In Time TOTP migration works:
 
 ### Remove legacy TOTP secret claim
 
-Within the [TOTP Migration Extension](policy/TrustFrameworkExtensions_TOTPMigration.xml) file under the *TotpFactor-Verify* sub journey, orchestration Step 5 will call the delete legacy TOTP Secret technical profile (AAD-DeleteLegacyTOTPClaim). This call by default has 2 conditions.
+Within the [TOTP Migration Extension](policy/TrustFrameworkExtensions_TOTPMigration.xml) file under the *TotpFactor-Verify* sub journey, orchestration Step 6 will call the delete legacy TOTP Secret technical profile (AAD-DeleteLegacyTOTPClaim). This call by default has 2 conditions.
 
 1. The extension attribute used to store the legacy claim needs to exist.
 2. The number of registered devices is not 0
