@@ -93,7 +93,7 @@
     <SubJourney Id="TotpFactor-Verify" Type="Call">
         <OrchestrationSteps>
             <!-- Additional step to call JIT TOTP Registration -->            
-            <OrchestrationStep Order="4" Type="ClaimsExchange">
+            <OrchestrationStep Order="5" Type="ClaimsExchange">
                 <Preconditions>
                   <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
                     <Value>extension_StrongAuthenticationAppSecretKey</Value>
@@ -111,7 +111,7 @@
               </OrchestrationStep>
               <!-- Additional Step to remove the lgacy TOTP Claim. -->
               <!-- Comment out this  Orchestration Step if you would like to retain the old secrets.-->
-              <OrchestrationStep Order="5" Type="ClaimsExchange">
+              <OrchestrationStep Order="6" Type="ClaimsExchange">
                 <Preconditions>
                   <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
                     <Value>extension_StrongAuthenticationAppSecretKey</Value>

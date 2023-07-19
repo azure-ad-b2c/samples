@@ -401,7 +401,6 @@
             <OutputClaim ClaimTypeReferenceId="otpCode" Required="true" />
           </OutputClaims>
           <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AzureMfa-BeginVerifyOTP" />
             <ValidationTechnicalProfile ReferenceId="AzureMfa-VerifyOTP" />
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-TOTP" />
@@ -762,8 +761,23 @@
         </OrchestrationStep>
 
         <!-- If the number of available devices isn't zero (user has enrolled before), 
-             render the TOTP verification page -->
+             begin the TOTP verification session -->
         <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>numberOfAvailableDevices</Value>
+              <Value>0</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AuthenticatorForSignInBeginSession" TechnicalProfileReferenceId="AzureMfa-BeginVerifyOTP" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- If the number of available devices isn't zero (user has enrolled before), 
+             render the TOTP verification page -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
               <Value>numberOfAvailableDevices</Value>
@@ -820,8 +834,23 @@
         </OrchestrationStep>
 
         <!-- If the number of available devices is zero (user hasn't enrolled before), 
-             render the TOTP verification page.  -->
+             begin the TOTP verification session.  -->
         <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>numberOfAvailableDevices</Value>
+              <Value>0</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AuthenticatorForSignInBeginSession" TechnicalProfileReferenceId="AzureMfa-BeginVerifyOTP" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- If the number of available devices is zero (user hasn't enrolled before), 
+             render the TOTP verification page.  -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
               <Value>numberOfAvailableDevices</Value>
