@@ -6,7 +6,7 @@ If you find a bug in the sample, please raise the issue on [GitHub Issues](https
 To provide product feedback, visit the Azure Active Directory B2C [Feedback page](https://feedback.azure.com/forums/169401-azure-active-directory?category_id=160596).
 
 ## Scenario
-A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies can be revoked. This prevents a user on another device to be able to obtain a new set of tokens using the [Azure AD B2C web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
+A users refresh token maybe revoked to prevent continued long term access to an application, across devices. In addition to refresh token revocation, the single sign on cookies can be revoked. This prevents a currently logged in user via any device to be able to obtain a new set of tokens using the [Azure AD B2C web session cookies](https://docs.microsoft.com/en-us/azure/active-directory-b2c/session-behavior?pivots=b2c-custom-policy#configure-azure-ad-b2c-session-behavior).
 
 Common scenarios include when a user uses a "change password" or "forgot password" journey. In these cases, both the refresh tokens and the session cookies should be invalidated, forcing all other devices to have to re-authenticate. The user on the device which made the operation, will also lose their web session SSO cookies. To allow the active device to maintain a session, you can bootstrap a new authentication journey using an [id_token_hint](https://docs.microsoft.com/azure/active-directory-b2c/id-token-hint).
 
