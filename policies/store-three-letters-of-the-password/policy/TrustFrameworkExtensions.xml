@@ -64,7 +64,7 @@
     
       <!-- Demo: Custom Restful service to HASH the password. This technical profile sends the password as input
             claim and return the passwords in HASH format, including the first 3 letters, second 3 letters 
-            and third 3 letters as output cliams. The input and output claims map the name use in the policy 
+            and third 3 letters as output claims. The input and output claims map the name use in the policy 
             with the name defined in the REST API code -->
       <TechnicalProfile Id="REST-HashPassword">
         <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
