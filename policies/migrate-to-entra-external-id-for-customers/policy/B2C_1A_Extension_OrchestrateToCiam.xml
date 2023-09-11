@@ -1,0 +1,776 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_OrchestrateToCiamV2" PublicPolicyUri="http://yourtenant.onmicrosoft.com/" TenantObjectId="yourtenant.onmicrosoft.com>">
+    <!--
+   Please modify policyId to save the policy. 
+   Please find the schema reference at https://docs.microsoft.com/en-us/azure/active-directory-b2c/trustframeworkpolicy.
+ -->
+    <BasePolicy>
+        <TenantId>yourtenant.onmicrosoft.com</TenantId>
+        <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+    </BasePolicy>
+
+    <BuildingBlocks>
+        <ClaimsSchema>
+            <ClaimType Id="signInNames.phoneNumber">
+                <DataType>phoneNumber</DataType>
+            </ClaimType>
+            <ClaimType Id="phoneNumberString">
+                <DataType>string</DataType>
+            </ClaimType>
+            <ClaimType Id="groups">
+                <DisplayName>groups</DisplayName>
+                <DataType>stringCollection</DataType>
+                <UserHelpText />
+            </ClaimType>
+            <ClaimType Id="roles">
+                <DisplayName>roles</DisplayName>
+                <DataType>stringCollection</DataType>
+                <UserHelpText />
+            </ClaimType>
+            <ClaimType Id="newlyEnrolled">
+                <DisplayName>newlyEnrolled</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText />
+            </ClaimType>
+            <ClaimType Id="graph_bearerToken">
+                <DisplayName>Bearer token</DisplayName>
+                <DataType>string</DataType>
+            </ClaimType>
+            <ClaimType Id="method">
+                <DisplayName>api method</DisplayName>
+                <DataType>string</DataType>
+            </ClaimType>
+            <ClaimType Id="ropc_grant_type">
+                <DisplayName>ropc_grant_type</DisplayName>
+                <DataType>string</DataType>
+                <AdminHelpText>ropc_grant_type</AdminHelpText>
+                <UserHelpText>ropc_grant_type</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="ciam_client_id">
+                <DisplayName>ciam_client_id</DisplayName>
+                <DataType>string</DataType>
+                <AdminHelpText>ciam_client_id</AdminHelpText>
+                <UserHelpText>ciam_client_id</UserHelpText>
+            </ClaimType>
+            <ClaimType Id="readOnlystrongAuthenticationPhoneNumber">
+                <DisplayName>Phone number</DisplayName>
+                <DataType>string</DataType>
+                <Mask Type="Simple">XXX-XXX-</Mask>
+                <UserHelpText>Your telephone number</UserHelpText>
+                <UserInputType>Readonly</UserInputType>
+            </ClaimType>
+            <ClaimType Id="countryCode">
+                <DisplayName>Country</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>Enter Country</UserHelpText>
+                <UserInputType>DropdownSingleSelect</UserInputType>
+                <Restriction>
+                    <Enumeration Text="Ireland(+353)" Value="IE" />
+                    <Enumeration Text="Sweden(+46)" Value="SE" />
+                    <Enumeration Text="Switzerland(+41)" Value="CH" />
+                    <Enumeration Text="United Kingdom(+44)" Value="GB" />
+                    <Enumeration Text="United States(+1)" Value="US" />
+                </Restriction>
+            </ClaimType>
+            <ClaimType Id="nationalNumber">
+                <DisplayName>Phone Number</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>Enter National Phone Number</UserHelpText>
+                <UserInputType>TextBox</UserInputType>
+                <PredicateValidationReference Id="nationalNumber" />
+            </ClaimType>
+            <ClaimType Id="verificationCode">
+                <DisplayName>Verification Code</DisplayName>
+                <DataType>string</DataType>
+                <UserHelpText>Enter your verification code</UserHelpText>
+                <UserInputType>TextBox</UserInputType>
+                <!--Restriction>
+          <Pattern RegularExpression="^[0-9]{1,15}$" HelpText="Please enter digits" />
+        </Restriction-->
+            </ClaimType>
+
+        </ClaimsSchema>
+        <Predicates>
+            <Predicate Id="email" Method="MatchesRegex">
+                <UserHelpText>Please enter a valid email address.</UserHelpText>
+                <Parameters>
+                    <!--
+            This regex is constructed mostly from RFC 5322 for email, with intentional omissions based on discovery of characters that don't work for other services we use
+            # the below two lines cover the local part of the email, before the '@' sign
+            [a-zA-Z0-9!#$%&amp;'+^_`{}~-]+         # matches lower or upper case letters, digits, and certain special characters
+            (?:\.[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+)*  # same list as above, but including an optional '.' character at the beginning, repeated
+            # together, the above two lines prevent the '.' character from appearing at the start, end, or twice in a row in the local part
+            @                                      # the '@' symbol appears exactly once, seperating the local and domain sections
+            (?:[a-zA-Z0-9]                         # matches lower and uppercase letters and digits
+            (?:[a-zA-Z0-9-]*                       # same as above, but also allowing '-'
+            [a-zA-Z0-9])                           # only lower and uppercase letters and digits again
+            ?\.)+                                  # allows for a '.' character to terminate a section
+            # the above lines mean that '.' can create segments, and segments can't begin or end with a '-'. Also, no repeating '.' chars
+            [a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$
+            # the above line is the essentially same as the previous section, but forces the email to not end with a '.'
+          -->
+                    <Parameter Id="RegularExpression">^[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+(?:\.[a-zA-Z0-9!#$%&amp;'+^_`{}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$</Parameter>
+                </Parameters>
+            </Predicate>
+            <Predicate Id="internationalOrNationalPhoneNumber" Method="MatchesRegex">
+                <UserHelpText>The value entered needs to be a phone number.</UserHelpText>
+                <Parameters>
+                    <!--
+              This regex will match a string with an optional leading "+", 4 to 16 digits, and any number of dashes, parentheses, and spaces, in any order.
+              It is intentionally overinclusive to allow the user to continue their journey with any input that might be an international or national phone number 
+              in any country with any customary punctuation/formatting. In this policy, the ConvertStringToPhoneNumberClaim claims converter will do the the final validation, 
+              ignoring the dashes, parentheses, and spaces.
+            -->
+                    <Parameter Id="RegularExpression">^\+?(?:[-()\s]*\d[-()\s]*){4,16}$</Parameter>
+                </Parameters>
+            </Predicate>
+            <Predicate Id="noLeadingPlus" Method="MatchesRegex">
+                <UserHelpText>The national number should not include a country code.</UserHelpText>
+                <Parameters>
+                    <!-- Combine this with the predicate above to match only a national phone number -->
+                    <Parameter Id="RegularExpression">^[^\\+]+$</Parameter>
+                </Parameters>
+            </Predicate>
+        </Predicates>
+        <PredicateValidations>
+            <PredicateValidation Id="nationalNumber">
+                <PredicateGroups>
+                    <PredicateGroup Id="internationalOrNationalPhoneNumber">
+                        <PredicateReferences>
+                            <PredicateReference Id="internationalOrNationalPhoneNumber" />
+                        </PredicateReferences>
+                    </PredicateGroup>
+                    <PredicateGroup Id="noLeadingPlus">
+                        <PredicateReferences>
+                            <PredicateReference Id="noLeadingPlus" />
+                        </PredicateReferences>
+                    </PredicateGroup>
+                </PredicateGroups>
+            </PredicateValidation>
+            <PredicateValidation Id="internationalOrNationalPhoneNumber">
+                <PredicateGroups>
+                    <PredicateGroup Id="internationalOrNationalPhoneNumber">
+                        <UserHelpText>Please enter a valid phone number.</UserHelpText>
+                        <PredicateReferences>
+                            <PredicateReference Id="internationalOrNationalPhoneNumber" />
+                        </PredicateReferences>
+                    </PredicateGroup>
+                </PredicateGroups>
+            </PredicateValidation>
+        </PredicateValidations>
+
+        <ClaimsTransformations>
+
+            <ClaimsTransformation Id="CopyPhoneToReadOnly" TransformationMethod="FormatStringClaim">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="phoneNumberString" TransformationClaimType="inputClaim" />
+                </InputClaims>
+                <InputParameters>
+                    <InputParameter Id="stringFormat" DataType="string" Value="{0}" />
+                </InputParameters>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="readOnlystrongAuthenticationPhoneNumber" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+
+            <ClaimsTransformation Id="PhoneNumberToString" TransformationMethod="ConvertPhoneNumberClaimToString">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" TransformationClaimType="phoneNumber" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="phoneNumberString" TransformationClaimType="phoneNumberString" />
+                </OutputClaims>
+            </ClaimsTransformation>
+
+            <ClaimsTransformation Id="ConvertStringToPhoneNumber" TransformationMethod="ConvertStringToPhoneNumberClaim">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="countryCode" TransformationClaimType="country" />
+                    <InputClaim ClaimTypeReferenceId="nationalNumber" TransformationClaimType="phoneNumberString" />
+                </InputClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" TransformationClaimType="outputClaim" />
+                </OutputClaims>
+            </ClaimsTransformation>
+        </ClaimsTransformations>
+        <ContentDefinitions>
+            <ContentDefinition Id="api.error">
+                <LoadUri>~/tenant/templates/AzureBlue/exception.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:globalexception:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.idpselections">
+                <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.idpselections.signup">
+                <LoadUri>~/tenant/templates/AzureBlue/idpSelector.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:providerselection:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.signuporsignin">
+                <LoadUri>~/tenant/templates/AzureBlue/unified.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:unifiedssp:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.selfasserted">
+                <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.selfasserted.profileupdate">
+                <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.localaccountsignup">
+                <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.localaccountpasswordreset">
+                <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="api.phonefactor">
+                <LoadUri>~/tenant/templates/AzureBlue/multifactor-1.0.0.cshtml</LoadUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:multifactor:1.2.0</DataUri>
+            </ContentDefinition>
+            <ContentDefinition Id="newPhoneNumber">
+                <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+                <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+                <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.1</DataUri>
+                <Metadata>
+                    <Item Key="DisplayName">Verify new phone number</Item>
+                </Metadata>
+            </ContentDefinition>
+        </ContentDefinitions>
+
+
+        <DisplayControls>
+            <DisplayControl Id="phoneVerificationControl" UserInterfaceControlType="VerificationControl">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="nationalNumber" />
+                    <InputClaim ClaimTypeReferenceId="countryCode" />
+                </InputClaims>
+                <DisplayClaims>
+                    <DisplayClaim ClaimTypeReferenceId="countryCode" ControlClaimType="CountryCode" Required="true" />
+                    <DisplayClaim ClaimTypeReferenceId="nationalNumber" ControlClaimType="Phone" Required="true" />
+                    <DisplayClaim ClaimTypeReferenceId="verificationCode" ControlClaimType="VerificationCode" Required="true" />
+                </DisplayClaims>
+                <Actions>
+                    <Action Id="SendCode">
+                        <ValidationClaimsExchange>
+                            <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="CombineCountryCodeAndNationalNumber" />
+                            <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AzureMfa-SendSms" />
+                        </ValidationClaimsExchange>
+                    </Action>
+                    <Action Id="VerifyCode">
+                        <ValidationClaimsExchange>
+                            <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="CombineCountryCodeAndNationalNumber" />
+                            <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AzureMfa-VerifySms" />
+                        </ValidationClaimsExchange>
+                    </Action>
+                </Actions>
+            </DisplayControl>
+
+            <DisplayControl Id="phoneVerificationControl-readOnly" UserInterfaceControlType="VerificationControl">
+                <InputClaims>
+                    <InputClaim ClaimTypeReferenceId="readOnlystrongAuthenticationPhoneNumber" />
+                </InputClaims>
+                <DisplayClaims>
+                    <DisplayClaim ClaimTypeReferenceId="readOnlystrongAuthenticationPhoneNumber" Required="true" />
+                    <DisplayClaim ClaimTypeReferenceId="verificationCode" ControlClaimType="VerificationCode" Required="true" />
+                </DisplayClaims>
+                <OutputClaims>
+                    <OutputClaim ClaimTypeReferenceId="phoneNumberString" />
+                </OutputClaims>
+                <Actions>
+                    <Action Id="SendCode">
+                        <ValidationClaimsExchange>
+                            <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AzureMfa-SendSms-RO" />
+                        </ValidationClaimsExchange>
+                    </Action>
+                    <Action Id="VerifyCode">
+                        <ValidationClaimsExchange>
+                            <ValidationClaimsExchangeTechnicalProfile TechnicalProfileReferenceId="AzureMfa-VerifySms-RO" />
+                        </ValidationClaimsExchange>
+                    </Action>
+                </Actions>
+            </DisplayControl>
+        </DisplayControls>
+    </BuildingBlocks>
+
+    <ClaimsProviders>
+        <!-- SUSI/Account Link/ForgotPwd journey forwarder -->
+        <ClaimsProvider>
+            <DisplayName>Local account sign up and sign in</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="CIAMSignUpWithLogonEmail">
+                    <DisplayName>Email signup</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+                        <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="email" />
+                    </InputClaims>
+                    <DisplayClaims>
+                        <DisplayClaim ClaimTypeReferenceId="email" Required="true" />
+                        <DisplayClaim ClaimTypeReferenceId="newPassword" Required="true" />
+                        <DisplayClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+                        <DisplayClaim ClaimTypeReferenceId="displayName" />
+                        <DisplayClaim ClaimTypeReferenceId="givenName" />
+                        <DisplayClaim ClaimTypeReferenceId="surName" />
+                    </DisplayClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="objectId" />
+                        <OutputClaim ClaimTypeReferenceId="email" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localViaCiamTenant" />
+                        <OutputClaim ClaimTypeReferenceId="newUser" DefaultValue="true"/>
+
+                        <!-- Optional claims, to be collected from the user -->
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surName" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="REST-CIAM-UserWriteUsingLogonEmail" />
+                    </ValidationTechnicalProfiles>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+                </TechnicalProfile>
+                <TechnicalProfile Id="CIAM-SelfAsserted-LocalAccountSignin-Email">
+                    <DisplayName>Local Account Signin</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
+                        <Item Key="setting.operatingMode">Email</Item>
+                        <Item Key="ContentDefinitionReferenceId">api.localaccountsignin</Item>
+                        <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+                    </Metadata>
+                    <IncludeInSso>false</IncludeInSso>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="signInName" DefaultValue="testaaa@pm.me" AlwaysUseDefaultValue="true" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="signInName" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="password" Required="true" />
+                        <OutputClaim ClaimTypeReferenceId="objectId"/>
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localViaCiamTenant"/>
+                        <OutputClaim ClaimTypeReferenceId="graph_bearerToken" />
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="REST-login-NonInteractive-CIAM" />
+                        <ValidationTechnicalProfile ReferenceId="REST-fetchUserProfile-CIAM" />
+                    </ValidationTechnicalProfiles>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Local Account Sign Up and Sign in MFA controls</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="SelfAsserted-Enrol-MFA">
+                    <DisplayName>Phone</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ContentDefinitionReferenceId">newPhoneNumber</Item>
+                        <Item Key="UserMessageIfClaimsTransformationInvalidPhoneNumber">Please enter a valid phone number and country code.</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <!--<InputClaimsTransformations>
+                        <InputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+                    </InputClaimsTransformations>-->
+                    <DisplayClaims>
+                        <DisplayClaim DisplayControlReferenceId="phoneVerificationControl" />
+                    </DisplayClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surName" />
+                        <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+                        <OutputClaim ClaimTypeReferenceId="newlyEnrolled" DefaultValue="true"/>
+                    </OutputClaims>
+                    <ValidationTechnicalProfiles>
+                        <ValidationTechnicalProfile ReferenceId="CombineCountryCodeAndNationalNumber" />
+                        <ValidationTechnicalProfile ReferenceId="REST-CIAM-UserUpdatePhoneNumberUsingObjectId" />
+                    </ValidationTechnicalProfiles>
+                </TechnicalProfile>
+                <TechnicalProfile Id="SelfAsserted-MFA-Challenge">
+                    <DisplayName>Phone</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ContentDefinitionReferenceId">newPhoneNumber</Item>
+                        <Item Key="UserMessageIfClaimsTransformationInvalidPhoneNumber">Please enter a valid phone number and country code.</Item>
+                    </Metadata>
+                    <CryptographicKeys>
+                        <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+                    </CryptographicKeys>
+                    <InputClaimsTransformations>
+                        <!--<InputClaimsTransformation ReferenceId="PhoneNumberToString" />-->
+                        <InputClaimsTransformation ReferenceId="CopyPhoneToReadOnly" />
+                    </InputClaimsTransformations>
+                    <DisplayClaims>
+                        <DisplayClaim DisplayControlReferenceId="phoneVerificationControl-ReadOnly" />
+                    </DisplayClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surName" />
+                        <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA" />
+                </TechnicalProfile>
+                <TechnicalProfile Id="SM-MFA">
+                    <PersistedClaims>
+                        <PersistedClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+                    </PersistedClaims>
+                </TechnicalProfile>
+                <TechnicalProfile Id="CombineCountryCodeAndNationalNumber">
+                    <DisplayName>Combine country code and national number</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <InputClaimsTransformations>
+                        <InputClaimsTransformation ReferenceId="ConvertStringToPhoneNumber" />
+                    </InputClaimsTransformations>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+                <TechnicalProfile Id="AAD-UserUpdatePhoneNumberUsingObjectId">
+                    <Metadata>
+                        <Item Key="Operation">Write</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+                        <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+                    </InputClaims>
+                    <PersistedClaims>
+                        <PersistedClaim ClaimTypeReferenceId="objectId" />
+                        <PersistedClaim ClaimTypeReferenceId="signInNames.phoneNumber" />
+                    </PersistedClaims>
+                    <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+                </TechnicalProfile>
+                <TechnicalProfile Id="AzureMfa-SendSms-RO">
+                    <DisplayName>Send Sms</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="Operation">OneWaySMS</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="userPrincipalName" DefaultValue="test@yourtenant.onmicrosoft.com" />
+                        <InputClaim ClaimTypeReferenceId="readOnlystrongAuthenticationPhoneNumber" PartnerClaimType="phoneNumber" />
+                    </InputClaims>
+                </TechnicalProfile>
+                <TechnicalProfile Id="AzureMfa-VerifySms-RO">
+                    <DisplayName>Verify Sms</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="Operation">Verify</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="verificationCode" />
+                        <InputClaim ClaimTypeReferenceId="readOnlystrongAuthenticationPhoneNumber" PartnerClaimType="phoneNumber" />
+                    </InputClaims>
+                </TechnicalProfile>
+                <TechnicalProfile Id="AzureMfa-SendSms">
+                    <DisplayName>Send Sms</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="Operation">OneWaySMS</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="userPrincipalName" DefaultValue="test@yourtenant.onmicrosoft.com" />
+                        <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" PartnerClaimType="phoneNumber" />
+                    </InputClaims>
+                </TechnicalProfile>
+                <TechnicalProfile Id="AzureMfa-VerifySms">
+                    <DisplayName>Verify Sms</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.AzureMfaProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="Operation">Verify</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="verificationCode" />
+                        <InputClaim ClaimTypeReferenceId="signInNames.phoneNumber" PartnerClaimType="phoneNumber" />
+                    </InputClaims>
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Local Account Sign Up and Sign in APIs</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="REST-CIAM-UserWriteUsingLogonEmail">
+                    <DisplayName>Write user into CIAM tenant</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <!-- Set the ServiceUrl with your own REST API endpoint -->
+                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="SendClaimsIn">Body</Item>
+                        <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
+                        <Item Key="AuthenticationType">None</Item>
+                        <!-- REMOVE the following line in production environments -->
+                        <Item Key="AllowInsecureAuthInProduction">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <!-- Claims sent to your REST API -->
+                        <InputClaim ClaimTypeReferenceId="email" />
+                        <InputClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password" />
+                        <InputClaim ClaimTypeReferenceId="displayName" />
+                        <InputClaim ClaimTypeReferenceId="givenName" />
+                        <InputClaim ClaimTypeReferenceId="surName" />
+                        <InputClaim ClaimTypeReferenceId="method" AlwaysUseDefaultValue="true" DefaultValue="createUser"/>
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- Claims parsed from your REST API -->
+                        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="id" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surName" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="CIAM-UserReadUsingObjectId">
+                    <DisplayName>Write user into CIAM tenant</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <!-- Set the ServiceUrl with your own REST API endpoint -->
+                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="SendClaimsIn">Body</Item>
+                        <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
+                        <Item Key="AuthenticationType">None</Item>
+                        <!-- REMOVE the following line in production environments -->
+                        <Item Key="AllowInsecureAuthInProduction">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <!-- Claims sent to your REST API -->
+                        <InputClaim ClaimTypeReferenceId="objectId" />
+                        <InputClaim ClaimTypeReferenceId="method" AlwaysUseDefaultValue="true" DefaultValue="read"/>
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- Claims parsed from your REST API -->
+                        <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="identities.0.issuerAssignedId" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="displayName"/>
+                        <OutputClaim ClaimTypeReferenceId="otherMails" PartnerClaimType="otherMails"/>
+                        <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="givenName"/>
+                        <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="surname"/>
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="REST-login-NonInteractive-CIAM">
+                    <DisplayName>non interactive authentication to APAC</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="AuthenticationType">None</Item>
+                        <Item Key="SendClaimsIn">Body</Item>
+                        <Item Key="AllowInsecureAuthInProduction">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="email" />
+                        <InputClaim ClaimTypeReferenceId="password" />
+                        <InputClaim ClaimTypeReferenceId="method" DefaultValue="auth" AlwaysUseDefaultValue="true"/>
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="graph_bearerToken" PartnerClaimType="access_token" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="REST-fetchUserProfile-CIAM">
+                    <DisplayName>fetch user profile cross tenant</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <Item Key="ServiceUrl">https://graph.microsoft.com/beta/me</Item>
+                        <Item Key="AuthenticationType">Bearer</Item>
+                        <Item Key="UseClaimAsBearerToken">graph_bearerToken</Item>
+                        <Item Key="SendClaimsIn">Url</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <InputClaim ClaimTypeReferenceId="graph_bearerToken" />
+                    </InputClaims>
+                    <OutputClaims>
+                        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="id" />
+                        <OutputClaim ClaimTypeReferenceId="givenName" />
+                        <OutputClaim ClaimTypeReferenceId="surName" />
+                        <OutputClaim ClaimTypeReferenceId="displayName" />
+                        <OutputClaim ClaimTypeReferenceId="userPrincipalName" PartnerClaimType="upn" />
+                        <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+
+        <ClaimsProvider>
+            <DisplayName>Local Account MFA APIs</DisplayName>
+            <TechnicalProfiles>
+                <TechnicalProfile Id="REST-CIAM-UserUpdatePhoneNumberUsingObjectId">
+                    <DisplayName>Write user phoneMethod</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <!-- Set the ServiceUrl with your own REST API endpoint -->
+                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="SendClaimsIn">Body</Item>
+                        <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
+                        <Item Key="AuthenticationType">None</Item>
+                        <!-- REMOVE the following line in production environments -->
+                        <Item Key="AllowInsecureAuthInProduction">true</Item>
+                    </Metadata>
+                    <InputClaimsTransformations>
+                        <InputClaimsTransformation ReferenceId="PhoneNumberToString" />
+                    </InputClaimsTransformations>
+                    <InputClaims>
+                        <!-- Claims sent to your REST API -->
+                        <InputClaim ClaimTypeReferenceId="objectId" />
+                        <InputClaim ClaimTypeReferenceId="method" AlwaysUseDefaultValue="true" DefaultValue="setPhone"/>
+                        <InputClaim ClaimTypeReferenceId="phoneNumberString" PartnerClaimType="phoneNumber" />
+                    </InputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+
+                <TechnicalProfile Id="REST-CIAM-UserGetPhoneNumberUsingObjectId">
+                    <DisplayName>Write user phoneMethod</DisplayName>
+                    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+                    <Metadata>
+                        <!-- Set the ServiceUrl with your own REST API endpoint -->
+                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="SendClaimsIn">Body</Item>
+                        <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
+                        <Item Key="AuthenticationType">None</Item>
+                        <!-- REMOVE the following line in production environments -->
+                        <Item Key="AllowInsecureAuthInProduction">true</Item>
+                    </Metadata>
+                    <InputClaims>
+                        <!-- Claims sent to your REST API -->
+                        <InputClaim ClaimTypeReferenceId="objectId" />
+                        <InputClaim ClaimTypeReferenceId="method" AlwaysUseDefaultValue="true" DefaultValue="getPhone"/>
+                    </InputClaims>
+                    <OutputClaims>
+                        <!-- Claims parsed from your REST API -->
+                        <OutputClaim ClaimTypeReferenceId="phoneNumberString" PartnerClaimType="phoneNumber" DefaultValue="null"/>
+                    </OutputClaims>
+                    <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+                </TechnicalProfile>
+            </TechnicalProfiles>
+        </ClaimsProvider>
+    </ClaimsProviders>
+
+    <UserJourneys>
+        <UserJourney Id="OrchestrateToCiam">
+            <OrchestrationSteps>
+                <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+                    <ClaimsProviderSelections>
+                        <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+                    </ClaimsProviderSelections>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="CIAM-SelfAsserted-LocalAccountSignin-Email" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- Check if the user has selected to sign in using one of the social providers -->
+                <OrchestrationStep Order="2" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>objectId</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="CIAMSignUpWithLogonEmail" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <!-- if its a new user, show mfa enrol screen, otherwise skip -->
+                <OrchestrationStep Order="3" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+                            <Value>newUser</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="Enrol-MFA-Step" TechnicalProfileReferenceId="SelfAsserted-Enrol-MFA" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- read the user from CIAM using objectid -->
+                <OrchestrationStep Order="4" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="Read-From-CIAM" TechnicalProfileReferenceId="CIAM-UserReadUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- read the users phoneMethods from CIAM using objectid -->
+                <OrchestrationStep Order="5" Type="ClaimsExchange">
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="Read-PhoneMethods-From-CIAM" TechnicalProfileReferenceId="REST-CIAM-UserGetPhoneNumberUsingObjectId" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- show MFA enrolment screen if user doesnt have a phone number registered -->
+                <OrchestrationStep Order="6" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+                            <Value>phoneNumberString</Value>
+                            <Value>null</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="Enrol-MFA-Step-AbandonedSignUp" TechnicalProfileReferenceId="SelfAsserted-Enrol-MFA" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+
+                <!-- show MFA challenge screen if user does have a phone number registered, and is not a sign up -->
+                <OrchestrationStep Order="7" Type="ClaimsExchange">
+                    <Preconditions>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>newUser</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                        <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+                            <Value>newlyEnrolled</Value>
+                            <Action>SkipThisOrchestrationStep</Action>
+                        </Precondition>
+                    </Preconditions>
+
+                    <ClaimsExchanges>
+                        <ClaimsExchange Id="Perform-MFA-Step" TechnicalProfileReferenceId="SelfAsserted-MFA-Challenge" />
+                    </ClaimsExchanges>
+                </OrchestrationStep>
+                <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+            </OrchestrationSteps>
+            <ClientDefinition ReferenceId="DefaultWeb" />
+        </UserJourney>
+    </UserJourneys>
+    <RelyingParty>
+        <DefaultUserJourney ReferenceId="OrchestrateToCiam" />
+        <TechnicalProfile Id="PolicyProfile">
+            <DisplayName>PolicyProfile</DisplayName>
+            <Protocol Name="OpenIdConnect" />
+            <OutputClaims>
+                <OutputClaim ClaimTypeReferenceId="displayName" />
+                <OutputClaim ClaimTypeReferenceId="givenName" />
+                <OutputClaim ClaimTypeReferenceId="surname" />
+                <OutputClaim ClaimTypeReferenceId="email" />
+                <OutputClaim ClaimTypeReferenceId="phoneNumberString" />
+                <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" />
+                <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+                <OutputClaim ClaimTypeReferenceId="groups" DefaultValue="null"/>
+                <OutputClaim ClaimTypeReferenceId="roles" DefaultValue="null"/>
+            </OutputClaims>
+            <SubjectNamingInfo ClaimType="sub" />
+        </TechnicalProfile>
+    </RelyingParty>
+
+</TrustFrameworkPolicy>
