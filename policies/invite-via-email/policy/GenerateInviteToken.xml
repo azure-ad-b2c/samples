@@ -33,7 +33,7 @@
 
   <UserJourneys>
     <!-- this mini-userjourney will generate a signed JWT that can be sent in an email. 
-         Do NOT intruduce anything that will cause a UX to be displayed as that will break this
+         Do NOT introduce anything that will cause a UX to be displayed as that will break this
      -->
     <UserJourney Id="GenerateInviteToken">    
       <OrchestrationSteps>

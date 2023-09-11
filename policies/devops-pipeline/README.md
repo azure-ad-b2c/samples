@@ -41,7 +41,7 @@ These policies are then batched by their hierarchy in the tree, as well as their
 
 1. 1A_Base
 2. 1A_EXT
-3. 1A_LBASE, 1A_LSBASE
+3. 1A_LBASE, 1A_SBASE
 4. 1A_LSS, 1A_LPR
 5. 1A_LSSS
 
@@ -52,29 +52,43 @@ These policies are then batched by their hierarchy in the tree, as well as their
 
 To deploy locally, you need to install the cli tool.
 
-### Via npm
+### Via curl
 ```sh
-npm install -g ieftool
+curl https://raw.githubusercontent.com/judedaryl/go-ieftool/main/install.sh | bash
 ```
 
-### Via yarn
-```sh
-yarn global add ieftool
-```
+### Download the binary
+
+The binaries are available in github [go-ieftool](https://github.com/judedaryl/go-ieftool/releases/latest)
+
+Select the binary for your system. Available binaries:
+* darwin-amd64 ( macOS intel chip )
+* darwin-arm64 ( macOS m1 chip )
+* linux-amd64 ( linux x64 )
+* windows-amd64 ( windows x64 )
 
 Then deploy
 
 ```sh
-ieftool deploy -t { tenant } -c { client_id } -s { client_secret } -p ./src
+export B2C_TENANT_ID=__TENANT_ID__
+export B2C_CLIENT_ID=__CLIENT_ID__
+export B2C_CLIENT_SECRET=__CLIENT_SECRET__
 
+ieftool deploy ./policy
 ```
 
-| option | description |
+```
+Usage:
+  ieftool deploy [path to policies]
+```
+
+### Required Environment Variables
+
+| variable | description |
 |--|--|
-| tenant | The B2C tenant, this can either be the **tenantId** or the **tenant name** (mytenant.onmicrosoft.com)|
-| client_id | The client id of an app registration in B2C that has permissions for TrustFrameworkPolicies |
-| client_secret | The client secret of an app registration in B2C that has permissions for TrustFrameworkPolicies |
-| source_path | The path to your b2c policies. In the tree structure above it would be ``./src`` 
+| B2C_TENANT_ID | The B2C tenant, this can either be the **tenantId** (guid) or the **tenant name** (mytenant.onmicrosoft.com)|
+| B2C_CLIENT_ID | The client id of an app registration in B2C that has permissions for TrustFrameworkPolicies |
+| B2C_CLIENT_SECRET | The client secret of an app registration in B2C that has permissions for TrustFrameworkPolicies |
 
 
 <br/>

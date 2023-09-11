@@ -26,7 +26,7 @@
         <AdminHelpText>lastLogonTime</AdminHelpText>
         <UserHelpText>lastLogonTime</UserHelpText>
       </ClaimType>
-      <ClaimType Id="refreshTokensValidFromDateTime">
+      <ClaimType Id="refreshTokensValidFromDateTime_for_revoke_sso_sessions">
         <DisplayName>refreshTokensValidFromDateTime</DisplayName>
         <DataType>dateTime</DataType>
         <AdminHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</AdminHelpText>
@@ -49,7 +49,7 @@
       <ClaimsTransformation Id="CompareLastLogonTimeToRTRevocationTime" TransformationMethod="DateTimeComparison">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="lastLogonTime" TransformationClaimType="firstDateTime" />
-          <InputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" TransformationClaimType="secondDateTime" />
+          <InputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime_for_revoke_sso_sessions" TransformationClaimType="secondDateTime" />
         </InputClaims>
         <InputParameters>
           <InputParameter Id="operator" DataType="string" Value="earlier than" />
@@ -90,7 +90,7 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" PartnerClaimType="refreshTokensValidFromDateTime"/>
+            <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime_for_revoke_sso_sessions" PartnerClaimType="refreshTokensValidFromDateTime"/>
           </OutputClaims>
         </TechnicalProfile>
 

@@ -8,13 +8,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node'
-
-  - script: npm install -g ieftool
+  - script: |
+      curl https://raw.githubusercontent.com/judedaryl/go-ieftool/main/install.sh | bash
     displayName: 'Install IEF Tool'
 
-  - script: ieftool deploy -t TENANT_ID -c CLIENT_ID -s CLIENT_SECRET -p ./policy
+  - script: ieftool deploy ./policy
     displayName: 'Uploading IEF policies'
+    env:
+      B2C_TENANT_ID: __TENANT_ID__
+      B2C_CLIENT_ID: __CLIENT_ID__
+      B2C_CLIENT_SECRET: __CLIENT_SECRET__
