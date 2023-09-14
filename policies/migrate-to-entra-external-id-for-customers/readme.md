@@ -19,6 +19,7 @@ Users are sent to the AAD B2C authentiaction endpoint. An Azure function orchest
 ### Create application registrations
 1. Create an Application registration in the Entra External Id tenant, named **RopcFromB2C**. Choose Native App. Copy the AppId/ClientId
 1. In the Authentication menu, enable **Allow public client**
+1. In the manifest, set
 
 1. Create an Application registration in the Entra External Id tenant, named **GraphCallsFromB2CTenant**. Choose Web App. Copy the AppId/ClientId
 1. Under API permissions, add MS Graph API **Application** permissions: `User.ReadWrite.All` and `UserAuthenticationMethod.ReadWrite.All`

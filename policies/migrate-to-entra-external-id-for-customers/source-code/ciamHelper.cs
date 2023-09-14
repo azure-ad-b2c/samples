@@ -142,6 +142,18 @@ namespace readUser
                     try
                     {
                         var result = await graphClient.Users.PostAsync(userRequestBody);
+                        string stringObjectId = result.Id;
+
+                            try 
+                            {
+                                await DoWithRetryAsync(TimeSpan.FromSeconds(1), tryCount: 10, stringObjectId, email, graphClient);
+                           
+                            }
+                            catch (Exception enrolEx)
+                            {
+                                return new ConflictObjectResult(enrolEx);
+                            }
+                    
                         return new OkObjectResult(result);
                     }
                     catch (Exception ex)
@@ -182,9 +194,32 @@ namespace readUser
 
             return new OkObjectResult(null);
         }
+        public static async Task EnrolEmail(GraphServiceClient graphClient, string email, string objectId){
+            var emailAuthMethodRequestBody = new EmailAuthenticationMethod
+            {
+                EmailAddress = email
+            };
+            var result = await graphClient.Users[objectId].Authentication.EmailMethods.PostAsync(emailAuthMethodRequestBody);
+            //return new OkObjectResult(enrolResult);
+        }
+    
+        public static async Task DoWithRetryAsync(TimeSpan sleepPeriod, int tryCount = 3, string objectId="test", string email="test", GraphServiceClient graphClient=null)
+        {
+            if (tryCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(tryCount));
 
+            while (true) {
+                try {
+                    await EnrolEmail(graphClient, email, objectId);
+                    return;
+                } catch {
+                    if (--tryCount == 0)
+                        throw;
+                    await Task.Delay(sleepPeriod);
+                }
+            }
+        }
     }
-
 
     public class B2CResponseModel
     {
