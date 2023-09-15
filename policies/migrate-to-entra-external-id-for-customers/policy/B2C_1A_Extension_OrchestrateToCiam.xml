@@ -513,7 +513,7 @@
                     <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
                     <Metadata>
                         <!-- Set the ServiceUrl with your own REST API endpoint -->
-                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="ServiceUrl">https://your-api-endpoint</Item>
                         <Item Key="SendClaimsIn">Body</Item>
                         <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
                         <Item Key="AuthenticationType">None</Item>
@@ -544,7 +544,7 @@
                     <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
                     <Metadata>
                         <!-- Set the ServiceUrl with your own REST API endpoint -->
-                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="ServiceUrl">https://your-api-endpoint</Item>
                         <Item Key="SendClaimsIn">Body</Item>
                         <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
                         <Item Key="AuthenticationType">None</Item>
@@ -571,7 +571,7 @@
                     <DisplayName>non interactive authentication to APAC</DisplayName>
                     <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
                     <Metadata>
-                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="ServiceUrl">https://your-api-endpoint</Item>
                         <Item Key="AuthenticationType">None</Item>
                         <Item Key="SendClaimsIn">Body</Item>
                         <Item Key="AllowInsecureAuthInProduction">true</Item>
@@ -620,7 +620,7 @@
                     <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
                     <Metadata>
                         <!-- Set the ServiceUrl with your own REST API endpoint -->
-                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="ServiceUrl">https://your-api-endpoint</Item>
                         <Item Key="SendClaimsIn">Body</Item>
                         <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
                         <Item Key="AuthenticationType">None</Item>
@@ -644,7 +644,7 @@
                     <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
                     <Metadata>
                         <!-- Set the ServiceUrl with your own REST API endpoint -->
-                        <Item Key="ServiceUrl">your-api-endpoint</Item>
+                        <Item Key="ServiceUrl">https://your-api-endpoint</Item>
                         <Item Key="SendClaimsIn">Body</Item>
                         <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
                         <Item Key="AuthenticationType">None</Item>
