@@ -34,7 +34,12 @@ Users are sent to the AAD B2C authentiaction endpoint. An Azure function orchest
 ### Host the Azure function
 1. In any production scenario, enable authentication in the Azure function. Eg, OAuth.
 
-### Modifications in policy file
+### Quick Deploy
+You can quick deploy the sample into your tenant, and then make the changes in the next section.
+Use this [link to quick deploy](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=migrate-to-entra-external-id-for-customers) into your tenant.
+
+
+#### Required modifications in policy file
 1. Change all instances of `your-tenant` to your tenant name, eg: `contoso.onmicrosoft.com`
 1. Change all instances of `your-api-endpoint` to your Azure function endpoint.
 1. In any production scenario, enable authentication in the REST API technical profiles.
