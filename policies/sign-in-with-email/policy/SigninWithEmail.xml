@@ -67,7 +67,7 @@
             <!-- <Item Key="issuer">your_optional_token_issuer_override</Item> -->
           </Metadata>
         <OutputClaims>
-          <!--Sample: Read the email cliam from the id_token_hint-->
+          <!--Sample: Read the email claim from the id_token_hint-->
           <OutputClaim ClaimTypeReferenceId="email" />  
         </OutputClaims>
         </TechnicalProfile>

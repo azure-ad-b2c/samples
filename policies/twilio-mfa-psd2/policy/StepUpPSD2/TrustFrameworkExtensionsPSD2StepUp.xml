@@ -188,7 +188,7 @@
             <Item Key="METADATA">https://psd2demo.azurewebsites.net/.well-known/openid-configuration</Item>
           </Metadata>
           <OutputClaims>
-            <!--Sample: Read the email cliam from the id_token_hint-->
+            <!--Sample: Read the email claim from the id_token_hint-->
             <OutputClaim ClaimTypeReferenceId="amount" />
             <OutputClaim ClaimTypeReferenceId="payee" />
             <OutputClaim ClaimTypeReferenceId="accountnumber" />

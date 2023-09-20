@@ -42,7 +42,7 @@
      	  <UserInputType>TextBox</UserInputType>
       </ClaimType> 
 
-      <!--Sample: Read only cliams to render on the self-asserted page-->
+      <!--Sample: Read only claims to render on the self-asserted page-->
       <ClaimType Id="readOnlyDisplayName">
      	  <DisplayName>FIDO dispaly name</DisplayName>
      	  <DataType>string</DataType>
