@@ -44,7 +44,7 @@
       </ClaimType>
 
       <ClaimType Id="QrCodeVerifyInstruction">
-        <DisplayName>Enter the verification code from your authenticator app​.</DisplayName>
+        <DisplayName>Enter the verification code from your authenticator app.</DisplayName>
         <DataType>string</DataType>
         <UserInputType>Paragraph</UserInputType>
       </ClaimType>
@@ -242,7 +242,7 @@
           <LocalizedString ElementType="DisplayControl" ElementId="authenticatorInfoControl" StringId="collapse_text">Still having trouble?</LocalizedString>
 
           <!-- Verification -->
-          <LocalizedString ElementType="ClaimType" ElementId="QrCodeVerifyInstruction" StringId="DisplayName">Enter the verification code from your authenticator app​.</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="QrCodeVerifyInstruction" StringId="DisplayName">Enter the verification code from your authenticator app.</LocalizedString>
           <LocalizedString ElementType="ClaimType" ElementId="otpCode" StringId="DisplayName">Enter your code.</LocalizedString>
           <!-- <LocalizedString ElementType="UxElement" StringId="button_continue">Verify</LocalizedString> -->
         </LocalizedStrings>
