@@ -157,7 +157,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- Sample: Link the new soicla account. -->
+        <!-- Sample: Link the new social account. -->
         <OrchestrationStep Order="11" Type="ClaimsExchange">
           <ClaimsExchanges>
             <ClaimsExchange Id="UpdateUserIdentities" TechnicalProfileReferenceId="AAD-UserUpdateWithUserIdentities"/>
