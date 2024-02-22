@@ -332,8 +332,18 @@
           </OutputClaims>
         </TechnicalProfile>
 
-        <!-- TOTP session manager-->
+        <!-- TOTP session manager for verification-->
         <TechnicalProfile Id="SM-MFA-TOTP">
+          <DisplayName>Session Mananagement Provider</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.DefaultSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="totpIdentifier" />
+            <PersistedClaim ClaimTypeReferenceId="issuer" />
+          </PersistedClaims>
+        </TechnicalProfile>
+
+        <!-- TOTP session manager for input-->
+        <TechnicalProfile Id="SM-MFA-Totp-Input">
           <DisplayName>Session Mananagement Provider</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.DefaultSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <PersistedClaims>
@@ -377,7 +387,7 @@
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="secretKey" />
           </OutputClaims>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-TOTP" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-MFA-Totp-Input" />
         </TechnicalProfile>
 
         <!-- Self-asserted technical profile that verifies the TOTP-->
