@@ -24,7 +24,7 @@ For custom policies see:
 
 - Details below and the sample in the [Policy](policy) folder. The TOTP policy uses the starter-pack [B2C_1A_TrustFrameworkExtensions](https://github.com/Azure-Samples/active-directory-b2c-custom-policy-starterpack/blob/master/SocialAndLocalAccounts/TrustFrameworkExtensions.xml) as a base policy.
 - Read the [Enable multi-factor authentication in Azure AD B2C](https://docs.microsoft.com/azure/active-directory-b2c/multi-factor-authentication?pivots=b2c-custom-policy) article.
-- Lear how to use [Display controls](https://docs.microsoft.com/azure/active-directory-b2c/display-controls) and [TOTP display control](https://docs.microsoft.com/azure/active-directory-b2c/display-control-time-based-one-time-password).
+- Learn how to use [Display controls](https://docs.microsoft.com/azure/active-directory-b2c/display-controls) and [TOTP display control](https://docs.microsoft.com/azure/active-directory-b2c/display-control-time-based-one-time-password).
 
 ## Using the Authenticator App
 
