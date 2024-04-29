@@ -56,7 +56,7 @@ The claim  *totpIdentifier* is used to copy the different type of signIn options
 
 ## Just In Time TOTP Migration
 
-Jut In time migration allows you to migrate from your legacy storage of the TOTP Secret to the new TOTP method outlined above.
+Just In time migration allows you to migrate from your legacy storage of the TOTP Secret to the new TOTP method outlined above.
 If you were previously using the [TOTP multi-factor authentication](../custom-mfa-totp) policy sample to implement TOTP then your users Secrets will be stored in the 'extension_StrongAuthenticationAppSecretKey' extension attribute.
 
 To migrate these to the new method you can implement the [TOTP Migration Extension](policy/TrustFrameworkExtensions_TOTPMigration.xml) policy as the parent policy for either [SignUpOrSignIn_TOTP](policy/SignUpOrSignin_TOTP.xml#L9) or [PasswordReset_TOTP.xml](policy/PaswordReset_TOTP.xml#L9) 
