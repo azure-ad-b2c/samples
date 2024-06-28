@@ -12,7 +12,7 @@
     <ClaimsSchema>
       <ClaimType Id="email">
         <Restriction>
-          <Pattern RegularExpression="^[a-zA-Z0-9.!#$%&amp;'^_`{}~\-]+@(outlook[.]com|live[.]com|gmail[.]com)" HelpText="Please enter a email address from one of the following domains: outlook.com, live.com." />
+          <Pattern RegularExpression="^[a-zA-Z0-9.!#$%&amp;'^_`{}~\-]+@(outlook|live|gmail)\.com$" HelpText="Please enter an email address from one of the following domains: outlook.com, live.com, gmail.com." />
         </Restriction>
       </ClaimType>
     </ClaimsSchema>
