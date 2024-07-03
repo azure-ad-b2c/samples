@@ -1,4 +1,4 @@
-# Azure Active Directory B2C: Custom CIAM User Journeys
+# Azure Active Directory B2C: Custom CIAM User Journeys 
 
 In this repo, you will find samples for several enhanced Azure AD B2C Custom CIAM User Journeys.
 
