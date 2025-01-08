@@ -25,6 +25,9 @@ The user will be presented with a dummy page rendered by the `Self-Asserted-Acco
 
 For subsequent logons whilst the account is disabled, the user will be get treated by the native Azure AD B2C functionality for disabled accounts. This error message can also be customised.
 
+### Note: 
+This sample requires custom attributes to be enabled in the policy by providing `ApplicationObjectId` in the `AAD-Common` technical profile metadata as mentioned [here](https://learn.microsoft.com/en-us/azure/active-directory-b2c/user-flow-custom-attributes?pivots=b2c-custom-policy#modify-your-custom-policy). 
+
 ## Unit Tests
 1. Sign up with an account, check the value of exentsion_lastLogonTime using the unlock-account.ps1 script.
 2. Sign in after sign up to make sure the account can login successfully.
