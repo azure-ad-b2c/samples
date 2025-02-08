@@ -149,6 +149,8 @@ Samples are available for the following categories
 |[Custom claims provider](policies/custom-claims-provider)|A custom OpenId connect claims provider that federates with Azure AD B2C over OIDC protocol.|NA|
 |[Obtain the Microsoft Graph access token for an Azure AD Federated logon](policies/B2C-Token-Includes-AzureAD-BearerToken)|For scenarios where we would like to obtain the Microsoft Graph API token for a Azure AD federated logon in the context of the logged in user. For example this could be used to read the users Exchange Online mailbox within an Azure AD B2C application.|NA|
 |[AAD Authentication with REST](policies/AAD-SignIn-with-REST)|Pass through authentication to Azure AD (no user created in B2C), then calls a REST API to obtain more claims.|NA|
+|[IDP Initiated via Entra ID with Custom Claim](policies/idp-initiated-EntraID-customclaim)|IDP Initiated flow with login via Entra ID, checking the user is part of the required group (or return an error), then then signing the asertion and then redirecting to the remoet ACL URL|NA|
+
 
 ## User interface
 

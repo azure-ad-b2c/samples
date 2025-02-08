@@ -1,0 +1,289 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+TenantId="yourtenant.onmicrosoft.com" PolicyId="B2C_1A_IDPInitiated_CustomClaim_EntraID" 
+PublicPolicyUri="http://yourtenant.onmicrosoft.com/B2C_1A_IDPInitiated_CustomClaim_EntraID" 
+TenantObjectId="yourtenant.onmicrosoft.com"
+DeploymentMode="Development"
+UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <!-- The custom claim that is passed as a query parameter -->
+      <ClaimType Id="custom_claim">
+        <DisplayName></DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <!-- email address from Entra ID preferred_username -->
+      <ClaimType Id="email">
+        <DisplayName>Email Address</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
+      <!-- String collection claim to hold the json array of groups from Entra ID id_token -->
+      <ClaimType Id="EntraIDGroupMemberships">
+        <DisplayName>Group Memberships in the IdP</DisplayName>
+        <DataType>stringCollection</DataType>
+      </ClaimType>
+      <!-- Boolean if user belongs to required Entra ID group -->
+      <ClaimType Id="InEntraIDGroup">
+        <DisplayName>Is a member of Entra ID Group</DisplayName>
+        <DataType>boolean</DataType>
+      </ClaimType>
+      <!-- Error message if they do not belong to the group -->
+      <ClaimType Id="errorMessage">
+        <DisplayName>Access denied as you are not a member of the correct Entra ID Group</DisplayName>
+        <DataType>string</DataType>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <!-- Check if user belongs to Entra ID group based on Group GUID -->
+      <ClaimsTransformation Id="CT-IsInEntraIDGroup" TransformationMethod="StringCollectionContains">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="EntraIDGroupMemberships" TransformationClaimType="inputClaim"/>
+        </InputClaims>
+        <InputParameters>
+          <!-- Update based on Entra ID Group GUID value -->
+          <InputParameter  Id="item" DataType="string" Value="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"/>
+          <InputParameter  Id="ignoreCase" DataType="string" Value="true"/>
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="InEntraIDGroup" TransformationClaimType="outputClaim"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+      <!-- Create error message reponse if user doesn't belong to the group -->
+      <ClaimsTransformation Id="CT-CreateRegErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="Please contact the helpdesk"/>
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+    <ContentDefinitions>
+      <ContentDefinition Id="api.selfasserted">
+        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.7</DataUri>
+      </ContentDefinition>
+    </ContentDefinitions>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <!-- Required technical profile -->
+    <ClaimsProvider>
+      <DisplayName>Trustframework Policy Engine TechnicalProfiles</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="TpEngine_c3bd4fe2-1775-4013-b91d-35f16d377d13">
+          <DisplayName>Trustframework Policy Engine Default Technical Profile</DisplayName>
+          <Protocol Name="None" />
+          <Metadata>
+            <Item Key="url">{service:te}</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- Entra ID Login -->
+    <ClaimsProvider>
+      <Domain>EntraIDTenant</Domain>
+      <DisplayName>Login using Entra ID Tenant</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="TP-EntraIDTenant">
+          <DisplayName>Entra ID User</DisplayName>
+          <Description>Login with your Entra ID account</Description>
+          <Protocol Name="OpenIdConnect"/>
+          <Metadata>
+            <!-- Update the Entra ID Tenant ID, and the Application client_id -->
+            <Item Key="METADATA">https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="client_id">cccccccc-cccc-cccc-cccc-cccccccccccc</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="scope">openid profile email</Item>
+            <Item Key="response_mode">form_post</Item>
+            <Item Key="HttpBinding">POST</Item>
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <!-- Update the Entra ID Application client_secret Policy Key -->
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_IDPEntraIDClientSecretyyyy"/>
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="preferred_username"/>
+            <OutputClaim ClaimTypeReferenceId="EntraIDGroupMemberships" PartnerClaimType="groups" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <!-- Claim Transform to check if the user belongs to the Entra ID Group in the id_token groups array -->
+            <OutputClaimsTransformation ReferenceId="CT-IsInEntraIDGroup"/>
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-EntraID"/>
+        </TechnicalProfile>
+        <TechnicalProfile Id="SM-EntraID">
+          <DisplayName>Session Mananagement Provider</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.ExternalLoginSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="AlwaysFetchClaimsFromProvider">true</Item>
+          </Metadata>
+        </TechnicalProfile>        
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- SAML IDP Initiated Token Issuer -->
+    <ClaimsProvider>
+      <DisplayName>SAML IDP Initiated Token Issuer</DisplayName>
+      <TechnicalProfiles>
+        <!-- SAML IDP Initiated Token Issuer technical profile -->
+        <TechnicalProfile Id="TP-SAML-AssertionIssuer">
+          <DisplayName>Token Issuer</DisplayName>
+          <Protocol Name="SAML2"/>
+          <OutputTokenFormat>SAML2</OutputTokenFormat>
+          <Metadata>
+            <Item Key="WantsSignedAssertions">true</Item>
+            <Item Key="WantsSignedRequests">false</Item>
+            <Item Key="XmlSignatureAlgorithm">Sha256</Item>
+            <Item Key="TokenLifeTimeInSeconds">120</Item>
+            <Item Key="TokenNotBeforeSkewInSeconds">120</Item>
+            <Item Key="RemoveMillisecondsFromDateTime">true</Item>
+            <!-- Local Entity ID -->
+            <Item Key="IssuerUri">https://localentityid.com</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <!-- Policy Key with PKCS12 Private Key used for signing the Assertion -->
+            <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_IDPLocalEntitySigningCertificateyyyy"/>
+            <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_IDPLocalEntitySigningCertificateyyyy"/>
+          </CryptographicKeys>
+          <InputClaims/>
+          <OutputClaims/>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SAML-Issuer"/>
+        </TechnicalProfile>
+        <!-- SAML IDP Initiated Session management technical profile for SAML based tokens -->
+        <TechnicalProfile Id="SM-SAML-Issuer">
+          <DisplayName>Session Management Provider</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.SSO.SamlSSOSessionProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- Inject Custom Claim from Query Parameter -->
+    <ClaimsProvider>
+      <DisplayName>Inject Custom Claim</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="TP-InjectCustomClaim">
+          <DisplayName>Inject Customer FLT</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="IncludeClaimResolvingInClaimsHandling">true</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="custom_claim" AlwaysUseDefaultValue="true" DefaultValue="{SAML-KV:custom_claim}"/>
+            <!-- If you want a static value for email for testing -->
+            <!-- <OutputClaim ClaimTypeReferenceId="email" AlwaysUseDefaultValue="true" DefaultValue="user@testdomain.com"/> -->
+          </OutputClaims>
+          <EnabledForUserJourneys>Always</EnabledForUserJourneys>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- Claims Provider for the error page -->
+    <ClaimsProvider>
+      <DisplayName>Error Message</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="TP-ThrowError">
+          <DisplayName>Error message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <Item Key="setting.showContinueButton">false</Item>
+            <Item Key="setting.showCancelButton">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorMessage"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="errorMessage"/>
+          </OutputClaims>
+        </TechnicalProfile>
+        <TechnicalProfile Id="TP-ThrowNotInGroupError">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CT-CreateRegErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="TP-ThrowError" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <UserJourneys>
+    <UserJourney Id="UJ-SAMLIDPInitiated">
+      <OrchestrationSteps>
+        <!-- Login to Entra ID -->
+        <OrchestrationStep Order="1" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CE-EntraIDTenant" TechnicalProfileReferenceId="TP-EntraIDTenant"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Return error if the user is not part of the required Entra ID group -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>InEntraIDGroup</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="GroupMembershipError" TechnicalProfileReferenceId="TP-ThrowNotInGroupError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Inject Cusom Claim -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="CE-InjectCustomerFLT" TechnicalProfileReferenceId="TP-InjectCustomClaim"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Create SAML Claims if part of required Entra ID Group -->
+        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="TP-SAML-AssertionIssuer">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="false">
+              <Value>InEntraIDGroup</Value>
+              <Value>True</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+        </OrchestrationStep>
+      </OrchestrationSteps>
+    </UserJourney>
+  </UserJourneys>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="UJ-SAMLIDPInitiated"/>
+    <UserJourneyBehaviors>
+      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="dddddddd-dddd-dddd-dddd-dddddddddddd" DeveloperMode="true" ClientEnabled="true" ServerEnabled="true" TelemetryVersion="1.0.0"/>
+      <ScriptExecution>Allow</ScriptExecution>
+    </UserJourneyBehaviors>
+    <TechnicalProfile Id="RP-TP-SAMLIDPInitiated">
+      <DisplayName>SAMLIDPInitiated</DisplayName>
+      <Protocol Name="SAML2"/>
+      <Metadata>
+        <Item Key="IdpInitiatedProfileEnabled">true</Item>
+        <Item Key="WantsSignedAssertions">true</Item>
+        <!-- If you don't need encrypted assertions then the whole KeyDescriptor is not necessary in PartnerEntity -->
+        <Item Key="WantsEncryptedAssertions">true</Item>
+        <Item Key="DataEncryptionMethod">Aes128</Item>
+        <Item Key="KeyEncryptionMethod">RsaOaep</Item>
+        <Item Key="UseDetachedKeys">false</Item>
+        <!-- Destination SP Metadata, Update the entityID, AssertionConsumerService Location and X509Certificate public key if encrypting the assertion. Also notice SPSSODescriptor not IDPSSODescriptor -->
+        <Item Key="PartnerEntity"><![CDATA[
+        <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" ID="destinationentity" entityID="https://destinationentityid.com/entityidurl">
+          <SPSSODescriptor AuthnRequestsSigned="false" WantAssertionsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+            <KeyDescriptor use="encryption">
+              <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+                <X509Data>
+                  <X509Certificate>MII..pem.base64.certificate.goes.here.U=</X509Certificate>
+                </X509Data>
+              </KeyInfo>
+            </KeyDescriptor>
+            <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+            <AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://destinationentityid.com/samlp/sso/assertionconsumer" index="0" isDefault="true"/>
+          </SPSSODescriptor>
+        </EntityDescriptor>]]></Item>
+      </Metadata>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="email"/>
+        <OutputClaim ClaimTypeReferenceId="custom_claim"/>
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="email" Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress" ExcludeAsClaim="true"/>
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
