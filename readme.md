@@ -1,3 +1,7 @@
+> [!NOTE]  
+> Azure AD B2C is currently on [path to deprecation](https://learn.microsoft.com/en-us/entra/external-id/customers/faq-customers#whats-happening-to-azure-ad-b2c-and-azure-ad-external-identities) (2030) and this repository is no longer being maintained. [Entra External Id](https://learn.microsoft.com/en-us/entra/external-id/external-identities-overview) supersedes AAD B2C.
+
+
 # Azure Active Directory B2C: Custom CIAM User Journeys 
 
 In this repo, you will find samples for several enhanced Azure AD B2C Custom CIAM User Journeys.
