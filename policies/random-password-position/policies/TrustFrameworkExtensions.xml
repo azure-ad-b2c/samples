@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="your_tenant.onmicrosoft.com" 
+  PolicyId="B2C_1A_EXT" 
+  PublicPolicyUri="http://your_tenant.onmicrosoft.com/B2C_1A_EXT">
+  
+  <BasePolicy>
+    <TenantId>your_tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_LOC</PolicyId>
+  </BasePolicy>
+	
+  <BuildingBlocks>
+    
+	  <ClaimsSchema>
+
+      <ClaimType Id="position1">
+        <DataType>string</DataType>
+        <UserHelpText>Resource identifier</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="position2">
+        <DataType>string</DataType>
+        <UserHelpText>Resource identifier</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="position3">
+        <DataType>string</DataType>
+        <UserHelpText>Resource identifier</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="code1">
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="code2">
+        <DataType>string</DataType>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="code3">
+        <DataType>string</DataType>
+        <UserHelpText>Resource identifier</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="userOK">
+        <DataType>string</DataType>
+        <UserHelpText>Resource identifier</UserHelpText>
+      </ClaimType>
+
+      <ClaimType Id="username">
+        <DataType>string</DataType>
+        <UserHelpText>Resource identifier</UserHelpText>
+        <UserInputType>TextBox</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="alternativeSecurityId">
+        <DataType>string</DataType>
+      </ClaimType>
+
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+    
+      <ClaimsTransformation Id="CreateRandomUPNUserName" TransformationMethod="CreateRandomString">
+        <InputParameters>
+          <InputParameter Id="randomGeneratorType" DataType="string" Value="GUID" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="upnUserName" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateUserPrincipalName" TransformationMethod="FormatStringClaim">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="upnUserName" TransformationClaimType="inputClaim" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringFormat" DataType="string" Value="cpim_{0}@{RelyingPartyTenantId}" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userPrincipalName" TransformationClaimType="outputClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateAlternativeSecurityId-With-SignInName" TransformationMethod="CreateAlternativeSecurityId">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="signInName" TransformationClaimType="key"/>
+          <InputClaim ClaimTypeReferenceId="identityProvider" TransformationClaimType="identityProvider"/>
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="alternativeSecurityId" TransformationClaimType="alternativeSecurityId"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+
+    </ClaimsTransformations>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+
+         <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
+          </InputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="RequestCodes">
+          <DisplayName>Email signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="position1" />
+            <InputClaim ClaimTypeReferenceId="position2" />
+            <InputClaim ClaimTypeReferenceId="position3" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="code1" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="code2" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="code3" Required="true" />
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="RequestUsername">
+          <DisplayName>Email signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="setting.showSignupLink">false</Item>
+            <Item Key="SignUpTarget">SignUpWithLogonEmailExchange</Item>
+            <Item Key="setting.operatingMode">Username</Item>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="signInName"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="signInName" Required="true"/>
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true"/>
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="rest-api" AlwaysUseDefaultValue="true" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId-With-SignInName" />
+          </OutputClaimsTransformations>          
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop"/>
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>REST APIs</DisplayName>
+      <TechnicalProfiles>
+
+        <TechnicalProfile Id="REST-GetPositions">
+          <DisplayName>Validate user input data and return positions claims</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://your_api.azurewebsites.net/api/positions</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Header</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="position1" />
+            <OutputClaim ClaimTypeReferenceId="position2" />
+            <OutputClaim ClaimTypeReferenceId="position3" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="REST-CheckCodes">
+          <DisplayName>Validate user input data and return positions claims</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://your_api.azurewebsites.net/api/checking</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="position1" />
+            <InputClaim ClaimTypeReferenceId="position2" />
+            <InputClaim ClaimTypeReferenceId="position3" />
+            <InputClaim ClaimTypeReferenceId="code1" />
+            <InputClaim ClaimTypeReferenceId="code2" />
+            <InputClaim ClaimTypeReferenceId="code3" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="userOK" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+  </ClaimsProviders>
+
+  <UserJourneys>
+  
+    <UserJourney Id="customSUSI">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Get positions -->
+         <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RESTGetPositions" TechnicalProfileReferenceId="REST-GetPositions" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RequestCodeToUser" TechnicalProfileReferenceId="RequestCodes" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Check codes -->
+         <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RESTCheckCodes" TechnicalProfileReferenceId="REST-CheckCodes" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+    <UserJourney Id="customSUSINoAuth">
+      <OrchestrationSteps>
+
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange"/>
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="RequestUsername"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Get positions -->
+         <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RESTGetPositions" TechnicalProfileReferenceId="REST-GetPositions" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RequestCodeToUser" TechnicalProfileReferenceId="RequestCodes" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!--Check codes -->
+         <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="RESTCheckCodes" TechnicalProfileReferenceId="REST-CheckCodes" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+
+	</UserJourneys>
+
+</TrustFrameworkPolicy>

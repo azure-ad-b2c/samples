@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTApi_Authentication", "RESTApi_Authentication.csproj", "{4117C1C9-2E8F-47C2-A742-7AE5CC6B0C66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4117C1C9-2E8F-47C2-A742-7AE5CC6B0C66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4117C1C9-2E8F-47C2-A742-7AE5CC6B0C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4117C1C9-2E8F-47C2-A742-7AE5CC6B0C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4117C1C9-2E8F-47C2-A742-7AE5CC6B0C66}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A736C287-8012-4877-8C6A-E5F4BF02EB18}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="your_tenant.onmicrosoft.com"
+  PolicyId="B2C_1A_SUSI_NoAuth"
+  PublicPolicyUri="http://your_tenant.onmicrosoft.com/B2C_1A_SUSI_NoAuth">
+
+  <BasePolicy>
+    <TenantId>your_tenant.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_EXT</PolicyId>
+  </BasePolicy>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="customSUSINoAuth" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="signInName" />
+        <OutputClaim ClaimTypeReferenceId="position1" />
+        <OutputClaim ClaimTypeReferenceId="position2" />
+        <OutputClaim ClaimTypeReferenceId="position3" />
+        <OutputClaim ClaimTypeReferenceId="code1" />
+        <OutputClaim ClaimTypeReferenceId="code2" />
+        <OutputClaim ClaimTypeReferenceId="code3" />
+        <OutputClaim ClaimTypeReferenceId="userOK" />
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub" DefaultValue="0"/>
+        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>
