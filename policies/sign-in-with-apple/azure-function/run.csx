@@ -1,5 +1,6 @@
 #r "Microsoft.IdentityModel.Tokens"
 #r "Newtonsoft.Json"
+#r "System.Security.Cryptography"
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+
 
 public static async Task<IActionResult> Run(HttpRequest req, ILogger log)
 {
