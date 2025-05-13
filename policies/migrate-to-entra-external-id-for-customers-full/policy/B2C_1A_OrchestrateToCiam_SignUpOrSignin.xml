@@ -11,7 +11,7 @@
 
   <BasePolicy>
     <TenantId>tenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_OrchestrateToCiam_Full</PolicyId>
+    <PolicyId>B2C_1A_Extension_OrchestrateToCiam_Full</PolicyId>
   </BasePolicy>
 
   <RelyingParty>

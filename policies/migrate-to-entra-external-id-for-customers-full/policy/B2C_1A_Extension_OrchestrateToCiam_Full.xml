@@ -1,8 +1,8 @@
 <TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0"
-	TenantId="tenant.onmicrosoft.com" PolicyId="B2C_1A_OrchestrateToCiam_Full"
-	PublicPolicyUri="http://tenant.onmicrosoft.com/B2C_1A_OrchestrateToCiam_Full"
+	TenantId="tenant.onmicrosoft.com" PolicyId="B2C_1A_Extension_OrchestrateToCiam_Full"
+	PublicPolicyUri="http://tenant.onmicrosoft.com/B2C_1A_Extension_OrchestrateToCiam_Full"
 	DeploymentMode="Development"
 	UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
 

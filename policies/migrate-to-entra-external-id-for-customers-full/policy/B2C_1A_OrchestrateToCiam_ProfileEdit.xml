@@ -5,18 +5,17 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="tenant.onmicrosoft.com"
-  PolicyId="B2C_1A_OrchestrateToCiam_Full_PasswordReset"
-  PublicPolicyUri="http://tenant.onmicrosoft.com/B2C_1A_OrchestrateToCiam_Full_PasswordReset"
-  DeploymentMode="Development" UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
-  >
+  PolicyId="B2C_1A_OrchestrateToCiam_Full_ProfileEdit"
+  PublicPolicyUri="http://tenant.onmicrosoft.com/B2C_1A_OrchestrateToCiam_Full_ProfileEdit"
+  DeploymentMode="Development" UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights">
 
   <BasePolicy>
     <TenantId>tenant.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_OrchestrateToCiam_Full</PolicyId>
+    <PolicyId>B2C_1A_Extension_OrchestrateToCiam_Full</PolicyId>
   </BasePolicy>
 
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="CIAM-PasswordReset" />
+    <DefaultUserJourney ReferenceId="CIAM-ProfileEdit" />
     <!-- Uncomment the following lines to enable Journey Insights and add the instrumentation key -->
     <!-- <UserJourneyBehaviors>
 			<JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
@@ -25,7 +24,8 @@
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
       <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="email" />
+        <OutputClaim ClaimTypeReferenceId="email"/>
+        <OutputClaim ClaimTypeReferenceId="signInName"/>
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
         <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
       </OutputClaims>

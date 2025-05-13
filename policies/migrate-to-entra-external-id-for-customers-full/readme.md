@@ -1,4 +1,4 @@
-# Azure AD B2C Hybrid Interface for Entra External ID
+# Azure AD B2C Interface for Entra External ID migration
 
 Please log any issues or questions in the repo.
 
@@ -10,7 +10,7 @@ This allows you to use B2C custom policies with the user data residing on an Ent
 
 This repo. was cloned from this [sample](https://github.com/azure-ad-b2c/samples/tree/master/policies/migrate-to-entra-external-id-for-customers)
 
-The original sample only implemented a subset of the API calls. This repo. implements them all. 
+The original sample implemented a subset of the API calls. This repo. implements them all. 
 
 This repo. also implements authentication using native auth. rather than ROPC.
 
