@@ -1,51 +1,12 @@
-# Azure AD B2C Hybrid Interface for Entra External ID
-
-Please log any issues or questions in the repo.
+# Upgrade ready architecture: AAD B2C to Entra External Id for Customers
 
 ## Summary
 
 This sample will use AAD B2C as the journey orchestrator, whilst creating and authenticating users in the Entra External Id tenant. This makes it easier in the future to move apps to Entra External Id without disruption to your users. This sample performs sign up/in with MFA using Azure AD B2C, whilst maintaining user profiles in the Entra External Id tenant.
 
-This allows you to use B2C custom policies with the user data residing on an Entra External ID tenant
+## How it works
 
-This repo. was cloned from this [sample](https://github.com/azure-ad-b2c/samples/tree/master/policies/migrate-to-entra-external-id-for-customers)
-
-The original sample only implemented a subset of the API calls. This repo. implements them all. 
-
-This repo. also implements authentication using native auth. rather than ROPC.
-
-The code also includes RP for "Profile Edit" and "Password Reset".
-
-## REST API
-
-There are REST API for:
-
-* "REST-CIAM-UserReadUsingObjectIdOrEmail"
-* "REST-CIAM-UserReadUsingAlternativeSecurityId"
-* "REST-CIAM-UserWriteUsingLogonEmail"
-* "REST-CIAM-UserWriteUsingAlternativeSecurityId"
-* "REST-login-NonInteractive-CIAM"
-* "REST-fetchUserProfile-CIAM"
-* "REST-CIAM-UserUpdateUsingLogonEmail"
-
-The source for the REST AI is an an Azure function but the repo. uses ngrok so those calls 
-need to be replaced with the actual function URL. 
-
-## Functionality
-
-The code handles:
-
-* Local account signup via link on the login page
-* Local account sign-in via login page using native authentication, not ROPC
-* Social account logins via federation buttons on the login page
-* MFA via SMS
-* Password reset via embedded link on the login page
-* Password reset via RP
-* Profile edit via RP
-
-## Original set up instructions - How it works
-
-Users are sent to the AAD B2C authentication endpoint. An Azure function orchestrates all Read/Write operations to the Entra External Id directory.
+Users are sent to the AAD B2C authentiaction endpoint. An Azure function orchestrates all Read/Write operations to the Entra External Id directory.
 
 ![High level design](media/high-level-design.png)
 
