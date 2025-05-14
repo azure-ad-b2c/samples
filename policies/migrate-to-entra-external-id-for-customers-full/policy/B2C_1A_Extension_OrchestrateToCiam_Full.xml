@@ -388,13 +388,13 @@
 	REST-login-NonInteractive-CIAM 				- login-NonInteractive
 	REST-fetchUserProfile-CIAM 
 	REST-CIAM-UserUpdatePhoneNumberUsingObjectId - AAD-UserWritePhoneNumberUsingObjectId
-	
 	-->
-
 
 	<ClaimsProviders>
 
-		<ClaimsProvider>
+		<!-- This is to test social logins. You can add any social login here  -->
+		<!-- TODO - Add endpoints and client_id and secret for the social login -->
+		 <ClaimsProvider>
 			<Domain>google.com</Domain>
 			<DisplayName>Google</DisplayName>
 			<TechnicalProfiles>
@@ -828,6 +828,7 @@
 
 				<!-- REST API -->
 
+				<!-- TODO - Set the ServiceUrl with your own REST API endpoints -->
 				<TechnicalProfile Id="REST-CIAM-UserReadUsingObjectIdOrEmail">
 					<DisplayName>Write user into CIAM tenant</DisplayName>
 					<Protocol Name="Proprietary"
