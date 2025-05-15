@@ -31,6 +31,8 @@ There are REST API for:
 The source for the REST AI is an an Azure function but the repo. uses ngrok so those calls 
 need to be replaced with the actual function URL. 
 
+Use "ngrok http 7257" if you want to use ngrok. (This allows you to run on localhost rather  then using an Azure function).
+
 ## Functionality
 
 The code handles:
