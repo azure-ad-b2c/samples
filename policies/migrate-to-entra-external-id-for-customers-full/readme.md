@@ -45,6 +45,12 @@ The code handles:
 * Password reset via RP
 * Profile edit via RP
 
+## Setup ##
+
+The “GraphCallsFromB2CTenant” application registration needs the following permissions:
+
+![Permissions](media/Permissions.png)
+
 ## Original set up instructions - How it works
 
 Users are sent to the AAD B2C authentication endpoint. An Azure function orchestrates all Read/Write operations to the Entra External Id directory.
