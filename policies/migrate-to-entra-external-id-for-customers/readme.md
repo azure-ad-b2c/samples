@@ -6,7 +6,7 @@ This sample will use AAD B2C as the journey orchestrator, whilst creating and au
 
 ## How it works
 
-Users are sent to the AAD B2C authentiaction endpoint. An Azure function orchestrates all Read/Write operations to the Entra External Id directory.
+Users are sent to the AAD B2C authentication endpoint. An Azure function orchestrates all Read/Write operations to the Entra External Id directory.
 
 ![High level design](media/high-level-design.png)
 
