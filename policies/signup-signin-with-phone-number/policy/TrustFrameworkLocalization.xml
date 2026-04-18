@@ -379,9 +379,70 @@
       <LocalizedResources Id="api.phonefactor.sv">
         <LocalizedCollections></LocalizedCollections>
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="countryList">
-            <![CDATA[{"NO":"Norge","SE":"Sverige","DK":"Danmark","FI":"Finland","AF":"Afghanistan","AL":"Albania","DZ":"Algerie","AS":"Amerikansk Samoa","AD":"Andorra","AO":"Angola","AI":"Anguilla","AQ":"Antarktis","AG":"Antigua og Barbuda","AR":"Argentina","AM":"Armenia","AW":"Aruba","AZ":"Aserbajdsjan","AU":"Australia","BS":"Bahamas","BH":"Bahrain","BD":"Bangladesh","BB":"Barbados","BE":"Belgia","BZ":"Belize","BJ":"Benin","BM":"Bermuda","BT":"Bhutan","BO":"Bolivia","BQ":"Bonaire","BA":"Bosnia-Hercegovina","BW":"Botswana","BV":"Bouvetøya","BR":"Brasil","BN":"Brunei","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","CV":"Cabo Verde","CA":"Canada","KY":"Caymanøyene","CL":"Chile","CX":"Christmasøya","CO":"Colombia","CK":"Cookøyene","CR":"Costa Rica","CU":"Cuba","CW":"Curaçao","VI":"De amerikanske jomfruøyene","VG":"De britiske jomfruøyene","AE":"De forente arabiske emirater","TF":"De franske sørterritorier","DO":"Den dominikanske republikk","PS":"Den palestinske selvstyremyndighet","CF":"Den sentralafrikanske republikk","IO":"Det britiske territoriet i Indiahavet","DJ":"Djibouti","DM":"Dominica","EC":"Ecuador","EG":"Egypt","GQ":"Ekvatorial-Guinea","SV":"El Salvador","CI":"Elfenbenskysten (Côte d’Ivoire)","ER":"Eritrea","EE":"Estland","SZ":"Eswatini","ET":"Etiopia","FK":"Falklandsøyene","FJ":"Fiji","PH":"Filippinene","FR":"Frankrike","GF":"Fransk Guyana","PF":"Fransk Polynesia","FO":"Færøyene","GA":"Gabon","GM":"Gambia","GE":"Georgia","GH":"Ghana","GI":"Gibraltar","GD":"Grenada","GL":"Grønland","GP":"Guadeloupe","GU":"Guam","GT":"Guatemala","GG":"Guernsey","GN":"Guinea","GW":"Guinea-Bissau","GY":"Guyana","HT":"Haiti","GR":"Hellas","HN":"Honduras","HK":"Hongkong SAR","BY":"Hviterussland","IN":"India","ID":"Indonesia","IQ":"Irak","IR":"Iran","IE":"Irland","IS":"Island","IL":"Israel","IT":"Italia","JM":"Jamaica","JP":"Japan","YE":"Jemen","JE":"Jersey","JO":"Jordan","KH":"Kambodsja","CM":"Kamerun","KZ":"Kasakhstan","KE":"Kenya","CN":"Kina","KG":"Kirgisistan","KI":"Kiribati","CC":"Kokosøyene","KM":"Komorene","CD":"Kongo","CG":"Kongo-Brazzaville","HR":"Kroatia","KW":"Kuwait","CY":"Kypros","LA":"Laos","LV":"Latvia","LS":"Lesotho","LB":"Libanon","LR":"Liberia","LY":"Libya","LI":"Liechtenstein","LT":"Litauen","LU":"Luxemburg","MO":"Macao SAR","MG":"Madagaskar","MW":"Malawi","MY":"Malaysia","MV":"Maldivene","ML":"Mali","MT":"Malta","IM":"Man","MA":"Marokko","MH":"Marshalløyene","MQ":"Martinique","MR":"Mauritania","MU":"Mauritius","YT":"Mayotte","MX":"Mexico","FM":"Mikronesiaføderasjonen","MD":"Moldova","MC":"Monaco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MZ":"Mosambik","MM":"Myanmar","NA":"Namibia","NR":"Nauru","NL":"Nederland","NP":"Nepal","NZ":"New Zealand","NI":"Nicaragua","NE":"Niger","NG":"Nigeria","NU":"Niue","KP":"Nord-Korea","MK":"Nord-Makedonia","MP":"Nord-Marianene","NF":"Norfolkøya","NC":"Ny-Caledonia","OM":"Oman","PK":"Pakistan","PW":"Palau","PA":"Panama","PG":"Papua Ny-Guinea","PY":"Paraguay","PE":"Peru","PN":"Pitcairn","PL":"Polen","PT":"Portugal","PR":"Puerto Rico","QA":"Qatar","RE":"Réunion","RO":"Romania","RU":"Russland","RW":"Rwanda","KN":"Saint Kitts og Nevis","BL":"Saint-Barthélemy","MF":"Saint-Martin","PM":"Saint-Pierre-et-Miquelon","SB":"Salomonøyene","WS":"Samoa","SM":"San Marino","ST":"São Tomé og Príncipe","SA":"Saudi-Arabia","SN":"Senegal","RS":"Serbia","SC":"Seychellene","SL":"Sierra Leone","SG":"Singapore","SX":"Sint Maarten","SK":"Slovakia","SI":"Slovenia","SO":"Somalia","ES":"Spania","LK":"Sri Lanka","SH":"St. Helena, Ascension, Tristan da Cunha","LC":"St. Lucia","VC":"St. Vincent og Grenadinene","GB":"Storbritannia","SD":"Sudan","SR":"Surinam","SJ":"Svalbard","CH":"Sveits","SY":"Syria","ZA":"Sør-Afrika","GS":"Sør-Georgia og Sør-Sandwichøyene","KR":"Sør-Korea","SS":"Sør-Sudan","TJ":"Tadsjikistan","TW":"Taiwan","TZ":"Tanzania","HM":"Territoriet Heard- og McDonaldøyene","TH":"Thailand","TL":"Timor-Leste","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad og Tobago","TD":"Tsjad","CZ":"Tsjekkia","TN":"Tunisia","TM":"Turkmenistan","TC":"Turks- og Caicosøyene","TV":"Tuvalu","TR":"Tyrkia","DE":"Tyskland","UG":"Uganda","UA":"Ukraina","HU":"Ungarn","UY":"Uruguay","US":"USA","UM":"USAs ytre øyer","UZ":"Usbekistan","VU":"Vanuatu","VA":"Vatikanstaten","VE":"Venezuela","VN":"Vietnam","WF":"Wallis og Futuna","ZM":"Zambia","ZW":"Zimbabwe","AT":"Østerrike","AX":"Åland"}]]>
-          </LocalizedString>
+          <!-- SMS toll fraud (IRSF) mitigation — countryList is an ALLOW-LIST.
+               Only country codes listed here will be selectable in the MFA phone prompt;
+               all others are blocked at the UX layer.
+          
+               DEFAULT (shipped):  Nordics only — matches this sample's nb/sv localization.
+               Action required:    expand the JSON below with countries where your users are.
+                                   Do NOT paste the full world list — uncomment entries one by one.
+          
+               See: https://learn.microsoft.com/en-us/azure/active-directory-b2c/phone-based-mfa#mitigate-fraudulent-sign-ups-for-custom-policy -->
+          <LocalizedString ElementType="UxElement" StringId="countryList"><![CDATA[{"NO":"Norge","SE":"Sverige","DK":"Danmark","FI":"Finland","IS":"Island","FO":"Färöarna","AX":"Åland"}]]></LocalizedString>
+
+          <!-- ============================================================================
+               REFERENCE ONLY — full legacy country list, split into RISK TIERS.
+               Copy entries from the "Lower-risk" tier into the active countryList above
+               as your business expands. Keep HIGH-RISK entries commented unless you have
+               a documented business need AND complementary controls (CAPTCHA, Conditional
+               Access, Azure Monitor anomaly alerts, per-tenant SMS spending cap).
+               ============================================================================
+
+               ⚠️  HIGH-RISK (IRSF / SMS-pumping hotspots) — DO NOT UNCOMMENT WITHOUT REVIEW:
+                   "AF":"Afghanistan", "AL":"Albania", "DZ":"Algerie", "AI":"Anguilla", "AQ":"Antarktis", "AZ":"Aserbajdsjan"
+                   "BD":"Bangladesh", "BJ":"Benin", "BT":"Bhutan", "BV":"Bouvetøya", "BI":"Burundi", "CK":"Cookøyene"
+                   "CU":"Cuba", "TF":"De franske sørterritorier", "CF":"Den sentralafrikanske republikk", "IO":"Det britiske territoriet i Indiahavet", "DJ":"Djibouti", "DM":"Dominica"
+                   "GQ":"Ekvatorial-Guinea", "CI":"Elfenbenskysten (Côte d’Ivoire)", "ER":"Eritrea", "ET":"Etiopia", "FK":"Falklandsøyene", "GA":"Gabon"
+                   "GM":"Gambia", "GH":"Ghana", "GD":"Grenada", "GN":"Guinea", "GW":"Guinea-Bissau", "IQ":"Irak"
+                   "IR":"Iran", "YE":"Jemen", "KH":"Kambodsja", "CM":"Kamerun", "KZ":"Kasakhstan", "KE":"Kenya"
+                   "KG":"Kirgisistan", "KI":"Kiribati", "CD":"Kongo", "CG":"Kongo-Brazzaville", "LA":"Laos", "LB":"Libanon"
+                   "LR":"Liberia", "LY":"Libya", "MG":"Madagaskar", "MW":"Malawi", "MV":"Maldivene", "ML":"Mali"
+                   "MA":"Marokko", "MH":"Marshalløyene", "MR":"Mauritania", "FM":"Mikronesiaføderasjonen", "MS":"Montserrat", "MZ":"Mosambik"
+                   "MM":"Myanmar", "NR":"Nauru", "NP":"Nepal", "NE":"Niger", "NG":"Nigeria", "NU":"Niue"
+                   "KP":"Nord-Korea", "PK":"Pakistan", "PW":"Palau", "RU":"Russland", "RW":"Rwanda", "KN":"Saint Kitts og Nevis"
+                   "BL":"Saint-Barthélemy", "PM":"Saint-Pierre-et-Miquelon", "SN":"Senegal", "SL":"Sierra Leone", "SO":"Somalia", "LK":"Sri Lanka"
+                   "SH":"St. Helena, Ascension, Tristan da Cunha", "LC":"St. Lucia", "VC":"St. Vincent og Grenadinene", "SD":"Sudan", "SJ":"Svalbard", "SY":"Syria"
+                   "GS":"Sør-Georgia og Sør-Sandwichøyene", "SS":"Sør-Sudan", "TJ":"Tadsjikistan", "TZ":"Tanzania", "HM":"Territoriet Heard- og McDonaldøyene", "TG":"Togo"
+                   "TK":"Tokelau", "TO":"Tonga", "TD":"Tsjad", "TN":"Tunisia", "TM":"Turkmenistan", "TC":"Turks- og Caicosøyene"
+                   "TV":"Tuvalu", "UG":"Uganda", "UA":"Ukraina", "UZ":"Usbekistan", "VN":"Vietnam", "WF":"Wallis og Futuna"
+                   "ZM":"Zambia", "ZW":"Zimbabwe"
+
+               Lower-risk (OECD / EU / major commercial markets — still review before enabling):
+                   "AS":"Amerikansk Samoa", "AD":"Andorra", "AO":"Angola", "AG":"Antigua og Barbuda", "AR":"Argentina", "AM":"Armenia"
+                   "AW":"Aruba", "AU":"Australia", "BS":"Bahamas", "BH":"Bahrain", "BB":"Barbados", "BE":"Belgia"
+                   "BZ":"Belize", "BM":"Bermuda", "BO":"Bolivia", "BQ":"Bonaire", "BA":"Bosnia-Hercegovina", "BW":"Botswana"
+                   "BR":"Brasil", "BN":"Brunei", "BG":"Bulgaria", "BF":"Burkina Faso", "CV":"Cabo Verde", "CA":"Canada"
+                   "KY":"Caymanøyene", "CL":"Chile", "CX":"Christmasøya", "CO":"Colombia", "CR":"Costa Rica", "CW":"Curaçao"
+                   "VI":"De amerikanske jomfruøyene", "VG":"De britiske jomfruøyene", "AE":"De forente arabiske emirater", "DO":"Den dominikanske republikk", "PS":"Den palestinske selvstyremyndighet", "EC":"Ecuador"
+                   "EG":"Egypt", "SV":"El Salvador", "EE":"Estland", "SZ":"Eswatini", "FJ":"Fiji", "PH":"Filippinene"
+                   "FR":"Frankrike", "GF":"Fransk Guyana", "PF":"Fransk Polynesia", "GE":"Georgia", "GI":"Gibraltar", "GL":"Grønland"
+                   "GP":"Guadeloupe", "GU":"Guam", "GT":"Guatemala", "GG":"Guernsey", "GY":"Guyana", "HT":"Haiti"
+                   "GR":"Hellas", "HN":"Honduras", "HK":"Hongkong SAR", "BY":"Hviterussland", "IN":"India", "ID":"Indonesia"
+                   "IE":"Irland", "IL":"Israel", "IT":"Italia", "JM":"Jamaica", "JP":"Japan", "JE":"Jersey"
+                   "JO":"Jordan", "CN":"Kina", "CC":"Kokosøyene", "KM":"Komorene", "HR":"Kroatia", "KW":"Kuwait"
+                   "CY":"Kypros", "LV":"Latvia", "LS":"Lesotho", "LI":"Liechtenstein", "LT":"Litauen", "LU":"Luxemburg"
+                   "MO":"Macao SAR", "MY":"Malaysia", "MT":"Malta", "IM":"Man", "MQ":"Martinique", "MU":"Mauritius"
+                   "YT":"Mayotte", "MX":"Mexico", "MD":"Moldova", "MC":"Monaco", "MN":"Mongolia", "ME":"Montenegro"
+                   "NA":"Namibia", "NL":"Nederland", "NZ":"New Zealand", "NI":"Nicaragua", "MK":"Nord-Makedonia", "MP":"Nord-Marianene"
+                   "NF":"Norfolkøya", "NC":"Ny-Caledonia", "OM":"Oman", "PA":"Panama", "PG":"Papua Ny-Guinea", "PY":"Paraguay"
+                   "PE":"Peru", "PN":"Pitcairn", "PL":"Polen", "PT":"Portugal", "PR":"Puerto Rico", "QA":"Qatar"
+                   "RE":"Réunion", "RO":"Romania", "MF":"Saint-Martin", "SB":"Salomonøyene", "WS":"Samoa", "SM":"San Marino"
+                   "ST":"São Tomé og Príncipe", "SA":"Saudi-Arabia", "RS":"Serbia", "SC":"Seychellene", "SG":"Singapore", "SX":"Sint Maarten"
+                   "SK":"Slovakia", "SI":"Slovenia", "ES":"Spania", "GB":"Storbritannia", "SR":"Surinam", "CH":"Sveits"
+                   "ZA":"Sør-Afrika", "KR":"Sør-Korea", "TW":"Taiwan", "TH":"Thailand", "TL":"Timor-Leste", "TT":"Trinidad og Tobago"
+                   "CZ":"Tsjekkia", "TR":"Tyrkia", "DE":"Tyskland", "HU":"Ungarn", "UY":"Uruguay", "US":"USA"
+                   "UM":"USAs ytre øyer", "VU":"Vanuatu", "VA":"Vatikanstaten", "VE":"Venezuela", "AT":"Østerrike"
+           -->
           <!-- <LocalizedString ElementType="UxElement" StringId="button_continue">Fortsätt</LocalizedString> -->
           <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
         </LocalizedStrings>
@@ -853,9 +914,70 @@
       <LocalizedResources Id="api.phonefactor.nb">
         <LocalizedCollections></LocalizedCollections>
         <LocalizedStrings>
-          <LocalizedString ElementType="UxElement" StringId="countryList">
-            <![CDATA[{"NO":"Norge","SE":"Sverige","DK":"Danmark","FI":"Finland","AF":"Afghanistan","AL":"Albania","DZ":"Algerie","AS":"Amerikansk Samoa","AD":"Andorra","AO":"Angola","AI":"Anguilla","AQ":"Antarktis","AG":"Antigua og Barbuda","AR":"Argentina","AM":"Armenia","AW":"Aruba","AZ":"Aserbajdsjan","AU":"Australia","BS":"Bahamas","BH":"Bahrain","BD":"Bangladesh","BB":"Barbados","BE":"Belgia","BZ":"Belize","BJ":"Benin","BM":"Bermuda","BT":"Bhutan","BO":"Bolivia","BQ":"Bonaire","BA":"Bosnia-Hercegovina","BW":"Botswana","BV":"Bouvetøya","BR":"Brasil","BN":"Brunei","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","CV":"Cabo Verde","CA":"Canada","KY":"Caymanøyene","CL":"Chile","CX":"Christmasøya","CO":"Colombia","CK":"Cookøyene","CR":"Costa Rica","CU":"Cuba","CW":"Curaçao","VI":"De amerikanske jomfruøyene","VG":"De britiske jomfruøyene","AE":"De forente arabiske emirater","TF":"De franske sørterritorier","DO":"Den dominikanske republikk","PS":"Den palestinske selvstyremyndighet","CF":"Den sentralafrikanske republikk","IO":"Det britiske territoriet i Indiahavet","DJ":"Djibouti","DM":"Dominica","EC":"Ecuador","EG":"Egypt","GQ":"Ekvatorial-Guinea","SV":"El Salvador","CI":"Elfenbenskysten (Côte d’Ivoire)","ER":"Eritrea","EE":"Estland","SZ":"Eswatini","ET":"Etiopia","FK":"Falklandsøyene","FJ":"Fiji","PH":"Filippinene","FR":"Frankrike","GF":"Fransk Guyana","PF":"Fransk Polynesia","FO":"Færøyene","GA":"Gabon","GM":"Gambia","GE":"Georgia","GH":"Ghana","GI":"Gibraltar","GD":"Grenada","GL":"Grønland","GP":"Guadeloupe","GU":"Guam","GT":"Guatemala","GG":"Guernsey","GN":"Guinea","GW":"Guinea-Bissau","GY":"Guyana","HT":"Haiti","GR":"Hellas","HN":"Honduras","HK":"Hongkong SAR","BY":"Hviterussland","IN":"India","ID":"Indonesia","IQ":"Irak","IR":"Iran","IE":"Irland","IS":"Island","IL":"Israel","IT":"Italia","JM":"Jamaica","JP":"Japan","YE":"Jemen","JE":"Jersey","JO":"Jordan","KH":"Kambodsja","CM":"Kamerun","KZ":"Kasakhstan","KE":"Kenya","CN":"Kina","KG":"Kirgisistan","KI":"Kiribati","CC":"Kokosøyene","KM":"Komorene","CD":"Kongo","CG":"Kongo-Brazzaville","HR":"Kroatia","KW":"Kuwait","CY":"Kypros","LA":"Laos","LV":"Latvia","LS":"Lesotho","LB":"Libanon","LR":"Liberia","LY":"Libya","LI":"Liechtenstein","LT":"Litauen","LU":"Luxemburg","MO":"Macao SAR","MG":"Madagaskar","MW":"Malawi","MY":"Malaysia","MV":"Maldivene","ML":"Mali","MT":"Malta","IM":"Man","MA":"Marokko","MH":"Marshalløyene","MQ":"Martinique","MR":"Mauritania","MU":"Mauritius","YT":"Mayotte","MX":"Mexico","FM":"Mikronesiaføderasjonen","MD":"Moldova","MC":"Monaco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MZ":"Mosambik","MM":"Myanmar","NA":"Namibia","NR":"Nauru","NL":"Nederland","NP":"Nepal","NZ":"New Zealand","NI":"Nicaragua","NE":"Niger","NG":"Nigeria","NU":"Niue","KP":"Nord-Korea","MK":"Nord-Makedonia","MP":"Nord-Marianene","NF":"Norfolkøya","NC":"Ny-Caledonia","OM":"Oman","PK":"Pakistan","PW":"Palau","PA":"Panama","PG":"Papua Ny-Guinea","PY":"Paraguay","PE":"Peru","PN":"Pitcairn","PL":"Polen","PT":"Portugal","PR":"Puerto Rico","QA":"Qatar","RE":"Réunion","RO":"Romania","RU":"Russland","RW":"Rwanda","KN":"Saint Kitts og Nevis","BL":"Saint-Barthélemy","MF":"Saint-Martin","PM":"Saint-Pierre-et-Miquelon","SB":"Salomonøyene","WS":"Samoa","SM":"San Marino","ST":"São Tomé og Príncipe","SA":"Saudi-Arabia","SN":"Senegal","RS":"Serbia","SC":"Seychellene","SL":"Sierra Leone","SG":"Singapore","SX":"Sint Maarten","SK":"Slovakia","SI":"Slovenia","SO":"Somalia","ES":"Spania","LK":"Sri Lanka","SH":"St. Helena, Ascension, Tristan da Cunha","LC":"St. Lucia","VC":"St. Vincent og Grenadinene","GB":"Storbritannia","SD":"Sudan","SR":"Surinam","SJ":"Svalbard","CH":"Sveits","SY":"Syria","ZA":"Sør-Afrika","GS":"Sør-Georgia og Sør-Sandwichøyene","KR":"Sør-Korea","SS":"Sør-Sudan","TJ":"Tadsjikistan","TW":"Taiwan","TZ":"Tanzania","HM":"Territoriet Heard- og McDonaldøyene","TH":"Thailand","TL":"Timor-Leste","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad og Tobago","TD":"Tsjad","CZ":"Tsjekkia","TN":"Tunisia","TM":"Turkmenistan","TC":"Turks- og Caicosøyene","TV":"Tuvalu","TR":"Tyrkia","DE":"Tyskland","UG":"Uganda","UA":"Ukraina","HU":"Ungarn","UY":"Uruguay","US":"USA","UM":"USAs ytre øyer","UZ":"Usbekistan","VU":"Vanuatu","VA":"Vatikanstaten","VE":"Venezuela","VN":"Vietnam","WF":"Wallis og Futuna","ZM":"Zambia","ZW":"Zimbabwe","AT":"Østerrike","AX":"Åland"}]]>
-          </LocalizedString>
+          <!-- SMS toll fraud (IRSF) mitigation — countryList is an ALLOW-LIST.
+               Only country codes listed here will be selectable in the MFA phone prompt;
+               all others are blocked at the UX layer.
+          
+               DEFAULT (shipped):  Nordics only — matches this sample's nb/sv localization.
+               Action required:    expand the JSON below with countries where your users are.
+                                   Do NOT paste the full world list — uncomment entries one by one.
+          
+               See: https://learn.microsoft.com/en-us/azure/active-directory-b2c/phone-based-mfa#mitigate-fraudulent-sign-ups-for-custom-policy -->
+          <LocalizedString ElementType="UxElement" StringId="countryList"><![CDATA[{"NO":"Norge","SE":"Sverige","DK":"Danmark","FI":"Finland","IS":"Island","FO":"Færøyene","AX":"Åland"}]]></LocalizedString>
+
+          <!-- ============================================================================
+               REFERENCE ONLY — full legacy country list, split into RISK TIERS.
+               Copy entries from the "Lower-risk" tier into the active countryList above
+               as your business expands. Keep HIGH-RISK entries commented unless you have
+               a documented business need AND complementary controls (CAPTCHA, Conditional
+               Access, Azure Monitor anomaly alerts, per-tenant SMS spending cap).
+               ============================================================================
+
+               ⚠️  HIGH-RISK (IRSF / SMS-pumping hotspots) — DO NOT UNCOMMENT WITHOUT REVIEW:
+                   "AF":"Afghanistan", "AL":"Albania", "DZ":"Algerie", "AI":"Anguilla", "AQ":"Antarktis", "AZ":"Aserbajdsjan"
+                   "BD":"Bangladesh", "BJ":"Benin", "BT":"Bhutan", "BV":"Bouvetøya", "BI":"Burundi", "CK":"Cookøyene"
+                   "CU":"Cuba", "TF":"De franske sørterritorier", "CF":"Den sentralafrikanske republikk", "IO":"Det britiske territoriet i Indiahavet", "DJ":"Djibouti", "DM":"Dominica"
+                   "GQ":"Ekvatorial-Guinea", "CI":"Elfenbenskysten (Côte d’Ivoire)", "ER":"Eritrea", "ET":"Etiopia", "FK":"Falklandsøyene", "GA":"Gabon"
+                   "GM":"Gambia", "GH":"Ghana", "GD":"Grenada", "GN":"Guinea", "GW":"Guinea-Bissau", "IQ":"Irak"
+                   "IR":"Iran", "YE":"Jemen", "KH":"Kambodsja", "CM":"Kamerun", "KZ":"Kasakhstan", "KE":"Kenya"
+                   "KG":"Kirgisistan", "KI":"Kiribati", "CD":"Kongo", "CG":"Kongo-Brazzaville", "LA":"Laos", "LB":"Libanon"
+                   "LR":"Liberia", "LY":"Libya", "MG":"Madagaskar", "MW":"Malawi", "MV":"Maldivene", "ML":"Mali"
+                   "MA":"Marokko", "MH":"Marshalløyene", "MR":"Mauritania", "FM":"Mikronesiaføderasjonen", "MS":"Montserrat", "MZ":"Mosambik"
+                   "MM":"Myanmar", "NR":"Nauru", "NP":"Nepal", "NE":"Niger", "NG":"Nigeria", "NU":"Niue"
+                   "KP":"Nord-Korea", "PK":"Pakistan", "PW":"Palau", "RU":"Russland", "RW":"Rwanda", "KN":"Saint Kitts og Nevis"
+                   "BL":"Saint-Barthélemy", "PM":"Saint-Pierre-et-Miquelon", "SN":"Senegal", "SL":"Sierra Leone", "SO":"Somalia", "LK":"Sri Lanka"
+                   "SH":"St. Helena, Ascension, Tristan da Cunha", "LC":"St. Lucia", "VC":"St. Vincent og Grenadinene", "SD":"Sudan", "SJ":"Svalbard", "SY":"Syria"
+                   "GS":"Sør-Georgia og Sør-Sandwichøyene", "SS":"Sør-Sudan", "TJ":"Tadsjikistan", "TZ":"Tanzania", "HM":"Territoriet Heard- og McDonaldøyene", "TG":"Togo"
+                   "TK":"Tokelau", "TO":"Tonga", "TD":"Tsjad", "TN":"Tunisia", "TM":"Turkmenistan", "TC":"Turks- og Caicosøyene"
+                   "TV":"Tuvalu", "UG":"Uganda", "UA":"Ukraina", "UZ":"Usbekistan", "VN":"Vietnam", "WF":"Wallis og Futuna"
+                   "ZM":"Zambia", "ZW":"Zimbabwe"
+
+               Lower-risk (OECD / EU / major commercial markets — still review before enabling):
+                   "AS":"Amerikansk Samoa", "AD":"Andorra", "AO":"Angola", "AG":"Antigua og Barbuda", "AR":"Argentina", "AM":"Armenia"
+                   "AW":"Aruba", "AU":"Australia", "BS":"Bahamas", "BH":"Bahrain", "BB":"Barbados", "BE":"Belgia"
+                   "BZ":"Belize", "BM":"Bermuda", "BO":"Bolivia", "BQ":"Bonaire", "BA":"Bosnia-Hercegovina", "BW":"Botswana"
+                   "BR":"Brasil", "BN":"Brunei", "BG":"Bulgaria", "BF":"Burkina Faso", "CV":"Cabo Verde", "CA":"Canada"
+                   "KY":"Caymanøyene", "CL":"Chile", "CX":"Christmasøya", "CO":"Colombia", "CR":"Costa Rica", "CW":"Curaçao"
+                   "VI":"De amerikanske jomfruøyene", "VG":"De britiske jomfruøyene", "AE":"De forente arabiske emirater", "DO":"Den dominikanske republikk", "PS":"Den palestinske selvstyremyndighet", "EC":"Ecuador"
+                   "EG":"Egypt", "SV":"El Salvador", "EE":"Estland", "SZ":"Eswatini", "FJ":"Fiji", "PH":"Filippinene"
+                   "FR":"Frankrike", "GF":"Fransk Guyana", "PF":"Fransk Polynesia", "GE":"Georgia", "GI":"Gibraltar", "GL":"Grønland"
+                   "GP":"Guadeloupe", "GU":"Guam", "GT":"Guatemala", "GG":"Guernsey", "GY":"Guyana", "HT":"Haiti"
+                   "GR":"Hellas", "HN":"Honduras", "HK":"Hongkong SAR", "BY":"Hviterussland", "IN":"India", "ID":"Indonesia"
+                   "IE":"Irland", "IL":"Israel", "IT":"Italia", "JM":"Jamaica", "JP":"Japan", "JE":"Jersey"
+                   "JO":"Jordan", "CN":"Kina", "CC":"Kokosøyene", "KM":"Komorene", "HR":"Kroatia", "KW":"Kuwait"
+                   "CY":"Kypros", "LV":"Latvia", "LS":"Lesotho", "LI":"Liechtenstein", "LT":"Litauen", "LU":"Luxemburg"
+                   "MO":"Macao SAR", "MY":"Malaysia", "MT":"Malta", "IM":"Man", "MQ":"Martinique", "MU":"Mauritius"
+                   "YT":"Mayotte", "MX":"Mexico", "MD":"Moldova", "MC":"Monaco", "MN":"Mongolia", "ME":"Montenegro"
+                   "NA":"Namibia", "NL":"Nederland", "NZ":"New Zealand", "NI":"Nicaragua", "MK":"Nord-Makedonia", "MP":"Nord-Marianene"
+                   "NF":"Norfolkøya", "NC":"Ny-Caledonia", "OM":"Oman", "PA":"Panama", "PG":"Papua Ny-Guinea", "PY":"Paraguay"
+                   "PE":"Peru", "PN":"Pitcairn", "PL":"Polen", "PT":"Portugal", "PR":"Puerto Rico", "QA":"Qatar"
+                   "RE":"Réunion", "RO":"Romania", "MF":"Saint-Martin", "SB":"Salomonøyene", "WS":"Samoa", "SM":"San Marino"
+                   "ST":"São Tomé og Príncipe", "SA":"Saudi-Arabia", "RS":"Serbia", "SC":"Seychellene", "SG":"Singapore", "SX":"Sint Maarten"
+                   "SK":"Slovakia", "SI":"Slovenia", "ES":"Spania", "GB":"Storbritannia", "SR":"Surinam", "CH":"Sveits"
+                   "ZA":"Sør-Afrika", "KR":"Sør-Korea", "TW":"Taiwan", "TH":"Thailand", "TL":"Timor-Leste", "TT":"Trinidad og Tobago"
+                   "CZ":"Tsjekkia", "TR":"Tyrkia", "DE":"Tyskland", "HU":"Ungarn", "UY":"Uruguay", "US":"USA"
+                   "UM":"USAs ytre øyer", "VU":"Vanuatu", "VA":"Vatikanstaten", "VE":"Venezuela", "AT":"Østerrike"
+           -->
           <!-- <LocalizedString ElementType="UxElement" StringId="button_continue">Opprett</LocalizedString> -->
           <LocalizedString ElementType="UxElement" StringId="button_cancel">Avbryt</LocalizedString>
         </LocalizedStrings>

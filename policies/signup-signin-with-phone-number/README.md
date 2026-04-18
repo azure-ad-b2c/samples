@@ -1,5 +1,45 @@
 # A B2C IEF Custom Policy which allows login via Phone Number (OTP)
 
+## ⚠️ Security Warning — SMS Toll Fraud (IRSF)
+
+**Before deploying phone-based authentication in production, implement SMS toll fraud mitigations.**
+
+Azure AD B2C phone-based authentication sends SMS to all supported countries by default without built-in geo-restriction or spending caps. This creates exposure to [International Revenue Share Fraud (IRSF)](https://en.wikipedia.org/wiki/International_revenue_share_fraud), where attackers programmatically trigger SMS OTP deliveries to premium-rate numbers, generating significant costs.
+
+**Recommended mitigations:**
+
+1. **Restrict country codes** — Use the `countryList` allow-list to limit SMS to countries where your users are located. A ready-to-paste snippet is provided below.
+2. **Enable CAPTCHA** — [Add CAPTCHA to sign-up and sign-in](https://learn.microsoft.com/en-us/azure/active-directory-b2c/add-captcha) to prevent automated attacks.
+3. **Conditional Access** — [Block sign-ins based on location](https://learn.microsoft.com/en-us/azure/active-directory-b2c/conditional-access-user-flow).
+4. **Monitor** — Use the [Azure Monitor workbook for phone authentication failures](https://learn.microsoft.com/en-us/azure/active-directory-b2c/phone-based-mfa) to detect anomalies.
+
+👉 Full mitigation guide: [Phone-based MFA — Mitigate fraudulent sign-ups for custom policy](https://learn.microsoft.com/en-us/azure/active-directory-b2c/phone-based-mfa#mitigate-fraudulent-sign-ups-for-custom-policy)
+
+### `countryList` allow-list — now enforced out-of-the-box
+
+This sample now ships with a **Nordic-only allow-list** (`NO`, `SE`, `DK`, `FI`, + `IS` / `FO` / `AX` on the Nordic localizations). All other country codes are blocked at the UX layer — SMS cannot be triggered to them.
+
+The enforcement lives in **two places**, both edited in this PR:
+
+1. **[`policy/TrustFrameworkLocalization.xml`](policy/TrustFrameworkLocalization.xml)** — `countryList` in the `api.phonefactor.sv` and `api.phonefactor.nb` `LocalizedResources`. The previous full world list (~240 countries) has been split into two commented reference tiers right below the active allow-list:
+   - ⚠️ **HIGH-RISK (IRSF / SMS-pumping hotspots)** — must not be uncommented without complementary controls (CAPTCHA, Conditional Access, Azure Monitor anomaly alerts, per-tenant SMS spending cap).
+   - Lower-risk (OECD / EU / major commercial markets) — still review before enabling.
+
+2. **[`policy/phone-signup-signin.xml`](policy/phone-signup-signin.xml)** — a new `BuildingBlocks > Localization` block at the top of the relying party policy adds the same Nordic allow-list for the default English UX path, alongside a prepended `api.phonefactor` `ContentDefinition` that wires in `api.phonefactor.en`.
+
+### Action required before production
+
+Extend the `countryList` JSON in both files with the ISO 3166-1 alpha-2 codes of the countries where your users are. **Do not paste a global list** — each entry opens an SMS egress path that an attacker can pivot to.
+
+```xml
+<!-- policy/phone-signup-signin.xml — extend this JSON -->
+<LocalizedString ElementType="UxElement" StringId="countryList"><![CDATA[{"NO":"Norway","SE":"Sweden","DK":"Denmark","FI":"Finland","IS":"Iceland","FR":"France","US":"United States"}]]></LocalizedString>
+```
+
+Apply the same edit to the `api.phonefactor.sv` and `api.phonefactor.nb` entries in `TrustFrameworkLocalization.xml` with localized country names.
+
+---
+
 ## Updated version notes
 This sample has been updated. The previous version is in the zip file [phone_SUSI_old.zip](policy/phone_SUSI_old.zip) for your conveniance.
 

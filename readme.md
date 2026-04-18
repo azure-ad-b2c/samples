@@ -4,6 +4,10 @@
 
 # Azure Active Directory B2C: Custom CIAM User Journeys 
 
+> ## ⚠️ Security Notice — SMS Toll Fraud (IRSF)
+>
+> Samples that use **phone-based authentication** (SMS OTP, voice call) carry financial risk if deployed without fraud mitigations. The [`signup-signin-with-phone-number`](policies/signup-signin-with-phone-number/#️-security-warning--sms-toll-fraud-irsf) sample has a dedicated security section with a ready-to-paste `countryList` allow-list snippet (the recommended first mitigation), and the [full mitigation guide](https://learn.microsoft.com/en-us/azure/active-directory-b2c/phone-based-mfa#mitigate-fraudulent-sign-ups-for-custom-policy) on Microsoft Learn.
+
 In this repo, you will find samples for several enhanced Azure AD B2C Custom CIAM User Journeys.
 
 ## Getting started
@@ -109,7 +113,7 @@ Samples are available for the following categories
 |Sample name   |Description   |Quick deploy|
 |---|---|---|
 |[Password-less sign-in with email verification](policies/passwordless-email)|Password-less authentication is a type of authentication where user doesn't need to sign-in with their password. This is commonly used in B2C scenarios where users use your application infrequently and tend to forget their password. This sample policy demonstrates how to allow user to sign-in, simply by providing and verifying the sign-in email address using OTP code (one time password).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=passwordless-email)|
-|[Login with Phone Number](policies/signup-signin-with-phone-number)|An example set of policies for password-less login via Phone Number (SMS or Phone Call).|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=signup-signin-with-phone-number)|
+|[Login with Phone Number](policies/signup-signin-with-phone-number)|An example set of policies for password-less login via Phone Number (SMS or Phone Call). **Includes SMS toll fraud (IRSF) mitigation guidance — `countryList` allow-list snippet in the sample README.**|[Go](https://b2ciefsetupapp.azurewebsites.net/Home/Experimental?sampleFolderName=signup-signin-with-phone-number)|
 
 
 ## Multi factor
